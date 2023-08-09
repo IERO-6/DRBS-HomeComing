@@ -19,6 +19,9 @@ disabled_rules:
     - cyclomatic_complexity             # 순환참조 복잡성 제한
     - identifier_name
     - colon
+    - opening_brace
+    
+    
 # 선택적으로 추가할 규칙
 opt_in_rules:
     - empty_count                       # count == 0 보다 empty 사용

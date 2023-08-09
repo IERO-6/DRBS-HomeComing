@@ -14,6 +14,8 @@ class SearchVC: UIViewController {
 
     weak var mapDelegate: MapDelegate?
 
+    let location: [String] = ["개포동", "개푸동", "진주시", "잠실", "수원시"]
+    var filtered: [String] = []
     
     let searchBar = UISearchBar()
     
@@ -62,11 +64,12 @@ class SearchVC: UIViewController {
 
 extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        return self.filtered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.identifier, for: indexPath) as! SearchCell
+        cell.locationLabel.text = self.filtered[indexPath.row]
         return cell
     }
     
@@ -82,8 +85,17 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
 
 extension SearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //글자가 바뀔 때의 로직
-    }
+           
+          
+            filtered = location.filter {$0.lowercased().contains(searchText.lowercased())}
+           
+//            if(filtered.count == 0){
+//                searchActive = false
+//            } else {
+//                searchActive = true
+//            }
+            self.tableView.reloadData()
+        }
 }
 
 
