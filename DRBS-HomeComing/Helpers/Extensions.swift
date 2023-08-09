@@ -1,6 +1,7 @@
 import UIKit
 
 
+//MARK: - 네비게이션
 
 extension UINavigationController {
     func setupHomeBarAppearance() {
@@ -18,5 +19,27 @@ extension UINavigationController {
         //navigationBar bottom bolder line 제거하기
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
+    }
+}
+
+//MARK: - 뷰
+
+extension UIView {
+    
+    
+    
+    // 한 번에 여러 객체 addSubView하기
+    func addSubviews(_ views: UIView...) {
+        for view in views {
+            addSubview(view)
+        }
+    }
+}
+extension UIStackView {
+    
+    func addArrangedSubviews(_ views: UIView...) {
+        for view in views {
+            addArrangedSubview(view)
+        }
     }
 }
