@@ -58,6 +58,7 @@ final class MapVC: UIViewController {
         subtitle: "아파트",
         coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
     
+
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,6 +200,100 @@ extension MapVC: MapDelegate {
     func cordHandler(with: Location){
         self.location = with
         
+=======
+        
+    }
+    
+   
+    
+    
+    
+    //MARK: - Helpers
+
+    func configureUI() {
+        view.addSubview(map)
+        view.addSubview(currentLocationButton)
+        view.addSubview(searchLocationButton)
+        
+        currentLocationButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(50)
+            make.right.equalToSuperview().offset(-10)
+            make.width.height.equalTo(40)
+        }
+        searchLocationButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(90)
+            make.right.equalTo(currentLocationButton.snp.right)
+            make.width.height.equalTo(40)
+        }
+        
+        
+        map.delegate = self
+        map.mapType = .standard
+        self.map.showsUserLocation = true
+        self.map.setUserTrackingMode(.follow, animated: true)
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+        locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                switch self.locationManager.authorizationStatus {
+                case .denied, .restricted:
+                    let alert = UIAlertController(title: "오류 발생", message: "위치 서비스 기능이 꺼져있음", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                    self.locationManager.delegate = self
+                    self.locationManager.requestWhenInUseAuthorization()
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    func firstSetting() {
+        self.currentLocation = locationManager.location
+    }
+}
+
+extension MapVC: MKMapViewDelegate {
+    
+}
+
+extension MapVC: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationManager = manager
+        if locationManager.authorizationStatus == .authorizedWhenInUse {
+            currentLocation = locationManager.location
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            manager.requestWhenInUseAuthorization()
+            break
+        case .authorizedWhenInUse:
+            self.firstSetting()
+            break
+        case .authorizedAlways:
+            self.firstSetting()
+            break
+        case .restricted:
+            break
+        case .denied:
+            break
+        default:
+            break
+        }
+
     }
     
 }

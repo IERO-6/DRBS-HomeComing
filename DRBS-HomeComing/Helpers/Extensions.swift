@@ -5,12 +5,14 @@ import UIKit
 
 extension UINavigationController {
     func setupHomeBarAppearance() {
+
         self.navigationController?.navigationBar.isTranslucent = false
         navigationBar.tintColor = .black
         self.navigationController?.navigationBar.barTintColor = .white
         navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
+
     
     func setupMapBarAppearance() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -42,4 +44,5 @@ extension UIStackView {
             addArrangedSubview(view)
         }
     }
+
 }
