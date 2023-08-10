@@ -26,8 +26,17 @@
 		218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACE102A763FA700687EE6 /* HouseViewModel.swift */; };
 		218ACE152A76434500687EE6 /* CheckVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACE142A76434500687EE6 /* CheckVC1.swift */; };
 		218ACE172A76435100687EE6 /* CheckVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACE162A76435100687EE6 /* CheckVC2.swift */; };
-		21B627552A8249AB00081D5E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21B627542A8249AB00081D5E /* .swiftlint.yml */; };
-		E59D95AD2D18C132F7A14C7A /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6F20602E5DAD709D123A878 /* Pods_DRBS_HomeComing.framework */; };
+		21B627602A83470A00081D5E /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 21B6275F2A83470A00081D5E /* .swiftlint.yml */; };
+		21B627622A834B5500081D5E /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627612A834B5500081D5E /* File.swift */; };
+		21B627642A83834900081D5E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627632A83834900081D5E /* Location.swift */; };
+		21B627662A83838600081D5E /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627652A83838600081D5E /* LocationViewModel.swift */; };
+		21B627682A8383FE00081D5E /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627672A8383FE00081D5E /* SearchVC.swift */; };
+		21B6276A2A83841200081D5E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627692A83841200081D5E /* SearchCell.swift */; };
+		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
+		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
+		21B627712A84AD1200081D5E /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627702A84AD1200081D5E /* Annotation.swift */; };
+		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,11 +61,18 @@
 		218ACE102A763FA700687EE6 /* HouseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseViewModel.swift; sourceTree = "<group>"; };
 		218ACE142A76434500687EE6 /* CheckVC1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC1.swift; sourceTree = "<group>"; };
 		218ACE162A76435100687EE6 /* CheckVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2.swift; sourceTree = "<group>"; };
-		21B627542A8249AB00081D5E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		21B6275F2A83470A00081D5E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		21B627612A834B5500081D5E /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = SOURCE_ROOT; };
+		21B627632A83834900081D5E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		21B627652A83838600081D5E /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
+		21B627672A8383FE00081D5E /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
+		21B627692A83841200081D5E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		21B6276B2A83844400081D5E /* ModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalVC.swift; sourceTree = "<group>"; };
+		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
+		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		21B627702A84AD1200081D5E /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
-		8DFEA3F6B09E94984F017411 /* Pods-DRBS_HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS_HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS_HomeComing/Pods-DRBS_HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
-		B6F20602E5DAD709D123A878 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6B7ED6DCA2A51FB910FED92 /* Pods-DRBS_HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS_HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS_HomeComing/Pods-DRBS_HomeComing.release.xcconfig"; sourceTree = "<group>"; };
+		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,7 +81,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E59D95AD2D18C132F7A14C7A /* Pods_DRBS_HomeComing.framework in Frameworks */,
+				D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +92,9 @@
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
-				21B627542A8249AB00081D5E /* .swiftlint.yml */,
+				21B6276D2A8384D700081D5E /* MyLocation.gpx */,
+				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
+
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
@@ -129,6 +148,9 @@
 			isa = PBXGroup;
 			children = (
 				218ACDFC2A752A0C00687EE6 /* House.swift */,
+				21B627632A83834900081D5E /* Location.swift */,
+				21B627702A84AD1200081D5E /* Annotation.swift */,
+
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -137,6 +159,9 @@
 			isa = PBXGroup;
 			children = (
 				218ACE102A763FA700687EE6 /* HouseViewModel.swift */,
+
+				21B627652A83838600081D5E /* LocationViewModel.swift */,
+
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -164,10 +189,14 @@
 			children = (
 				218ACDFE2A752ABB00687EE6 /* Tabbar.swift */,
 				218ACDE62A75262400687EE6 /* HomeVC.swift */,
-				218ACE082A76312400687EE6 /* MapVC.swift */,
-				218ACE162A76435100687EE6 /* CheckVC2.swift */,
 				218ACE142A76434500687EE6 /* CheckVC1.swift */,
+				218ACE162A76435100687EE6 /* CheckVC2.swift */,
 				2143CE3D2A79179100A5DB36 /* SettingVC.swift */,
+				218ACE082A76312400687EE6 /* MapVC.swift */,
+				21B627672A8383FE00081D5E /* SearchVC.swift */,
+				21B6276B2A83844400081D5E /* ModalVC.swift */,
+				21B6276E2A83A95B00081D5E /* AnnotationView.swift */,
+
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -175,6 +204,8 @@
 		21B627522A814B1400081D5E /* TV&CV */ = {
 			isa = PBXGroup;
 			children = (
+				21B627612A834B5500081D5E /* File.swift */,
+
 			);
 			path = "TV&CV";
 			sourceTree = "<group>";
@@ -186,6 +217,8 @@
 				217C83F02A76858F00363ED2 /* ApartCell.swift */,
 				2143CE352A7904DD00A5DB36 /* OneroomCell.swift */,
 				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
+				21B627692A83841200081D5E /* SearchCell.swift */,
+
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -193,7 +226,9 @@
 		57FAD258E927479E3F71361D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B6F20602E5DAD709D123A878 /* Pods_DRBS_HomeComing.framework */,
+				ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */,
+
+
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -201,8 +236,6 @@
 		9360B786DD59331CA82EFBCE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8DFEA3F6B09E94984F017411 /* Pods-DRBS_HomeComing.debug.xcconfig */,
-				C6B7ED6DCA2A51FB910FED92 /* Pods-DRBS_HomeComing.release.xcconfig */,
 				6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */,
 				F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */,
 			);
@@ -270,7 +303,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21B627552A8249AB00081D5E /* .swiftlint.yml in Resources */,
+				21B627602A83470A00081D5E /* .swiftlint.yml in Resources */,
 				218ACDEF2A75262500687EE6 /* LaunchScreen.storyboard in Resources */,
 				218ACDEC2A75262500687EE6 /* Assets.xcassets in Resources */,
 			);
@@ -345,18 +378,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */,
+				21B627712A84AD1200081D5E /* Annotation.swift in Sources */,
+				21B6276A2A83841200081D5E /* SearchCell.swift in Sources */,
 				218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */,
 				218ACE092A76312400687EE6 /* MapVC.swift in Sources */,
+				21B627662A83838600081D5E /* LocationViewModel.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
+				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
+				21B627622A834B5500081D5E /* File.swift in Sources */,
 				2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */,
 				218ACE172A76435100687EE6 /* CheckVC2.swift in Sources */,
+				21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */,
+				21B6276C2A83844400081D5E /* ModalVC.swift in Sources */,
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
 				2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
+				21B627642A83834900081D5E /* Location.swift in Sources */,
+
 				218ACE0F2A763CBC00687EE6 /* Constants.swift in Sources */,
 				218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */,
 				217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */,

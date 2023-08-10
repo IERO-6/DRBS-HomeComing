@@ -1,0 +1,39 @@
+#---------⭐️규칙작성은 여기서⭐️----------#
+# https://github.com/realm/SwiftLint #
+#------------------------------------#
+
+# 비활성화할 규칙
+disabled_rules:
+
+    - line_length                       # 코드의 길이제한
+    - trailing_whitespace               # 코드 마지막 띄어쓰기 제한
+    - force_cast                        # 강제 타입 캐스팅 제한
+    - force_unwrapping                  # 강제 언래핑 제한
+    - vertical_whitespace               # 세로 공백 제한
+    - trailing_comma                    # case first, two 제한
+    - comment_spacing                   # 주석 이후 공백 제한
+    - trailing_newline                  # 파일 끝에 빈 줄 한 줄 제한
+    - mark                              # mark의 형식 제한
+    - switch_case_alignment             # switch문의 올바른 형식 제한
+    - unneeded_break_in_switch          # switch문에서 불필요한 break 제한
+    - cyclomatic_complexity             # 순환참조 복잡성 제한
+    - identifier_name
+    - colon
+    - opening_brace
+    
+    
+# 선택적으로 추가할 규칙
+opt_in_rules:
+    - empty_count                       # count == 0 보다 empty 사용
+    - empty_string                      # string도 마찬가지
+    
+    
+# 검사에 포함할 규칙
+included:
+    - DRBS-HomeComing
+    
+    
+# 검사에서 제외될 규칙
+excluded:
+
+    - Pods                              # Pod 제외
