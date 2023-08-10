@@ -87,8 +87,12 @@ final class MapVC: UIViewController {
         self.mkMapView.isPitchEnabled = false        // 각도 가능 여부
         self.mkMapView.delegate = self
         self.mkMapView.showsUserLocation = true
-        self.mkMapView.setRegion(MKCoordinateRegion(center:  CLLocationCoordinate2D(latitude: 37.57273458434912, longitude: 126.97784685534123), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-        self.mkMapView.addAnnotation(mark)
+                self.mkMapView.setRegion(MKCoordinateRegion(center:  CLLocationCoordinate2D(latitude: 37.57273458434912, longitude: 126.97784685534123), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+//        self.mkMapView.addAnnotations([mark])
+        self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationView.identifier)
+        let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
+        mkMapView.addAnnotation(pin)
+        
         // mapKit.zoomEnabled = false         // 줌 가능 여부
         // mapKit.scrollEnabled = false       // 스크롤 가능 여부
         // mapKit.rotateEnabled = false       // 회전 가능 여부
@@ -103,9 +107,6 @@ final class MapVC: UIViewController {
         //        locationManager.requestWhenInUseAuthorization()             // 위치 데이터 승인 요구
         //        locationManager.startUpdatingLocation()                     // 위치 업데이트 시작
         //        self.currentLocation = locationManager.location
-        
-        
-        
     }
     
     
@@ -136,6 +137,29 @@ extension MapVC: MKMapViewDelegate {
         present(modalVC, animated: true)
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        guard let annotation = annotation as? Annotation else { return nil}
+        var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: AnnotationView.identifier)
+        
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationView.identifier)
+            annotationView?.canShowCallout = false
+            annotationView?.contentMode = .scaleAspectFit
+        } else {
+            annotationView?.annotation = annotation
+        }
+        
+        let size = CGSize(width: 30, height: 30)
+        UIGraphicsBeginImageContext(size)
+        
+        switch annotation.isBookMarked {
+        case true:
+            return annotationView
+        case false:
+            return annotationView
+        }
+    }
 }
 
 

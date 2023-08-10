@@ -33,6 +33,8 @@
 		21B627682A8383FE00081D5E /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627672A8383FE00081D5E /* SearchVC.swift */; };
 		21B6276A2A83841200081D5E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627692A83841200081D5E /* SearchCell.swift */; };
 		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
+		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
+		21B627712A84AD1200081D5E /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627702A84AD1200081D5E /* Annotation.swift */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,8 @@
 		21B627692A83841200081D5E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		21B6276B2A83844400081D5E /* ModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalVC.swift; sourceTree = "<group>"; };
 		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
+		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		21B627702A84AD1200081D5E /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 			children = (
 				218ACDFC2A752A0C00687EE6 /* House.swift */,
 				21B627632A83834900081D5E /* Location.swift */,
+				21B627702A84AD1200081D5E /* Annotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -184,6 +189,7 @@
 				218ACE082A76312400687EE6 /* MapVC.swift */,
 				21B627672A8383FE00081D5E /* SearchVC.swift */,
 				21B6276B2A83844400081D5E /* ModalVC.swift */,
+				21B6276E2A83A95B00081D5E /* AnnotationView.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -361,6 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */,
+				21B627712A84AD1200081D5E /* Annotation.swift in Sources */,
 				21B6276A2A83841200081D5E /* SearchCell.swift in Sources */,
 				218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */,
 				218ACE092A76312400687EE6 /* MapVC.swift in Sources */,
@@ -373,6 +380,7 @@
 				21B627622A834B5500081D5E /* File.swift in Sources */,
 				2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */,
 				218ACE172A76435100687EE6 /* CheckVC2.swift in Sources */,
+				21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */,
 				21B6276C2A83844400081D5E /* ModalVC.swift in Sources */,
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
 				2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */,
