@@ -37,7 +37,7 @@ class SearchVC: UIViewController {
     func configureUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
-        
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func settingSearchBar() {

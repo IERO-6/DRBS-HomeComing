@@ -17,18 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            if #available(iOS 13.0, *) {
                return true
            }
-           
-           // 13이전의 경우에는 SceneDelegate에서 해주었던 작업을 그대로 진행해주면 된다.
            window = UIWindow()
-           
-//           let vc1 = HomeVC()
-//           let vc2 = MapVC()
-//           let nav1 = UINavigationController(rootViewController: vc1)
-//           let nav2 = UINavigationController(rootViewController: vc2)
-//           let tabbar = Tabbar()
-//           tabbar.viewControllers = [nav1, nav2]
-//           
-//           window?.rootViewController = Tabbar() // 시작 VC 작성해주기
            window?.makeKeyAndVisible()
            return true
        }

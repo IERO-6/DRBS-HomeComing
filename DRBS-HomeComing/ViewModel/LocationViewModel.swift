@@ -9,6 +9,9 @@ class LocationViewModel {
     
     let locationManager = CLLocationManager()
     
+    var isUserDeviceAuthPermitted: Bool?
+    
+    var locationStatus: CLAuthorizationStatus?
     
     
     
@@ -23,19 +26,33 @@ class LocationViewModel {
     
     
     //MARK: - Logics
-    func checkUserDeviceLocationServiceAuthorization() {
-        // 디바이스 자체 위치 서비스가 활성화인지 확인
-        
-        DispatchQueue.global().async {
-            guard CLLocationManager.locationServicesEnabled() else {
-                self.showRequestLocationServiceAlert()
-                return
-            }
-            
-            // 앱의 권한 상태를 가져오는 코드
-           
+    
+    
+    func userDeviceAuth(isPermitted: Bool?) {
+        guard let permitStatus = isPermitted else { return }
+        switch permitStatus {
+        case true:
+            print("허용된 상태")
+            let authorizationStatus = self.locationManager.authorizationStatus
+            checkUserCurrentLocationAuthorization(authorizationStatus)
+        case false:
+            print("허용안된 상태임! 기기 설정에 접근하는 코드 작성 요망")
+            print("\(String(describing: self.isUserDeviceAuthPermitted))")
+//            showRequestLocationServiceAlert()
         }
-        let authorizationStatus: CLAuthorizationStatus = self.locationManager.authorizationStatus
+    }
+    
+    
+    
+    func checkUserDeviceAuth() {
+       
+       
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.isUserDeviceAuthPermitted = CLLocationManager.locationServicesEnabled()
+            self.userDeviceAuth(isPermitted: self.isUserDeviceAuthPermitted)
+        }
+        
         
         /*
          CLAuthorizationStatus (권한 상태를 나타내는 열거형 타입)
@@ -49,32 +66,18 @@ class LocationViewModel {
          .authorizedWhenInUse: 앱이 포그라운드 상태에서만 위치 서비스를 이용할 수 있도록 승인된 상태
          */
         
-        
-        
-        // 권한 상태값에 따라 분기처리를 수행하는 메서드 실행
-        self.checkUserCurrentLocationAuthorization(authorizationStatus)
-        
+//
+//
+//        // 권한 상태값에 따라 분기처리를 수행하는 메서드 실행
+//        self.checkUserCurrentLocationAuthorization(authorizationStatus)
+//
     }
     
     
     
     
     
-    func showRequestLocationServiceAlert() {
-        let requestLocationServiceAlert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
-           let goSetting = UIAlertAction(title: "설정으로 이동", style: .destructive) { _ in
-               if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-                   UIApplication.shared.open(appSetting)
-               }
-           }
-           let cancel = UIAlertAction(title: "취소", style: .default) { [weak self] _ in
-//               async { await self?.reloadData() }
-           }
-           requestLocationServiceAlert.addAction(cancel)
-           requestLocationServiceAlert.addAction(goSetting)
-           
-//           present(requestLocationServiceAlert, animated: true)
-    }
+    
     
     func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
         switch status {
@@ -102,7 +105,8 @@ class LocationViewModel {
             // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
             // 시스템 설정에서 설정값을 변경하도록 유도한다.
             // 시스템 설정으로 유도하는 커스텀 얼럿
-            showRequestLocationServiceAlert()
+//            showRequestLocationServiceAlert()
+            print("")
             
         case .authorizedWhenInUse:
             // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
@@ -116,4 +120,3 @@ class LocationViewModel {
     
     
 }
-

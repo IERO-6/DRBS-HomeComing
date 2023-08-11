@@ -10,6 +10,7 @@
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
 		2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* OfficeCell.swift */; };
 		2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE3D2A79179100A5DB36 /* SettingVC.swift */; };
+		215BDC642A863B4C007151A1 /* HudVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC632A863B4C007151A1 /* HudVC.swift */; };
 		217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83EC2A76847600363ED2 /* HouseTVCell.swift */; };
 		217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83F02A76858F00363ED2 /* ApartCell.swift */; };
 		218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE22A75262400687EE6 /* AppDelegate.swift */; };
@@ -36,13 +37,13 @@
 		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
 		21B627712A84AD1200081D5E /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627702A84AD1200081D5E /* Annotation.swift */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
 		2143CE372A79051400A5DB36 /* OfficeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeCell.swift; sourceTree = "<group>"; };
 		2143CE3D2A79179100A5DB36 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
+		215BDC632A863B4C007151A1 /* HudVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudVC.swift; sourceTree = "<group>"; };
 		217C83EC2A76847600363ED2 /* HouseTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTVCell.swift; sourceTree = "<group>"; };
 		217C83F02A76858F00363ED2 /* ApartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartCell.swift; sourceTree = "<group>"; };
 		218ACDDF2A75262400687EE6 /* DRBS-HomeComing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DRBS-HomeComing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +83,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,7 +94,6 @@
 			children = (
 				21B6276D2A8384D700081D5E /* MyLocation.gpx */,
 				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
-
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
@@ -150,7 +149,6 @@
 				218ACDFC2A752A0C00687EE6 /* House.swift */,
 				21B627632A83834900081D5E /* Location.swift */,
 				21B627702A84AD1200081D5E /* Annotation.swift */,
-
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -159,9 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				218ACE102A763FA700687EE6 /* HouseViewModel.swift */,
-
 				21B627652A83838600081D5E /* LocationViewModel.swift */,
-
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -196,7 +192,7 @@
 				21B627672A8383FE00081D5E /* SearchVC.swift */,
 				21B6276B2A83844400081D5E /* ModalVC.swift */,
 				21B6276E2A83A95B00081D5E /* AnnotationView.swift */,
-
+				215BDC632A863B4C007151A1 /* HudVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -205,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				21B627612A834B5500081D5E /* File.swift */,
-
 			);
 			path = "TV&CV";
 			sourceTree = "<group>";
@@ -218,7 +213,6 @@
 				2143CE352A7904DD00A5DB36 /* OneroomCell.swift */,
 				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
-
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -227,8 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */,
-
-
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -387,6 +379,7 @@
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
+				215BDC642A863B4C007151A1 /* HudVC.swift in Sources */,
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
 				21B627622A834B5500081D5E /* File.swift in Sources */,
 				2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */,
@@ -398,7 +391,6 @@
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
 				21B627642A83834900081D5E /* Location.swift in Sources */,
-
 				218ACE0F2A763CBC00687EE6 /* Constants.swift in Sources */,
 				218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */,
 				217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */,
