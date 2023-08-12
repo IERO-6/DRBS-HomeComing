@@ -37,7 +37,7 @@ class SearchVC: UIViewController {
     func configureUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
-        
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func settingSearchBar() {
@@ -74,7 +74,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let gaepoLocation = Location(latitude: 37.482040282097046, longitude: 127.06796189321376)
+        let gaepoLocation = Location(latitude: "37.482040282097046", longitude: "127.06796189321376", isBookMarked: true)
         mapDelegate?.cordHandler(with: gaepoLocation)
         self.navigationController?.popViewController(animated: true)
         

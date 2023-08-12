@@ -3,46 +3,37 @@ import CoreLocation
 import MapKit
 import Then
 import SnapKit
+import JGProgressHUD
+
+
+// https://co-dong.tistory.com/73 참고중..
 
 protocol MapDelegate: AnyObject {
     func cordHandler(with: Location)
 }
 
-
-final class MapVC: UIViewController {
+final class MapVC: HudVC {
     //MARK: - Properties
     
-    //⭐️뷰모델⭐️
     private lazy var locationViewModel = LocationViewModel()
     private lazy var mkMapView = MKMapView(frame: self.view.frame)
     private lazy var locationManager = CLLocationManager()
-    private lazy var currentLocation: CLLocation = CLLocation(latitude: 37.332651635682176, longitude: 127.11873405786073)
-    var location: Location? {
-        didSet {
-            guard let location = location else { return }
-            self.mkMapView.setCenter(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude), animated: true)
-        }
-    }
     
     private lazy var currentLocationButton = UIButton().then {
         $0.setImage(UIImage(systemName: "location"), for: .normal)
         $0.backgroundColor = .white
         $0.clipsToBounds = true
         $0.tintColor = .gray
-        $0.addTarget(self, action: #selector(currentLocationTapped), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(currentLocationTapped), for: .touchUpInside)}
     
     private lazy var searchButton = UIButton().then {
         $0.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         $0.backgroundColor = .white
         $0.clipsToBounds = true
         $0.tintColor = .gray
-        $0.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)}
     
-    private lazy var separateLine = UIView().then {
-        $0.backgroundColor = .systemGray4
-    }
+    private lazy var separateLine = UIView().then {$0.backgroundColor = .systemGray4}
     
     private lazy var stackView = UIStackView().then {
         $0.spacing = 0
@@ -50,28 +41,29 @@ final class MapVC: UIViewController {
         $0.distribution = .fill
         $0.alignment = .fill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = self.view.frame.width/30}
+    
+    var location: Location? {
+        didSet {
+            guard let location = location else { return }
+            self.mkMapView.setCenter(CLLocationCoordinate2D(latitude: Double(location.latitude) ?? 0.0, longitude: Double(location.longitude) ?? 0.0), animated: true)
+        }
     }
+    let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
     
-    let mark = Marker(
-        title: "무지개마을",
-        subtitle: "아파트",
-        coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
-    
-
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        settingMKMapView()
-        settingCLLocationManager()
-        locationViewModel.checkUserDeviceLocationServiceAuthorization()
+        checkDeviceService()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     //MARK: - Helpers
-    
-    func configureUI() {
-        //화면구성
+    private func configureUI() {            //화면 구성
         stackView.addArrangedSubviews(currentLocationButton, separateLine, searchButton)
         view.addSubviews(mkMapView, stackView)
         currentLocationButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
@@ -83,31 +75,89 @@ final class MapVC: UIViewController {
             $0.width.equalTo(self.view.frame.width/8)
             $0.height.equalTo(self.view.frame.width/4)}}
     
-    func settingMKMapView() {
+    private func settingMKMapView() {       //맵킷 세팅
         //MKMapView설정
-        self.mkMapView.isPitchEnabled = false        // 각도 가능 여부
+        self.mkMapView.isPitchEnabled = false
+        self.mkMapView.isRotateEnabled = false
         self.mkMapView.delegate = self
-        self.mkMapView.showsUserLocation = true
-                self.mkMapView.setRegion(MKCoordinateRegion(center:  CLLocationCoordinate2D(latitude: 37.57273458434912, longitude: 126.97784685534123), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-//        self.mkMapView.addAnnotations([mark])
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationView.identifier)
-        let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
+        self.mkMapView.showsUserLocation = true
+        self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
-        
-        // mapKit.zoomEnabled = false         // 줌 가능 여부
-        // mapKit.scrollEnabled = false       // 스크롤 가능 여부
-        // mapKit.rotateEnabled = false       // 회전 가능 여부
-        
+
         
     }
     
-    func settingCLLocationManager() {
+    private func settingCLLocationManager() { locationManager.delegate = self }
     
-        locationManager.delegate = self
-        //        locationManager.desiredAccuracy = kCLLocationAccuracyBest   // 정확도 최상 설정
-        //        locationManager.requestWhenInUseAuthorization()             // 위치 데이터 승인 요구
-        //        locationManager.startUpdatingLocation()                     // 위치 업데이트 시작
-        //        self.currentLocation = locationManager.location
+    private func settingAnnotationPin() {
+        
+    }
+    
+    //MARK: - 권한설정탭(아마불변)
+    private func checkDeviceService() {
+        // 디바이스 자체 위치 서비스 관련 로직
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard CLLocationManager.locationServicesEnabled() else {
+                print("디버깅: 현재 디바이스 위치 서비스 상태는 ❌")
+                self.showRequestLocationServiceAlert()
+                return}
+            print("디버깅: 현재 디바이스의 위치 서비스 상태는 ⭕️")
+            let authStatus = self.locationManager.authorizationStatus
+            self.checkCurrentLocationAuth(authStatus)}}
+    
+    private func checkCurrentLocationAuth(_ status: CLAuthorizationStatus) {
+        // 디바이스 확인해서 허용이면, CLAuthorizationStatus를 통해 앱 설정
+        switch status {
+        case .notDetermined:
+            print("디버깅: notDetermined")
+            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
+            locationManager.requestWhenInUseAuthorization()
+            print("requestWhenInUseAuthorization 실행됨")
+            // 권한 요청을 보낸다.
+        case .denied:
+            // 사용자가 명시적으로 권한을 거부
+            print("디버깅: denied")
+            showAlert()
+        case .restricted:
+            // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
+            // 시스템 설정에서 설정값을 변경하도록 유도
+            print("디버깅: restricted")
+            showRequestLocationServiceAlert()
+        case .authorizedWhenInUse:
+            print("디버깅: authorizedWhenInUse ")
+            settingMKMapView()
+            settingCLLocationManager()
+            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
+            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
+            locationManager.startUpdatingLocation()
+            
+        default:
+            print("디버깅: default")
+        }
+    }
+    private func showRequestLocationServiceAlert() {
+        let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
+        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSetting)
+            }
+        }
+        alert.addAction(goSetting)
+        present(alert, animated: true)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호> 위치서비스> DRBS'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
+        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSetting)
+            }
+        }
+        alert.addAction(goSetting)
+        present(alert, animated: true)
     }
     
     
@@ -115,8 +165,7 @@ final class MapVC: UIViewController {
     
     @objc func currentLocationTapped() {
         print("디버깅: 현재위치 버튼 눌림")
-        self.mkMapView.showsUserLocation = true
-        self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        checkDeviceService()
         
     }
     
@@ -132,24 +181,21 @@ final class MapVC: UIViewController {
 
 extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("디버깅: AnnotationView")
         let modalVC = ModalVC()
         modalVC.modalPresentationStyle = .pageSheet
-        present(modalVC, animated: true)
-    }
+        //모달VC에 데이터 전달 => viewModel을 통해
+        
+        present(modalVC, animated: true)}
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
+        // 커스텀 어노테이션 뷰 설정
         guard let annotation = annotation as? Annotation else { return nil}
         var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: AnnotationView.identifier)
-        
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationView.identifier)
             annotationView?.canShowCallout = false
             annotationView?.contentMode = .scaleAspectFit
-        } else {
-            annotationView?.annotation = annotation
-        }
+        } else { annotationView?.annotation = annotation }
         
         let size = CGSize(width: 30, height: 30)
         UIGraphicsBeginImageContext(size)
@@ -161,6 +207,15 @@ extension MapVC: MKMapViewDelegate {
             return annotationView
         }
     }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        print("지역이 달라짐")
+        let visibleRegion = mapView.region
+        self.locationViewModel.visibleRegion = visibleRegion
+        self.locationViewModel.getAnnotationsWhenRegionChanged()
+        print("변경된 지역의 위도는 :\(visibleRegion.center.latitude) 경도는 : \(visibleRegion.center.longitude)")
+    }
+    
 }
 
 
@@ -170,11 +225,11 @@ extension MapVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         // 위치 정보를 배열로 입력받는데, 마지막 index값이 가장 정확.
-        if let coordinate = locations.last?.coordinate {
-            // ⭐️ 사용자 위치 정보 사용
-            self.mkMapView.showsUserLocation = true
-            self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        }
+        //        if let coordinate = locations.last?.coordinate {
+        //            // ⭐️ 사용자 위치 정보 사용
+        //            self.mkMapView.showsUserLocation = true
+        //            self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        //        }
         
         // startUpdatingLocation()을 사용하여 사용자 위치를 가져왔다면
         // 불필요한 업데이트를 방지하기 위해 stopUpdatingLocation을 호출
@@ -189,11 +244,10 @@ extension MapVC: CLLocationManagerDelegate {
     
     
     
-    // 앱에 대한 권한 설정이 변경되면 호출 (iOS 14 이상)
-//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-//        // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
-//        checkUserDeviceLocationServiceAuthorization()
-//    }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
+        checkDeviceService()
+    }
     
 }
 extension MapVC: MapDelegate {
