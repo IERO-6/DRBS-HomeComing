@@ -176,6 +176,7 @@
 		21B627502A814B0200081D5E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				21B6276E2A83A95B00081D5E /* AnnotationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -191,7 +192,6 @@
 				218ACE082A76312400687EE6 /* MapVC.swift */,
 				21B627672A8383FE00081D5E /* SearchVC.swift */,
 				21B6276B2A83844400081D5E /* ModalVC.swift */,
-				21B6276E2A83A95B00081D5E /* AnnotationView.swift */,
 				215BDC632A863B4C007151A1 /* HudVC.swift */,
 			);
 			path = VC;

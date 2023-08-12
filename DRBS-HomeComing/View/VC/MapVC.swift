@@ -5,6 +5,9 @@ import Then
 import SnapKit
 import JGProgressHUD
 
+
+// https://co-dong.tistory.com/73 참고중..
+
 protocol MapDelegate: AnyObject {
     func cordHandler(with: Location)
 }
@@ -43,10 +46,10 @@ final class MapVC: HudVC {
     var location: Location? {
         didSet {
             guard let location = location else { return }
-            self.mkMapView.setCenter(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude), animated: true)
+            self.mkMapView.setCenter(CLLocationCoordinate2D(latitude: Double(location.latitude) ?? 0.0, longitude: Double(location.longitude) ?? 0.0), animated: true)
         }
     }
-    
+    let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -78,9 +81,11 @@ final class MapVC: HudVC {
         self.mkMapView.isRotateEnabled = false
         self.mkMapView.delegate = self
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationView.identifier)
-        let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
+        self.mkMapView.showsUserLocation = true
+        self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
-    
+
+        
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
@@ -92,7 +97,7 @@ final class MapVC: HudVC {
     //MARK: - 권한설정탭(아마불변)
     private func checkDeviceService() {
         // 디바이스 자체 위치 서비스 관련 로직
-        DispatchQueue.global(qos: .userInitiated).sync {
+        DispatchQueue.global(qos: .userInitiated).async {
             guard CLLocationManager.locationServicesEnabled() else {
                 print("디버깅: 현재 디바이스 위치 서비스 상태는 ❌")
                 self.showRequestLocationServiceAlert()
@@ -114,11 +119,12 @@ final class MapVC: HudVC {
             // 권한 요청을 보낸다.
         case .denied:
             // 사용자가 명시적으로 권한을 거부
-            print("디버깅: denied, restricted")
+            print("디버깅: denied")
             showAlert()
         case .restricted:
             // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
             // 시스템 설정에서 설정값을 변경하도록 유도
+            print("디버깅: restricted")
             showRequestLocationServiceAlert()
         case .authorizedWhenInUse:
             print("디버깅: authorizedWhenInUse ")
@@ -127,8 +133,7 @@ final class MapVC: HudVC {
             // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
             // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
             locationManager.startUpdatingLocation()
-            self.mkMapView.showsUserLocation = true
-            self.mkMapView.setUserTrackingMode(.follow, animated: true)
+            
         default:
             print("디버깅: default")
         }
@@ -206,6 +211,8 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print("지역이 달라짐")
         let visibleRegion = mapView.region
+        self.locationViewModel.visibleRegion = visibleRegion
+        self.locationViewModel.getAnnotationsWhenRegionChanged()
         print("변경된 지역의 위도는 :\(visibleRegion.center.latitude) 경도는 : \(visibleRegion.center.longitude)")
     }
     
