@@ -212,8 +212,7 @@ extension MapVC: MKMapViewDelegate {
         print("지역이 달라짐")
         let visibleRegion = mapView.region
         self.locationViewModel.visibleRegion = visibleRegion
-        self.locationViewModel.getAnnotationsWhenRegionChanged()
-        print("변경된 지역의 위도는 :\(visibleRegion.center.latitude) 경도는 : \(visibleRegion.center.longitude)")
+//        self.locationViewModel.getAnnotationsWhenRegionChanged()
     }
     
 }
