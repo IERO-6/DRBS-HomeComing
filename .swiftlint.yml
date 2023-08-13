@@ -20,6 +20,7 @@ disabled_rules:
     - identifier_name
     - colon
     - opening_brace
+    - type_name
     
     
 # 선택적으로 추가할 규칙

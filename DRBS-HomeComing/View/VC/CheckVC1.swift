@@ -1,10 +1,3 @@
-//
-//  CheckVC1.swift
-//  TestProject
-//
-//  Created by 김은상 on 2023/07/30.
-//
-
 import UIKit
 
 class CheckVC1: UIViewController {

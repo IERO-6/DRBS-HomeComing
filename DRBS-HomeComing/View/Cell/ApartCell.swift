@@ -1,10 +1,3 @@
-//
-//  FirstCell.swift
-//  TestProject
-//
-//  Created by 김은상 on 2023/07/30.
-//
-
 import UIKit
 
 class ApartCell: UICollectionViewCell {

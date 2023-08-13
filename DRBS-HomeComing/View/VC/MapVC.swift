@@ -3,7 +3,6 @@ import CoreLocation
 import MapKit
 import Then
 import SnapKit
-import JGProgressHUD
 
 
 // https://co-dong.tistory.com/73 참고중..
@@ -12,7 +11,7 @@ protocol MapDelegate: AnyObject {
     func cordHandler(with: Location)
 }
 
-final class MapVC: HudVC {
+final class MapVC: UIViewController {
     //MARK: - Properties
     
     private lazy var locationViewModel = LocationViewModel()
@@ -199,9 +198,9 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
         guard let annotation = annotation as? Annotation else { return nil}
-        var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: AnnotationView.identifier)
+        var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationView.identifier)
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constant.Identifier.annotationView.rawValue)
             annotationView?.canShowCallout = false
             annotationView?.contentMode = .scaleAspectFit
         } else { annotationView?.annotation = annotation }

@@ -1,10 +1,3 @@
-//
-//  SearchCell.swift
-//  MKMapViewTest
-//
-//  Created by 김은상 on 2023/08/05.
-//
-
 import UIKit
 
 class SearchCell: UITableViewCell {

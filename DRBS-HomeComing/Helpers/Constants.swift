@@ -9,6 +9,7 @@ struct Constant {
         case apartCell = "ApartCell"
         case oneroomCell = "OneroomCell"
         case officeCell = "OfficeCell"
+        case annotationView = "AnnotaionView"
     }
     
     enum 주거: String {
@@ -32,5 +33,7 @@ struct Constant {
         case 가스비
         case 기타
     }
+    
+   
 }
 

@@ -10,7 +10,6 @@
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
 		2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* OfficeCell.swift */; };
 		2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE3D2A79179100A5DB36 /* SettingVC.swift */; };
-		215BDC642A863B4C007151A1 /* HudVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC632A863B4C007151A1 /* HudVC.swift */; };
 		215BDC662A889D7F007151A1 /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC652A889D7F007151A1 /* CheckList.swift */; };
 		217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83EC2A76847600363ED2 /* HouseTVCell.swift */; };
 		217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83F02A76858F00363ED2 /* ApartCell.swift */; };
@@ -44,7 +43,6 @@
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
 		2143CE372A79051400A5DB36 /* OfficeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeCell.swift; sourceTree = "<group>"; };
 		2143CE3D2A79179100A5DB36 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
-		215BDC632A863B4C007151A1 /* HudVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudVC.swift; sourceTree = "<group>"; };
 		215BDC652A889D7F007151A1 /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
 		217C83EC2A76847600363ED2 /* HouseTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTVCell.swift; sourceTree = "<group>"; };
 		217C83F02A76858F00363ED2 /* ApartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartCell.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 				218ACE082A76312400687EE6 /* MapVC.swift */,
 				21B627672A8383FE00081D5E /* SearchVC.swift */,
 				21B6276B2A83844400081D5E /* ModalVC.swift */,
-				215BDC632A863B4C007151A1 /* HudVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -383,7 +380,6 @@
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
 				215BDC662A889D7F007151A1 /* CheckList.swift in Sources */,
-				215BDC642A863B4C007151A1 /* HudVC.swift in Sources */,
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
 				21B627622A834B5500081D5E /* File.swift in Sources */,
 				2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */,
@@ -537,6 +533,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5L4BQJJ3H8;
@@ -571,6 +568,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5L4BQJJ3H8;
