@@ -2,6 +2,7 @@ import UIKit
 
 
 class NetworkingManager {
+    //MARK: - Singleton Pattern
     static let shared = NetworkingManager()
     private init() {}
     

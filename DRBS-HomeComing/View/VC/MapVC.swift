@@ -63,7 +63,7 @@ final class MapVC: HudVC {
     }
     
     //MARK: - Helpers
-    private func configureUI() {            //화면 구성
+    private func configureUI() {
         stackView.addArrangedSubviews(currentLocationButton, separateLine, searchButton)
         view.addSubviews(mkMapView, stackView)
         currentLocationButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
@@ -75,7 +75,7 @@ final class MapVC: HudVC {
             $0.width.equalTo(self.view.frame.width/8)
             $0.height.equalTo(self.view.frame.width/4)}}
     
-    private func settingMKMapView() {       //맵킷 세팅
+    private func settingMKMapView() {
         //MKMapView설정
         self.mkMapView.isPitchEnabled = false
         self.mkMapView.isRotateEnabled = false
@@ -84,8 +84,6 @@ final class MapVC: HudVC {
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
-
-        
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
@@ -162,7 +160,6 @@ final class MapVC: HudVC {
     
     
     //MARK: - Actions
-    
     @objc func currentLocationTapped() {
         print("디버깅: 현재위치 버튼 눌림")
         checkDeviceService()
@@ -210,9 +207,11 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print("지역이 달라짐")
-        let visibleRegion = mapView.region
-        self.locationViewModel.visibleRegion = visibleRegion
-//        self.locationViewModel.getAnnotationsWhenRegionChanged()
+        self.locationViewModel.currentVisible(region: mapView.region)
+        self.locationViewModel.locationsWhenRegionChanged()
+        for customPin in self.locationViewModel.annotations {
+            self.mkMapView.addAnnotation(customPin)
+        }
     }
     
 }

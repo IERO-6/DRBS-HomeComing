@@ -16,7 +16,7 @@ struct House {
     var 면적: Double?
     var 입주가능일: Date?
     var 계약기간: String?
-    var 체크리스트: CheckList? 
+    var 체크리스트: CheckList?
     var 기록: String?
     var 사진: [UIImage]?
     var 별점: String?
