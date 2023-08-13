@@ -24,6 +24,7 @@ class HouseViewModel {
 
     
     
+    
     //MARK: - Logics
     func blahblah() {
         

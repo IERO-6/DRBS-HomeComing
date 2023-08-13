@@ -92,6 +92,18 @@ final class MapVC: HudVC {
         
     }
     
+    
+    func removeAllAnnotations() {
+        
+        let annotations = mkMapView.annotations
+        
+        if !annotations.isEmpty {
+            for annotation in annotations {
+                mkMapView.removeAnnotation(annotation)
+            }
+        }
+    }
+    
     //MARK: - 권한설정탭(아마불변)
     private func checkDeviceService() {
         // 디바이스 자체 위치 서비스 관련 로직
@@ -207,12 +219,14 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print("지역이 달라짐")
+        self.removeAllAnnotations()
         self.locationViewModel.currentVisible(region: mapView.region)
         self.locationViewModel.locationsWhenRegionChanged()
         for customPin in self.locationViewModel.annotations {
             self.mkMapView.addAnnotation(customPin)
         }
     }
+    
     
 }
 

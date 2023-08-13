@@ -15,19 +15,11 @@ class LocationViewModel {
     
     //MARK: - Output
     
-    func getLocations() -> [Location] {
-        return self.fetchedLocations
-    }
-    
-//    func getFilteredLocations() -> [Location] {
-//        return locationsWhenRegionChanged()
-//    }
-//    
+    func getLocations() -> [Location] { return self.fetchedLocations }
+        
     
     //MARK: - Input
-    func currentVisible(region: MKCoordinateRegion) {
-        self.visibleRegion = region
-    }
+    func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
     
     
     
@@ -45,13 +37,6 @@ class LocationViewModel {
     
     func locationsWhenRegionChanged() {
         guard let visibleRegion = visibleRegion else { return }
-        //        let visibleRect = MKMapRect(origin: MKMapPoint(visibleRegion.center), size: MKMapSize(width: visibleRegion.span.longitudeDelta, height: visibleRegion.span.latitudeDelta))
-        //        let filteredLocations = fetchedAnnotations.filter {
-        //            visibleRect.contains(CLLocation(latitude: Double($0.latitude) ?? 0.0, longitude: Double($0.longitude) ?? 0.0))
-        //        }
-        //
-        //
-        //        return self.fetchedAnnotations
         let locationsInVisibleRegion = fetchedLocations.filter { location in
             guard
                 let latitude = CLLocationDegrees(location.latitude),
