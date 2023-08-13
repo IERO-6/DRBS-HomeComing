@@ -1,10 +1,3 @@
-//
-//  OfficeCell.swift
-//  TestProject
-//
-//  Created by 김은상 on 2023/08/01.
-//
-
 import UIKit
 
 class OfficeCell: UICollectionViewCell {

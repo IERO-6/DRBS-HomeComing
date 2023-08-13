@@ -3,7 +3,6 @@ import CoreLocation
 import MapKit
 import Then
 import SnapKit
-import JGProgressHUD
 
 
 // https://co-dong.tistory.com/73 참고중..
@@ -12,7 +11,7 @@ protocol MapDelegate: AnyObject {
     func cordHandler(with: Location)
 }
 
-final class MapVC: HudVC {
+final class MapVC: UIViewController {
     //MARK: - Properties
     
     private lazy var locationViewModel = LocationViewModel()
@@ -63,7 +62,7 @@ final class MapVC: HudVC {
     }
     
     //MARK: - Helpers
-    private func configureUI() {            //화면 구성
+    private func configureUI() {
         stackView.addArrangedSubviews(currentLocationButton, separateLine, searchButton)
         view.addSubviews(mkMapView, stackView)
         currentLocationButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
@@ -75,7 +74,7 @@ final class MapVC: HudVC {
             $0.width.equalTo(self.view.frame.width/8)
             $0.height.equalTo(self.view.frame.width/4)}}
     
-    private func settingMKMapView() {       //맵킷 세팅
+    private func settingMKMapView() {
         //MKMapView설정
         self.mkMapView.isPitchEnabled = false
         self.mkMapView.isRotateEnabled = false
@@ -84,14 +83,24 @@ final class MapVC: HudVC {
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
-
-        
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
     
     private func settingAnnotationPin() {
         
+    }
+    
+    
+    func removeAllAnnotations() {
+        
+        let annotations = mkMapView.annotations
+        
+        if !annotations.isEmpty {
+            for annotation in annotations {
+                mkMapView.removeAnnotation(annotation)
+            }
+        }
     }
     
     //MARK: - 권한설정탭(아마불변)
@@ -162,7 +171,6 @@ final class MapVC: HudVC {
     
     
     //MARK: - Actions
-    
     @objc func currentLocationTapped() {
         print("디버깅: 현재위치 버튼 눌림")
         checkDeviceService()
@@ -190,9 +198,9 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
         guard let annotation = annotation as? Annotation else { return nil}
-        var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: AnnotationView.identifier)
+        var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationView.identifier)
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constant.Identifier.annotationView.rawValue)
             annotationView?.canShowCallout = false
             annotationView?.contentMode = .scaleAspectFit
         } else { annotationView?.annotation = annotation }
@@ -210,11 +218,14 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print("지역이 달라짐")
-        let visibleRegion = mapView.region
-        self.locationViewModel.visibleRegion = visibleRegion
-        self.locationViewModel.getAnnotationsWhenRegionChanged()
-        print("변경된 지역의 위도는 :\(visibleRegion.center.latitude) 경도는 : \(visibleRegion.center.longitude)")
+        self.removeAllAnnotations()
+        self.locationViewModel.currentVisible(region: mapView.region)
+        self.locationViewModel.locationsWhenRegionChanged()
+        for customPin in self.locationViewModel.annotations {
+            self.mkMapView.addAnnotation(customPin)
+        }
     }
+    
     
 }
 

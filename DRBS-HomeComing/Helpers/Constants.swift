@@ -9,8 +9,31 @@ struct Constant {
         case apartCell = "ApartCell"
         case oneroomCell = "OneroomCell"
         case officeCell = "OfficeCell"
+        case annotationView = "AnnotaionView"
     }
     
+    enum 주거: String {
+        case 아파트
+        case 원룸
+        case 오피스텔
+        case 주택
+    }
     
+    enum 주거형태: String {
+        case 월세
+        case 전세
+        case 매매
+        case 분양
+    }
+    
+    enum 관리비미포함목록: String {
+        case 인터넷
+        case 전기세
+        case 수도세
+        case 가스비
+        case 기타
+    }
+    
+   
 }
 
