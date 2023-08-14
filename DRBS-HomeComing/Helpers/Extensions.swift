@@ -46,3 +46,7 @@ extension UIStackView {
     }
 
 }
+
+extension UIColor {
+    class var mainColor: UIColor? { return UIColor(named: "mainColor") }
+}

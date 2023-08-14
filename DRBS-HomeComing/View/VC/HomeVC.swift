@@ -37,7 +37,8 @@ class HomeVC: UIViewController {
 
     @objc public func plusButtonTapped() {
         let checkVC = CheckVC1()
-        present(checkVC, animated: true)
+        checkVC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(checkVC, animated: true)
     }
     @objc func settingButtonTapped() {
         let settingVC = SettingVC()
