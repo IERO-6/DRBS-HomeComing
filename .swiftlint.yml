@@ -17,6 +17,11 @@ disabled_rules:
     - switch_case_alignment             # switch문의 올바른 형식 제한
     - unneeded_break_in_switch          # switch문에서 불필요한 break 제한
     - cyclomatic_complexity             # 순환참조 복잡성 제한
+    - identifier_name
+    - colon
+    - opening_brace
+    - type_name
+    
 # 선택적으로 추가할 규칙
 opt_in_rules:
     - empty_count                       # count == 0 보다 empty 사용

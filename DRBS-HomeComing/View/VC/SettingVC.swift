@@ -1,10 +1,10 @@
 import UIKit
 
-class CheckVC2: UIViewController {
+class SettingVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .purple
         // Do any additional setup after loading the view.
     }
     

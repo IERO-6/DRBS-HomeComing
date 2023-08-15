@@ -10,5 +10,4 @@ target 'DRBS-HomeComing' do
   pod 'SnapKit'
   pod 'SwiftLint'
   pod 'Alamofire'
-  pod 'JGProgressHUD'
 end

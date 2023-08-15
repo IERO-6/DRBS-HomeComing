@@ -1,10 +1,18 @@
+//
+//  AdditionalVC.swift
+//  DRBS-HomeComing
+//
+//  Created by 김성호 on 2023/08/14.
+//
+
 import UIKit
 
-class CheckVC2: UIViewController {
+class AdditionalVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
     

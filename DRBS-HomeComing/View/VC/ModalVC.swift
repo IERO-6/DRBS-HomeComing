@@ -37,23 +37,23 @@ class ModalVC: UIViewController {
         
     }
     
-//    private let 주거형태레이블 = UILabel().then {
-//        $0.textColor = Constant.appColor
-//        $0.font = UIFont.systemFont(ofSize: 11)
-//        $0.textAlignment = .center
-//        $0.layer.cornerRadius = 5
-//        $0.layer.borderColor = Constant.appColor.cgColor
-//        $0.layer.borderWidth = 1
-//    }
-//    
-//    private let 매매형태레이블 = UILabel().then {
-//        $0.textColor = Constant.appColor
-//        $0.font = UIFont.systemFont(ofSize: 11)
-//        $0.textAlignment = .center
-//        $0.layer.cornerRadius = 5
-//        $0.layer.borderColor = Constant.appColor.cgColor
-//        $0.layer.borderWidth = 1
-//    }
+    private let 주거형태레이블 = UILabel().then {
+        $0.textColor = Constant.appColor
+        $0.font = UIFont.systemFont(ofSize: 11)
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = Constant.appColor.cgColor
+        $0.layer.borderWidth = 1
+    }
+    
+    private let 매매형태레이블 = UILabel().then {
+        $0.textColor = Constant.appColor
+        $0.font = UIFont.systemFont(ofSize: 11)
+        $0.textAlignment = .center
+        $0.layer.cornerRadius = 5
+        $0.layer.borderColor = Constant.appColor.cgColor
+        $0.layer.borderWidth = 1
+    }
     
     private let costLabel = UILabel().then {
         $0.font = UIFont.boldSystemFont(ofSize: 18)

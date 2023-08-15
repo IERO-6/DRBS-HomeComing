@@ -1,9 +1,3 @@
-//
-//  SearchVC.swift
-//  MKMapViewTest
-//
-//  Created by 김은상 on 2023/08/03.
-//
 import CoreLocation
 import UIKit
 
@@ -85,17 +79,9 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
 
 extension SearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-           
-          
             filtered = location.filter {$0.lowercased().contains(searchText.lowercased())}
-           
-//            if(filtered.count == 0){
-//                searchActive = false
-//            } else {
-//                searchActive = true
-//            }
             self.tableView.reloadData()
-        }
+    }
 }
 
 
