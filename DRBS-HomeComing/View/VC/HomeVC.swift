@@ -38,14 +38,14 @@ class HomeVC: UIViewController {
     //MARK: - Actions
 
     @objc public func plusButtonTapped() {
-        let checkVC = CheckVC1()
-        checkVC.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(checkVC, animated: true)
-    }
-    @objc func settingButtonTapped() {
-        let settingVC = SettingVC()
-        self.navigationController?.pushViewController(settingVC, animated: true)
-    }
+           let checkVC = CheckVC1()
+           checkVC.hidesBottomBarWhenPushed = true
+           self.navigationController?.pushViewController(checkVC, animated: true)
+       }
+       @objc func settingButtonTapped() {
+           let settingVC = SettingVC()
+           self.navigationController?.pushViewController(settingVC, animated: true)
+       }
 }
 
 //MARK: - UITableViewDelegate

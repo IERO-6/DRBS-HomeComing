@@ -67,4 +67,3 @@ class SettingsViewModel {
         return "\(version).\(build)"
     }
 }
-

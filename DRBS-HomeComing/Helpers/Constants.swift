@@ -9,7 +9,9 @@ struct Constant {
         case apartCell = "ApartCell"
         case oneroomCell = "OneroomCell"
         case officeCell = "OfficeCell"
+        case searchCell = "SearchCell"
         case annotationView = "AnnotaionView"
+
     }
     
     enum 주거: String {

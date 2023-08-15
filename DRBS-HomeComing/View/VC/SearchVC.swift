@@ -1,25 +1,25 @@
 import CoreLocation
 import UIKit
 
-class SearchVC: UIViewController {
+final class SearchVC: UIViewController {
     
     
     //MARK: - Properties
-
-    weak var mapDelegate: MapDelegate?
-
+    
+    private lazy var searchLocationViewModel = LocationViewModel()
+    
     let location: [String] = ["개포동", "개푸동", "진주시", "잠실", "수원시"]
+    
     var filtered: [String] = []
     
-    let searchBar = UISearchBar()
+    private lazy var searchBar = UISearchBar()
     
-    lazy var tableView = UITableView(frame: self.view.frame)
+    private lazy var tableView = UITableView(frame: self.view.frame)
     
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         settingSearchBar()
         configureUI()
         settingTableView()
@@ -28,54 +28,44 @@ class SearchVC: UIViewController {
     
     //MARK: - Helpers
 
-    func configureUI() {
+    private func configureUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
         self.tabBarController?.tabBar.isHidden = true
     }
     
-    func settingSearchBar() {
+    private func settingSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "지역 검색하기"
-
         self.navigationItem.titleView = searchBar
         self.searchBar.becomeFirstResponder()
     }
     
-    func settingTableView() {
+    private func settingTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 60
-        tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.identifier)
+        tableView.register(SearchCell.self, forCellReuseIdentifier: Constant.Identifier.searchCell.rawValue)
     }
-    
-    
 }
 
-//MARK: - Extensions
-
-
-
+//MARK: - UITableViewDataSource, UITableViewDelegate
 extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.filtered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.identifier, for: indexPath) as! SearchCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.searchCell.rawValue, for: indexPath) as! SearchCell
         cell.locationLabel.text = self.filtered[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let gaepoLocation = Location(latitude: "37.482040282097046", longitude: "127.06796189321376", isBookMarked: true)
-        mapDelegate?.cordHandler(with: gaepoLocation)
         self.navigationController?.popViewController(animated: true)
-        
-        
     }
-    
 }
+//MARK: - UISearchBarDelegate
 
 extension SearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

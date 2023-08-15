@@ -7,10 +7,6 @@ import SnapKit
 
 // https://co-dong.tistory.com/73 참고중..
 
-protocol MapDelegate: AnyObject {
-    func cordHandler(with: Location)
-}
-
 final class MapVC: UIViewController {
     //MARK: - Properties
     
@@ -42,12 +38,6 @@ final class MapVC: UIViewController {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = self.view.frame.width/30}
     
-    var location: Location? {
-        didSet {
-            guard let location = location else { return }
-            self.mkMapView.setCenter(CLLocationCoordinate2D(latitude: Double(location.latitude) ?? 0.0, longitude: Double(location.longitude) ?? 0.0), animated: true)
-        }
-    }
     let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
     
     //MARK: - LifeCycle
@@ -79,7 +69,7 @@ final class MapVC: UIViewController {
         self.mkMapView.isPitchEnabled = false
         self.mkMapView.isRotateEnabled = false
         self.mkMapView.delegate = self
-        self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationView.identifier)
+        self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
@@ -87,15 +77,8 @@ final class MapVC: UIViewController {
     
     private func settingCLLocationManager() { locationManager.delegate = self }
     
-    private func settingAnnotationPin() {
-        
-    }
-    
-    
-    func removeAllAnnotations() {
-        
+    private func removeAllAnnotations() {
         let annotations = mkMapView.annotations
-        
         if !annotations.isEmpty {
             for annotation in annotations {
                 mkMapView.removeAnnotation(annotation)
@@ -174,25 +157,21 @@ final class MapVC: UIViewController {
     @objc func currentLocationTapped() {
         print("디버깅: 현재위치 버튼 눌림")
         checkDeviceService()
-        
     }
     
     @objc func searchButtonTapped() {
         print("디버깅: 검색 버튼 눌림")
         let searchVC = SearchVC()
-        searchVC.mapDelegate = self
         navigationController?.pushViewController(searchVC, animated: true)
     }
 }
 
-//MARK: - Extension
-
+//MARK: - MKMapViewDelegate
 extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let modalVC = ModalVC()
         modalVC.modalPresentationStyle = .pageSheet
         //모달VC에 데이터 전달 => viewModel을 통해
-        
         present(modalVC, animated: true)}
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -214,22 +193,21 @@ extension MapVC: MKMapViewDelegate {
         case false:
             return annotationView
         }
+        
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        print("지역이 달라짐")
-        self.removeAllAnnotations()
         self.locationViewModel.currentVisible(region: mapView.region)
         self.locationViewModel.locationsWhenRegionChanged()
-        for customPin in self.locationViewModel.annotations {
-            self.mkMapView.addAnnotation(customPin)
+        DispatchQueue.main.async {
+            self.removeAllAnnotations()
+            for customPin in self.locationViewModel.getAnnotations() {
+                self.mkMapView.addAnnotation(customPin)
+            }
         }
     }
-    
-    
 }
-
-
+//MARK: - CLLocationManagerDelegate
 
 extension MapVC: CLLocationManagerDelegate {
     // 사용자의 위치를 성공적으로 가져왔을 때 호출
@@ -254,22 +232,9 @@ extension MapVC: CLLocationManagerDelegate {
     
     
     
-    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
         checkDeviceService()
     }
-    
-}
-extension MapVC: MapDelegate {
-    func cordHandler(with: Location){
-        self.location = with
-        
-        
-    }
-    
-    
-    
-    
     
 }

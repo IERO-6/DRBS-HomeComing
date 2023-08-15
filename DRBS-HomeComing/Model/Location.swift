@@ -7,7 +7,7 @@ struct Location {
 
     var latitude: String        //위도
     var longitude: String       //경도
-    var isBookMarked: Bool//북마크여부 => 전체 모델에서 가져올지 따로 변수로 만들지 고민중
+    var isBookMarked: Bool      //북마크여부 => 전체 모델에서 가져올지 따로 변수로 만들지 고민중
 //    var house: House?
     // House 모델도 소유해야함
     

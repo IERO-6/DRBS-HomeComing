@@ -5,9 +5,6 @@ class HouseTVCell: UITableViewCell {
 
     var indexPath: Int?
     
-    
-    
-
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -51,6 +48,10 @@ class HouseTVCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - Helpers
+
+    
     
 }
 
