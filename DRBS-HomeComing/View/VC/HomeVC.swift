@@ -14,6 +14,8 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingTV()
+        
+        self.extendedLayoutIncludesOpaqueBars = true
     }
     
     //MARK: - Helpers
@@ -42,9 +44,8 @@ class HomeVC: UIViewController {
     }
     @objc func settingButtonTapped() {
         let settingVC = SettingVC()
-        present(settingVC, animated: true)
+        self.navigationController?.pushViewController(settingVC, animated: true)
     }
-    
 }
 
 //MARK: - UITableViewDelegate
