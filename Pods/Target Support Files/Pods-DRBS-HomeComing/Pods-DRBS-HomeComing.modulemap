@@ -1,0 +1,6 @@
+framework module Pods_DRBS_HomeComing {
+  umbrella header "Pods-DRBS-HomeComing-umbrella.h"
+
+  export *
+  module * { export * }
+}
