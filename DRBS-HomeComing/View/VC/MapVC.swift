@@ -79,7 +79,7 @@ final class MapVC: UIViewController {
         self.mkMapView.isPitchEnabled = false
         self.mkMapView.isRotateEnabled = false
         self.mkMapView.delegate = self
-        self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: AnnotationView.identifier)
+        self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         mkMapView.addAnnotation(pin)
@@ -214,16 +214,19 @@ extension MapVC: MKMapViewDelegate {
         case false:
             return annotationView
         }
+        
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        print("지역이 달라짐")
         self.removeAllAnnotations()
         self.locationViewModel.currentVisible(region: mapView.region)
         self.locationViewModel.locationsWhenRegionChanged()
-        for customPin in self.locationViewModel.annotations {
-            self.mkMapView.addAnnotation(customPin)
+        DispatchQueue.main.async {
+            for customPin in self.locationViewModel.getAnnotations() {
+                self.mkMapView.addAnnotation(customPin)
+            }
         }
+        
     }
     
     

@@ -5,8 +5,6 @@ import SnapKit
 
 class AnnotationView: MKAnnotationView {
     //MARK: - Properties
-
-    static let identifier = "AnnotationView"
     
     private let view = UIImageView().then {
         $0.backgroundColor = .clear

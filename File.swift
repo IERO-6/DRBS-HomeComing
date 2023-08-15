@@ -1,8 +1,18 @@
-//
-//  File.swift
-//  DRBS-HomeComing
-//
-//  Created by 김은상 on 2023/08/09.
-//
+import UIKit
 
-import Foundation
+class SomeViewController: UIViewController {
+    //MARK: - Properties
+
+    
+    //MARK: - LifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    //MARK: - Helpers
+    
+    //MARK: - Actions
+
+
+    
+}
