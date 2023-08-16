@@ -18,11 +18,6 @@ class HomeVC: UIViewController {
         self.extendedLayoutIncludesOpaqueBars = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setupHomeBarAppearance()
-    }
-    
     //MARK: - Helpers
 
     func configureUI() {

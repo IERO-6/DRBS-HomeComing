@@ -10,7 +10,7 @@ class HouseTVCell: UITableViewCell {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 8.0
         layout.minimumInteritemSpacing = 0
-        layout.itemSize = .init(width: 200, height: 180)
+        layout.itemSize = .init(width: 150, height: 150)
         
         return layout
     }()

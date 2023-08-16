@@ -38,6 +38,8 @@ final class MapVC: UIViewController {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = self.view.frame.width/30}
     
+    let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,17 +55,9 @@ final class MapVC: UIViewController {
     private func configureUI() {
         stackView.addArrangedSubviews(currentLocationButton, separateLine, searchButton)
         view.addSubviews(mkMapView, stackView)
-        currentLocationButton.snp.makeConstraints{
-            $0.width.equalToSuperview()
-            $0.height.equalTo(stackView.snp.width)
-            $0.top.equalTo(stackView.snp.top)}
-        searchButton.snp.makeConstraints{
-            $0.width.equalToSuperview()
-            $0.bottom.equalTo(stackView.snp.bottom)}
-        separateLine.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.width.equalTo(stackView.snp.width)
-            $0.leading.trailing.equalToSuperview()}
+        currentLocationButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
+        searchButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
+        separateLine.snp.makeConstraints {$0.height.equalTo(1)}
         stackView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             $0.trailing.equalToSuperview().offset(-10)
@@ -78,6 +72,7 @@ final class MapVC: UIViewController {
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        mkMapView.addAnnotation(pin)
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
@@ -114,10 +109,14 @@ final class MapVC: UIViewController {
             locationManager.requestWhenInUseAuthorization()
             print("requestWhenInUseAuthorization 실행됨")
             // 권한 요청을 보낸다.
-        case .restricted, .denied:
+        case .denied:
+            // 사용자가 명시적으로 권한을 거부
+            print("디버깅: denied")
+            showAlert()
+        case .restricted:
             // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
             // 시스템 설정에서 설정값을 변경하도록 유도
-            print("디버깅: restricted, denied")
+            print("디버깅: restricted")
             showRequestLocationServiceAlert()
         case .authorizedWhenInUse:
             print("디버깅: authorizedWhenInUse ")
@@ -126,12 +125,12 @@ final class MapVC: UIViewController {
             // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
             // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
             locationManager.startUpdatingLocation()
+            
         default:
             print("디버깅: default")
         }
     }
     private func showRequestLocationServiceAlert() {
-        DispatchQueue.main.async {
         let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
         let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
             if let appSetting = URL(string: UIApplication.openSettingsURLString) {
@@ -139,17 +138,30 @@ final class MapVC: UIViewController {
             }
         }
         alert.addAction(goSetting)
-            self.present(alert, animated: true)
+        present(alert, animated: true)
+    }
+     
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호> 위치서비스> DRBS'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
+        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSetting)
+            }
         }
+        alert.addAction(goSetting)
+        present(alert, animated: true)
     }
     
     
     //MARK: - Actions
     @objc func currentLocationTapped() {
-        self.checkDeviceService()
+        print("디버깅: 현재위치 버튼 눌림")
+        checkDeviceService()
     }
     
     @objc func searchButtonTapped() {
+        print("디버깅: 검색 버튼 눌림")
         let searchVC = SearchVC()
         navigationController?.pushViewController(searchVC, animated: true)
     }

@@ -4,6 +4,7 @@ import CoreLocation
 
 class LocationViewModel {
     //MARK: - Model
+    
     var locationModel: Location?
     var annotations: [Annotation] = []
     var fetchedLocations: [Location] = [
@@ -19,6 +20,7 @@ class LocationViewModel {
     
     func getAnnotations() -> [Annotation] { return self.annotations }
         
+    
     //MARK: - Input
     func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
     

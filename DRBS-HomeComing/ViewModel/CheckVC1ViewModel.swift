@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class CheckViewModel {
     var information: Information = Information()
     
