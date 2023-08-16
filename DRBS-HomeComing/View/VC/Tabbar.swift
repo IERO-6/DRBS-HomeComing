@@ -1,20 +1,14 @@
 import UIKit
 
-
-
-class Tabbar: UITabBarController {
+final class Tabbar: UITabBarController {
     //MARK: - Properties
-    
-    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabbar()
-
     }
-    
     //MARK: - Helpers
-    func configureTabbar() {
+    private func configureTabbar() {
         self.tabBar.isTranslucent = false
         self.tabBar.backgroundColor = .white
         self.tabBar.tintColor = Constant.appColor

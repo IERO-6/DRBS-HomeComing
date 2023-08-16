@@ -14,8 +14,11 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingTV()
-        
-        self.extendedLayoutIncludesOpaqueBars = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setupHomeBarAppearance()
     }
     
     //MARK: - Helpers
@@ -46,6 +49,7 @@ class HomeVC: UIViewController {
            let settingVC = SettingVC()
            self.navigationController?.pushViewController(settingVC, animated: true)
        }
+    
 }
 
 //MARK: - UITableViewDelegate

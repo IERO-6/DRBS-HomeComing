@@ -179,6 +179,14 @@
 			path = SettingSectionViewModel;
 			sourceTree = "<group>";
 		};
+		216FA0CB2A8BB00B004D0279 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				218ACDEB2A75262500687EE6 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
@@ -202,12 +210,12 @@
 		218ACDE12A75262400687EE6 /* DRBS-HomeComing */ = {
 			isa = PBXGroup;
 			children = (
+				216FA0CB2A8BB00B004D0279 /* Resources */,
 				218ACDF72A75263C00687EE6 /* API */,
 				218ACDFB2A7526F500687EE6 /* Helpers */,
 				218ACDF92A75266400687EE6 /* Model */,
 				218ACDF82A75264500687EE6 /* View */,
 				218ACDFA2A75266A00687EE6 /* ViewModel */,
-				218ACDEB2A75262500687EE6 /* Assets.xcassets */,
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
 			);
