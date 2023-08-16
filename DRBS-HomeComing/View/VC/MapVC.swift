@@ -49,6 +49,7 @@ final class MapVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        self.checkDeviceService()
     }
     
     //MARK: - Helpers
@@ -96,6 +97,7 @@ final class MapVC: UIViewController {
                 return}
             print("디버깅: 현재 디바이스의 위치 서비스 상태는 ⭕️")
             let authStatus = self.locationManager.authorizationStatus
+            self.locationViewModel.locationAuthStatus = authStatus
             self.checkCurrentLocationAuth(authStatus)}}
     
     private func checkCurrentLocationAuth(_ status: CLAuthorizationStatus) {
@@ -109,14 +111,10 @@ final class MapVC: UIViewController {
             locationManager.requestWhenInUseAuthorization()
             print("requestWhenInUseAuthorization 실행됨")
             // 권한 요청을 보낸다.
-        case .denied:
-            // 사용자가 명시적으로 권한을 거부
-            print("디버깅: denied")
-            showAlert()
-        case .restricted:
+        case .restricted, .denied:
             // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
             // 시스템 설정에서 설정값을 변경하도록 유도
-            print("디버깅: restricted")
+            print("디버깅: restricted, denied")
             showRequestLocationServiceAlert()
         case .authorizedWhenInUse:
             print("디버깅: authorizedWhenInUse ")
@@ -125,12 +123,12 @@ final class MapVC: UIViewController {
             // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
             // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
             locationManager.startUpdatingLocation()
-            
         default:
             print("디버깅: default")
         }
     }
     private func showRequestLocationServiceAlert() {
+        DispatchQueue.main.async {
         let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
         let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
             if let appSetting = URL(string: UIApplication.openSettingsURLString) {
@@ -138,25 +136,20 @@ final class MapVC: UIViewController {
             }
         }
         alert.addAction(goSetting)
-        present(alert, animated: true)
-    }
-    
-    private func showAlert() {
-        let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호> 위치서비스> DRBS'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
-        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
-            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(appSetting)
-            }
+            self.present(alert, animated: true)
         }
-        alert.addAction(goSetting)
-        present(alert, animated: true)
     }
     
     
     //MARK: - Actions
     @objc func currentLocationTapped() {
-        print("디버깅: 현재위치 버튼 눌림")
-        checkDeviceService()
+        guard self.locationViewModel.locationAuthStatus == .authorizedWhenInUse else {
+            self.checkDeviceService()
+            return
+        }
+        self.mkMapView.showsUserLocation = true
+        self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        
     }
     
     @objc func searchButtonTapped() {

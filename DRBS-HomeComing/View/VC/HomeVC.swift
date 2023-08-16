@@ -16,6 +16,11 @@ class HomeVC: UIViewController {
         settingTV()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setupHomeBarAppearance()
+    }
+    
     //MARK: - Helpers
 
     func configureUI() {

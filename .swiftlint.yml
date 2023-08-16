@@ -17,7 +17,7 @@ disabled_rules:
     - switch_case_alignment             # switch문의 올바른 형식 제한
     - unneeded_break_in_switch          # switch문에서 불필요한 break 제한
     - cyclomatic_complexity             # 순환참조 복잡성 제한
-    - identifier_name
+    - identifier_name                   # 번들 아이텐디파이어 제한
     - colon
     - opening_brace
     - type_name
