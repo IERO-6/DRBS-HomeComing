@@ -12,8 +12,6 @@ class LocationViewModel {
                         Location(latitude: "37.33387447939296", longitude: "127.11677820767655", isBookMarked: true)]
     var visibleRegion: MKCoordinateRegion?
     
-    var locationAuthStatus: CLAuthorizationStatus?
-    
     
     //MARK: - Output
     

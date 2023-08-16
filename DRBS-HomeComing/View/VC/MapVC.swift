@@ -38,8 +38,6 @@ final class MapVC: UIViewController {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = self.view.frame.width/30}
     
-    let pin = Annotation(isBookMarked: false, coordinate: CLLocationCoordinate2D(latitude: 37.33511535552606, longitude: 127.11933035555937))
-    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,16 +47,23 @@ final class MapVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        self.checkDeviceService()
     }
     
     //MARK: - Helpers
     private func configureUI() {
         stackView.addArrangedSubviews(currentLocationButton, separateLine, searchButton)
         view.addSubviews(mkMapView, stackView)
-        currentLocationButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
-        searchButton.snp.makeConstraints{$0.height.equalTo(self.view.frame.width/8)}
-        separateLine.snp.makeConstraints {$0.height.equalTo(1)}
+        currentLocationButton.snp.makeConstraints{
+            $0.width.equalToSuperview()
+            $0.height.equalTo(stackView.snp.width)
+            $0.top.equalTo(stackView.snp.top)}
+        searchButton.snp.makeConstraints{
+            $0.width.equalToSuperview()
+            $0.bottom.equalTo(stackView.snp.bottom)}
+        separateLine.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.width.equalTo(stackView.snp.width)
+            $0.leading.trailing.equalToSuperview()}
         stackView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             $0.trailing.equalToSuperview().offset(-10)
@@ -73,7 +78,6 @@ final class MapVC: UIViewController {
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        mkMapView.addAnnotation(pin)
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
@@ -97,7 +101,6 @@ final class MapVC: UIViewController {
                 return}
             print("디버깅: 현재 디바이스의 위치 서비스 상태는 ⭕️")
             let authStatus = self.locationManager.authorizationStatus
-            self.locationViewModel.locationAuthStatus = authStatus
             self.checkCurrentLocationAuth(authStatus)}}
     
     private func checkCurrentLocationAuth(_ status: CLAuthorizationStatus) {
@@ -143,17 +146,10 @@ final class MapVC: UIViewController {
     
     //MARK: - Actions
     @objc func currentLocationTapped() {
-        guard self.locationViewModel.locationAuthStatus == .authorizedWhenInUse else {
-            self.checkDeviceService()
-            return
-        }
-        self.mkMapView.showsUserLocation = true
-        self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        
+        self.checkDeviceService()
     }
     
     @objc func searchButtonTapped() {
-        print("디버깅: 검색 버튼 눌림")
         let searchVC = SearchVC()
         navigationController?.pushViewController(searchVC, animated: true)
     }
