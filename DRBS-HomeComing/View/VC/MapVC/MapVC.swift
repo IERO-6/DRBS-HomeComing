@@ -132,13 +132,13 @@ final class MapVC: UIViewController {
     }
     private func showRequestLocationServiceAlert() {
         DispatchQueue.main.async {
-        let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
-        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
-            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(appSetting)
+            let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
+            let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+                if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSetting)
+                }
             }
-        }
-        alert.addAction(goSetting)
+            alert.addAction(goSetting)
             self.present(alert, animated: true)
         }
     }
@@ -165,32 +165,36 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
-        guard let annotation = annotation as? Annotation else { return nil}
+        guard let annotation = annotation as? Annotation else {return nil}
         var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constant.Identifier.annotationView.rawValue)
             annotationView?.canShowCallout = false
             annotationView?.contentMode = .scaleAspectFit
         } else { annotationView?.annotation = annotation }
-        
-        let size = CGSize(width: 30, height: 30)
-        UIGraphicsBeginImageContext(size)
-        
+        let annotationImage: UIImage!
         switch annotation.isBookMarked {
         case true:
-            return annotationView
+//            annotationImage = UIImage(named: "annotation_Bookmarked.png")
+            annotationImage = UIImage(named: "test1.png")
         case false:
-            return annotationView
+//            annotationImage = UIImage(named: "annotation_default.png")
+            annotationImage = UIImage(named: "testb1.png")
         }
-        
+//        annotationImage.draw(in: CGRect(x: 0, y: 0, width: 20, height: 20))
+        annotationView?.image = annotationImage
+        return annotationView
     }
+    
+    
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         self.locationViewModel.currentVisible(region: mapView.region)
         self.locationViewModel.locationsWhenRegionChanged()
         DispatchQueue.main.async {
             self.removeAllAnnotations()
-            for customPin in self.locationViewModel.getAnnotations() {
+            let annotations = self.locationViewModel.getAnnotations()
+            for customPin in annotations {
                 self.mkMapView.addAnnotation(customPin)
             }
         }
@@ -216,14 +220,10 @@ extension MapVC: CLLocationManagerDelegate {
     
     // 사용자가 GPS 사용이 불가한 지역에 있는 등 위치 정보를 가져오지 못했을 때 호출
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(#function)
-    }
-    
-    
+        print(#function)}
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
-        checkDeviceService()
-    }
+        checkDeviceService()}
     
 }

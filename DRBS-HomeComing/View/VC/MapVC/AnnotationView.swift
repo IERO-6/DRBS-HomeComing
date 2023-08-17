@@ -14,10 +14,6 @@ class AnnotationView: MKAnnotationView {
         $0.tintColor = .white
     }
     
-    private let houseImage = UIImage(systemName: "house")!.then {
-        $0.withTintColor(.white)
-    }
-    
     private let backgroundView = UIView().then {
         $0.backgroundColor = Constant.appColor
         $0.clipsToBounds = true
@@ -28,7 +24,8 @@ class AnnotationView: MKAnnotationView {
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        configureUI()
+        backgroundColor = .clear
+//        configureUI()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,15 +42,12 @@ class AnnotationView: MKAnnotationView {
         backgroundView.snp.makeConstraints {
             $0.width.height.equalTo(30)
             $0.centerX.equalTo(self.snp.centerX)
-            $0.centerY.equalTo(self.snp.centerY)
-        }
-        
+            $0.centerY.equalTo(self.snp.centerY)}
         
         view.snp.makeConstraints {
             $0.width.height.equalTo(25)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview()
-        }
+            $0.centerY.equalToSuperview()}
         backgroundView.layer.cornerRadius = 15
     }
     

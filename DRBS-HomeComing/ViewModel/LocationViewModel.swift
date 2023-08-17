@@ -7,8 +7,8 @@ class LocationViewModel {
     var locationModel: Location?
     var annotations: [Annotation] = []
     var fetchedLocations: [Location] = [
-                        Location(latitude: "37.33511535552606", longitude: "127.11933035555937", isBookMarked: true),
-                        Location(latitude: "37.32209627495218", longitude: " 127.12718477301696", isBookMarked: true),
+                        Location(latitude: "37.33511535552606", longitude: "127.11933035555937", isBookMarked: false),
+                        Location(latitude: "37.32209627495218", longitude: " 127.12718477301696", isBookMarked: false),
                         Location(latitude: "37.33387447939296", longitude: "127.11677820767655", isBookMarked: true)]
     var visibleRegion: MKCoordinateRegion?
     
