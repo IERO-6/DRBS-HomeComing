@@ -3,7 +3,7 @@ import UIKit
 
 struct Constant {
     static let appColor: UIColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1.00)
-
+    static let font = "Pretendard-Bold"
     enum Identifier: String {
         case houseCell = "HouseCell"
         case apartCell = "ApartCell"
@@ -36,6 +36,12 @@ struct Constant {
         case 기타
     }
     
+    enum 방향: String {
+        case 남향
+        case 동향
+        case 북향
+        case 서향
+    }
    
 }
 

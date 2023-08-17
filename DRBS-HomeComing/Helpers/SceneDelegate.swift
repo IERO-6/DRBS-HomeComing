@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             vc1.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
             vc2.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "map"), selectedImage: UIImage(systemName: "map.fill"))
             let nav1 = UINavigationController(rootViewController: vc1)
-            
             let nav2 = UINavigationController(rootViewController: vc2)
             vc1.tabBarItem.title = "홈"
             vc2.tabBarItem.title = "지도"
