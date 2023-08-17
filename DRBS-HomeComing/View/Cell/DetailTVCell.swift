@@ -1,10 +1,3 @@
-//
-//  DetailTVCell.swift
-//  DRBS-HomeComing
-//
-//  Created by 김성호 on 2023/08/14.
-//
-
 import UIKit
 import Then
 import SnapKit
@@ -13,73 +6,58 @@ class DetailTVCell: UITableViewCell {
     
     static let identifier = "DetailTVCell"
     
-    let nameLabel: UILabel = {
-        let nameLabel = UILabel()
-        nameLabel.text = "신대방역 근처 원룸"
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        if let currentFont = nameLabel.font {
-            nameLabel.font = currentFont.withSize(18)
-        }
-       return nameLabel
-    }()
+    let nameLabel = UILabel().then {
+        $0.text = "신대방역 근처 원룸"
+    }
     
-    let priceLabel: UILabel = {
-        let priceLabel = UILabel()
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        priceLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        
-        return priceLabel
-    }()
+    let priceLabel = UILabel().then {
+        $0.font = UIFont.boldSystemFont(ofSize: 16)
+    }
     
-    let roomImageView: UIImageView = {
-        let roomImageView = UIImageView()
-        roomImageView.image = UIImage(named: "roomImage")
-        roomImageView.translatesAutoresizingMaskIntoConstraints = false
-        return roomImageView
-    }()
+    let roomImageView = UIImageView().then {
+        $0.image = UIImage(named: "roomImage")
+    }
     
-    let starsNumber: UILabel = {
-        let starsNumber = UILabel()
-        starsNumber.translatesAutoresizingMaskIntoConstraints = false
-        return starsNumber
-    }()
+    let starsNumber = UILabel().then {
+        $0.textColor = .black
+    }
     
-    let starImageView: UIImageView = {
-        let starImageView = UIImageView()
-        starImageView.image = UIImage(named: "star")
-        starImageView.translatesAutoresizingMaskIntoConstraints = false
-        return starImageView
-    }()
+    let starImageView = UIImageView().then {
+        $0.image = UIImage(named: "star")
+    }
     
-    let bookMarkButton: UIButton = {
-        let bookMarkButton = UIButton()
-        
+    let bookMarkButton = UIButton().then {
         if let bookMarkImage = UIImage(systemName: "bookmark") {
-            bookMarkButton.setImage(bookMarkImage, for: .normal)
-            bookMarkButton.tintColor = .mainColor
+            $0.setImage(bookMarkImage, for: .normal)
+            $0.tintColor = Constant.appColor
         }
-        
-        bookMarkButton.translatesAutoresizingMaskIntoConstraints = false
-        return bookMarkButton
-    }()
+    }
     
-    let memoTextField: UITextView = {
-        let memoTextField = UITextView()
-        memoTextField.translatesAutoresizingMaskIntoConstraints = false
-        memoTextField.backgroundColor = .systemGray6
-        memoTextField.isScrollEnabled = false
-        memoTextField.font = UIFont.systemFont(ofSize: 16)
-        memoTextField.textContainer.maximumNumberOfLines = 2
-        memoTextField.textContainer.lineBreakMode = .byTruncatingTail
-        return memoTextField
-    }()
+    let memoTextField = UITextView().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = .systemGray6
+        $0.isScrollEnabled = false
+        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textContainer.maximumNumberOfLines = 2
+        $0.textContainer.lineBreakMode = .byTruncatingTail
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-            
-    addContentView()
-    autoLayout()
+        
+        bookMarkButton.addTarget(self, action: #selector(bookMarkButtonTapped), for: .touchUpInside)
+        
+        addContentView()
+        autoLayout()
+    }
+    
+    //버튼을 눌렀을 때, 꽉찬북마크가 나타나게
+    @objc private func bookMarkButtonTapped() {
+        bookMarkButton.isSelected.toggle()
+        let bookMarkImage = bookMarkButton.isSelected ? "bookmark.fill" : "bookmark"
+        if let fillBookMarkImage = UIImage(systemName: bookMarkImage) {
+            bookMarkButton.setImage(fillBookMarkImage, for: .normal)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -93,7 +71,6 @@ class DetailTVCell: UITableViewCell {
     private func autoLayout() {
         
         roomImageView.snp.makeConstraints {
-            //왼쪽으로부터 5
             $0.top.equalTo(priceLabel.snp.bottom).offset(10)
             $0.leading.equalTo(0)
             $0.size.width.height.equalTo(100)
@@ -134,11 +111,10 @@ class DetailTVCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-        
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
 }

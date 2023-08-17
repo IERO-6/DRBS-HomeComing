@@ -61,10 +61,24 @@ extension HomeVC: UITableViewDelegate {
             titleButton.setTitleColor(.black, for: .normal)
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-            
+        
+        // 섹션을 버튼의 태그로 저장
+        titleButton.tag = section
+
+        
+        titleButton.addTarget(self, action: #selector(titleButtonTapped(_:)), for: .touchUpInside)
+                              
             return headerView
         }
-    
+            @objc func titleButtonTapped(_ sender: UIButton) {
+            // 선택된 버튼의 섹션을 가져옴
+            let section = sender.tag
+            let detailTV = DetailTV()
+            detailTV.section = section
+            
+            navigationController?.pushViewController(detailTV, animated: true)
+        }
+                              
 }
 
 //MARK: - UITableViewDataSource

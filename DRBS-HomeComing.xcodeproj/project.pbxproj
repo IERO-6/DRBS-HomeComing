@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		186335582A8A0CDD00E283D5 /* AdditionalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186335572A8A0CDD00E283D5 /* AdditionalVC.swift */; };
 		1863355A2A8A0D0B00E283D5 /* DetailTV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186335592A8A0D0B00E283D5 /* DetailTV.swift */; };
-		1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */; };
 		1863355E2A8A0D1D00E283D5 /* DetailTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */; };
 		186335602A8A0D2900E283D5 /* CheckVC1ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */; };
+		188FEE9E2A8DE82B0013A53A /* CheckVC2Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FEE9D2A8DE82B0013A53A /* CheckVC2Cell.swift */; };
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
 		2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* OfficeCell.swift */; };
 		2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE3D2A79179100A5DB36 /* SettingVC.swift */; };
@@ -47,9 +47,9 @@
 /* Begin PBXFileReference section */
 		186335572A8A0CDD00E283D5 /* AdditionalVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalVC.swift; sourceTree = "<group>"; };
 		186335592A8A0D0B00E283D5 /* DetailTV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTV.swift; sourceTree = "<group>"; };
-		1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1Model.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTVCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1ViewModel.swift; sourceTree = "<group>"; };
+		188FEE9D2A8DE82B0013A53A /* CheckVC2Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2Cell.swift; sourceTree = "<group>"; };
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
 		2143CE372A79051400A5DB36 /* OfficeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeCell.swift; sourceTree = "<group>"; };
 		2143CE3D2A79179100A5DB36 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
@@ -99,6 +99,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		188FEE9C2A8DD15A0013A53A /* CheckViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */,
+			);
+			path = CheckViewModels;
+			sourceTree = "<group>";
+		};
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
@@ -160,7 +168,6 @@
 				21B627632A83834900081D5E /* Location.swift */,
 				21B627702A84AD1200081D5E /* Annotation.swift */,
 				215BDC652A889D7F007151A1 /* CheckList.swift */,
-				1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -168,9 +175,9 @@
 		218ACDFA2A75266A00687EE6 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				188FEE9C2A8DD15A0013A53A /* CheckViewModels */,
 				218ACE102A763FA700687EE6 /* HouseViewModel.swift */,
 				21B627652A83838600081D5E /* LocationViewModel.swift */,
-				1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -228,6 +235,7 @@
 				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
 				1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */,
+				188FEE9D2A8DE82B0013A53A /* CheckVC2Cell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -405,7 +413,6 @@
 				21B6276C2A83844400081D5E /* ModalVC.swift in Sources */,
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
 				2143CE3E2A79179100A5DB36 /* SettingVC.swift in Sources */,
-				1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
 				21B627642A83834900081D5E /* Location.swift in Sources */,
@@ -413,6 +420,7 @@
 				218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */,
 				186335602A8A0D2900E283D5 /* CheckVC1ViewModel.swift in Sources */,
 				217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */,
+				188FEE9E2A8DE82B0013A53A /* CheckVC2Cell.swift in Sources */,
 				1863355A2A8A0D0B00E283D5 /* DetailTV.swift in Sources */,
 				218ACE152A76434500687EE6 /* CheckVC1.swift in Sources */,
 			);
