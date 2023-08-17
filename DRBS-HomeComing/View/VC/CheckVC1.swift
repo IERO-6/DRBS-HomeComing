@@ -27,28 +27,31 @@ final class CheckVC1: UIViewController {
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
         $0.font = UIFont(name: Constant.font, size: 16)}
-    private let nameTextField = UITextField().then {$0.placeholder = "이름을 입력해주세요"}
+    private let nameTextField = UITextField().then {
+        $0.placeholder = "이름을 입력해주세요"
+//        $0.borderStyle = .none
+    }
     private let tradeLabel = UILabel().then {
-        $0.text = "거래 방식"
+        $0.text = "거래 방식*"
         $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray}
     private lazy var 월세버튼 = UIButton().then {
         $0.setTitle("월세", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 전세버튼 = UIButton().then {
         $0.setTitle("전세", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 매매버튼 = UIButton().then {
         $0.setTitle("매매", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -60,28 +63,28 @@ final class CheckVC1: UIViewController {
         $0.textColor = .darkGray}
     private lazy var 아파트버튼 = UIButton().then {
         $0.setTitle("아파트", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 투룸버튼 = UIButton().then {
         $0.setTitle("빌라/투룸+", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 오피스텔버튼 = UIButton().then {
         $0.setTitle("오피스텔", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 원룸버튼 = UIButton().then {
         $0.setTitle("원룸", for: .normal)
-        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -89,8 +92,6 @@ final class CheckVC1: UIViewController {
     private lazy var livingButtons = [아파트버튼, 투룸버튼, 오피스텔버튼, 원룸버튼]
     private let addressLabel = UILabel().then {$0.text = "주소*"}
     private let addressTextField = UITextField().then {$0.placeholder = "경기도 수원시 권선구 매실로 70"}
-    private let bottomBorder = UIView().then {$0.backgroundColor = .gray}
-    private let addressBottomBorder = UIView().then {$0.backgroundColor = .gray}
     private lazy var nextButton = UIButton().then {
         $0.backgroundColor = Constant.appColor
         $0.setTitle("다음", for: .normal)
@@ -104,6 +105,10 @@ final class CheckVC1: UIViewController {
         configureUI()
         setupNavigationBar()
         setUpLabel()
+    }
+    override func viewDidLayoutSubviews() {
+        addressTextField.addBottomBorder()
+        nameTextField.addBottomBorder()
     }
     
     //MARK: - Helpers
@@ -119,7 +124,11 @@ final class CheckVC1: UIViewController {
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)}
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)}
+            $0.height.equalTo(30)
+
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
+        }
         tradeLabel.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(20)
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)}
@@ -166,7 +175,10 @@ final class CheckVC1: UIViewController {
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)}
         addressTextField.snp.makeConstraints {
             $0.top.equalTo(addressLabel.snp.bottom).offset(20)
-            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)}
+            $0.height.equalTo(30)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
+        }
         nextButton.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-70)
             $0.centerX.equalTo(self.view.snp.centerX)
@@ -182,7 +194,8 @@ final class CheckVC1: UIViewController {
     
     private func setUpLabel() {
         //*만 빨갛게 바꾸는 콛
-        let labels = [nameLabel, livingLabel, addressLabel]
+        let labels = [nameLabel, tradeLabel,
+                      livingLabel, addressLabel]
         for texts in labels {
             let fullText = texts.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
@@ -195,21 +208,23 @@ final class CheckVC1: UIViewController {
     @objc func buttonTapped(_ sender: UIButton) {
         switch sender.currentTitle {
         case "월세", "전세", "매매":
+            self.houseViewModel.trade = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
             for tradeButton in tradeButtons {
                 guard tradeButton.currentTitle == sender.currentTitle else {
-                    tradeButton.setTitleColor(.systemGray4, for: .normal)
+                    tradeButton.setTitleColor(.darkGray, for: .normal)
                     tradeButton.backgroundColor = .white
                     continue
                 }
             }
         case "아파트", "빌라/투룸+", "오피스텔", "원룸":
+            self.houseViewModel.living = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
             for livingButton in livingButtons {
                 guard livingButton.currentTitle == sender.currentTitle else {
-                    livingButton.setTitleColor(.systemGray4, for: .normal)
+                    livingButton.setTitleColor(.darkGray, for: .normal)
                     livingButton.backgroundColor = .white
                     continue
                 }
@@ -221,6 +236,9 @@ final class CheckVC1: UIViewController {
 
     @objc public func nextButtonTapped() {
         let checkVC2 = CheckVC2()
+        self.houseViewModel.name = self.nameLabel.text
+//        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
+//        checkVC2.viewModel = self.houseViewModel
         checkVC2.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }

@@ -57,7 +57,7 @@ class DetailTVCell: UITableViewCell {
         
         if let bookMarkImage = UIImage(systemName: "bookmark") {
             bookMarkButton.setImage(bookMarkImage, for: .normal)
-            bookMarkButton.tintColor = .mainColor
+            bookMarkButton.tintColor = Constant.appColor
         }
         
         bookMarkButton.translatesAutoresizingMaskIntoConstraints = false
