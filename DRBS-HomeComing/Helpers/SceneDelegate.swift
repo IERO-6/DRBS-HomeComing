@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             tabbar.viewControllers = [nav1, nav2]
             
 
-            window.rootViewController = tabbar // 자신의 시작 ViewController
+            window.rootViewController = LoginVC() // 자신의 시작 ViewController
             window.makeKeyAndVisible()
             self.window = window
         }
