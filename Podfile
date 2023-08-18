@@ -10,4 +10,7 @@ target 'DRBS-HomeComing' do
   pod 'SnapKit'
   pod 'SwiftLint'
   pod 'Alamofire'
+  pod 'FirebaseAuth'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseAnalytics' 
 end
