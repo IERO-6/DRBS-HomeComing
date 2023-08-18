@@ -286,6 +286,17 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		2192EA962A8F0903006AB5B3 /* HomeCell */ = {
+			isa = PBXGroup;
+			children = (
+				217C83EC2A76847600363ED2 /* HouseTVCell.swift */,
+				217C83F02A76858F00363ED2 /* ApartCell.swift */,
+				2143CE352A7904DD00A5DB36 /* OneroomCell.swift */,
+				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
+			);
+			path = HomeCell;
+			sourceTree = "<group>";
+		};
 		21B627512A814B0500081D5E /* VC */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,11 +323,8 @@
 		21B627532A814B1F00081D5E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				2192EA962A8F0903006AB5B3 /* HomeCell */,
 				216FA0AA2A8BA632004D0279 /* SettingSectionCell */,
-				217C83EC2A76847600363ED2 /* HouseTVCell.swift */,
-				217C83F02A76858F00363ED2 /* ApartCell.swift */,
-				2143CE352A7904DD00A5DB36 /* OneroomCell.swift */,
-				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
 				1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */,
 			);

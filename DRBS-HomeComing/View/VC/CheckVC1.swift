@@ -5,43 +5,27 @@ import SnapKit
 //+버튼 눌렀을 때 나오는 화면
 final class CheckVC1: UIViewController {
     //MARK: - Properties
-    //viewmodel과 소통
-    /*
-     setName -> nameLabel
-     거래방식  -> tradeLabel
-     주거형태  -> livingLabel
-     주소     -> addressLabel
-     bottomBorder -> 삭제후 UIView Extension에 addBottomBorder() 구현..
-     
-     setUplabelConstraints,        -|
-     setUpTextField,                |
-     setUpButton,                   |->  -> configureUI() 병합..
-     setUpButtonConstraints,        |
-     configureButton               -|
-     
-     setupButtonActions -> 하나로 통일..
-     *색 바꾸는 코드도 중복제거..
-     */
     var nameIndex: Int?
     private let houseViewModel = HouseViewModel()
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
         $0.font = UIFont(name: Constant.font, size: 16)}
-    private let nameTextField = UITextField().then {
-        $0.placeholder = "이름을 입력해주세요"
-//        $0.borderStyle = .none
-    }
+    private let nameTextField = UITextField().then {$0.placeholder = "이름을 입력해주세요"}
     private let tradeLabel = UILabel().then {
         $0.text = "거래 방식*"
         $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray}
+    
+    
     private lazy var 월세버튼 = UIButton().then {
         $0.setTitle("월세", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        
+    }
     private lazy var 전세버튼 = UIButton().then {
         $0.setTitle("전세", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
@@ -107,8 +91,8 @@ final class CheckVC1: UIViewController {
         setUpLabel()
     }
     override func viewDidLayoutSubviews() {
-        addressTextField.addBottomBorder()
-        nameTextField.addBottomBorder()
+        addressTextField.layer.addBottomLayer()
+        nameTextField.layer.addBottomLayer()
     }
     
     //MARK: - Helpers
@@ -125,7 +109,6 @@ final class CheckVC1: UIViewController {
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(10)
             $0.height.equalTo(30)
-
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
             $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
         }
@@ -243,4 +226,3 @@ final class CheckVC1: UIViewController {
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }
 }
-

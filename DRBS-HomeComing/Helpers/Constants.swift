@@ -12,6 +12,7 @@ struct Constant {
         case searchCell = "SearchCell"
         case annotationView = "AnnotaionView"
         case bookmarkedAnnotationView = "BookMarkedAnnotationView"
+        case topCell = "TopCell"
     }
     
     enum 주거: String {
