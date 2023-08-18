@@ -90,6 +90,10 @@ final class CheckVC1: UIViewController {
         setupNavigationBar()
         setUpLabel()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setupNavigationBar()
+    }
     override func viewDidLayoutSubviews() {
         addressTextField.layer.addBottomLayer()
         nameTextField.layer.addBottomLayer()
@@ -172,7 +176,7 @@ final class CheckVC1: UIViewController {
     private func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "추가하기"
-        self.navigationController?.navigationBar.backItem?.title = ""
+        self.navigationController?.navigationBar.tintColor = .black
     }
     
     private func setUpLabel() {
@@ -218,11 +222,13 @@ final class CheckVC1: UIViewController {
     }
 
     @objc public func nextButtonTapped() {
-        let checkVC2 = CheckVC2()
+//        let checkVC2 = CheckVC2()
+        let checkVC2 = MyHouseVC()
+
         self.houseViewModel.name = self.nameLabel.text
 //        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
 //        checkVC2.viewModel = self.houseViewModel
-        checkVC2.hidesBottomBarWhenPushed = true
+//        checkVC2.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }
 }

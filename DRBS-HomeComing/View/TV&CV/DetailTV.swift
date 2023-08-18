@@ -53,7 +53,7 @@ class DetailTV: UIViewController {
     //MARK: - Actions
     
     @objc public func plusButtonTapped() {
-        let additionalVC = AdditionalVC()
+        let additionalVC = MyHouseVC()
         additionalVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(additionalVC, animated: true)
     }
