@@ -4,6 +4,8 @@ import SnapKit
 
 class DetailTVCell: UITableViewCell {
     
+    //MARK: - Properties
+
     static let identifier = "DetailTVCell"
     
     let nameLabel = UILabel().then {
@@ -41,7 +43,8 @@ class DetailTVCell: UITableViewCell {
         $0.textContainer.maximumNumberOfLines = 2
         $0.textContainer.lineBreakMode = .byTruncatingTail
     }
-    
+    //MARK: - LifeCycle
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -51,18 +54,12 @@ class DetailTVCell: UITableViewCell {
         autoLayout()
     }
     
-    //버튼을 눌렀을 때, 꽉찬북마크가 나타나게
-    @objc private func bookMarkButtonTapped() {
-        bookMarkButton.isSelected.toggle()
-        let bookMarkImage = bookMarkButton.isSelected ? "bookmark.fill" : "bookmark"
-        if let fillBookMarkImage = UIImage(systemName: bookMarkImage) {
-            bookMarkButton.setImage(fillBookMarkImage, for: .normal)
-        }
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    //MARK: - Helpers
     
     private func addContentView() {
         contentView.addSubviews(nameLabel, priceLabel, roomImageView, starsNumber, starImageView, memoTextField, bookMarkButton)
@@ -116,5 +113,16 @@ class DetailTVCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
+    }
+    
+    //MARK: - Actions
+
+    //버튼을 눌렀을 때, 꽉찬북마크가 나타나게
+    @objc private func bookMarkButtonTapped() {
+        bookMarkButton.isSelected.toggle()
+        let bookMarkImage = bookMarkButton.isSelected ? "bookmark.fill" : "bookmark"
+        if let fillBookMarkImage = UIImage(systemName: bookMarkImage) {
+            bookMarkButton.setImage(fillBookMarkImage, for: .normal)
+        }
     }
 }

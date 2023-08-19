@@ -38,6 +38,8 @@ class CheckVC2: UIViewController {
     
     
     
+    
+    
     //MARK: - Actions
 
     
@@ -55,6 +57,8 @@ extension CheckVC2 {
     
     private func addSubView() {
         view.addSubview(tableView)
+        
+        
     }
     
     private func autoLayout() {
@@ -62,6 +66,18 @@ extension CheckVC2 {
             $0.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
+    
+//    private func setUpLabel() {
+//        //*만 빨갛게 바꾸는 콛
+//        let labels = [보증금, tradeLabel,
+//                      livingLabel, addressLabel]
+//        for texts in labels {
+//            let fullText = texts.text ?? ""
+//            let attribtuedString = NSMutableAttributedString(string: fullText)
+//            let range = (fullText as NSString).range(of: "*")
+//            attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
+//            texts.attributedText = attribtuedString}
+//    }
 }
 
 
@@ -78,23 +94,27 @@ extension CheckVC2 : UITableViewDataSource {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: CheckVC2Cell.identifierCheckVC2, for: indexPath) as! CheckVC2Cell
         cell.selectionStyle = .none
+        cell.보증금.isHidden = indexPath.row != 0
+        cell.보증금TextField.isHidden = indexPath.row != 0
+        cell.만원.isHidden = indexPath.row != 0
 
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section > 0 {
-            return 90.0 // 원하는 간격 값으로 변경
-        }
-        return 0.0 // 첫 번째 섹션 이전에는 간격이 필요 없으면 0으로 설정
-    }
+    // 섹션간 거리를 띄우기 위해
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        if section == 0 {
+//            return 0.0 // 첫 번째 섹션의 간격 설정
+//        }
+//        return 20.0 // 다른 섹션의 간격 설정
+//    }
     
-    // 섹션 헤더 뷰 설정
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .black
-        return nil
-    }
+//    // 섹션 헤더 뷰 설정
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let headerView = UIView()
+//        headerView.backgroundColor = .black
+//        return nil
+//    }
     
 }
 

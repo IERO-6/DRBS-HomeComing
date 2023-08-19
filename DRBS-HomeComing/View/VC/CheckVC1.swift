@@ -3,24 +3,18 @@ import SnapKit
 import Then
 
 //+버튼 눌렀을 때 나오는 화면
-class CheckVC1: UIViewController {
+final class CheckVC1: UIViewController {
     
     //MARK: - Properties
     
     //viewmodel과 소통
     private let viewModel = CheckViewModel()
     
-    private let setName = UILabel().then {
-        $0.text = "이름*"
-    }
+    private let setName = UILabel().then {$0.text = "이름*"}
     private let 거래방식 = UILabel()
     private let 주거형태 = UILabel()
-    private let 주소 = UILabel().then {
-        $0.text = "주소*"
-    }
-    private let bottomBorder = UIView().then {
-        $0.backgroundColor = .gray
-    }
+    private let 주소 = UILabel().then {$0.text = "주소*" }
+    private let bottomBorder = UIView().then {$0.backgroundColor = .gray}
     
     private let nameTextField = UITextField().then {
         $0.placeholder = "이름을 입력해주세요"
@@ -80,6 +74,7 @@ class CheckVC1: UIViewController {
         let range = (fullText as NSString).range(of: "*")
         attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
         setName.attributedText = attribtuedString
+        // 위에 올리기
         거래방식.text = "거래 방식"
         
         주거형태.text = "주거 형태*"
@@ -119,6 +114,7 @@ class CheckVC1: UIViewController {
             $0.leading.equalToSuperview().offset(23)
         }
     }
+
     
     func setUpTextField() {
         view.addSubviews(nameTextField, addressTextField)
