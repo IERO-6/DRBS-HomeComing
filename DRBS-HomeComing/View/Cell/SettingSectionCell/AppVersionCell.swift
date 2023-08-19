@@ -13,8 +13,6 @@ class AppVersionCell: UITableViewCell {
         $0.alignment = .fill
         $0.distribution = .fill
         $0.spacing = 10
-        $0.addArrangedSubview(leftTitleLabel)
-        $0.addArrangedSubview(rightTitleLabel)
     }
 
     private let leftTitleLabel = UILabel().then {
@@ -25,10 +23,14 @@ class AppVersionCell: UITableViewCell {
     }
     
     private let rightTitleLabel = UILabel().then {
-        $0.textColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+        $0.textColor = Constant.appColor
         $0.font = .systemFont(ofSize: 14)
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+    
+    private let separatorView = UIView().then {
+        $0.backgroundColor = .systemGray5
     }
     
     // MARK: - Initialization
@@ -36,20 +38,28 @@ class AppVersionCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
-        setupLayout()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("")
     }
     
-    // MARK: - Setup Layout
+    // MARK: - Helpers
     
-    private func setupLayout() {
-        contentView.addSubview(stackView)
-            
+    private func configureUI() {
+        contentView.addSubviews(stackView, separatorView)
+        stackView.addArrangedSubviews(leftTitleLabel, rightTitleLabel)
+        
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 13, left: 16, bottom: 13, right: 16))
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.leading.equalTo(contentView).offset(0)
+            $0.trailing.equalTo(contentView).offset(0)
+            $0.bottom.equalTo(contentView)
+            $0.height.equalTo(1)
         }
     }
 

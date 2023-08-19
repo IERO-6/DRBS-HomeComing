@@ -21,32 +21,43 @@ class LicenseCell: UITableViewCell {
 
     private let rightButton = UIButton().then {
         $0.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        $0.tintColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+        $0.tintColor = Constant.appColor
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+    }
+    
+    private let separatorView = UIView().then {
+        $0.backgroundColor = .systemGray5
     }
     
     // MARK: - Initialization
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupLayout()
+        configureUI()
     }
 
     required init?(coder: NSCoder) {
         fatalError("")
     }
     
-    // MARK: - Setup Layout
+    // MARK: - Helpers
 
-    private func setupLayout() {
-        stackView.addArrangedSubview(leftTitleLabel)
-        stackView.addArrangedSubview(rightButton)
-        contentView.addSubview(stackView)
+    private func configureUI() {
+        stackView.addArrangedSubviews(leftTitleLabel, rightButton)
+        contentView.addSubviews(stackView, separatorView)
         
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 13, left: 16, bottom: 13, right: 16))
         }
+        
+        separatorView.snp.makeConstraints {
+            $0.leading.equalTo(contentView).offset(0)
+            $0.trailing.equalTo(contentView).offset(0)
+            $0.bottom.equalTo(contentView)
+            $0.height.equalTo(1)
+        }
+
     }
 
     func prepare(leftTitleText: String?) {

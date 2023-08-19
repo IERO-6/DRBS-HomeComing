@@ -22,13 +22,13 @@ class LocationSettingCell: UITableViewCell {
     
     private let detailsButton = UIButton().then {
         $0.setTitle("위치정보 이용동의 전문보기", for: .normal)
-        $0.setTitleColor(UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1), for: .normal)
+        $0.setTitleColor(Constant.appColor, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         $0.contentHorizontalAlignment = .left
     }
     
     let toggleSwitch = UISwitch().then {
-        $0.onTintColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+        $0.onTintColor = Constant.appColor
     }
     
     var onDetailsButtonTapped: (() -> Void)?
@@ -37,7 +37,7 @@ class LocationSettingCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupLayout()
+        configureUI()
         detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside)
     }
     
@@ -45,29 +45,28 @@ class LocationSettingCell: UITableViewCell {
         fatalError("")
     }
     
-    // MARK: - Setup
+    // MARK: - Helpers
     
-    private func setupLayout() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(subTitleLabel)
-        contentView.addSubview(detailsButton)
-        contentView.addSubview(toggleSwitch)
+    private func configureUI() {
+        contentView.addSubviews(titleLabel, subTitleLabel, detailsButton, toggleSwitch)
 
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.top.equalToSuperview().offset(16)
+            $0.height.greaterThanOrEqualTo(30)
         }
 
         subTitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalTo(toggleSwitch.snp.leading).offset(-16)
+            $0.bottom.equalTo(detailsButton.snp.top).offset(-10)
         }
 
         detailsButton.snp.makeConstraints {
-            $0.top.equalTo(subTitleLabel.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(16)
             $0.bottom.equalToSuperview().offset(-16)
+            $0.height.equalTo(30)
         }
 
         toggleSwitch.snp.makeConstraints {
@@ -78,14 +77,10 @@ class LocationSettingCell: UITableViewCell {
         }
     }
 
-    // MARK: - Action
+    // MARK: - Actions
     
     @objc private func detailsButtonTapped() {
         onDetailsButtonTapped?()
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

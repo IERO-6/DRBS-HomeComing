@@ -34,22 +34,26 @@ class AccountSettingCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
+        configureUI()
         setupActions()
     }
 
     required init?(coder: NSCoder) {
         fatalError("")
     }
-
-    // MARK: - Setup Layout
     
-    private func setupViews() {
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.separatorInset = UIEdgeInsets(top: 0, left: self.bounds.size.width, bottom: 0, right: 0)
+    }
+
+
+    // MARK: - Helpers
+    
+    private func configureUI() {
         backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00)
         
-        stackView.addArrangedSubview(logoutButton)
-        stackView.addArrangedSubview(withdrawButton)
-        
+        stackView.addArrangedSubviews(logoutButton, withdrawButton)
         contentView.addSubview(stackView)
 
         stackView.snp.makeConstraints {
@@ -58,13 +62,6 @@ class AccountSettingCell: UITableViewCell {
             $0.bottom.equalToSuperview().inset(13)
         }
     }
-
-    // MARK: - Method & Action
-    
-    private func setupActions() {
-        logoutButton.addTarget(self, action: #selector(handleLogoutPressed), for: .touchUpInside)
-        withdrawButton.addTarget(self, action: #selector(handleWithdrawPressed), for: .touchUpInside)
-    }
     
     func prepare(with model: AccountActionModel) {
         logoutButton.setTitle(model.logoutTitle, for: .normal)
@@ -72,6 +69,13 @@ class AccountSettingCell: UITableViewCell {
         
         self.logoutAction = model.logoutAction
         self.withdrawAction = model.withdrawAction
+    }
+
+    // MARK: - Actions
+    
+    private func setupActions() {
+        logoutButton.addTarget(self, action: #selector(handleLogoutPressed), for: .touchUpInside)
+        withdrawButton.addTarget(self, action: #selector(handleWithdrawPressed), for: .touchUpInside)
     }
 
     @objc private func handleLogoutPressed() {
