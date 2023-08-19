@@ -87,13 +87,8 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
                 print("\(String(describing: error?.localizedDescription))")
                 return
             }
-            guard let placeMark = response?.mapItems[0].placemark else {
-                return
-            }
-//            let coordinate = Coordinate(coordinate: placeMark.coordinate)
+            guard let placeMark = response?.mapItems[0].placemark else { return }
             let coordinate = CLLocationCoordinate2D(latitude: placeMark.coordinate.latitude, longitude: placeMark.coordinate.longitude)
-            print(coordinate)
-//            self.delegate?.userAdd(newLocation: Location(coordinate: coordinate, name: "\(placeMark.locality ?? selectedResult.title)"))
             self.searchViewDelegate?.setRegion(cood: coordinate)
             
             self.navigationController?.popViewController(animated: true)

@@ -55,9 +55,6 @@ class HomeVC: UIViewController {
 //MARK: - UITableViewDelegate
 
 extension HomeVC: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return self.categories[section]
-//    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
             let titleButton = UIButton(frame: CGRect(x: 15, y: 0, width: 200, height: 40))
@@ -69,7 +66,7 @@ extension HomeVC: UITableViewDelegate {
             
             return headerView
         }
-    
+   
 }
 
 //MARK: - UITableViewDataSource
