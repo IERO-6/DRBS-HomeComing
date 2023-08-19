@@ -1,31 +1,25 @@
-//
-//  CheckVC1Model.swift
-//  DRBS-HomeComing
-//
-//  Created by 김성호 on 2023/08/14.
-//
-
 import UIKit
 
-struct Information {
-    var name: String = ""
-    var transactionMethod: TransactionMethod = .none
-    var dwellingType: DwellingType = .none
-    var address: String = ""
-}
-
-enum TransactionMethod {
-    case monthly
-    case jeonse
-    case bargain
-    case none
-}
-
-enum DwellingType {
-    case apartment
-    case twoRoom
-    case office
-    case oneroom
-    case none
-}
-
+//struct CheckVC1Model {
+    struct Information {
+        var name: String = ""
+        var 거래방식: TransactionMethod = .none
+        var 주거형태: DwellingType = .none
+        var 주소: String = ""
+    }
+    
+    enum TransactionMethod {
+        case 월세
+        case 전세
+        case 매매
+        case none
+    }
+    
+    enum DwellingType {
+        case 아파트
+        case 투룸
+        case 오피스텔
+        case 원룸
+        case none
+    }
+//}

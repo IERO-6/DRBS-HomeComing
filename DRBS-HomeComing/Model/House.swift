@@ -1,6 +1,5 @@
 import UIKit
 
-
 struct House {
     var id: String?
     var isBookMarked: Bool?

@@ -7,7 +7,6 @@ import SafariServices
 class SettingVC: UIViewController {
     
     // MARK: - Properties
-    
     private let settingTableView = UITableView(frame: .zero, style: .grouped).then {
         $0.register(NoticeCell.self, forCellReuseIdentifier: NoticeCell.id)
         $0.register(OptionCell.self, forCellReuseIdentifier: OptionCell.id)
@@ -26,7 +25,6 @@ class SettingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureNav()
         setupTableView()
         //loadAdMob()
@@ -54,11 +52,10 @@ class SettingVC: UIViewController {
     }
     
     // MARK: - Navigation Bar
-    
     private func configureNav() {
         navigationItem.title = "설정"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
+
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()
             $0.backgroundColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
@@ -69,7 +66,7 @@ class SettingVC: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        
+
     }
     
     // MARK: - Setup Layout

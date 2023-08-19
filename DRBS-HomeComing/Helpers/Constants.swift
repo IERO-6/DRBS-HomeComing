@@ -3,7 +3,7 @@ import UIKit
 
 struct Constant {
     static let appColor: UIColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1.00)
-
+    static let font = "Pretendard-Bold"
     enum Identifier: String {
         case houseCell = "HouseCell"
         case apartCell = "ApartCell"
@@ -12,6 +12,7 @@ struct Constant {
         case searchCell = "SearchCell"
         case annotationView = "AnnotaionView"
         case bookmarkedAnnotationView = "BookMarkedAnnotationView"
+        case topCell = "TopCell"
     }
     
     enum 주거: String {
@@ -35,6 +36,45 @@ struct Constant {
         case 가스비
         case 기타
     }
+    
+    enum 방향: String {
+        case 남향
+        case 동향
+        case 북향
+        case 서향
+    }
+    
+    enum 방음: String {
+        case 우수
+        case 보통
+        case 미흡
+    }
+    
+    enum 수압: String {
+        case 우수
+        case 보통
+        case 미흡
+    }
+    enum 벌레: String {
+        case 있음
+        case 모름
+        case 없음
+    }
+    enum 통풍: String {
+        case 쾌적
+        case 보통
+        case 불쾌
+    }
+    enum 보안: String {
+        case 철저
+        case 보통
+        case 미흡
+    }
+    enum 곰팡이: String {
+        case 있음
+        case 없음
+    }
+    
     
    
 }
