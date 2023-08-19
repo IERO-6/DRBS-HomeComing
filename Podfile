@@ -12,5 +12,6 @@ target 'DRBS-HomeComing' do
   pod 'Alamofire'
   pod 'FirebaseAuth'
   pod 'FirebaseFirestore'
-  pod 'FirebaseAnalytics' 
+  pod 'FirebaseAnalytics'
+  pod 'Google-Mobile-Ads-SDK' 
 end
