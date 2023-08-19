@@ -321,16 +321,24 @@
 			path = HomeCell;
 			sourceTree = "<group>";
 		};
+		2192EA9B2A8FBAA9006AB5B3 /* CheckVC */ = {
+			isa = PBXGroup;
+			children = (
+				218ACE142A76434500687EE6 /* CheckVC1.swift */,
+				218ACE162A76435100687EE6 /* CheckVC2.swift */,
+				186335572A8A0CDD00E283D5 /* MyHouseVC.swift */,
+			);
+			path = CheckVC;
+			sourceTree = "<group>";
+		};
 		21B627512A814B0500081D5E /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				2192EA9B2A8FBAA9006AB5B3 /* CheckVC */,
 				217E14B22A8E111800CFFF2E /* MapVC */,
 				216FA0B92A8BA6F6004D0279 /* SettingSectionVC */,
 				218ACDFE2A752ABB00687EE6 /* Tabbar.swift */,
 				218ACDE62A75262400687EE6 /* HomeVC.swift */,
-				218ACE142A76434500687EE6 /* CheckVC1.swift */,
-				218ACE162A76435100687EE6 /* CheckVC2.swift */,
-				186335572A8A0CDD00E283D5 /* MyHouseVC.swift */,
 				B386B08A2A8EAA8200E68A2D /* LoginVC.swift */,
 			);
 			path = VC;

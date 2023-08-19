@@ -7,6 +7,11 @@ import SnapKit
 
 // https://co-dong.tistory.com/73 참고중..
 
+protocol searchViewDelegate: AnyObject {
+    func setRegion(cood: CLLocationCoordinate2D)
+}
+
+
 final class MapVC: UIViewController {
     //MARK: - Properties
     
@@ -151,6 +156,7 @@ final class MapVC: UIViewController {
     
     @objc func searchButtonTapped() {
         let searchVC = SearchVC()
+        searchVC.searchViewDelegate = self
         navigationController?.pushViewController(searchVC, animated: true)
     }
 }
@@ -225,5 +231,13 @@ extension MapVC: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
         checkDeviceService()}
+    
+}
+
+extension MapVC: searchViewDelegate {
+    func setRegion(cood: CLLocationCoordinate2D) {
+        self.mkMapView.setCenter(cood, animated: true)
+    }
+    
     
 }
