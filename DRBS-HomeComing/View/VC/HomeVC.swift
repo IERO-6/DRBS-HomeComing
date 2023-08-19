@@ -16,6 +16,11 @@ class HomeVC: UIViewController {
         settingTV()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setupHomeBarAppearance()
+    }
+    
     //MARK: - Helpers
 
     func configureUI() {
@@ -36,14 +41,14 @@ class HomeVC: UIViewController {
     //MARK: - Actions
 
     @objc public func plusButtonTapped() {
-        let checkVC = CheckVC1()
-        checkVC.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(checkVC, animated: true)
-    }
-    @objc func settingButtonTapped() {
-        let settingVC = SettingVC()
-        present(settingVC, animated: true)
-    }
+           let checkVC = CheckVC1()
+           checkVC.hidesBottomBarWhenPushed = true
+           self.navigationController?.pushViewController(checkVC, animated: true)
+       }
+       @objc func settingButtonTapped() {
+           let settingVC = SettingVC()
+           self.navigationController?.pushViewController(settingVC, animated: true)
+       }
     
 }
 
@@ -61,24 +66,10 @@ extension HomeVC: UITableViewDelegate {
             titleButton.setTitleColor(.black, for: .normal)
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-        
-        // 섹션을 버튼의 태그로 저장
-        titleButton.tag = section
-
-        
-        titleButton.addTarget(self, action: #selector(titleButtonTapped(_:)), for: .touchUpInside)
-                              
+            
             return headerView
         }
-            @objc func titleButtonTapped(_ sender: UIButton) {
-            // 선택된 버튼의 섹션을 가져옴
-            let section = sender.tag
-            let detailTV = DetailTV()
-            detailTV.section = section
-            
-            navigationController?.pushViewController(detailTV, animated: true)
-        }
-                              
+    
 }
 
 //MARK: - UITableViewDataSource

@@ -1,18 +1,21 @@
+//
+//  DetailTV.swift
+//  DRBS-HomeComing
+//
+//  Created by 김성호 on 2023/08/14.
+//
+
 import UIKit
-import SnapKit
-import Then
 
 class DetailTV: UIViewController {
     
-    //MARK: - Properties
     
-    let tableView = UITableView().then {
-        $0.register(DetailTVCell.self, forCellReuseIdentifier: DetailTVCell.identifier)
-    }
-    
-    var section: Int = 0
-    
-    //MARK: - LifeCycle
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(DetailTVCell.self, forCellReuseIdentifier: DetailTVCell.identifier)
+        return tableView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,21 +26,25 @@ class DetailTV: UIViewController {
         addSubView()
         autoLayout()
     }
+
     
-    
-    //MARK: - Helpers
+    //MARK: - SetupNavigationBar
     
     func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
-        print(section)
-        if section == 0 {
+        let checkVC1 = CheckVC1()
+        print(checkVC1.nameIndex)
+        if checkVC1.nameIndex == 4 {
             self.navigationItem.title = "아파트"
-        } else if section == 1 {
-            self.navigationItem.title = "원룸"
-        } else {
+        } else if checkVC1.nameIndex == 5 {
+            self.navigationItem.title = "투룸"
+        } else if checkVC1.nameIndex == 6 {
             self.navigationItem.title = "오피스텔"
+        } else if checkVC1.nameIndex == 7 {
+            self.navigationItem.title = "원룸"
         }
         
+        //        self.navigationItem.title = "추가하기"
         self.navigationController?.navigationBar.backItem?.title = ""
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
@@ -76,13 +83,13 @@ extension DetailTV {
 
 extension DetailTV : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: DetailTVCell.identifier, for: indexPath) as! DetailTVCell
-        cell.selectionStyle = .none
+        cell.selectionStyle = .default
         cell.roomImageView.image = UIImage(named: "roomImage")
         cell.nameLabel.text = "신대방역 근처 원룸"
         cell.priceLabel.text = "1000/60"

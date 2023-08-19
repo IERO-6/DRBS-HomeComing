@@ -4,11 +4,11 @@ import CoreLocation
 
 class LocationViewModel {
     //MARK: - Model
-    
     var locationModel: Location?
     var annotations: [Annotation] = []
-    var fetchedLocations: [Location] = [Location(latitude: "37.33511535552606", longitude: "127.11933035555937", isBookMarked: true),
-                        Location(latitude: "37.32209627495218", longitude: " 127.12718477301696", isBookMarked: true),
+    var fetchedLocations: [Location] = [
+                        Location(latitude: "37.33511535552606", longitude: "127.11933035555937", isBookMarked: false),
+                        Location(latitude: "37.32209627495218", longitude: " 127.12718477301696", isBookMarked: false),
                         Location(latitude: "37.33387447939296", longitude: "127.11677820767655", isBookMarked: true)]
     var visibleRegion: MKCoordinateRegion?
     
@@ -16,8 +16,9 @@ class LocationViewModel {
     //MARK: - Output
     
     func getLocations() -> [Location] { return self.fetchedLocations }
-        
     
+    func getAnnotations() -> [Annotation] { return self.annotations }
+        
     //MARK: - Input
     func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
     
@@ -54,7 +55,6 @@ class LocationViewModel {
             // Check if the deltas are within half of the visible region's span (latitudeDelta/2 and longitudeDelta/2)
             return deltaLatitude <= visibleRegion.span.latitudeDelta / 2 && deltaLongitude <= visibleRegion.span.longitudeDelta / 2
         }
-        print(locationsInVisibleRegion)
         makeAnnotationsWithFiltered(locations: locationsInVisibleRegion)
     }
     
