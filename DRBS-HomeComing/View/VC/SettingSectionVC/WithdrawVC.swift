@@ -2,7 +2,7 @@ import UIKit
 import Then
 import SnapKit
 
-class WithdrawVC: UIViewController {
+final class WithdrawVC: UIViewController {
     
     // MARK: - Properties
     
@@ -27,15 +27,19 @@ class WithdrawVC: UIViewController {
             let label = UILabel().then {
                 $0.text = text
                 $0.numberOfLines = 0
+                $0.lineBreakMode = .byWordWrapping
                 $0.font = UIFont.systemFont(ofSize: 14)
             }
             
             let stackView = UIStackView(arrangedSubviews: [icon, label]).then {
                 $0.axis = .horizontal
                 $0.spacing = 8
-                $0.alignment = .center
+                $0.alignment = .leading
+                $0.distribution = .fill
             }
-            
+            label.snp.makeConstraints {
+                $0.width.lessThanOrEqualTo(UIScreen.main.bounds.width - (icon.frame.width + 8 + 20 * 2) - 20)
+            }
             return stackView
         }
     }()
@@ -60,13 +64,14 @@ class WithdrawVC: UIViewController {
 
     private let reasonTextView = UITextView().then {
         $0.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.96, alpha: 1.00)
-        $0.layer.cornerRadius = 5
+        $0.layer.cornerRadius = 10
     }
 
-    private let withdrawButton = UIButton().then {
+    private lazy var withdrawButton = UIButton().then {
         $0.setTitle("탈퇴 하기", for: .normal)
         $0.backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.00)
         $0.layer.cornerRadius = 5
+        $0.addTarget(self, action: #selector(withdrawButtonTapped), for: .touchUpInside)
     }
 
     private lazy var checkBoxStackView = UIStackView(arrangedSubviews: [checkBoxButton, checkBoxLabel]).then {
@@ -78,6 +83,7 @@ class WithdrawVC: UIViewController {
     private let scrollView = UIScrollView().then {
         $0.isScrollEnabled = true
     }
+    
     private let contentView = UIView()
 
     // MARK: - View Lifecycle
@@ -87,7 +93,13 @@ class WithdrawVC: UIViewController {
         
         view.backgroundColor = .white
         configureNav()
-        setupScrollView()
+        configureUI()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.extendedLayoutIncludesOpaqueBars = true
     }
@@ -102,7 +114,7 @@ class WithdrawVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    // MARK: - Navigation Bar
+    // MARK: - Helpers
     
     private func configureNav() {
         navigationItem.title = "회원탈퇴"
@@ -111,19 +123,20 @@ class WithdrawVC: UIViewController {
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()
             $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+            $0.shadowColor = nil
         }
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-
-    // MARK: - Method & Action
     
-    private func setupScrollView() {
+    private func configureUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-
+        contentView.addSubviews(titleLabel, checkBoxStackView, reasonLabel, reasonTextView, withdrawButton)
+        infoViews.forEach(contentView.addSubview)
+        
         scrollView.snp.makeConstraints {
             $0.edges.equalTo(view)
         }
@@ -132,9 +145,6 @@ class WithdrawVC: UIViewController {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(view)
         }
-
-        contentView.addSubviews(titleLabel, checkBoxStackView, reasonLabel, reasonTextView, withdrawButton)
-        infoViews.forEach(contentView.addSubview)
 
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(30)
@@ -146,14 +156,14 @@ class WithdrawVC: UIViewController {
 
         for infoView in infoViews {
             infoView.snp.makeConstraints {
-                $0.top.equalTo(previousView.snp.bottom).offset(20)
+                $0.top.equalTo(previousView.snp.bottom).offset(30)
                 $0.left.equalTo(contentView).offset(20)
             }
             previousView = infoView
         }
 
         checkBoxStackView.snp.makeConstraints {
-            $0.top.equalTo(previousView.snp.bottom).offset(100)
+            $0.top.equalTo(previousView.snp.bottom).offset(80)
             $0.left.equalTo(contentView).offset(20)
         }
 
@@ -179,21 +189,46 @@ class WithdrawVC: UIViewController {
         }
     }
 
+    // MARK: - Actions
 
     @objc private func handleCheckBox(button: UIButton) {
         button.isSelected = !button.isSelected
 
         if button.isSelected {
-            withdrawButton.backgroundColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
-            checkBoxButton.tintColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
-            checkBoxLabel.textColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+            withdrawButton.backgroundColor = Constant.appColor
+            checkBoxButton.tintColor = Constant.appColor
+            checkBoxLabel.textColor = Constant.appColor
         } else {
             withdrawButton.backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.00)
             checkBoxButton.tintColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.00)
             checkBoxLabel.textColor = .lightGray
         }
     }
+    
+    @objc func withdrawButtonTapped() {
+        // 회원탈퇴 로직
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height / 2
+            }
+        }
+    }
 
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
 
-
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
 }

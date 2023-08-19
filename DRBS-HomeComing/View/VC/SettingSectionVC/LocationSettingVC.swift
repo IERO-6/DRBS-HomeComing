@@ -2,7 +2,7 @@ import UIKit
 import Then
 import SnapKit
 
-class LocationSettingVC: UIViewController {
+final class LocationSettingVC: UIViewController {
     
     // MARK: - Properties
     
@@ -13,21 +13,20 @@ class LocationSettingVC: UIViewController {
     private let viewModel = LocationSettingViewModel()
 
     
-    // MARK: - View Lifecycle
+    // MARK: - View Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNav()
-        setupTableView()
+        configureTableView()
         
         self.extendedLayoutIncludesOpaqueBars = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        setupFooterView()
+        configureFooterView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +39,7 @@ class LocationSettingVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
 
-    // MARK: - Navigation Bar
+    // MARK: - Helpers
     
     private func configureNav() {
         navigationItem.title = "위치 기반 서비스 이용 동의 설정"
@@ -48,7 +47,7 @@ class LocationSettingVC: UIViewController {
 
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()
-            $0.backgroundColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+            $0.backgroundColor = Constant.appColor
             $0.titleTextAttributes = [.foregroundColor: UIColor.white]
         }
         
@@ -57,15 +56,12 @@ class LocationSettingVC: UIViewController {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-
-    // MARK: - Setup TableView
     
-    private func setupTableView() {
+    private func configureTableView() {
         
         view.addSubview(locationSettingTableView)
         locationSettingTableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            //$0.top.leading.trailing.bottom.equalToSuperview()
         }
 
         locationSettingTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -74,7 +70,7 @@ class LocationSettingVC: UIViewController {
         locationSettingTableView.delegate = self
     }
     
-    private func setupFooterView() {
+    private func configureFooterView() {
         let footerLabel = UILabel().then {
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
@@ -82,22 +78,18 @@ class LocationSettingVC: UIViewController {
             $0.textColor = .gray
 
             let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 2
+            paragraphStyle.lineSpacing = 1
 
-            let attributedString = NSMutableAttributedString(string: "• 위치기반서비스를 이용하기 위해서는 위치 선택, 접근권한에 먼저 동의하셔야 합니다.\n",
-                                                             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
-                                                             
-            attributedString.append(NSMutableAttributedString(string: "\n• 선택 접근권한은 동의하지 않아도 서비스를 이용할 수 있으나, 해당 권한이 필요한 기능은 이용이 제한될 수 있습니다.",
-                                                              attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]))
-
+            let attributedString = NSMutableAttributedString(string: "• 위치기반서비스를 이용하기 위해서는 위치 선택, 접근권한에 먼저 동의하셔야 합니다.\n", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
             $0.attributedText = attributedString
         }
 
         let footerView = UIView()
         footerView.addSubview(footerLabel)
         footerLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.top.bottom.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview().inset(50)
         }
 
         locationSettingTableView.tableFooterView = footerView
@@ -105,7 +97,6 @@ class LocationSettingVC: UIViewController {
     }
 
 }
-    
     
 // MARK: - UITableViewDataSource, UITableViewDelegate
 

@@ -9,7 +9,6 @@ enum SettingSection {
     case admob(AdmobModel)
 }
 
-
 struct NoticeModel {
     let title: String?
 }

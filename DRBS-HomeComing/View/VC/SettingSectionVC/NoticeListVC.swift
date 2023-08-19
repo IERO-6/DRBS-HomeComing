@@ -2,7 +2,7 @@ import UIKit
 import Then
 import SnapKit
 
-class NoticeListVC: UIViewController {
+final class NoticeListVC: UIViewController {
 
     // MARK: - Properties
     
@@ -24,7 +24,7 @@ class NoticeListVC: UIViewController {
         noticeTableView.reloadData()
 
         configureNav()
-        setupTableView()
+        configureTableView()
         
         self.extendedLayoutIncludesOpaqueBars = true
     }
@@ -39,7 +39,7 @@ class NoticeListVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
 
-    // MARK: - Navigation Bar
+    // MARK: - Helpers
     
     private func configureNav() {
         navigationItem.title = "공지사항"
@@ -47,7 +47,7 @@ class NoticeListVC: UIViewController {
 
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()
-            $0.backgroundColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+            $0.backgroundColor = Constant.appColor
             $0.titleTextAttributes = [.foregroundColor: UIColor.white]
         }
         
@@ -55,12 +55,9 @@ class NoticeListVC: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        
     }
     
-    // MARK: - Setup Layout
-    
-    private func setupTableView() {
+    private func configureTableView() {
         noticeTableView.delegate = self
         noticeTableView.dataSource = self
         noticeTableView.register(NoticeListCell.self, forCellReuseIdentifier: NoticeListCell.id)
@@ -70,7 +67,6 @@ class NoticeListVC: UIViewController {
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
     }
-
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
@@ -90,10 +86,8 @@ extension NoticeListVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-            // 셀의 separator 인셋을 지정하여 separator의 좌우 여백을 조절
             if let cell = cell as? NoticeListCell {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             }
         }
-    
 }

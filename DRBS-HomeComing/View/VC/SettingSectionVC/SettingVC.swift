@@ -2,32 +2,29 @@ import UIKit
 import Then
 import SnapKit
 import SafariServices
-//import GoogleMobileAds
 
-class SettingVC: UIViewController {
+final class SettingVC: UIViewController {
     
     // MARK: - Properties
+    
     private let settingTableView = UITableView(frame: .zero, style: .grouped).then {
         $0.register(NoticeCell.self, forCellReuseIdentifier: NoticeCell.id)
         $0.register(OptionCell.self, forCellReuseIdentifier: OptionCell.id)
         $0.register(LicenseCell.self, forCellReuseIdentifier: LicenseCell.id)
         $0.register(AppVersionCell.self, forCellReuseIdentifier: AppVersionCell.id)
         $0.register(AccountSettingCell.self, forCellReuseIdentifier: AccountSettingCell.id)
-        
-        $0.separatorColor = .opaqueSeparator
+        $0.separatorStyle = .none
     }
     
     private lazy var settingViewModel = SettingsViewModel()
-    
-    //private lazy var bannerView: GADBannerView?
     
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureNav()
-        setupTableView()
-        //loadAdMob()
+        configureTableView()
         
         settingViewModel.logoutAction = { [weak self] in
             self?.showLogoutAlert()
@@ -51,14 +48,15 @@ class SettingVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    // MARK: - Navigation Bar
+    // MARK: - Helpers
+    
     private func configureNav() {
         navigationItem.title = "설정"
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
+        
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()
-            $0.backgroundColor = UIColor(red: 0.12, green: 0.27, blue: 0.56, alpha: 1)
+            $0.backgroundColor = Constant.appColor
             $0.titleTextAttributes = [.foregroundColor: UIColor.white]
         }
         navigationController?.navigationBar.topItem?.title = ""
@@ -66,12 +64,9 @@ class SettingVC: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-
     }
     
-    // MARK: - Setup Layout
-    
-    private func setupTableView() {
+    private func configureTableView() {
         
         settingTableView.dataSource = self
         settingTableView.delegate = self
@@ -82,7 +77,7 @@ class SettingVC: UIViewController {
         }
     }
     
-    // MARK: - Method & Action
+    // MARK: - Actions
     
     private func showLogoutAlert() {
         let alertController = UIAlertController(title: nil, message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
@@ -92,18 +87,7 @@ class SettingVC: UIViewController {
         alertController.addAction(UIAlertAction(title: "아니오", style: .cancel, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
-    
-    //    private func loadAdMob() {
-    //        if case .admob(let admobModel) = viewModel.sections.last {
-    //            bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-    //            bannerView?.adUnitID = admobModel.adUnitID
-    //            bannerView?.delegate = self
-    //            bannerView?.rootViewController = self
-    //            bannerView?.load(GADRequest())
-    //        }
-    //    }
 }
-
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
@@ -111,7 +95,6 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return settingViewModel.sections.count
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionType = settingViewModel.sections[section]
@@ -155,7 +138,6 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: AppVersionCell.id, for: indexPath) as! AppVersionCell
                 let model = models[indexPath.row]
                 cell.prepare(leftTitleText: model.leftTitle, rightTitleText: model.rightTitle)
-                cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.width, bottom: 0, right: 0)
                 return cell
                 
             case let .accountActions(models):
@@ -163,6 +145,7 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 cell.prepare(with: models[indexPath.row])
                 cell.logoutAction = settingViewModel.logoutAction
                 cell.withdrawAction = settingViewModel.withdrawAction
+                cell.selectionStyle = .none
                 return cell
                 
             case .admob:
@@ -240,8 +223,8 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                         break
                     case "서비스 이용약관":
                         if let termsOfUseNotionUrl = URL(string: "https://ryuwon-project.notion.site/d47f7ee67b974d7da381d24a4ffa8bc2?pvs=4") {
-                            let ppNotionSafariView = SFSafariViewController(url: termsOfUseNotionUrl)
-                            present(ppNotionSafariView, animated: true, completion: nil)
+                            let touNotionSafariView = SFSafariViewController(url: termsOfUseNotionUrl)
+                            present(touNotionSafariView, animated: true, completion: nil)
                         }
                         break
                     case "오픈소스 라이선스":
@@ -265,8 +248,3 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
-
-
-//extension SettingMainVC: GADBannerViewDelegate {
-//    // AdMob 관련 델리게이트 메서드들을 이곳에 추가
-//}
