@@ -7,20 +7,15 @@ class MyHouseVC: UIViewController {
     //MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    
     private lazy var mainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.image = UIImage(named: "roomImage.png")
-    }
-    
+        $0.image = UIImage(named: "roomImage.png")}
     private lazy var nameLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 18)
         $0.text = "개포 3동 2층 원룸"
         $0.textColor = .black
-        $0.textAlignment = .left
-    }
-    
+        $0.textAlignment = .left}
     private lazy var livingMethodLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.text = "원룸"
@@ -29,30 +24,19 @@ class MyHouseVC: UIViewController {
         $0.layer.cornerRadius = 3
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
-    private lazy var starImage = UIImageView().then {
-        $0.image = UIImage(named: "star.png")
-    }
+        $0.layer.borderWidth = 1}
+    private lazy var starImage = UIImageView().then {$0.image = UIImage(named: "star.png")}
     private lazy var rateLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .darkGray
         $0.text = "4.0"
-        $0.textAlignment = .center
-    }
-    
+        $0.textAlignment = .center}
     private lazy var firstContainView = UIView()
-    
-    
-    
-    
     private lazy var addressLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .black
         $0.text = "서울특별시 강남구 개포동 153"
-        $0.textAlignment = .left
-    }
+        $0.textAlignment = .left}
     private lazy var tradeMethodLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.text = "월세"
@@ -61,73 +45,60 @@ class MyHouseVC: UIViewController {
         $0.layer.cornerRadius = 3
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
-        $0.layer.borderWidth = 1
-    }
-    
+        $0.layer.borderWidth = 1}
     private lazy var costLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 22)
         $0.text = "1000/60"
         $0.textColor = .black
-        $0.textAlignment = .left
-    }
-    
+        $0.textAlignment = .left}
     private lazy var secondContainView = UIView()
-    
-    private lazy var stackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.distribution = .fillEqually
-        $0.alignment = .fill
-        $0.spacing = 10
-    }
-    
+    private lazy var mainView = UIView()
     private lazy var maintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
         $0.text = "관리비 7만원"
-        $0.textAlignment = .left
-    }
+        $0.textAlignment = .left}
     // 아직 관리비 미포함 목록 안함
-
     private lazy var mapLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
-        $0.text = "지도"
-    }
-    
+        $0.text = "지도"}
     private lazy var mapView = MKMapView()
-//        .then {} 나중에 추가
-    
     private lazy var mapStackView = UIView()
-    
     private lazy var memoLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
-        $0.text = "메모"
-    }
-    
+        $0.text = "메모"}
     private lazy var memoTextView = UITextView().then {
         $0.layer.borderColor = UIColor.lightGray.cgColor
         $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
-    }
-    
+        $0.layer.cornerRadius = 3}
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
-        $0.text = "(242/500)"
-    }
-    
+        $0.text = "(242/500)"}
     private lazy var memoView = UIView()
-    
-    
     private lazy var button = UIButton().then {
         $0.backgroundColor = Constant.appColor
         $0.setTitle("확인", for: .normal)
         $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true}
+    private lazy var checkView = UIView().then {
+        $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
-    }
-    
-    
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.borderWidth = 1}
+    private lazy var checkLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
+        $0.text = "체크 리스트"}
+    private lazy var 방향label = UILabel()
+    private lazy var 방음label = UILabel()
+    private lazy var 수압label = UILabel()
+    private lazy var 벌레label = UILabel()
+    private lazy var 통풍label = UILabel()
+    private lazy var 보안label = UILabel()
+    private lazy var 곰팡이label = UILabel()
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -137,7 +108,7 @@ class MyHouseVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        stackView.layer.addBottomLayer()
+        mainView.layer.addBottomLayer()
         mapStackView.layer.addBottomLayer()
         memoView.layer.addBottomLayer()
     }
@@ -147,7 +118,7 @@ class MyHouseVC: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        stackView.addArrangedSubviews(firstContainView,
+        mainView.addSubviews(firstContainView,
                                       addressLabel,
                                       secondContainView,
                                       maintenanceLabel)
@@ -155,12 +126,12 @@ class MyHouseVC: UIViewController {
                                     livingMethodLabel,
                                     starImage,
                                     rateLabel)
-        secondContainView.addSubviews(tradeMethodLabel,costLabel)
+        secondContainView.addSubviews(tradeMethodLabel, costLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
-                                stackView,
+                                mainView,
                                 mapStackView,
                                 memoView,
                                 button)
@@ -171,49 +142,63 @@ class MyHouseVC: UIViewController {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
         }
-        
-        tradeMethodLabel.snp.makeConstraints {
-            $0.width.equalTo(50)
-        }
-        costLabel.snp.makeConstraints {
-            $0.leading.equalTo(tradeMethodLabel.snp.trailing).offset(5)
-        }
 
-        stackView.snp.makeConstraints {
+        mainView.snp.makeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).offset(10)
             $0.trailing.equalTo(contentView).offset(-10)
-            $0.height.equalTo(120)
+            $0.height.equalTo(180)
         }
         
+        firstContainView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(30)
+        }
         nameLabel.snp.makeConstraints {
-            $0.top.leading.equalToSuperview()
-            $0.width.equalTo(150)
-            $0.height.equalTo(22)
+            $0.bottom.top.leading.equalToSuperview()
         }
         rateLabel.snp.makeConstraints {
-            $0.top.trailing.equalToSuperview()
-            $0.width.equalTo(50)
-            $0.height.equalTo(nameLabel)
+            $0.trailing.bottom.top.equalToSuperview()
+            $0.width.equalTo(30)
         }
         starImage.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-//            $0.trailing.equalTo(rateLabel.snp.leading).offset(5)
-            $0.height.width.equalTo(22)
+            $0.top.bottom.equalToSuperview()
+            $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
+            $0.width.equalTo(30)
         }
         livingMethodLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
-            $0.width.equalTo(50)
-//            $0.trailing.equalTo(starImage.snp.leading).offset(-10)
+            $0.trailing.equalTo(starImage.snp.leading).offset(-5)
+            $0.width.equalTo(35)
+        }
+        addressLabel.snp.makeConstraints {
+            $0.top.equalTo(firstContainView.snp.bottom).offset(5)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(30)
+        }
+        secondContainView.snp.makeConstraints {
+            $0.top.equalTo(addressLabel.snp.bottom).offset(5)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(30)
+        }
+        tradeMethodLabel.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview()
+            $0.width.equalTo(35)
+        }
+        costLabel.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalTo(tradeMethodLabel.snp.trailing).offset(10)
         }
         maintenanceLabel.snp.makeConstraints {
-            $0.leading.bottom.width.equalToSuperview()
+            $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+            $0.leading.equalToSuperview()
             $0.height.equalTo(30)
+            $0.bottom.equalToSuperview().offset(-30)
         }
         
         mapStackView.snp.makeConstraints {
-            $0.top.equalTo(stackView.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(stackView)
+            $0.top.equalTo(mainView.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(mainView)
             $0.height.equalTo(210)
         }
         
@@ -230,7 +215,7 @@ class MyHouseVC: UIViewController {
         
         memoView.snp.makeConstraints {
             $0.top.equalTo(mapStackView.snp.bottom).offset(30)
-            $0.leading.trailing.equalTo(stackView)
+            $0.leading.trailing.equalTo(mainView)
             $0.height.equalTo(234)
         }
         
