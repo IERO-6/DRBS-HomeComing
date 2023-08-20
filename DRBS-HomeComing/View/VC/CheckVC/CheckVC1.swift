@@ -24,7 +24,7 @@ final class CheckVC1: UIViewController {
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        
+
     }
     private lazy var 전세버튼 = UIButton().then {
         $0.setTitle("전세", for: .normal)
@@ -222,8 +222,9 @@ final class CheckVC1: UIViewController {
     }
 
     @objc public func nextButtonTapped() {
-//        let checkVC2 = CheckVC2()
-        let checkVC2 = MyHouseVC()
+        let checkVC2 = CheckVC2()
+//        let checkVC2 = MyHouseVC()
+//        let checkVC2 = CheckListView()
 
         self.houseViewModel.name = self.nameLabel.text
 //        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
