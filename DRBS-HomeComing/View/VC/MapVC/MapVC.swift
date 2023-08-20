@@ -85,7 +85,12 @@ final class MapVC: UIViewController {
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         let annotations = self.locationViewModel.fetchedLocations
-        for customPin in annotations { self.mkMapView.addAnnotation(customPin) }
+        let centerCoordinate = CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5) // 대한민국 중심 좌표
+        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 500000, longitudinalMeters: 500000) // 반경 설정
+        self.mkMapView.region = region
+        DispatchQueue.main.async {
+            for customPin in annotations { self.mkMapView.addAnnotation(customPin) }
+        }
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }

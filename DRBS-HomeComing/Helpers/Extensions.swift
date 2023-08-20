@@ -1,5 +1,6 @@
 import UIKit
-
+import MapKit
+import CoreLocation
 
 //MARK: - 네비게이션
 
@@ -55,3 +56,22 @@ extension CALayer {
         self.masksToBounds = true
     }
 }
+extension MKCoordinateRegion {
+    func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
+        let centerCoordinate = self.center
+        let latitudeDelta = self.span.latitudeDelta
+        let longitudeDelta = self.span.longitudeDelta
+        
+        let minLatitude = centerCoordinate.latitude - (latitudeDelta / 2.0)
+        let maxLatitude = centerCoordinate.latitude + (latitudeDelta / 2.0)
+        let minLongitude = centerCoordinate.longitude - (longitudeDelta / 2.0)
+        let maxLongitude = centerCoordinate.longitude + (longitudeDelta / 2.0)
+        
+        return (coordinate.latitude >= minLatitude &&
+                coordinate.latitude <= maxLatitude &&
+                coordinate.longitude >= minLongitude &&
+                coordinate.longitude <= maxLongitude)
+    }
+}
+
+
