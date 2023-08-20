@@ -3,12 +3,12 @@ import Then
 import SnapKit
 
 class CheckVC2: UIViewController {
+    
     //MARK: - Properties
     private let houseViewModel = HouseViewModel()
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false
-    }
+        $0.showsVerticalScrollIndicator = false}
     private lazy var backView = UIView().then {$0.backgroundColor = .systemBlue}
     private let 보증금 = UILabel().then {
         $0.text = "보증금*"
@@ -20,14 +20,10 @@ class CheckVC2: UIViewController {
         label.text = " 만원"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always
-        
-    }
+        $0.rightViewMode = .always}
     private let 월세 = UILabel().then {
         $0.text = "월세*"
-        $0.font = UIFont(name: Constant.font, size: 16)
-        
-    }
+        $0.font = UIFont(name: Constant.font, size: 16)}
     private let 월세TextField = UITextField().then {
         $0.placeholder = "00"
         $0.textAlignment = .right
@@ -35,11 +31,9 @@ class CheckVC2: UIViewController {
         label.text = " 만원"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always
-        
-    }
+        $0.rightViewMode = .always}
     private let 관리비 = UILabel().then {$0.text = "관리비" }
-    private let 관리비TextField = UITextField().then {
+    var 관리비TextField = UITextField().then {
         $0.placeholder = "0"
         $0.textAlignment = .right
         let label = UILabel()
@@ -54,48 +48,42 @@ class CheckVC2: UIViewController {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 가스버튼 = UIButton().then {
         $0.setTitle("가스", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 수도버튼 = UIButton().then {
         $0.setTitle("수도", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 인터넷버튼 = UIButton().then {
         $0.setTitle("인터넷", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var TV버튼 = UIButton().then {
         $0.setTitle("TV", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 기타버튼 = UIButton().then {
         $0.setTitle("기타", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(vc2ButtonTapped(_:)), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     private let separatorLine = UIView.createSeparatorLine()
     private let separatorLine2 = UIView.createSeparatorLine()
@@ -105,7 +93,7 @@ class CheckVC2: UIViewController {
         let label = UILabel()
         label.text = "㎡"
         label.sizeToFit()
-//        $0.rightView = label
+        $0.rightView = label
         $0.rightViewMode = .always}
     private let 입주가능일 = UILabel().then {
         $0.text = "입주 가능일"}
@@ -116,7 +104,7 @@ class CheckVC2: UIViewController {
         let label = UILabel()
         label.text = " 년"
         label.sizeToFit()
-//        $0.rightView = label
+        $0.rightView = label
         $0.rightViewMode = .always}
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
@@ -124,9 +112,7 @@ class CheckVC2: UIViewController {
     private let checkListUIView = UIView().then {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
-        $0.layer.borderColor = UIColor.systemGray4.cgColor
-    }
-    
+        $0.layer.borderColor = UIColor.systemGray4.cgColor}
     private let recodeLabel = UILabel().then {
         $0.text = "기록"
         $0.font = UIFont(name: Constant.font, size: 18)}
@@ -135,8 +121,7 @@ class CheckVC2: UIViewController {
             let configuration = UIImage.SymbolConfiguration(scale: .large)
             let scaledImage = image.applyingSymbolConfiguration(configuration)
             let tintedImage = image.withTintColor(.black, renderingMode: .alwaysOriginal)
-            $0.setImage(tintedImage, for: .normal)
-        }
+            $0.setImage(tintedImage, for: .normal)}
         $0.backgroundColor = UIColor.systemGray6
         $0.layer.cornerRadius = 10
         $0.contentMode = .center
@@ -163,11 +148,8 @@ class CheckVC2: UIViewController {
         configureUI2()
         configureUI3()
         setUpLabel()
-        보증금TextField.delegate = self
-        월세TextField.delegate = self
-        관리비TextField.delegate = self
-        
-        
+        view.bringSubviewToFront(보증금TextField)
+
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -185,39 +167,39 @@ class CheckVC2: UIViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()}
-        scrollView.addSubview(backView)
+        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주TextField, 계약기간TextField, memoTextView)
         backView.snp.makeConstraints {
             $0.top.equalTo(scrollView)
-            $0.left.right.equalTo(scrollView) // 가로 방향에 대해 화면 너비와 동일하게 설정
-            $0.width.equalTo(scrollView) // backView의 너비를 화면 너비와 동일하게 설정
+            $0.left.right.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
+            $0.width.equalTo(view) // backView의 너비를 화면 너비와 동일하게 설정
         }}
     
     private func configureUI() {
         view.backgroundColor = .white
-        backView.addSubviews(보증금, 보증금TextField, 월세, 월세TextField, 관리비, 관리비TextField, 관리비미포함, 전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼, separatorLine)
+        backView.addSubviews(보증금, 월세, 관리비, 관리비미포함, 전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼, separatorLine)
         보증금.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.leading.equalToSuperview().offset(20)}
         보증금TextField.snp.makeConstraints {
             $0.top.equalTo(보증금.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         월세.snp.makeConstraints {
             $0.top.equalTo(보증금TextField.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)}
         월세TextField.snp.makeConstraints {
             $0.top.equalTo(월세.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         관리비.snp.makeConstraints {
             $0.top.equalTo(월세TextField.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)}
         관리비TextField.snp.makeConstraints {
             $0.top.equalTo(관리비.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         관리비미포함.snp.makeConstraints {
             $0.top.equalTo(관리비TextField.snp.bottom).offset(20)
@@ -259,30 +241,30 @@ class CheckVC2: UIViewController {
     }
     private func configureUI2() {
         view.backgroundColor = .white
-        backView.addSubviews(면적, 면적TextField, 입주가능일, 입주TextField, 계약기간, 계약기간TextField, separatorLine2)
+        backView.addSubviews(면적, 입주가능일, 계약기간, separatorLine2)
         면적.snp.makeConstraints {
             $0.top.equalTo(separatorLine.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
         면적TextField.snp.makeConstraints {
             $0.top.equalTo(면적.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         입주가능일.snp.makeConstraints {
             $0.top.equalTo(면적TextField.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(20)}
         입주TextField.snp.makeConstraints {
             $0.top.equalTo(입주가능일.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         계약기간.snp.makeConstraints {
             $0.top.equalTo(입주TextField.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(20)}
         계약기간TextField.snp.makeConstraints {
             $0.top.equalTo(계약기간.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().offset(23)
-            $0.trailing.equalToSuperview().offset(-23)
+            $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
+            $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         separatorLine2.snp.makeConstraints {
             $0.top.equalTo(계약기간TextField.snp.bottom).offset(30)
@@ -291,7 +273,7 @@ class CheckVC2: UIViewController {
     }
     private func configureUI3() {
         view.backgroundColor = .white
-        backView.addSubviews(checkListLabel, checkListUIView, recodeLabel, galleryButton, memoTextView, completionButton)
+        backView.addSubviews(checkListLabel, checkListUIView, recodeLabel, galleryButton, completionButton)
         checkListUIView.addSubviews(recodeLabel, galleryButton, memoTextView)
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
@@ -332,23 +314,22 @@ class CheckVC2: UIViewController {
     }
     
     //MARK: - Actions
-    @objc func vc2ButtonTapped(_ sender: UIButton) {
-        print("⭐️")
-//        switch sender.currentTitle {
-//        case "전기", "가스", "수도", "인터넷", "TV", "기타":
-////            self.houseViewModel.trade = sender.currentTitle
-//            sender.setTitleColor(.white, for: .normal)
-//            sender.backgroundColor = Constant.appColor
-//            for 버튼 in 관리비버튼 {
-//                guard 버튼.currentTitle == sender.currentTitle else {
-//                    버튼.setTitleColor(.darkGray, for: .normal)
-//                    버튼.backgroundColor = .white
-//                    continue
-//                }
-//            }
-//        default:
-//            print("디버깅: 디폴트")
-//        }
+    @objc func buttonTapped(_ sender: UIButton) {
+        switch sender.currentTitle {
+        case "전기", "가스", "수도", "인터넷", "TV", "기타":
+            self.houseViewModel.trade = sender.currentTitle
+            sender.setTitleColor(.white, for: .normal)
+            sender.backgroundColor = Constant.appColor
+            for 관리비버튼 in 관리비버튼 {
+                guard 관리비버튼.currentTitle == sender.currentTitle else {
+                    관리비버튼.setTitleColor(.darkGray, for: .normal)
+                    관리비버튼.backgroundColor = .white
+                    continue
+                }
+            }
+        default:
+            print("디버깅: 디폴트")
+        }
     }
 }
 
@@ -360,7 +341,8 @@ extension UIView {
         return separator
     }
 }
-
 extension CheckVC2: UITextFieldDelegate {
-
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.delegate = self
+    }
 }
