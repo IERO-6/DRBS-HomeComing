@@ -9,7 +9,7 @@ class CheckVC2: UIViewController {
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false}
-    private lazy var backView = UIView().then {$0.backgroundColor = .systemBlue}
+    private lazy var backView = UIView().then {$0.backgroundColor = .white}
     private let 보증금 = UILabel().then {
         $0.text = "보증금*"
         $0.font = UIFont(name: Constant.font, size: 16)}
@@ -48,42 +48,42 @@ class CheckVC2: UIViewController {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 가스버튼 = UIButton().then {
         $0.setTitle("가스", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 수도버튼 = UIButton().then {
         $0.setTitle("수도", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 인터넷버튼 = UIButton().then {
         $0.setTitle("인터넷", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var TV버튼 = UIButton().then {
         $0.setTitle("TV", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 기타버튼 = UIButton().then {
         $0.setTitle("기타", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
-        $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)}
+        $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
     private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     private let separatorLine = UIView.createSeparatorLine()
     private let separatorLine2 = UIView.createSeparatorLine()
@@ -149,7 +149,6 @@ class CheckVC2: UIViewController {
         configureUI3()
         setUpLabel()
         view.bringSubviewToFront(보증금TextField)
-
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -170,7 +169,7 @@ class CheckVC2: UIViewController {
         scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주TextField, 계약기간TextField, memoTextView)
         backView.snp.makeConstraints {
             $0.top.equalTo(scrollView)
-            $0.left.right.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
+            $0.left.right.bottom.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
             $0.width.equalTo(view) // backView의 너비를 화면 너비와 동일하게 설정
         }}
     
@@ -314,16 +313,16 @@ class CheckVC2: UIViewController {
     }
     
     //MARK: - Actions
-    @objc func buttonTapped(_ sender: UIButton) {
+    @objc func vc2buttonTapped(_ sender: UIButton) {
         switch sender.currentTitle {
         case "전기", "가스", "수도", "인터넷", "TV", "기타":
-            self.houseViewModel.trade = sender.currentTitle
+//            self.houseViewModel.trade = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
-            for 관리비버튼 in 관리비버튼 {
-                guard 관리비버튼.currentTitle == sender.currentTitle else {
-                    관리비버튼.setTitleColor(.darkGray, for: .normal)
-                    관리비버튼.backgroundColor = .white
+            for 버튼 in 관리비버튼 {
+                guard 버튼.currentTitle == sender.currentTitle else {
+                    버튼.setTitleColor(.darkGray, for: .normal)
+                    버튼.backgroundColor = .white
                     continue
                 }
             }
