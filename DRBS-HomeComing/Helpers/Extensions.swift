@@ -6,7 +6,6 @@ import CoreLocation
 
 extension UINavigationController {
     func setupHomeBarAppearance() {
-
         self.navigationController?.navigationBar.isTranslucent = false
         navigationBar.tintColor = .black
         self.navigationController?.navigationBar.barTintColor = .white
@@ -17,7 +16,7 @@ extension UINavigationController {
     
     func setupMapBarAppearance() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
-//        navigationBar color 뷰 컬러와 동일하게 맞추기
+        //navigationBar color 뷰 컬러와 동일하게 맞추기
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         //navigationBar bottom bolder line 제거하기
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -28,22 +27,15 @@ extension UINavigationController {
 //MARK: - 뷰
 
 extension UIView {
-
     // 한 번에 여러 객체 addSubView하기
     func addSubviews(_ views: UIView...) {
-        for view in views {
-            addSubview(view)
-        }
+        for view in views { addSubview(view) }
     }
 }
 extension UIStackView {
-    
     func addArrangedSubviews(_ views: UIView...) {
-        for view in views {
-            addArrangedSubview(view)
-        }
+        for view in views {addArrangedSubview(view)}
     }
-
 }
 
 extension CALayer {
@@ -56,22 +48,6 @@ extension CALayer {
         self.masksToBounds = true
     }
 }
-extension MKCoordinateRegion {
-    func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
-        let centerCoordinate = self.center
-        let latitudeDelta = self.span.latitudeDelta
-        let longitudeDelta = self.span.longitudeDelta
-        
-        let minLatitude = centerCoordinate.latitude - (latitudeDelta / 2.0)
-        let maxLatitude = centerCoordinate.latitude + (latitudeDelta / 2.0)
-        let minLongitude = centerCoordinate.longitude - (longitudeDelta / 2.0)
-        let maxLongitude = centerCoordinate.longitude + (longitudeDelta / 2.0)
-        
-        return (coordinate.latitude >= minLatitude &&
-                coordinate.latitude <= maxLatitude &&
-                coordinate.longitude >= minLongitude &&
-                coordinate.longitude <= maxLongitude)
-    }
-}
+
 
 

@@ -10,6 +10,30 @@ class NetworkingManager {
     
     //MARK: - 체크리스트관련메서드
 
+    func fetchHouses(completion: @escaping([House]) -> Void) {
+        DispatchQueue.global().async {
+            self.db.collection("Homes").getDocuments { querySnapshot, error in
+                if error == nil && querySnapshot != nil {
+                    guard let snapshot = querySnapshot else { return }
+                    var houses: [House] = []
+                    for document in snapshot.documents {
+                        let data = document.data()
+//                        let latitude = data["latitude"] as! Double
+//                        let longitude = data["longitude"] as! Double
+//                        let isBookMarked = data["isBookMarked"] as! Bool
+                        
+//                        locations.append(location)
+                    }
+                    completion(houses)
+                } else {
+                    print("\(String(describing: error?.localizedDescription))")
+                }
+            }        }
+        
+        
+        
+        
+    }
     
     
     

@@ -222,8 +222,8 @@ final class CheckVC1: UIViewController {
     }
 
     @objc public func nextButtonTapped() {
-//        let checkVC2 = CheckVC2()
-        let checkVC2 = MyHouseVC()
+        let checkVC2 = CheckVC2()
+//        let checkVC2 = MyHouseVC()
 
         self.houseViewModel.name = self.nameLabel.text
 //        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)

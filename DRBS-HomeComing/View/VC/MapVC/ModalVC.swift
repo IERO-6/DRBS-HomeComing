@@ -8,7 +8,6 @@ class ModalVC: UIViewController {
         $0.textColor = .black
         $0.font = UIFont.boldSystemFont(ofSize: 22)
         $0.textAlignment = .left
-        
     }
     
     private let star = UIImageView().then {
@@ -19,7 +18,6 @@ class ModalVC: UIViewController {
         $0.textColor = .systemGray4
         $0.font = UIFont.systemFont(ofSize: 18)
         $0.textAlignment = .left
-        
     }
     
     private let addressLabel = UILabel().then {
