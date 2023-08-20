@@ -15,14 +15,14 @@ struct Constant {
         case topCell = "TopCell"
     }
     
-    enum 주거: String {
+    enum livingType: String {
         case 아파트
         case 원룸
         case 오피스텔
         case 주택
     }
     
-    enum 주거형태: String {
+    enum tradingType: String {
         case 월세
         case 전세
         case 매매
