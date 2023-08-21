@@ -5,7 +5,7 @@ import SnapKit
 class CheckVC2: UIViewController {
     
     //MARK: - Properties
-    private let houseViewModel = HouseViewModel()
+    var houseViewModel: HouseViewModel?
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false}

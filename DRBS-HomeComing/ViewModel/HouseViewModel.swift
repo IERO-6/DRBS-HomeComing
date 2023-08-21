@@ -15,8 +15,8 @@ class HouseViewModel {
        뷰모델은 뷰컨이 소유한 데이터와 관련있는 값도 가져야 함 */
     
     var name: String?
-    var trade: String?
-    var living: String?
+    var tradingType: String?
+    var livingType: String?
     var address: CLLocationCoordinate2D?
     
     
