@@ -138,7 +138,9 @@ class CheckVC2: UIViewController {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = Constant.appColor}
+        $0.backgroundColor = Constant.appColor
+        $0.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
+    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -329,6 +331,11 @@ class CheckVC2: UIViewController {
         default:
             print("디버깅: 디폴트")
         }
+    }
+    @objc func completionButtonTapped() {
+        let rateVC = RateVC()
+//        rateVC.modalPresentationStyle = .pageSheet
+        self.present(rateVC, animated: true)
     }
 }
 

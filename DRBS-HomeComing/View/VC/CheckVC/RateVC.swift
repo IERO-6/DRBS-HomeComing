@@ -18,23 +18,110 @@ class RateVC: UIViewController {
         $0.textAlignment = .left
     }
     
-    private lazy var rateSlider = UISlider().then {
+    private lazy var rateSlider = CustomSlider().then {
         $0.minimumValue = 0.0
         $0.maximumValue = 5.0
         
         $0.addTarget(self, action: #selector(valueChanged(_:)), for: .valueChanged)
     }
     
+    private lazy var rateLabel = UILabel().then {
+        $0.text = ""
+        
+    }
+    
+    private lazy var saveButton = UIButton().then {
+        $0.setTitle("저장", for: .normal)
+        $0.backgroundColor = Constant.appColor
+        $0.layer.cornerRadius = 5
+        $0.clipsToBounds = true
+        $0.setTitleColor(UIColor.white, for: .normal)
+        $0.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+    }
+    
+    private lazy var firstImageView = UIImageView().then {
+        $0.image = UIImage(named: "star_unfill.png")
+        $0.tag = 1
+    }
+    private lazy var secondImageView = UIImageView().then {
+        $0.image = UIImage(named: "star_unfill.png")
+        $0.tag = 2
+        
+    }
+    private lazy var thirdImageView = UIImageView().then {
+        $0.image = UIImage(named: "star_unfill.png")
+        $0.tag = 3
+        
+    }
+    private lazy var fourthImageView = UIImageView().then {
+        $0.image = UIImage(named: "star_unfill.png")
+        $0.tag = 4
+    }
+    private lazy var fiveImageView = UIImageView().then {
+        $0.image = UIImage(named: "star_unfill.png")
+        $0.tag = 5
+    }
+    
+    private lazy var imageStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+        $0.spacing = 0
+        $0.alignment = .fill
+    }
+    
     
     //MARK: - LifeCycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
         configureUI()
+        //        settingModal()
         
     }
     //MARK: - Helpers
     private func configureUI() {
+        view.addSubviews(mainTitleLabel, subTitleLabel, rateLabel, rateSlider,imageStackView, saveButton)
+        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView, fiveImageView)
+        
+        mainTitleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(30)
+            $0.width.equalToSuperview()
+            $0.height.equalTo(50)
+        }
+        
+        subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(mainTitleLabel.snp.bottom).offset(10)
+            $0.leading.equalToSuperview().offset(23)
+            $0.width.equalTo(self.view.frame.width - 46)
+            $0.height.equalTo(30)
+        }
+        
+        rateLabel.snp.makeConstraints {
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(subTitleLabel)
+            $0.width.equalTo(subTitleLabel)
+            $0.height.equalTo(30)
+        }
+        rateSlider.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(rateLabel.snp.bottom).offset(10)
+            $0.width.equalTo(self.view.frame.width)
+            $0.height.equalTo(30)
+        }
+        imageStackView.snp.makeConstraints {
+            $0.centerX.equalTo(mainTitleLabel)
+            $0.width.equalTo(subTitleLabel)
+            $0.height.equalTo((view.frame.width - 46)/5)
+            $0.top.equalTo(rateSlider.snp.bottom).offset(10)
+        }
+        saveButton.snp.makeConstraints {
+            $0.centerX.equalTo(mainTitleLabel)
+            $0.width.equalTo(subTitleLabel)
+            $0.top.equalTo(imageStackView.snp.bottom).offset(10)
+            $0.height.equalTo(56)
+        }
         
     }
     
@@ -48,9 +135,28 @@ class RateVC: UIViewController {
     
     //MARK: - Actions
     @objc func valueChanged(_ sender: UISlider) {
-        print(sender.value)
+//        self.rateLabel.text = "\(sender.value)"
+        let floatValue = floor(sender.value * 5) / 5
+        let intValue = Float(floor(sender.value))
+        
+        for index in 0...5 { // 여기서 index는 우리가 설정한 'Tag'로 매치시킬 것이다.
+            if let starImage = view.viewWithTag(index) as? UIImageView {
+                if Float(index) <= intValue {
+                    starImage.image = UIImage(named: "star_fill.png")
+                } else {
+                    if (2 * Float(index) - intValue) <= 1.5 {
+                        starImage.image = UIImage(named: "half_star.png")
+                    } else {
+                        starImage.image = UIImage(named: "star_unfill.png")
+                    }
+                }
+            }
+            self.rateLabel.text = String(Int(floatValue))
+        }
     }
     
-
-
+    @objc func saveButtonTapped() {
+        print("----------saveButtonTapped----------")
+    }
+    
 }
