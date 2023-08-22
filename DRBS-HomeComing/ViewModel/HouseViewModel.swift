@@ -20,6 +20,8 @@ class HouseViewModel {
     var address: CLLocationCoordinate2D?
     
     
+    var rate: Float?
+    
     //MARK: - Output
     
     
@@ -33,6 +35,35 @@ class HouseViewModel {
     //MARK: - Logics
     func blahblah() {
         
+    }
+    
+    func calculateRates(value: Float) -> Float {
+        switch value {
+        case _ where value > 0.0 && value < 0.5:
+            return 0
+        case _ where value > 0.5 && value < 1.0:
+            return 0.5
+        case _ where value > 1.0 && value < 1.5:
+            return 1.0
+        case _ where value > 1.5 && value < 2.0:
+            return 1.5
+        case _ where value > 2.0 && value < 2.5:
+            return 2.0
+        case _ where value > 2.5 && value < 3.0:
+            return 2.5
+        case _ where value > 3.0 && value < 3.5:
+            return 3.0
+        case _ where value > 3.5 && value < 4.0:
+            return 3.5
+        case _ where value > 4.0 && value < 4.5:
+            return 4.0
+        case _ where value > 4.5 && value < 5.0:
+            return 4.5
+        case 5.0:
+            return 5.0
+        default:
+            return 0.0
+        }
     }
 
 }
