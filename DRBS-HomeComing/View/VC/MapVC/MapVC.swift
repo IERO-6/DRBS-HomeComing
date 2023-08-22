@@ -46,6 +46,7 @@ final class MapVC: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.locationViewModel.fetchAnnotations()
         configureUI()
         checkDeviceService()
     }
@@ -83,17 +84,20 @@ final class MapVC: UIViewController {
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        let annotations = self.locationViewModel.fetchedLocations
+        let centerCoordinate = CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5) // 대한민국 중심 좌표
+        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 500000, longitudinalMeters: 500000) // 반경 설정
+        self.mkMapView.region = region
+        DispatchQueue.main.async {
+            for customPin in annotations { self.mkMapView.addAnnotation(customPin) }
+        }
     }
     
     private func settingCLLocationManager() { locationManager.delegate = self }
     
     private func removeAllAnnotations() {
         let annotations = mkMapView.annotations
-        if !annotations.isEmpty {
-            for annotation in annotations {
-                mkMapView.removeAnnotation(annotation)
-            }
-        }
+        if !annotations.isEmpty {for annotation in annotations {mkMapView.removeAnnotation(annotation)}}
     }
     
     //MARK: - 권한설정탭(아마불변)
@@ -171,7 +175,7 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
-        guard let annotation = annotation as? Annotation else {return nil}
+        guard let annotation = annotation as? Location else {return nil}
         var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constant.Identifier.annotationView.rawValue)
@@ -182,10 +186,10 @@ extension MapVC: MKMapViewDelegate {
         switch annotation.isBookMarked {
         case true:
 //            annotationImage = UIImage(named: "annotation_Bookmarked.png")
-            annotationImage = UIImage(named: "test1.png")
+            annotationImage = UIImage(named: "testb1.png")
         case false:
 //            annotationImage = UIImage(named: "annotation_default.png")
-            annotationImage = UIImage(named: "testb1.png")
+            annotationImage = UIImage(named: "test1.png")
         }
 //        annotationImage.draw(in: CGRect(x: 0, y: 0, width: 20, height: 20))
         annotationView?.image = annotationImage

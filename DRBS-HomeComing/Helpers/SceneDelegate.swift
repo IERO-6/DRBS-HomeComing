@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseCore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -6,7 +7,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
             guard let windowScene = (scene as? UIWindowScene) else { return }
-            
+            FirebaseApp.configure()  ///Firebase 구동
+
             let window = UIWindow(windowScene: windowScene)
             let vc1 = HomeVC()
             let vc2 = MapVC()
@@ -20,8 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             nav2.setupMapBarAppearance()
             let tabbar = Tabbar()
             tabbar.viewControllers = [nav1, nav2]
-            
-
             window.rootViewController = tabbar // 자신의 시작 ViewController
             window.makeKeyAndVisible()
             self.window = window

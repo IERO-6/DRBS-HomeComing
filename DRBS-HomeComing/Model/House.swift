@@ -1,12 +1,14 @@
 import UIKit
 
 struct House {
-    var id: String?
-    var isBookMarked: Bool?
-    var title: String?
-    var 주거: Constant.주거?
-    var 주거형태: Constant.주거형태?
-    var location: Location?
+    var uid: String?                        //유저ID
+    var title: String?                      //타이틀
+    var isBookMarked: Bool?                 //북마크여부
+    var livingType: Constant.livingType?    //주거 ex) 아파트, 원룸 등..
+    var tradingType: Constant.tradingType?  //주거형태 ex) 월세 분양 매매 등
+    var address: String?                    //주소    ex) 서울특별시 ~~
+    var latitude: Double?                   //위도
+    var longitude: Double?                  //경도
     var 보증금: String?
     var 월세: String?
     var 관리비: String?

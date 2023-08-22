@@ -45,19 +45,20 @@ class HomeVC: UIViewController {
            checkVC.hidesBottomBarWhenPushed = true
            self.navigationController?.pushViewController(checkVC, animated: true)
        }
-       @objc func settingButtonTapped() {
+    @objc func settingButtonTapped() {
            let settingVC = SettingVC()
            self.navigationController?.pushViewController(settingVC, animated: true)
-       }
+    }
+    @objc func headButtonTapped() {
+        let myHouseVC = MyHouseVC()
+        self.navigationController?.pushViewController(myHouseVC, animated: true)
+    }
     
 }
 
 //MARK: - UITableViewDelegate
 
 extension HomeVC: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return self.categories[section]
-//    }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
             let titleButton = UIButton(frame: CGRect(x: 15, y: 0, width: 200, height: 40))
@@ -66,10 +67,11 @@ extension HomeVC: UITableViewDelegate {
             titleButton.setTitleColor(.black, for: .normal)
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-            
+            titleButton.addTarget(self, action: #selector(headButtonTapped), for: .touchUpInside)
+            titleButton.tag = section
             return headerView
         }
-    
+   
 }
 
 //MARK: - UITableViewDataSource
