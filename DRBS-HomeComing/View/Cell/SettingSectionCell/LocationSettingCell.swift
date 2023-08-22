@@ -39,6 +39,7 @@ class LocationSettingCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
         detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside)
+        toggleSwitch.addTarget(self, action: #selector(toggleSwitchValueChanged), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -81,6 +82,17 @@ class LocationSettingCell: UITableViewCell {
     
     @objc private func detailsButtonTapped() {
         onDetailsButtonTapped?()
+    }
+    
+    @objc private func toggleSwitchValueChanged(sender: UISwitch) {
+        if sender.isOn {
+            guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
