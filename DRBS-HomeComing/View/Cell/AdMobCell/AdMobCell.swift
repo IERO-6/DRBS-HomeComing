@@ -2,9 +2,9 @@ import UIKit
 import Then
 import SnapKit
 
-class SettingAdMobCell: UITableViewCell {
+class AdMobCell: UITableViewCell {
     
-    static let id = "SettingAdMobCell"
+    static let id = "AdMobCell"
     
     // MARK: - Properties
 
