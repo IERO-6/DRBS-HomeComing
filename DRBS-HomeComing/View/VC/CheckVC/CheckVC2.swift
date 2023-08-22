@@ -5,7 +5,7 @@ import SnapKit
 class CheckVC2: UIViewController {
     
     //MARK: - Properties
-    var houseViewModel: HouseViewModel?
+    var houseViewModel = HouseViewModel()
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false}
@@ -45,6 +45,7 @@ class CheckVC2: UIViewController {
     private lazy var 전기버튼 = UIButton().then {
         $0.setTitle("전기", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -52,6 +53,7 @@ class CheckVC2: UIViewController {
     private lazy var 가스버튼 = UIButton().then {
         $0.setTitle("가스", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -59,6 +61,7 @@ class CheckVC2: UIViewController {
     private lazy var 수도버튼 = UIButton().then {
         $0.setTitle("수도", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -66,6 +69,7 @@ class CheckVC2: UIViewController {
     private lazy var 인터넷버튼 = UIButton().then {
         $0.setTitle("인터넷", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -73,6 +77,7 @@ class CheckVC2: UIViewController {
     private lazy var TV버튼 = UIButton().then {
         $0.setTitle("TV", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
@@ -80,11 +85,11 @@ class CheckVC2: UIViewController {
     private lazy var 기타버튼 = UIButton().then {
         $0.setTitle("기타", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
+        $0.backgroundColor = .white
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
         $0.layer.cornerRadius = 20
         $0.addTarget(self, action: #selector(vc2buttonTapped(_:)), for: .touchUpInside)}
-    private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     private let separatorLine = UIView.createSeparatorLine()
     private let separatorLine2 = UIView.createSeparatorLine()
     private let 면적 = UILabel().then {$0.text = "면적"}
@@ -134,13 +139,15 @@ class CheckVC2: UIViewController {
         $0.isEditable = true
         $0.textColor = .black
         $0.layer.cornerRadius = 10}
-    private let completionButton = UIButton().then {
+    private lazy var completionButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 10
         $0.backgroundColor = Constant.appColor
         $0.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
     }
+    
+    private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -316,25 +323,29 @@ class CheckVC2: UIViewController {
     
     //MARK: - Actions
     @objc func vc2buttonTapped(_ sender: UIButton) {
+        print("--------\(sender.currentTitle!)버튼 눌림-------")
         switch sender.currentTitle {
         case "전기", "가스", "수도", "인터넷", "TV", "기타":
-//            self.houseViewModel.trade = sender.currentTitle
-            sender.setTitleColor(.white, for: .normal)
-            sender.backgroundColor = Constant.appColor
-            for 버튼 in 관리비버튼 {
-                guard 버튼.currentTitle == sender.currentTitle else {
-                    버튼.setTitleColor(.darkGray, for: .normal)
-                    버튼.backgroundColor = .white
-                    continue
-                }
+            guard sender.backgroundColor == Constant.appColor else {
+                sender.setTitleColor(.white, for: .normal)
+                sender.backgroundColor = Constant.appColor
+                self.houseViewModel.관리비미포함목록.append(sender.currentTitle ?? "")
+                return
+            }
+            sender.setTitleColor(.darkGray, for: .normal)
+            sender.backgroundColor = .white
+            self.houseViewModel.관리비미포함목록 = self.houseViewModel.관리비미포함목록.filter {
+                $0 != sender.currentTitle ?? ""
             }
         default:
-            print("디버깅: 디폴트")
+            print("디폴트")
         }
     }
     @objc func completionButtonTapped() {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
+        rateVC.houseViewModel = self.houseViewModel
+        print(rateVC.houseViewModel.관리비미포함목록)
         self.present(rateVC, animated: true)
     }
 }

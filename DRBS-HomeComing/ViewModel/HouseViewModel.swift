@@ -18,7 +18,7 @@ class HouseViewModel {
     var tradingType: String?
     var livingType: String?
     var address: CLLocationCoordinate2D?
-    
+    var 관리비미포함목록: [String] = []
     
     var rate: Float?
     

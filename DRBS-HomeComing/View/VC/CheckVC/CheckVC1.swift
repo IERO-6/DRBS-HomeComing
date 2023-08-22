@@ -16,7 +16,6 @@ final class CheckVC1: UIViewController {
         $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray}
     
-    
     private lazy var 월세버튼 = UIButton().then {
         $0.setTitle("월세", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
@@ -225,7 +224,6 @@ final class CheckVC1: UIViewController {
         let checkVC2 = CheckVC2()
 //        let checkVC2 = MyHouseVC()
 //        let checkVC2 = CheckListView()
-
         self.houseViewModel.name = self.nameLabel.text
 //        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
 //        checkVC2.viewModel = self.houseViewModel
