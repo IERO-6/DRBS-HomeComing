@@ -102,7 +102,10 @@ class CheckVC2: UIViewController {
         $0.rightViewMode = .always}
     private let 입주가능일 = UILabel().then {
         $0.text = "입주 가능일"}
-    private let 입주TextField = UITextField().then {$0.placeholder = "e) 23.08.28"}
+    private let 입주TextField = UITextField().then {
+        $0.placeholder = "e) 23.08.28"
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .editingDidBegin)
+    }
     private let 계약기간 = UILabel().then {$0.text = "계약기간"}
     private let 계약기간TextField = UITextField().then {
         $0.placeholder = "0"
@@ -347,6 +350,16 @@ class CheckVC2: UIViewController {
         rateVC.houseViewModel = self.houseViewModel
         print(rateVC.houseViewModel.관리비미포함목록)
         self.present(rateVC, animated: true)
+    }
+    @objc func textFieldTapped() {
+        if #available(iOS 16.0, *) {
+            let calendarVC = CalendarVC()
+            calendarVC.modalPresentationStyle = .pageSheet
+            self.present(calendarVC, animated: true)
+        } else {
+            print("버전 낮음")
+        }
+        
     }
 }
 
