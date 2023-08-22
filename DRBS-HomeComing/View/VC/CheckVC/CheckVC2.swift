@@ -334,7 +334,7 @@ class CheckVC2: UIViewController {
     }
     @objc func completionButtonTapped() {
         let rateVC = RateVC()
-//        rateVC.modalPresentationStyle = .pageSheet
+        rateVC.modalPresentationStyle = .pageSheet
         self.present(rateVC, animated: true)
     }
 }

@@ -31,6 +31,13 @@ class LocationSettingCell: UITableViewCell {
         $0.onTintColor = Constant.appColor
     }
     
+    private let verticalStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 5
+        $0.distribution = .fill
+        $0.alignment = .leading
+    }
+    
     var onDetailsButtonTapped: (() -> Void)?
     
     // MARK: - Initialization
@@ -39,6 +46,7 @@ class LocationSettingCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
         detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside)
+        toggleSwitch.addTarget(self, action: #selector(toggleSwitchValueChanged), for: .valueChanged)
     }
     
     required init?(coder: NSCoder) {
@@ -48,25 +56,14 @@ class LocationSettingCell: UITableViewCell {
     // MARK: - Helpers
     
     private func configureUI() {
-        contentView.addSubviews(titleLabel, subTitleLabel, detailsButton, toggleSwitch)
-
-        titleLabel.snp.makeConstraints {
+        verticalStackView.addArrangedSubviews(titleLabel, subTitleLabel, detailsButton)
+        contentView.addSubviews(verticalStackView, toggleSwitch)
+        
+        verticalStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)
             $0.top.equalToSuperview().offset(16)
-            $0.height.greaterThanOrEqualTo(30)
-        }
-
-        subTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalTo(toggleSwitch.snp.leading).offset(-16)
-            $0.bottom.equalTo(detailsButton.snp.top).offset(-10)
-        }
-
-        detailsButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
-            $0.bottom.equalToSuperview().offset(-16)
-            $0.height.equalTo(30)
+            $0.trailing.lessThanOrEqualTo(toggleSwitch.snp.leading).offset(-16)
+            $0.bottom.lessThanOrEqualToSuperview().offset(-16)
         }
 
         toggleSwitch.snp.makeConstraints {
@@ -81,6 +78,17 @@ class LocationSettingCell: UITableViewCell {
     
     @objc private func detailsButtonTapped() {
         onDetailsButtonTapped?()
+    }
+    
+    @objc private func toggleSwitchValueChanged(sender: UISwitch) {
+        if sender.isOn {
+            guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

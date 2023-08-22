@@ -72,7 +72,7 @@
 		B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0942A8F140500E68A2D /* Pretendard-Black.otf */; };
 		B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
-		EB560BE72A9099870051E9E6 /* SettingAdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* SettingAdMobCell.swift */; };
+		EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* AdMobCell.swift */; };
 		EBD8B7632A90A060005DCCFD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -146,8 +146,10 @@
 		B386B0932A8F140500E68A2D /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		B386B0942A8F140500E68A2D /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
-		EB560BE62A9099870051E9E6 /* SettingAdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAdMobCell.swift; sourceTree = "<group>"; };
+		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1.swift; sourceTree = "<group>"; };
+		EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC2.swift; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -163,6 +165,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2158BA552A94A78D0064AFC4 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */,
+				EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		216FA0A32A8BA5D8004D0279 /* SettingSectionModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,7 +194,6 @@
 				216FA0B32A8BA672004D0279 /* NoticeCell.swift */,
 				216FA0B52A8BA67C004D0279 /* NoticeListCell.swift */,
 				216FA0B72A8BA684004D0279 /* OptionCell.swift */,
-				EB560BE62A9099870051E9E6 /* SettingAdMobCell.swift */,
 			);
 			path = SettingSectionCell;
 			sourceTree = "<group>";
@@ -239,6 +249,7 @@
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
 				57FAD258E927479E3F71361D /* Frameworks */,
+				2158BA552A94A78D0064AFC4 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -368,6 +379,7 @@
 		21B627532A814B1F00081D5E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				EBB005622A94A1D2008E2A8C /* AdMobCell */,
 				2192EA962A8F0903006AB5B3 /* HomeCell */,
 				216FA0AA2A8BA632004D0279 /* SettingSectionCell */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
@@ -407,6 +419,14 @@
 				B386B08E2A8F140500E68A2D /* Pretendard-Thin.otf */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		EBB005622A94A1D2008E2A8C /* AdMobCell */ = {
+			isa = PBXGroup;
+			children = (
+				EB560BE62A9099870051E9E6 /* AdMobCell.swift */,
+			);
+			path = AdMobCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -566,7 +586,7 @@
 				216FA0C62A8BA7A3004D0279 /* LocationSettingViewModel.swift in Sources */,
 				216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
-				EB560BE72A9099870051E9E6 /* SettingAdMobCell.swift in Sources */,
+				EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
 				216FA0BB2A8BA708004D0279 /* LocationConsentDetail.swift in Sources */,
 				216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */,
