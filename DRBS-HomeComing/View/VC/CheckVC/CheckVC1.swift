@@ -177,6 +177,7 @@ final class CheckVC1: UIViewController {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "추가하기"
         self.navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.backgroundColor = .white
     }
     
     private func setUpLabel() {
