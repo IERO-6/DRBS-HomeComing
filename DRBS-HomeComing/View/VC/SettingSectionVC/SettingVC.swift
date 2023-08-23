@@ -67,7 +67,6 @@ final class SettingVC: UIViewController {
     }
     
     private func configureTableView() {
-        
         settingTableView.dataSource = self
         settingTableView.delegate = self
         
