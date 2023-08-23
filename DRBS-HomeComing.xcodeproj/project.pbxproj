@@ -17,6 +17,7 @@
 		2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* OfficeCell.swift */; };
 		2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA522A949B510064AFC4 /* CustomSlider.swift */; };
 		2158BA572A9508160064AFC4 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA562A9508160064AFC4 /* CalendarVC.swift */; };
+		2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */; };
 		215BDC662A889D7F007151A1 /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC652A889D7F007151A1 /* CheckList.swift */; };
 		216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A42A8BA5EA004D0279 /* LocationSetting.swift */; };
 		216FA0A72A8BA5F1004D0279 /* NoticeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A62A8BA5F1004D0279 /* NoticeList.swift */; };
@@ -88,6 +89,7 @@
 		2143CE372A79051400A5DB36 /* OfficeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeCell.swift; sourceTree = "<group>"; };
 		2158BA522A949B510064AFC4 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		2158BA562A9508160064AFC4 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
+		2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListUIView.swift; sourceTree = "<group>"; };
 		215BDC652A889D7F007151A1 /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
 		216FA0A42A8BA5EA004D0279 /* LocationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSetting.swift; sourceTree = "<group>"; };
 		216FA0A62A8BA5F1004D0279 /* NoticeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeList.swift; sourceTree = "<group>"; };
@@ -165,15 +167,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2158BA552A94A78D0064AFC4 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */,
-				EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		216FA0A32A8BA5D8004D0279 /* SettingSectionModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,7 +242,6 @@
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
 				57FAD258E927479E3F71361D /* Frameworks */,
-				2158BA552A94A78D0064AFC4 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -351,6 +343,7 @@
 				2192EA9D2A90A4BD006AB5B3 /* MyHouseVC.swift */,
 				2192EAA22A947740006AB5B3 /* RateVC.swift */,
 				2158BA562A9508160064AFC4 /* CalendarVC.swift */,
+				2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */,
 			);
 			path = CheckVC;
 			sourceTree = "<group>";
@@ -586,6 +579,7 @@
 				21B627662A83838600081D5E /* LocationViewModel.swift in Sources */,
 				216FA0C62A8BA7A3004D0279 /* LocationSettingViewModel.swift in Sources */,
 				216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */,
+				2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
 				EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
