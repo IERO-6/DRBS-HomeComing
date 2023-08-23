@@ -2,7 +2,11 @@ import UIKit
 import Then
 import SnapKit
 
-class CheckVC2: UIViewController {
+protocol CalendarDelegate: AnyObject {
+    func dateSelected(date: Date)
+}
+
+final class CheckVC2: UIViewController {
     
     //MARK: - Properties
     var houseViewModel = HouseViewModel()
@@ -349,11 +353,13 @@ class CheckVC2: UIViewController {
         rateVC.modalPresentationStyle = .pageSheet
         rateVC.houseViewModel = self.houseViewModel
         print(rateVC.houseViewModel.관리비미포함목록)
+        print(rateVC.houseViewModel.입주가능일)
         self.present(rateVC, animated: true)
     }
     @objc func textFieldTapped() {
         if #available(iOS 16.0, *) {
             let calendarVC = CalendarVC()
+            calendarVC.calendarDelegate = self
             calendarVC.modalPresentationStyle = .pageSheet
             self.present(calendarVC, animated: true)
         } else {
@@ -374,5 +380,14 @@ extension UIView {
 extension CheckVC2: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.delegate = self
+    }
+}
+
+extension CheckVC2: CalendarDelegate {
+    func dateSelected(date: Date) {
+        let myFormatter = DateFormatter()
+        myFormatter.dateFormat = "yy.MM.dd"
+        self.입주TextField.text = myFormatter.string(from: date)
+        self.houseViewModel.입주가능일 = date
     }
 }

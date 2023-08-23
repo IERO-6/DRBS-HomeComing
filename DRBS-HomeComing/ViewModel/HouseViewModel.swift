@@ -19,6 +19,7 @@ class HouseViewModel {
     var livingType: String?
     var address: CLLocationCoordinate2D?
     var 관리비미포함목록: [String] = []
+    var 입주가능일: Date?
     
     var rate: Float?
     
