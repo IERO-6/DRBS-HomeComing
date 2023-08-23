@@ -101,6 +101,7 @@ final class CheckVC1: UIViewController {
     //MARK: - Helpers
     
     private func configureUI() {
+        addressTextField.delegate = self
         view.backgroundColor = .white
         view.addSubviews(nameLabel, nameTextField, tradeLabel,
                          월세버튼, 전세버튼, 매매버튼, livingLabel,
@@ -222,13 +223,39 @@ final class CheckVC1: UIViewController {
 
     @objc public func nextButtonTapped() {
         let checkVC2 = CheckVC2()
-//        let checkVC2 = MyHouseVC()
-//        let checkVC2 = CheckListView()
         self.houseViewModel.name = self.nameLabel.text
-//        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
-//        checkVC2.viewModel = self.houseViewModel
-//        checkVC2.hidesBottomBarWhenPushed = true
         checkVC2.houseViewModel = self.houseViewModel
+        print(checkVC2.houseViewModel.address)
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }
+}
+
+//MARK: - UITextFieldDelegate
+extension CheckVC1: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
+            if let error = error {
+                print("Error geocoding address: \(error.localizedDescription)")
+            } else if let coordinate = coordinate {
+                self.houseViewModel.address = coordinate
+            }
+        }
+        
+        
+        
+        
+        return true
+    }
+    
+    // 도로명 주소를 위도와 경도로 변환하는 예제 사용
+//        let address = "서울특별시 강남구 역삼로 123"
+//        geocodeAddress(address: address) { (coordinate, error) in
+//            if let error = error {
+//                print("Error geocoding address: \(error.localizedDescription)")
+//            } else if let coordinate = coordinate {
+//                print("주소: \(address)")
+//                print("위도: \(coordinate.latitude)")
+//                print("경도: \(coordinate.longitude)")
+//            }
+//        }
 }

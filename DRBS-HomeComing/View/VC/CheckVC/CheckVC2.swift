@@ -374,6 +374,7 @@ extension CheckVC2: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.delegate = self
     }
+    
 }
 
 extension CheckVC2: CalendarDelegate {

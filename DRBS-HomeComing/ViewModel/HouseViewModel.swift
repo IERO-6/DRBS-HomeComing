@@ -12,7 +12,7 @@ class HouseViewModel {
     //MARK: - Model
     var house: House?
     /* 뷰컨은 뷰모델이 소유한 데이터를 표기해야하기 때문에
-       뷰모델은 뷰컨이 소유한 데이터와 관련있는 값도 가져야 함 */
+     뷰모델은 뷰컨이 소유한 데이터와 관련있는 값도 가져야 함 */
     
     var name: String?
     var tradingType: String?
@@ -28,16 +28,32 @@ class HouseViewModel {
     
     
     //MARK: - Input
-
-
+    
+    
     
     
     
     //MARK: - Logics
-    func blahblah() {
-        
+    func switchAddressToCLCoordinate2D(address: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
+        // 도로명 주소를 위도와 경도로 변환하는 함수
+        let geocoder = CLGeocoder()
+        DispatchQueue.global().async {
+            geocoder.geocodeAddressString(address) { (placemarks, error) in
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+                if let placemark = placemarks?.first,
+                   let location = placemark.location {
+                    completion(location.coordinate, nil)
+                } else {
+                    completion(nil, NSError(domain: "GeocodingErrorDomain", code: 1, userInfo: nil))
+                }
+            }
+        } 
     }
     
+    //uiSlider값에 따라 평점 구분하는 로직
     func calculateRates(value: Float) -> Float {
         switch value {
         case _ where value > 0.0 && value < 0.5:
@@ -66,5 +82,5 @@ class HouseViewModel {
             return 0.0
         }
     }
-
+    
 }
