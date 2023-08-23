@@ -17,7 +17,8 @@ final class CheckVC2: UIViewController {
     private lazy var backView = UIView().then {$0.backgroundColor = .white}
     private let 보증금 = UILabel().then {
         $0.text = "보증금*"
-        $0.font = UIFont(name: Constant.font, size: 16)}
+        $0.font = UIFont(name: Constant.font, size: 16)
+    }
     private let 보증금TextField = UITextField().then {
         $0.placeholder = "000 "
         $0.textAlignment = .right
@@ -25,7 +26,10 @@ final class CheckVC2: UIViewController {
         label.text = " 만원"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always}
+        $0.rightViewMode = .always
+        $0.keyboardType = .numbersAndPunctuation
+    }
+    
     private let 월세 = UILabel().then {
         $0.text = "월세*"
         $0.font = UIFont(name: Constant.font, size: 16)}
@@ -36,7 +40,9 @@ final class CheckVC2: UIViewController {
         label.text = " 만원"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always}
+        $0.rightViewMode = .always
+        $0.keyboardType = .numbersAndPunctuation
+    }
     private let 관리비 = UILabel().then {$0.text = "관리비" }
     var 관리비TextField = UITextField().then {
         $0.placeholder = "0"
@@ -45,7 +51,9 @@ final class CheckVC2: UIViewController {
         label.text = " 만원"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always}
+        $0.rightViewMode = .always
+        $0.keyboardType = .numbersAndPunctuation
+    }
     private let 관리비미포함 = UILabel().then {$0.text = "관리비 미포함 목록"}
     private lazy var 전기버튼 = UIButton().then {
         $0.setTitle("전기", for: .normal)
@@ -104,7 +112,10 @@ final class CheckVC2: UIViewController {
         label.text = "㎡"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always}
+        $0.rightViewMode = .always
+        $0.keyboardType = .numbersAndPunctuation
+        
+    }
     private let 입주가능일 = UILabel().then {
         $0.text = "입주 가능일"}
     private lazy var 입주가능일button = UIButton().then {
@@ -120,7 +131,9 @@ final class CheckVC2: UIViewController {
         label.text = " 년"
         label.sizeToFit()
         $0.rightView = label
-        $0.rightViewMode = .always}
+        $0.rightViewMode = .always
+        $0.keyboardType = .numbersAndPunctuation
+    }
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
         $0.font = UIFont(name: Constant.font, size: 18)}
@@ -167,6 +180,9 @@ final class CheckVC2: UIViewController {
         setUpLabel()
         initPicker()
         setupImageViewGesture()
+        보증금TextField.delegate = self
+        월세TextField.delegate = self
+        관리비TextField.delegate = self
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -384,6 +400,28 @@ extension CheckVC2: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.delegate = self
     }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard Double(string) != nil || string == "" else { return false }
+        //글자수 제한하는 코드 작성
+        if textField == 보증금TextField {
+            // 텍스트 필드 글자 내용이 (한글자 한글자)입력되거나 지워질 때 호출이 되고 (허락)
+            let maxLenght = 6
+            let currentString: NSString = (textField.text ?? "") as NSString
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+            return newString.length <= maxLenght
+        } else if textField == 월세TextField {
+            let maxLenght = 3
+            let currentString: NSString = (textField.text ?? "") as NSString
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+            return newString.length <= maxLenght
+        } else if textField == 관리비 {
+            let maxLenght = 2
+            let currentString: NSString = (textField.text ?? "") as NSString
+            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+            return newString.length <= maxLenght
+        }
+        return true
+    }
     
 }
 
@@ -395,6 +433,9 @@ extension CheckVC2: CalendarDelegate {
         self.입주가능일button.setTitleColor(.black, for: .normal)
         self.houseViewModel.입주가능일 = date
     }
+    
+    
+    
 }
 extension CheckVC2: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
