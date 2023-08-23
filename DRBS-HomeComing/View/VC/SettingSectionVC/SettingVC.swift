@@ -23,7 +23,6 @@ final class SettingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureNav()
         configureTableView()
         
         settingViewModel.logoutAction = { [weak self] in
