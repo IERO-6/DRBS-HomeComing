@@ -225,7 +225,6 @@ final class CheckVC1: UIViewController {
         let checkVC2 = CheckVC2()
         self.houseViewModel.name = self.nameLabel.text
         checkVC2.houseViewModel = self.houseViewModel
-        print(checkVC2.houseViewModel.address)
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }
 }
@@ -235,6 +234,14 @@ extension CheckVC1: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "주소 형식이 맞지 않습니다.", message: "주소를 다시 입력해주세요.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
                 self.houseViewModel.address = coordinate
