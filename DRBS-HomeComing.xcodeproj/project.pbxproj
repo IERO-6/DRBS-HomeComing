@@ -765,6 +765,9 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application requires location services to work";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is required to find out where you are";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -800,6 +803,9 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application requires location services to work";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is required to find out where you are";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
