@@ -247,10 +247,7 @@ extension CheckVC1: UITextFieldDelegate {
                 self.houseViewModel.address = coordinate
             }
         }
-        
-        
-        
-        
+
         return true
     }
     

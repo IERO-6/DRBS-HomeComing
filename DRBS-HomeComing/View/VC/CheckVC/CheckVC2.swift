@@ -10,6 +10,7 @@ final class CheckVC2: UIViewController {
     
     //MARK: - Properties
     var houseViewModel = HouseViewModel()
+    private let checkListUIView = CheckListUIView()
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false}
@@ -123,23 +124,21 @@ final class CheckVC2: UIViewController {
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
         $0.font = UIFont(name: Constant.font, size: 18)}
-    private let checkListUIView = UIView().then {
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 10
-        $0.layer.borderColor = UIColor.systemGray4.cgColor}
     private let recodeLabel = UILabel().then {
         $0.text = "기록"
         $0.font = UIFont(name: Constant.font, size: 18)}
-    private lazy var galleryButton = UIButton().then {
-        if let image = UIImage(systemName: "camera") {
-            let configuration = UIImage.SymbolConfiguration(scale: .large)
-            let scaledImage = image.applyingSymbolConfiguration(configuration)
-            let tintedImage = image.withTintColor(.black, renderingMode: .alwaysOriginal)
-            $0.setImage(tintedImage, for: .normal)}
-        $0.backgroundColor = UIColor.systemGray6
+    private let picker = UIImagePickerController()
+    private let galleryImageView = UIImageView().then {
+        let cameraImage = UIImage(systemName: "camera")
+        let size = CGSize(width: 20, height: 20)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        cameraImage?.draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        $0.image = UIImage(systemName: "camera")
+        $0.tintColor = .black
         $0.layer.cornerRadius = 10
-        $0.contentMode = .center
-        $0.frame = CGRect(x: 0, y: 0, width: 63, height: 50)}
+        $0.backgroundColor = UIColor.systemGray6}
     private let memoTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
         $0.font = UIFont.systemFont(ofSize: 13)
@@ -166,7 +165,8 @@ final class CheckVC2: UIViewController {
         configureUI2()
         configureUI3()
         setUpLabel()
-        view.bringSubviewToFront(보증금TextField)
+        initPicker()
+        setupImageViewGesture()
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -175,9 +175,12 @@ final class CheckVC2: UIViewController {
         면적TextField.layer.addBottomLayer()
         입주가능일button.layer.addBottomLayer()
         계약기간TextField.layer.addBottomLayer()
-        //맨 밑이 어디까지인지 알 수 있게 해준다
         let contentHeight = completionButton.frame.maxY + 20
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)}
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.backView.endEditing(true)
+    }
     
     //MARK: - Helpers
     private func addScrollView() {
@@ -290,8 +293,7 @@ final class CheckVC2: UIViewController {
     }
     private func configureUI3() {
         view.backgroundColor = .white
-        backView.addSubviews(checkListLabel, checkListUIView, recodeLabel, galleryButton, completionButton)
-        checkListUIView.addSubviews(recodeLabel, galleryButton, memoTextView)
+        backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, galleryImageView, completionButton)
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
@@ -299,17 +301,17 @@ final class CheckVC2: UIViewController {
             $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
-            $0.height.equalTo(470)}
+            $0.height.equalTo(500)}
         recodeLabel.snp.makeConstraints {
             $0.top.equalTo(checkListUIView.snp.bottom).offset(30)
             $0.leading.equalTo(checkListLabel)}
-        galleryButton.snp.makeConstraints {
+        galleryImageView.snp.makeConstraints {
             $0.top.equalTo(recodeLabel.snp.bottom).offset(20)
             $0.leading.equalTo(checkListLabel)
             $0.height.equalTo(140)
             $0.width.equalTo(140)}
         memoTextView.snp.makeConstraints {
-            $0.top.equalTo(galleryButton.snp.bottom).offset(20)
+            $0.top.equalTo(galleryImageView.snp.bottom).offset(20)
             $0.leading.equalTo(checkListLabel)
             $0.trailing.equalTo(checkListUIView)
             $0.height.equalTo(200)}
@@ -329,6 +331,14 @@ final class CheckVC2: UIViewController {
             attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
             texts.attributedText = attribtuedString}
     }
+    private func initPicker() {
+        self.picker.delegate = self
+        self.picker.sourceType = .photoLibrary
+        self.picker.modalPresentationStyle = .fullScreen}
+    private func setupImageViewGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        galleryImageView.addGestureRecognizer(tapGesture)
+        galleryImageView.isUserInteractionEnabled = true}
     
     //MARK: - Actions
     @objc func vc2buttonTapped(_ sender: UIButton) {
@@ -365,8 +375,8 @@ final class CheckVC2: UIViewController {
         } else {
             print("버전 낮음")
         }
-        
     }
+    @objc func openLibrary() {self.present(picker, animated: true, completion: nil)}
 }
 
 //MARK: - Extensions
@@ -384,5 +394,38 @@ extension CheckVC2: CalendarDelegate {
         self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
         self.입주가능일button.setTitleColor(.black, for: .normal)
         self.houseViewModel.입주가능일 = date
+    }
+}
+extension CheckVC2: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.dismiss(animated: false, completion: {
+                DispatchQueue.main.async {
+                    self.galleryImageView.image = image}
+            })
+        }
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)}
+}
+
+extension UITextField: UITextFieldDelegate {
+    
+    @IBInspectable var onlyNumbers: Bool {
+        get {
+            return delegate is UITextField
+        }
+        set {
+            if newValue {
+                delegate = self}
+        }
+    }
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard onlyNumbers else { return true }
+        let allowedCharacters = CharacterSet.decimalDigits.union(CharacterSet(charactersIn: "\u{8}"))
+        let characterSet = CharacterSet(charactersIn: string)
+        if !allowedCharacters.isSuperset(of: characterSet) {return false}
+        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+        return newString.count <= 6 // 새로운 문자열의 길이가 6자리 이하인지 확인
     }
 }
