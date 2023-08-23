@@ -114,10 +114,6 @@ class CheckVC2: UIViewController {
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
         $0.font = UIFont(name: Constant.font, size: 18)}
-//    private let checkListUIView = UIView().then {
-//        $0.layer.borderWidth = 1
-//        $0.layer.cornerRadius = 10
-//        $0.layer.borderColor = UIColor.systemGray4.cgColor}
     private let recodeLabel = UILabel().then {
         $0.text = "기록"
         $0.font = UIFont(name: Constant.font, size: 18)}
@@ -292,11 +288,6 @@ class CheckVC2: UIViewController {
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
-//        checkListUIView.snp.makeConstraints {
-//            $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
-//            $0.leading.equalToSuperview().offset(20)
-//            $0.trailing.equalToSuperview().offset(-20)
-//            $0.height.equalTo(470)}
         checkListUIView.snp.makeConstraints {
             $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
@@ -382,6 +373,8 @@ extension CheckVC2: UIImagePickerControllerDelegate, UINavigationControllerDeleg
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)}
+    
+
 }
 
 extension UITextField: UITextFieldDelegate {
