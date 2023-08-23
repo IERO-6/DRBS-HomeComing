@@ -20,7 +20,6 @@ final class LocationSettingVC: UIViewController {
         
         configureNav()
         configureTableView()
-        configureFooterView()
         
         self.extendedLayoutIncludesOpaqueBars = true
     }
@@ -64,32 +63,6 @@ final class LocationSettingVC: UIViewController {
         locationSettingTableView.separatorInsetReference = .fromCellEdges
         locationSettingTableView.dataSource = self
         locationSettingTableView.delegate = self
-    }
-    
-    private func configureFooterView() {
-        let footerLabel = UILabel().then {
-            $0.numberOfLines = 0
-            $0.lineBreakMode = .byWordWrapping
-            $0.font = UIFont.systemFont(ofSize: 12)
-            $0.textColor = .gray
-
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 1
-
-            let attributedString = NSMutableAttributedString(string: "• 위치기반서비스를 이용하기 위해서는 위치 선택, 접근권한에 먼저 동의하셔야 합니다.\n", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
-            $0.attributedText = attributedString
-        }
-
-        let footerView = UIView()
-        footerView.addSubview(footerLabel)
-        footerLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalToSuperview().inset(10)
-            $0.bottom.equalToSuperview().inset(50)
-        }
-
-        locationSettingTableView.tableFooterView = footerView
-        locationSettingTableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 100)
     }
 
 }

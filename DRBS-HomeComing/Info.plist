@@ -4,6 +4,8 @@
 <dict>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-5665531154477823~7245842966</string>
+	<key>NSAppTransportSecurity</key>
+	<dict/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Black.otf</string>
@@ -16,14 +18,6 @@
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Thin.otf</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This application requires location services to work</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location is required to find out where you are</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This application requires location services to work</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -41,5 +35,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

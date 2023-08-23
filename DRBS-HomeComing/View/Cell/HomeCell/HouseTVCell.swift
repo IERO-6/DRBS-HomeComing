@@ -36,6 +36,7 @@ class HouseTVCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         self.collectionView.dataSource = self
+        self.collectionView.delegate = self
         self.contentView.addSubview(self.collectionView)
         NSLayoutConstraint.activate([
             self.collectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
@@ -78,5 +79,12 @@ extension HouseTVCell: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
+    }
+    
+}
+
+extension HouseTVCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        //셀 선택 됐을 때 해당 셀의 Id를 통해 파이어베이스에서 받아온 데이터로 디테일VC를 띄움
     }
 }
