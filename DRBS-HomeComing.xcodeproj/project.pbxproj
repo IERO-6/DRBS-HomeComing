@@ -11,6 +11,7 @@
 		1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */; };
 		1863355E2A8A0D1D00E283D5 /* DetailTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */; };
 		186335602A8A0D2900E283D5 /* CheckVC1ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */; };
+		186B0F6E2A95D546001FF57A /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186B0F6D2A95D546001FF57A /* CheckListUIView.swift */; };
 		188FEEAE2A91BFB50013A53A /* CheckVC2ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FEEAD2A91BFB50013A53A /* CheckVC2ViewModel.swift */; };
 		188FEEB02A91C3C90013A53A /* CheckVC2Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FEEAF2A91C3C90013A53A /* CheckVC2Model.swift */; };
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
@@ -72,9 +73,6 @@
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
 		EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* AdMobCell.swift */; };
 		EBD8B7632A90A060005DCCFD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */; };
-		EBD8B76A2A90A52F005DCCFD /* CheckVC1.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */; };
-		EBD8B76B2A90A52F005DCCFD /* MyHouseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD8B7682A90A52F005DCCFD /* MyHouseVC.swift */; };
-		EBD8B76C2A90A52F005DCCFD /* CheckVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +80,7 @@
 		1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1Model.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTVCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1ViewModel.swift; sourceTree = "<group>"; };
+		186B0F6D2A95D546001FF57A /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListUIView.swift; sourceTree = "<group>"; };
 		188FEEAD2A91BFB50013A53A /* CheckVC2ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2ViewModel.swift; sourceTree = "<group>"; };
 		188FEEAF2A91C3C90013A53A /* CheckVC2Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2Model.swift; sourceTree = "<group>"; };
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
@@ -148,7 +147,6 @@
 		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1.swift; sourceTree = "<group>"; };
-		EBD8B7682A90A52F005DCCFD /* MyHouseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyHouseVC.swift; sourceTree = "<group>"; };
 		EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC2.swift; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +163,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		188D8DBB2A94D52C00C70FB1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */,
+				EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		216FA0A32A8BA5D8004D0279 /* SettingSectionModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +247,7 @@
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
 				57FAD258E927479E3F71361D /* Frameworks */,
+				188D8DBB2A94D52C00C70FB1 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -338,6 +346,7 @@
 				2192EA9E2A90A4BD006AB5B3 /* CheckVC1.swift */,
 				2192EA9C2A90A4BD006AB5B3 /* CheckVC2.swift */,
 				2192EA9D2A90A4BD006AB5B3 /* MyHouseVC.swift */,
+				186B0F6D2A95D546001FF57A /* CheckListUIView.swift */,
 			);
 			path = CheckVC;
 			sourceTree = "<group>";
@@ -582,6 +591,7 @@
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
 				2192EAA02A90A4BD006AB5B3 /* MyHouseVC.swift in Sources */,
+				186B0F6E2A95D546001FF57A /* CheckListUIView.swift in Sources */,
 				2192EA9F2A90A4BD006AB5B3 /* CheckVC2.swift in Sources */,
 				215BDC662A889D7F007151A1 /* CheckList.swift in Sources */,
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
@@ -593,14 +603,12 @@
 				216FA0AC2A8BA641004D0279 /* AccountSettingCell.swift in Sources */,
 				21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */,
 				216FA0A72A8BA5F1004D0279 /* NoticeList.swift in Sources */,
-				EBD8B76C2A90A52F005DCCFD /* CheckVC2.swift in Sources */,
 				21B6276C2A83844400081D5E /* ModalVC.swift in Sources */,
 				216FA0AE2A8BA651004D0279 /* AppVersionCell.swift in Sources */,
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
 				216FA0BD2A8BA711004D0279 /* LocationSettingVC.swift in Sources */,
 				216FA0C32A8BA739004D0279 /* WithdrawVC.swift in Sources */,
 				1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */,
-				EBD8B76A2A90A52F005DCCFD /* CheckVC1.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				216FA0B62A8BA67C004D0279 /* NoticeListCell.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
