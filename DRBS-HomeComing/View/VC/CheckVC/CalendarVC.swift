@@ -14,8 +14,9 @@ final class CalendarVC: UIViewController {
         
     }
     
-    
     private var selectedDate: DateComponents?
+    
+    weak var calendarDelegate: CalendarDelegate?
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -66,7 +67,8 @@ extension CalendarVC: UICalendarViewDelegate, UICalendarSelectionSingleDateDeleg
             let myFormatter = DateFormatter()
             myFormatter.dateFormat = "yyyy-MM-dd"
             let formattedDate = myFormatter.string(from: date)
-            print(formattedDate)
+            calendarDelegate?.dateSelected(date: date)
+            self.dismiss(animated: true)
         }
     }
 }

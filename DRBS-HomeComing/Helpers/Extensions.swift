@@ -31,6 +31,11 @@ extension UIView {
     func addSubviews(_ views: UIView...) {
         for view in views { addSubview(view) }
     }
+    static func createSeparatorLine() -> UIView {
+        let separator = UIView()
+        separator.backgroundColor = .systemGray5
+        return separator
+    }
 }
 extension UIStackView {
     func addArrangedSubviews(_ views: UIView...) {
