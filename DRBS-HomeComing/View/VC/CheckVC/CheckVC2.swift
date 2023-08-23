@@ -375,6 +375,23 @@ final class CheckVC2: UIViewController {
         } else {
             print("버전 낮음")
         }
+        
+    }
+    @objc func completionButtonTapped() {
+        let rateVC = RateVC()
+        rateVC.modalPresentationStyle = .pageSheet
+        rateVC.houseViewModel = self.houseViewModel
+        self.present(rateVC, animated: true)
+    }
+    @objc func textFieldTapped() {
+        if #available(iOS 16.0, *) {
+            let calendarVC = CalendarVC()
+            calendarVC.calendarDelegate = self
+            calendarVC.modalPresentationStyle = .pageSheet
+            self.present(calendarVC, animated: true)
+        } else {
+            print("버전 낮음")
+        }
     }
     @objc func openLibrary() {self.present(picker, animated: true, completion: nil)}
 }
@@ -383,6 +400,17 @@ final class CheckVC2: UIViewController {
 extension CheckVC2: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.delegate = self
+    }
+    
+}
+
+extension CheckVC2: CalendarDelegate {
+    func dateSelected(date: Date) {
+        let myFormatter = DateFormatter()
+        myFormatter.dateFormat = "yy.MM.dd"
+        self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
+        self.입주가능일button.setTitleColor(.black, for: .normal)
+        self.houseViewModel.입주가능일 = date
     }
 }
 
