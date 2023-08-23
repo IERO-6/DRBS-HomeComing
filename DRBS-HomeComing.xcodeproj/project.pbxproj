@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180365D12A962C540016CD5E /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180365D02A962C540016CD5E /* CheckListUIView.swift */; };
 		1863355A2A8A0D0B00E283D5 /* DetailTV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186335592A8A0D0B00E283D5 /* DetailTV.swift */; };
 		1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */; };
 		1863355E2A8A0D1D00E283D5 /* DetailTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		180365D02A962C540016CD5E /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CheckListUIView.swift; path = "../../../../../../.Trash/DRBS-HomeComing 오후 8.35.32/View/VC/CheckVC/CheckListUIView.swift"; sourceTree = "<group>"; };
 		186335592A8A0D0B00E283D5 /* DetailTV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTV.swift; sourceTree = "<group>"; };
 		1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1Model.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTVCell.swift; sourceTree = "<group>"; };
@@ -168,8 +170,6 @@
 		2158BA552A94A78D0064AFC4 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				EBD8B7692A90A52F005DCCFD /* CheckVC2.swift */,
-				EBD8B7672A90A52F005DCCFD /* CheckVC1.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -351,6 +351,7 @@
 				2192EA9D2A90A4BD006AB5B3 /* MyHouseVC.swift */,
 				2192EAA22A947740006AB5B3 /* RateVC.swift */,
 				2158BA562A9508160064AFC4 /* CalendarVC.swift */,
+				180365D02A962C540016CD5E /* CheckListUIView.swift */,
 			);
 			path = CheckVC;
 			sourceTree = "<group>";
@@ -586,6 +587,7 @@
 				21B627662A83838600081D5E /* LocationViewModel.swift in Sources */,
 				216FA0C62A8BA7A3004D0279 /* LocationSettingViewModel.swift in Sources */,
 				216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */,
+				180365D12A962C540016CD5E /* CheckListUIView.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
 				EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
