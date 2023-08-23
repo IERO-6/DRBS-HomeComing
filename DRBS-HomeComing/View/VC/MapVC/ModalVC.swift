@@ -150,8 +150,6 @@ class ModalVC: UIViewController {
             sheetPresentationController.prefersGrabberVisible = true
             sheetPresentationController.preferredCornerRadius = 25
         }
-        
-        
     }
     
     //MARK: - Actions

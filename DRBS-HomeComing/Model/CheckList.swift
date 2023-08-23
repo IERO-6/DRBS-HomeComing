@@ -1,12 +1,12 @@
 import UIKit
 
-struct CheckList {
+struct CheckList: Codable {
     //체크리스트 모델
-    var 방향: Constant.방향?
-    var 방음: Constant.방음?
-    var 수압: Constant.수압?
-    var 벌레: Constant.벌레?
-    var 통풍: Constant.통풍?
-    var 보안: Constant.보안?
-    var 곰팡이: Constant.곰팡이?
+    var 방향: String?
+    var 방음: String?
+    var 수압: String?
+    var 벌레: String?
+    var 통풍: String?
+    var 보안: String?
+    var 곰팡이: String?
 }
