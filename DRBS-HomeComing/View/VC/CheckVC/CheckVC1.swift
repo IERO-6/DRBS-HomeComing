@@ -16,7 +16,6 @@ final class CheckVC1: UIViewController {
         $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray}
     
-    
     private lazy var 월세버튼 = UIButton().then {
         $0.setTitle("월세", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
@@ -195,7 +194,7 @@ final class CheckVC1: UIViewController {
     @objc func buttonTapped(_ sender: UIButton) {
         switch sender.currentTitle {
         case "월세", "전세", "매매":
-            self.houseViewModel.trade = sender.currentTitle
+            self.houseViewModel.tradingType = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
             for tradeButton in tradeButtons {
@@ -206,7 +205,7 @@ final class CheckVC1: UIViewController {
                 }
             }
         case "아파트", "빌라/투룸+", "오피스텔", "원룸":
-            self.houseViewModel.living = sender.currentTitle
+            self.houseViewModel.livingType = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
             for livingButton in livingButtons {
@@ -225,11 +224,11 @@ final class CheckVC1: UIViewController {
         let checkVC2 = CheckVC2()
 //        let checkVC2 = MyHouseVC()
 //        let checkVC2 = CheckListView()
-
         self.houseViewModel.name = self.nameLabel.text
 //        self.houseViewModel.address = 좌표로 변환하는 코드(self.addressTextField.text)
 //        checkVC2.viewModel = self.houseViewModel
 //        checkVC2.hidesBottomBarWhenPushed = true
+        checkVC2.houseViewModel = self.houseViewModel
         self.navigationController?.pushViewController(checkVC2, animated: true)
     }
 }
