@@ -106,9 +106,11 @@ final class CheckVC2: UIViewController {
         $0.rightViewMode = .always}
     private let 입주가능일 = UILabel().then {
         $0.text = "입주 가능일"}
-    private let 입주TextField = UITextField().then {
-        $0.placeholder = "e) 23.08.28"
-        $0.addTarget(self, action: #selector(textFieldTapped), for: .editingDidBegin)
+    private lazy var 입주가능일button = UIButton().then {
+        $0.setTitle("e) 23.08.28", for: .normal)
+        $0.setTitleColor(UIColor.systemGray4, for: .normal)
+        $0.contentHorizontalAlignment = .left
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)
     }
     private let 계약기간 = UILabel().then {$0.text = "계약기간"}
     private let 계약기간TextField = UITextField().then {
@@ -171,7 +173,7 @@ final class CheckVC2: UIViewController {
         월세TextField.layer.addBottomLayer()
         관리비TextField.layer.addBottomLayer()
         면적TextField.layer.addBottomLayer()
-        입주TextField.layer.addBottomLayer()
+        입주가능일button.layer.addBottomLayer()
         계약기간TextField.layer.addBottomLayer()
         //맨 밑이 어디까지인지 알 수 있게 해준다
         let contentHeight = completionButton.frame.maxY + 20
@@ -182,7 +184,7 @@ final class CheckVC2: UIViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()}
-        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주TextField, 계약기간TextField, memoTextView)
+        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주가능일button, 계약기간TextField, memoTextView)
         backView.snp.makeConstraints {
             $0.top.equalTo(scrollView)
             $0.left.right.bottom.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
@@ -268,13 +270,13 @@ final class CheckVC2: UIViewController {
         입주가능일.snp.makeConstraints {
             $0.top.equalTo(면적TextField.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(20)}
-        입주TextField.snp.makeConstraints {
+        입주가능일button.snp.makeConstraints {
             $0.top.equalTo(입주가능일.snp.bottom).offset(10)
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
             $0.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).offset(-23)
             $0.height.equalTo(30)}
         계약기간.snp.makeConstraints {
-            $0.top.equalTo(입주TextField.snp.bottom).offset(10)
+            $0.top.equalTo(입주가능일button.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(20)}
         계약기간TextField.snp.makeConstraints {
             $0.top.equalTo(계약기간.snp.bottom).offset(10)
@@ -352,8 +354,6 @@ final class CheckVC2: UIViewController {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
         rateVC.houseViewModel = self.houseViewModel
-        print(rateVC.houseViewModel.관리비미포함목록)
-        print(rateVC.houseViewModel.입주가능일)
         self.present(rateVC, animated: true)
     }
     @objc func textFieldTapped() {
@@ -370,13 +370,6 @@ final class CheckVC2: UIViewController {
 }
 
 //MARK: - Extensions
-extension UIView {
-    static func createSeparatorLine() -> UIView {
-        let separator = UIView()
-        separator.backgroundColor = .systemGray5
-        return separator
-    }
-}
 extension CheckVC2: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.delegate = self
@@ -387,7 +380,8 @@ extension CheckVC2: CalendarDelegate {
     func dateSelected(date: Date) {
         let myFormatter = DateFormatter()
         myFormatter.dateFormat = "yy.MM.dd"
-        self.입주TextField.text = myFormatter.string(from: date)
+        self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
+        self.입주가능일button.setTitleColor(.black, for: .normal)
         self.houseViewModel.입주가능일 = date
     }
 }
