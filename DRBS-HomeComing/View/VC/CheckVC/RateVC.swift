@@ -123,14 +123,13 @@ final class RateVC: UIViewController {
     
     //MARK: - Actions
     @objc func valueChanged(_ sender: UISlider) {
-//        self.rateLabel.text = "\(sender.value)"
-        let floatValue = Float(sender.value)
+        let floatValue = Double(sender.value)
         for index in 1...5 { // 여기서 index는 우리가 설정한 'Tag'로 매치시킬 것이다.
             if let starImage = view.viewWithTag(index) as? UIImageView {
-                if Float(index) <= floatValue {
+                if Double(index) <= floatValue {
                     starImage.image = UIImage(named: "star_fill.png")
                 } else {
-                    if (Float(index) - floatValue) <= 0.5 {
+                    if (Double(index) - floatValue) <= 0.5 {
                         starImage.image = UIImage(named: "half_star.png")
                     } else {
                         starImage.image = UIImage(named: "star_unfill.png")
@@ -141,9 +140,9 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        self.houseViewModel.rate = houseViewModel.calculateRates(value: rateSlider.value)
-        print(self.houseViewModel.rate ?? 0.0)
-        print("----------saveButtonTapped----------")
+        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
+        self.houseViewModel.makeHouseModel()
+        dump(self.houseViewModel.house)
     }
     
 }

@@ -358,7 +358,6 @@ final class CheckVC2: UIViewController {
     
     //MARK: - Actions
     @objc func vc2buttonTapped(_ sender: UIButton) {
-        print("--------\(sender.currentTitle!)버튼 눌림-------")
         switch sender.currentTitle {
         case "전기", "가스", "수도", "인터넷", "TV", "기타":
             guard sender.backgroundColor == Constant.appColor else {
@@ -379,7 +378,16 @@ final class CheckVC2: UIViewController {
     @objc func completionButtonTapped() {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
+        self.houseViewModel.보증금 = self.보증금TextField.text
+        self.houseViewModel.월세or전세금 = self.월세TextField.text
+        self.houseViewModel.관리비 = self.관리비TextField.text
+        self.houseViewModel.면적 = self.면적TextField.text
+        self.houseViewModel.계약기간 = self.계약기간TextField.text
+        self.houseViewModel.checkList = self.checkListUIView.checkViewModel.makeCheckListModel()
+        //사진은 아직
+        self.houseViewModel.memo = self.memoTextView.text
         rateVC.houseViewModel = self.houseViewModel
+//        dump(rateVC.houseViewModel)
         self.present(rateVC, animated: true)
     }
     @objc func textFieldTapped() {

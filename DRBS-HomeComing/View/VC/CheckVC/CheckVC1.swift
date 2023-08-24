@@ -320,9 +320,12 @@ final class CheckVC1: UIViewController {
                 }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
-                self.houseViewModel.address = coordinate
-                let checkVC2 = CheckVC2()
+//                self.houseViewModel.address = coordinate
+                self.houseViewModel.address = self.addressTextField.text
+                self.houseViewModel.latitude = coordinate.latitude
+                self.houseViewModel.longitude = coordinate.longitude
                 self.houseViewModel.name = self.nameLabel.text
+                let checkVC2 = CheckVC2()
                 checkVC2.houseViewModel = self.houseViewModel
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }

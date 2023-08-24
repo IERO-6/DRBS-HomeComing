@@ -4,6 +4,9 @@ import SnapKit
 
 class CheckListUIView: UIView {
     //MARK: - Properties
+    
+    var checkViewModel = CheckViewModel()
+    
     let checkListUIView = UIView().then {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
@@ -251,10 +254,7 @@ class CheckListUIView: UIView {
 
     //MARK: - Actions
     @objc func toggleCheckBox(_ sender: KeyedButton) {
-        print(sender.key)
-        print(sender.tag)
-        sender.isSelected.toggle()
-        
-        
+            sender.isSelected.toggle()
+            self.checkViewModel.checkListButton(sender)
     }
 }
