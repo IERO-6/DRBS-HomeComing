@@ -17,14 +17,26 @@ class HouseViewModel {
     var name: String?
     var tradingType: String?
     var livingType: String?
-    var address: CLLocationCoordinate2D?
+    var latitude: Double?
+    var longitude: Double?
+    var address: String?
+    var 보증금: String?
+    var 월세or전세금: String?
+    var 관리비: String?
     var 관리비미포함목록: [String] = []
+    var 면적: String?
     var 입주가능일: Date?
-    
-    var rate: Float?
+    var 계약기간: String?
+    var checkList: CheckList?
+    var photo: [String]?
+    var memo: String?
+    var rate: Double?
     
     //MARK: - Output
     
+    func makeHouseModel() {
+        self.house = House(uid: "자동으로 만들어지겠지", title: self.name, isBookMarked: true, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: [], 별점: self.rate)
+    }
     
     
     //MARK: - Input
@@ -54,7 +66,7 @@ class HouseViewModel {
     }
     
     //uiSlider값에 따라 평점 구분하는 로직
-    func calculateRates(value: Float) -> Float {
+    func calculateRates(value: Double) -> Double {
         switch value {
         case _ where value > 0.0 && value < 0.5:
             return 0

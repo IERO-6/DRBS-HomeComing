@@ -4,18 +4,18 @@ import SnapKit
 
 //+버튼 눌렀을 때 나오는 화면
 final class CheckVC1: UIViewController {
-    
     //MARK: - Properties
-    
     var nameIndex: Int?
     private let houseViewModel = HouseViewModel()
-    
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
         $0.font = UIFont(name: Constant.font, size: 16)
     }
     
-    private let nameTextField = UITextField().then { $0.placeholder = "이름을 입력해주세요" }
+    private lazy var nameTextField = UITextField().then {
+        $0.placeholder = "이름을 입력해주세요"
+        $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+    }
     
     private let tradeLabel = UILabel().then {
         $0.text = "거래 방식*"
@@ -96,7 +96,10 @@ final class CheckVC1: UIViewController {
     
     private lazy var livingButtons = [아파트버튼, 투룸버튼, 오피스텔버튼, 원룸버튼]
     private let addressLabel = UILabel().then { $0.text = "주소*" }
-    private let addressTextField = UITextField().then { $0.placeholder = "경기도 수원시 권선구 매실로 70" }
+    private lazy var addressTextField = UITextField().then {
+        $0.placeholder = "경기도 수원시 권선구 매실로 70"
+        $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
+    }
     
     private lazy var nextButton = UIButton().then {
         $0.backgroundColor = Constant.appColor
@@ -263,7 +266,6 @@ final class CheckVC1: UIViewController {
     }
     
     //MARK: - Actions
-    
     @objc func buttonTapped(_ sender: UIButton) {
         switch sender.currentTitle {
         case "월세", "전세", "매매":
@@ -294,10 +296,50 @@ final class CheckVC1: UIViewController {
     }
 
     @objc public func nextButtonTapped() {
-        let checkVC2 = CheckVC2()
-        self.houseViewModel.name = self.nameLabel.text
-        checkVC2.houseViewModel = self.houseViewModel
-        self.navigationController?.pushViewController(checkVC2, animated: true)
+        guard let name = self.nameTextField.text,
+              let address = self.addressTextField.text,
+            !name.isEmpty && !address.isEmpty && self.houseViewModel.tradingType != nil && self.houseViewModel.livingType != nil else {
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "항목 입력을 완료해주세요.", message: "모든 항목이 입력되지 않았습니다.", preferredStyle: .alert)
+                let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                }
+                alert.addAction(confirm)
+                self.present(alert, animated: true)
+            }
+            return
+        }
+        
+        self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "주소 형식이 맞지 않습니다.", message: "주소를 다시 입력해주세요.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+                print("Error geocoding address: \(error.localizedDescription)")
+            } else if let coordinate = coordinate {
+//                self.houseViewModel.address = coordinate
+                self.houseViewModel.address = self.addressTextField.text
+                self.houseViewModel.latitude = coordinate.latitude
+                self.houseViewModel.longitude = coordinate.longitude
+                self.houseViewModel.name = self.nameLabel.text
+                let checkVC2 = CheckVC2()
+                checkVC2.houseViewModel = self.houseViewModel
+                self.navigationController?.pushViewController(checkVC2, animated: true)
+            }
+        }
+        
+    }
+    
+    @objc func textFieldEditingChanged(_ textField: UITextField) {
+        if textField.text?.count == 1 {
+            if textField.text?.first == " " {
+                textField.text = ""
+                return
+            }
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -335,9 +377,7 @@ extension CheckVC1: UITextFieldDelegate {
         if textField == nameTextField {
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }
-            
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
             return updatedText.count <= 10
         }
         
@@ -348,34 +388,8 @@ extension CheckVC1: UITextFieldDelegate {
         if textField == nameTextField {
             textField.resignFirstResponder()
         } else if textField == addressTextField {
-            self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "주소 형식이 맞지 않습니다.", message: "주소를 다시 입력해주세요.", preferredStyle: .alert)
-                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                        }
-                        alert.addAction(confirm)
-                        self.present(alert, animated: true)
-                    }
-                    print("Error geocoding address: \(error.localizedDescription)")
-                } else if let coordinate = coordinate {
-                    self.houseViewModel.address = coordinate
-                }
-            }
             textField.resignFirstResponder()
         }
         return true
     }
-    
-    // 도로명 주소를 위도와 경도로 변환하는 예제 사용
-//        let address = "서울특별시 강남구 역삼로 123"
-//        geocodeAddress(address: address) { (coordinate, error) in
-//            if let error = error {
-//                print("Error geocoding address: \(error.localizedDescription)")
-//            } else if let coordinate = coordinate {
-//                print("주소: \(address)")
-//                print("위도: \(coordinate.latitude)")
-//                print("경도: \(coordinate.longitude)")
-//            }
-//        }
 }
