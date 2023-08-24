@@ -79,3 +79,6 @@ struct Constant {
    
 }
 
+class KeyedButton: UIButton {
+    var key: String?
+}

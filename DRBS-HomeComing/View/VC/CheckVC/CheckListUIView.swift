@@ -111,19 +111,19 @@ class CheckListUIView: UIView {
         eastWindLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel)
             $0.leading.equalTo(directionLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: eastWindLabel)}
+            addCheckBox(toLeftOf: eastWindLabel, key: "동향", tag: 1)}
         westWindLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel)
             $0.leading.equalTo(eastWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: westWindLabel)}
+            addCheckBox(toLeftOf: westWindLabel, key: "서향", tag: 1)}
         southWindLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel)
             $0.leading.equalTo(westWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: southWindLabel)}
+            addCheckBox(toLeftOf: southWindLabel, key: "남향", tag: 1)}
         northWindLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel)
             $0.leading.equalTo(southWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: northWindLabel)}
+            addCheckBox(toLeftOf: northWindLabel, key: "북향", tag: 1)}
         addUnderlineView(below: directionLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         soundproofingLabel.snp.makeConstraints {
@@ -132,15 +132,15 @@ class CheckListUIView: UIView {
         excellentLabel.snp.makeConstraints {
             $0.top.equalTo(soundproofingLabel)
             $0.leading.equalTo(directionLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: excellentLabel)}
+            addCheckBox(toLeftOf: excellentLabel, key: "우수", tag: 2)}
         moderateLabel.snp.makeConstraints {
             $0.top.equalTo(soundproofingLabel)
             $0.leading.equalTo(excellentLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateLabel)}
+            addCheckBox(toLeftOf: moderateLabel, key: "보통", tag: 2)}
         insufficientLabel.snp.makeConstraints {
             $0.top.equalTo(soundproofingLabel)
             $0.leading.equalTo(moderateLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: insufficientLabel)}
+            addCheckBox(toLeftOf: insufficientLabel, key: "미흡", tag: 2)}
         addUnderlineView(below: soundproofingLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         waterLabel.snp.makeConstraints {
@@ -149,15 +149,15 @@ class CheckListUIView: UIView {
         excellentwaterLabel.snp.makeConstraints {
             $0.top.equalTo(waterLabel)
             $0.leading.equalTo(waterLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: excellentwaterLabel)}
+            addCheckBox(toLeftOf: excellentwaterLabel, key: "우수", tag: 3)}
         moderatewaterLabel.snp.makeConstraints {
             $0.top.equalTo(waterLabel)
             $0.leading.equalTo(excellentwaterLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderatewaterLabel)}
+            addCheckBox(toLeftOf: moderatewaterLabel, key: "보통", tag: 3)}
         insufficientwaterLabel.snp.makeConstraints {
             $0.top.equalTo(waterLabel)
             $0.leading.equalTo(moderatewaterLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: insufficientwaterLabel)}
+            addCheckBox(toLeftOf: insufficientwaterLabel, key: "미흡", tag: 3)}
         addUnderlineView(below: waterLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         bugLabel.snp.makeConstraints {
@@ -166,15 +166,15 @@ class CheckListUIView: UIView {
         yesLabel.snp.makeConstraints {
             $0.top.equalTo(bugLabel)
             $0.leading.equalTo(bugLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: yesLabel)}
+            addCheckBox(toLeftOf: yesLabel, key: "있음", tag: 4)}
         mysteryLabel.snp.makeConstraints {
             $0.top.equalTo(bugLabel)
             $0.leading.equalTo(yesLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: mysteryLabel)}
+            addCheckBox(toLeftOf: mysteryLabel, key: "모름", tag: 4)}
         noLabel.snp.makeConstraints {
             $0.top.equalTo(bugLabel)
             $0.leading.equalTo(mysteryLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: noLabel)}
+            addCheckBox(toLeftOf: noLabel, key: "없음", tag: 4)}
         addUnderlineView(below: bugLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         통풍.snp.makeConstraints {
@@ -183,15 +183,15 @@ class CheckListUIView: UIView {
         쾌적.snp.makeConstraints {
             $0.top.equalTo(통풍)
             $0.leading.equalTo(통풍.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: 쾌적)}
+            addCheckBox(toLeftOf: 쾌적, key: "쾌적", tag: 5)}
         moderateWindLabel.snp.makeConstraints {
             $0.top.equalTo(통풍)
             $0.leading.equalTo(쾌적.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateWindLabel)}
+            addCheckBox(toLeftOf: moderateWindLabel, key: "보통", tag: 5)}
         불쾌.snp.makeConstraints {
             $0.top.equalTo(통풍)
             $0.leading.equalTo(moderateWindLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: 불쾌)}
+            addCheckBox(toLeftOf: 불쾌, key: "모름", tag: 5)}
         addUnderlineView(below: 통풍, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         securityLabel.snp.makeConstraints {
@@ -200,15 +200,15 @@ class CheckListUIView: UIView {
         철저.snp.makeConstraints {
             $0.top.equalTo(securityLabel)
             $0.leading.equalTo(securityLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: 철저)}
+            addCheckBox(toLeftOf: 철저, key: "철저", tag: 6)}
         moderateSecurityLabel.snp.makeConstraints {
             $0.top.equalTo(securityLabel)
             $0.leading.equalTo(철저.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateSecurityLabel)}
+            addCheckBox(toLeftOf: moderateSecurityLabel, key: "보통", tag: 6)}
         미흡.snp.makeConstraints {
             $0.top.equalTo(securityLabel)
             $0.leading.equalTo(moderateSecurityLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: 미흡)}
+            addCheckBox(toLeftOf: 미흡, key: "미흡", tag: 6)}
         addUnderlineView(below: securityLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         moldLabel.snp.makeConstraints {
@@ -217,11 +217,11 @@ class CheckListUIView: UIView {
         yesMoldLabel.snp.makeConstraints {
             $0.top.equalTo(moldLabel)
             $0.leading.equalTo(moldLabel.snp.trailing).offset(85)
-            addCheckBox(toLeftOf: yesMoldLabel)}
+            addCheckBox(toLeftOf: yesMoldLabel, key: "있음", tag: 7)}
         noMoldLabel.snp.makeConstraints {
             $0.top.equalTo(moldLabel)
             $0.leading.equalTo(yesMoldLabel.snp.trailing).offset(85)
-            addCheckBox(toLeftOf: noMoldLabel)}
+            addCheckBox(toLeftOf: noMoldLabel, key: "없음", tag: 7)}
     }
 
     func addUnderlineView(below startView: UIView, to parentView: UIView, withOffset offset: CGFloat, width: CGFloat, height: CGFloat) {
@@ -234,8 +234,10 @@ class CheckListUIView: UIView {
             $0.height.equalTo(height)}
     }
 
-    func addCheckBox(toLeftOf label: UILabel) {
-        let checkBox = UIButton().then {
+    func addCheckBox(toLeftOf label: UILabel, key: String, tag: Int) {
+        let checkBox = KeyedButton().then {
+            $0.key = key
+            $0.tag = tag
             $0.setImage(UIImage(named: "checkBox-off"), for: .normal)
             $0.setImage(UIImage(named: "checkBox-on"), for: .selected)
             $0.addTarget(self, action: #selector(toggleCheckBox(_:)), for: .touchUpInside)
@@ -248,6 +250,11 @@ class CheckListUIView: UIView {
     }
 
     //MARK: - Actions
-    @objc func toggleCheckBox(_ sender: UIButton) {
-        sender.isSelected.toggle()}
+    @objc func toggleCheckBox(_ sender: KeyedButton) {
+        print(sender.key)
+        print(sender.tag)
+        sender.isSelected.toggle()
+        
+        
+    }
 }

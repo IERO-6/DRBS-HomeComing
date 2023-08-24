@@ -8,11 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1863355A2A8A0D0B00E283D5 /* DetailTV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186335592A8A0D0B00E283D5 /* DetailTV.swift */; };
-		1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */; };
 		1863355E2A8A0D1D00E283D5 /* DetailTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */; };
-		186335602A8A0D2900E283D5 /* CheckVC1ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */; };
-		188FEEAE2A91BFB50013A53A /* CheckVC2ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FEEAD2A91BFB50013A53A /* CheckVC2ViewModel.swift */; };
-		188FEEB02A91C3C90013A53A /* CheckVC2Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188FEEAF2A91C3C90013A53A /* CheckVC2Model.swift */; };
+		186335602A8A0D2900E283D5 /* CheckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */; };
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
 		2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* OfficeCell.swift */; };
 		2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA522A949B510064AFC4 /* CustomSlider.swift */; };
@@ -80,11 +77,8 @@
 
 /* Begin PBXFileReference section */
 		186335592A8A0D0B00E283D5 /* DetailTV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTV.swift; sourceTree = "<group>"; };
-		1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1Model.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTVCell.swift; sourceTree = "<group>"; };
-		1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckVC1ViewModel.swift; sourceTree = "<group>"; };
-		188FEEAD2A91BFB50013A53A /* CheckVC2ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2ViewModel.swift; sourceTree = "<group>"; };
-		188FEEAF2A91C3C90013A53A /* CheckVC2Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVC2Model.swift; sourceTree = "<group>"; };
+		1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckViewModel.swift; sourceTree = "<group>"; };
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
 		2143CE372A79051400A5DB36 /* OfficeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeCell.swift; sourceTree = "<group>"; };
 		2158BA522A949B510064AFC4 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
@@ -295,8 +289,6 @@
 				218ACDFC2A752A0C00687EE6 /* House.swift */,
 				21B627632A83834900081D5E /* Location.swift */,
 				215BDC652A889D7F007151A1 /* CheckList.swift */,
-				1863355B2A8A0D1500E283D5 /* CheckVC1Model.swift */,
-				188FEEAF2A91C3C90013A53A /* CheckVC2Model.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,8 +299,7 @@
 				216FA0C42A8BA783004D0279 /* SettingSectionViewModel */,
 				218ACE102A763FA700687EE6 /* HouseViewModel.swift */,
 				21B627652A83838600081D5E /* LocationViewModel.swift */,
-				1863355F2A8A0D2900E283D5 /* CheckVC1ViewModel.swift */,
-				188FEEAD2A91BFB50013A53A /* CheckVC2ViewModel.swift */,
+				1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -586,7 +577,6 @@
 				216FA0BB2A8BA708004D0279 /* LocationConsentDetail.swift in Sources */,
 				216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */,
 				216FA0B22A8BA667004D0279 /* LocationSettingCell.swift in Sources */,
-				188FEEB02A91C3C90013A53A /* CheckVC2Model.swift in Sources */,
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
 				2192EAA02A90A4BD006AB5B3 /* MyHouseVC.swift in Sources */,
@@ -594,7 +584,6 @@
 				215BDC662A889D7F007151A1 /* CheckList.swift in Sources */,
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
 				21B627622A834B5500081D5E /* File.swift in Sources */,
-				188FEEAE2A91BFB50013A53A /* CheckVC2ViewModel.swift in Sources */,
 				2143CE382A79051400A5DB36 /* OfficeCell.swift in Sources */,
 				216FA0B42A8BA672004D0279 /* NoticeCell.swift in Sources */,
 				B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */,
@@ -607,7 +596,6 @@
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
 				216FA0BD2A8BA711004D0279 /* LocationSettingVC.swift in Sources */,
 				216FA0C32A8BA739004D0279 /* WithdrawVC.swift in Sources */,
-				1863355C2A8A0D1500E283D5 /* CheckVC1Model.swift in Sources */,
 				2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				216FA0B62A8BA67C004D0279 /* NoticeListCell.swift in Sources */,
@@ -620,7 +608,7 @@
 				218ACE0F2A763CBC00687EE6 /* Constants.swift in Sources */,
 				216FA0CA2A8BA7BA004D0279 /* SettingViewModel.swift in Sources */,
 				218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */,
-				186335602A8A0D2900E283D5 /* CheckVC1ViewModel.swift in Sources */,
+				186335602A8A0D2900E283D5 /* CheckViewModel.swift in Sources */,
 				217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */,
 				1863355A2A8A0D0B00E283D5 /* DetailTV.swift in Sources */,
 			);
