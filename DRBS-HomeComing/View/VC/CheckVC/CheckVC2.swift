@@ -1,6 +1,7 @@
 import UIKit
 import Then
 import SnapKit
+import PhotosUI
 
 protocol CalendarDelegate: AnyObject {
     func dateSelected(date: Date)
@@ -114,7 +115,6 @@ final class CheckVC2: UIViewController {
         $0.rightView = label
         $0.rightViewMode = .always
         $0.keyboardType = .numbersAndPunctuation
-        
     }
     private let 입주가능일 = UILabel().then {
         $0.text = "입주 가능일"}
@@ -140,18 +140,35 @@ final class CheckVC2: UIViewController {
     private let recodeLabel = UILabel().then {
         $0.text = "기록"
         $0.font = UIFont(name: Constant.font, size: 18)}
-    private let picker = UIImagePickerController()
+    //이미지뷰를 담을 스크롤뷰를 생성
+    private lazy var imageScrollView = UIScrollView(frame: self.view.frame).then {
+        $0.isPagingEnabled = true
+        $0.showsHorizontalScrollIndicator = false
+        $0.isScrollEnabled = true
+    }
+    private var picker: PHPickerViewController!
     private let galleryImageView = UIImageView().then {
-        let cameraImage = UIImage(systemName: "camera")
-        let size = CGSize(width: 20, height: 20)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        cameraImage?.draw(in: CGRect(origin: .zero, size: size))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+        $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
         $0.image = UIImage(systemName: "camera")
         $0.tintColor = .black
+        $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = UIColor.systemGray6}
+        $0.clipsToBounds = true
+        $0.backgroundColor = UIColor.systemGray6
+    }
+    private let secondGalleryImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10}
+    private let thirdGalleryImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10}
+    private let fourthGalleryImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10}
+    private let fifthGalleryImageView = UIImageView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10}
+    private lazy var imageViewArray: [UIImageView] = [galleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView]     //이미지뷰가 초기화되기전에 초기화되면 에러가 발생할 수 있어 지연저장속성 사용
     private let memoTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
         $0.font = UIFont.systemFont(ofSize: 13)
@@ -178,6 +195,7 @@ final class CheckVC2: UIViewController {
         configureUI2()
         configureUI3()
         setUpLabel()
+        setupNavigationBar()
         initPicker()
         setupImageViewGesture()
         보증금TextField.delegate = self
@@ -192,6 +210,8 @@ final class CheckVC2: UIViewController {
         입주가능일button.layer.addBottomLayer()
         계약기간TextField.layer.addBottomLayer()
         let contentHeight = completionButton.frame.maxY + 20
+        let contentWidth = 140 * imageViewArray.count + 13 * (imageViewArray.count - 2)
+        imageScrollView.contentSize = CGSize(width: contentWidth, height: 140)
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -203,7 +223,7 @@ final class CheckVC2: UIViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()}
-        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주가능일button, 계약기간TextField, memoTextView)
+        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주가능일button, 계약기간TextField, memoTextView, imageScrollView)
         backView.snp.makeConstraints {
             $0.top.equalTo(scrollView)
             $0.left.right.bottom.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
@@ -309,7 +329,8 @@ final class CheckVC2: UIViewController {
     }
     private func configureUI3() {
         view.backgroundColor = .white
-        backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, galleryImageView, completionButton)
+        backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, completionButton)
+        imageScrollView.addSubviews(galleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView)
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
@@ -321,11 +342,32 @@ final class CheckVC2: UIViewController {
         recodeLabel.snp.makeConstraints {
             $0.top.equalTo(checkListUIView.snp.bottom).offset(30)
             $0.leading.equalTo(checkListLabel)}
-        galleryImageView.snp.makeConstraints {
+        imageScrollView.snp.makeConstraints {
             $0.top.equalTo(recodeLabel.snp.bottom).offset(20)
             $0.leading.equalTo(checkListLabel)
+            $0.trailing.equalTo(면적TextField)
             $0.height.equalTo(140)
-            $0.width.equalTo(140)}
+        }
+        galleryImageView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.height.width.equalTo(140)}
+        secondGalleryImageView.snp.makeConstraints {
+            $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
+            $0.leading.equalTo(galleryImageView.snp.trailing).offset(10)
+            $0.height.width.equalTo(140)}
+        thirdGalleryImageView.snp.makeConstraints {
+            $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
+            $0.leading.equalTo(secondGalleryImageView.snp.trailing).offset(10)
+            $0.height.width.equalTo(140)}
+        fourthGalleryImageView.snp.makeConstraints {
+            $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
+            $0.leading.equalTo(thirdGalleryImageView.snp.trailing).offset(10)
+            $0.height.width.equalTo(140)}
+        fifthGalleryImageView.snp.makeConstraints {
+            $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
+            $0.leading.equalTo(fourthGalleryImageView.snp.trailing).offset(10)
+            $0.height.width.equalTo(140)
+            $0.trailing.equalTo(imageScrollView.snp.trailing)}
         memoTextView.snp.makeConstraints {
             $0.top.equalTo(galleryImageView.snp.bottom).offset(20)
             $0.leading.equalTo(checkListLabel)
@@ -347,17 +389,41 @@ final class CheckVC2: UIViewController {
             attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
             texts.attributedText = attribtuedString}
     }
+    private func setupNavigationBar() {
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.navigationItem.title = "추가하기"
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.backgroundColor = .white
+    }
     private func initPicker() {
-        self.picker.delegate = self
-        self.picker.sourceType = .photoLibrary
-        self.picker.modalPresentationStyle = .fullScreen}
+        var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        configuration.selectionLimit = 5
+        configuration.filter = .images // 이미지만 선택할 수 있게 설정
+        picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+    }
     private func setupImageViewGesture() {
+        // 모든 이미지뷰에서 앨버으로 접근하려면 새로운 객체를 만들어야 한다.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
         galleryImageView.addGestureRecognizer(tapGesture)
-        galleryImageView.isUserInteractionEnabled = true}
+        galleryImageView.isUserInteractionEnabled = true
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        secondGalleryImageView.addGestureRecognizer(tapGesture2)
+        secondGalleryImageView.isUserInteractionEnabled = true
+        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        thirdGalleryImageView.addGestureRecognizer(tapGesture3)
+        thirdGalleryImageView.isUserInteractionEnabled = true
+        let tapGesture4 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        thirdGalleryImageView.addGestureRecognizer(tapGesture4)
+        thirdGalleryImageView.isUserInteractionEnabled = true
+        let tapGesture5 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        thirdGalleryImageView.addGestureRecognizer(tapGesture5)
+        thirdGalleryImageView.isUserInteractionEnabled = true
+    }
     
     //MARK: - Actions
     @objc func vc2buttonTapped(_ sender: UIButton) {
+        print("--------\(sender.currentTitle!)버튼 눌림-------")
         switch sender.currentTitle {
         case "전기", "가스", "수도", "인터넷", "TV", "기타":
             guard sender.backgroundColor == Constant.appColor else {
@@ -378,16 +444,7 @@ final class CheckVC2: UIViewController {
     @objc func completionButtonTapped() {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
-        self.houseViewModel.보증금 = self.보증금TextField.text
-        self.houseViewModel.월세or전세금 = self.월세TextField.text
-        self.houseViewModel.관리비 = self.관리비TextField.text
-        self.houseViewModel.면적 = self.면적TextField.text
-        self.houseViewModel.계약기간 = self.계약기간TextField.text
-        self.houseViewModel.checkList = self.checkListUIView.checkViewModel.makeCheckListModel()
-        //사진은 아직
-        self.houseViewModel.memo = self.memoTextView.text
         rateVC.houseViewModel = self.houseViewModel
-//        dump(rateVC.houseViewModel)
         self.present(rateVC, animated: true)
     }
     @objc func textFieldTapped() {
@@ -400,7 +457,34 @@ final class CheckVC2: UIViewController {
             print("버전 낮음")
         }
     }
-    @objc func openLibrary() {self.present(picker, animated: true, completion: nil)}
+    // 앨범 권한설정(사진 다운로드때문에)
+    @objc func openLibrary() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            self.present(picker, animated: true, completion: nil)
+        case .denied, .restricted:
+            let alert = UIAlertController(title: "권한 필요", message: "앨범 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.", preferredStyle: .alert)
+            let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)}
+            }
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            alert.addAction(goSetting)
+            alert.addAction(cancel)
+            self.present(alert, animated: true, completion: nil)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization { newStatus in
+                if newStatus == .authorized {
+                    DispatchQueue.main.async {
+                        self.present(self.picker, animated: true, completion: nil)
+                    }
+                }
+            }
+        @unknown default:
+            fatalError("Unknown authorization status.")
+        }
+    }
 }
 
 //MARK: - Extensions
@@ -410,9 +494,7 @@ extension CheckVC2: UITextFieldDelegate {
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard Double(string) != nil || string == "" else { return false }
-        //글자수 제한하는 코드 작성
         if textField == 보증금TextField {
-            // 텍스트 필드 글자 내용이 (한글자 한글자)입력되거나 지워질 때 호출이 되고 (허락)
             let maxLenght = 6
             let currentString: NSString = (textField.text ?? "") as NSString
             let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
@@ -422,7 +504,7 @@ extension CheckVC2: UITextFieldDelegate {
             let currentString: NSString = (textField.text ?? "") as NSString
             let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
             return newString.length <= maxLenght
-        } else if textField == 관리비 {
+        } else if textField == 관리비TextField {
             let maxLenght = 2
             let currentString: NSString = (textField.text ?? "") as NSString
             let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
@@ -430,7 +512,6 @@ extension CheckVC2: UITextFieldDelegate {
         }
         return true
     }
-    
 }
 
 extension CheckVC2: CalendarDelegate {
@@ -439,27 +520,27 @@ extension CheckVC2: CalendarDelegate {
         myFormatter.dateFormat = "yy.MM.dd"
         self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
         self.입주가능일button.setTitleColor(.black, for: .normal)
-        self.houseViewModel.입주가능일 = date
-    }
-    
-    
-    
-}
-extension CheckVC2: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            self.dismiss(animated: false, completion: {
-                DispatchQueue.main.async {
-                    self.galleryImageView.image = image}
-            })
-        }
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)}
+        self.houseViewModel.입주가능일 = date}
 }
 
+extension CheckVC2: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        for (index, result) in results.enumerated() {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                if let image = object as? UIImage {
+                    DispatchQueue.main.async {
+                        if index < self.imageViewArray.count {
+                            self.imageViewArray[index].image = image
+                            self.imageViewArray[index].contentMode = .scaleAspectFill
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 extension UITextField: UITextFieldDelegate {
-    
     @IBInspectable var onlyNumbers: Bool {
         get {
             return delegate is UITextField
