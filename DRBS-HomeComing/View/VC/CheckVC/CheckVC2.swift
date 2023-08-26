@@ -194,6 +194,7 @@ final class CheckVC2: UIViewController {
         configureUI()
         configureUI2()
         configureUI3()
+        setUpKeyBoard()
         setUpLabel()
         setupNavigationBar()
         initPicker()
@@ -201,6 +202,8 @@ final class CheckVC2: UIViewController {
         보증금TextField.delegate = self
         월세TextField.delegate = self
         관리비TextField.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -213,9 +216,6 @@ final class CheckVC2: UIViewController {
         let contentWidth = 140 * imageViewArray.count + 13 * (imageViewArray.count - 2)
         imageScrollView.contentSize = CGSize(width: contentWidth, height: 140)
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.backView.endEditing(true)
     }
     
     //MARK: - Helpers
@@ -379,6 +379,11 @@ final class CheckVC2: UIViewController {
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(56)}
     }
+    private func setUpKeyBoard() {
+        // 다른 곳을 누르면 키보드가 내려가게 됨
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
+    }
     private func setUpLabel() {
         //*만 빨갛게 바꾸는 콛
         let labels = [보증금, 월세]
@@ -484,6 +489,29 @@ final class CheckVC2: UIViewController {
         @unknown default:
             fatalError("Unknown authorization status.")
         }
+    }
+    @objc func handleTap() {
+        self.view.endEditing(true)
+    }
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.size.height
+        let textViewFrameInSuperview = scrollView.convert(memoTextView.frame, from: memoTextView.superview)
+        let offset = textViewFrameInSuperview.origin.y + textViewFrameInSuperview.size.height - (scrollView.frame.size.height - keyboardHeight)
+        if offset > 0 {
+            scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInset
+    }
+    
+    //관찰자 제거
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
