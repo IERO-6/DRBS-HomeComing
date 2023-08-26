@@ -18,13 +18,15 @@ class NetworkingManager {
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
     func addHouses(houseModel: House) {
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(houseModel)
-//            db.collection("Homes").document().setData(data)
-        } catch let error {
-            print("\(error.localizedDescription)")
-        }
+//        let encoder = JSONEncoder()
+//        do {
+//            let checkData = try encoder.encode(houseModel.체크리스트)
+//            let data = try encoder.encode(houseModel)
+            guard let data = houseModel.asDictionary else { return }
+            db.collection("Homes").document().setData(data)
+//        } catch let error {
+//            print("\(error.localizedDescription)")
+//        }
         
     }
     
