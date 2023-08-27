@@ -41,7 +41,7 @@ class HomeVC: UIViewController {
     //MARK: - Actions
 
     @objc public func plusButtonTapped() {
-           let checkVC = CheckVC1()
+           let checkVC = CheckVC2()
            checkVC.hidesBottomBarWhenPushed = true
            self.navigationController?.pushViewController(checkVC, animated: true)
        }

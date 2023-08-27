@@ -75,7 +75,32 @@ struct Constant {
         case 없음
     }
     
-    
+    /**
+     # (E) PopupPosition
+     - Author: suni
+     - Date:
+     - Note: PopupVC에 애니메이션 시작 포지션을 정하는 enum
+     */
+    enum PopupPosition: String {
+        case top = "Top"
+        case bottom = "Bottom"
+        case left = "Left"
+        case right = "Rigth"
+        case center = "Center"
+        case none = ""
+    }
+
+    /**
+     # (E) PopupType
+     - Author: suni
+     - Date:
+     - Note: PopupVC에 애니메이션 타입을 모아둔 enum
+     */
+    enum PopupType: String {
+        case fadeInOut = "Fade In Out"
+        case move = "Move"
+        case none = ""
+    }
    
 }
 

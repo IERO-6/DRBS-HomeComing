@@ -4,8 +4,6 @@ import Then
 
 @available(iOS 16.0, *)
 final class CalendarVC: UIViewController {
-    
-    
     //MARK: - Properties
     private lazy var calendarView = UICalendarView().then {
         $0.calendar = .current
@@ -13,9 +11,7 @@ final class CalendarVC: UIViewController {
         $0.fontDesign = .rounded
         
     }
-    
     private var selectedDate: DateComponents?
-    
     weak var calendarDelegate: CalendarDelegate?
     
     //MARK: - LifeCycle
@@ -24,7 +20,6 @@ final class CalendarVC: UIViewController {
         configureUI()
         settingCalendar()
         settingModal()
-        
     }
     
     
@@ -55,18 +50,16 @@ final class CalendarVC: UIViewController {
     }
     
     //MARK: - Actions
-
-    
     
 }
+
+//MARK: - UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate
+
 @available(iOS 16.0, *)
 extension CalendarVC: UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
     func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
 
         if let date = dateComponents?.date {
-            let myFormatter = DateFormatter()
-            myFormatter.dateFormat = "yyyy-MM-dd"
-            let formattedDate = myFormatter.string(from: date)
             calendarDelegate?.dateSelected(date: date)
             self.dismiss(animated: true)
         }
