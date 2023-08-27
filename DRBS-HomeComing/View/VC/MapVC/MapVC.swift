@@ -215,13 +215,8 @@ extension MapVC: MKMapViewDelegate {
 extension MapVC: CLLocationManagerDelegate {
     // 사용자의 위치를 성공적으로 가져왔을 때 호출
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        // 위치 정보를 배열로 입력받는데, 마지막 index값이 가장 정확.
-        //        if let coordinate = locations.last?.coordinate {
-        //            // ⭐️ 사용자 위치 정보 사용
-        //            self.mkMapView.showsUserLocation = true
-        //            self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        //        }
+        self.mkMapView.showsUserLocation = true
+        self.mkMapView.setUserTrackingMode(.follow, animated: true)
         
         // startUpdatingLocation()을 사용하여 사용자 위치를 가져왔다면
         // 불필요한 업데이트를 방지하기 위해 stopUpdatingLocation을 호출
@@ -240,7 +235,7 @@ extension MapVC: CLLocationManagerDelegate {
 
 extension MapVC: searchViewDelegate {
     func setRegion(cood: CLLocationCoordinate2D) {
-        self.mkMapView.setCenter(cood, animated: true)
+        self.mkMapView.setRegion(.init(center: cood, span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
     }
     
     
