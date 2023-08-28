@@ -24,6 +24,7 @@ final class HomeVC: UIViewController {
     //MARK: - Helpers
 
     func configureUI() {
+        view.backgroundColor = .white
         view.addSubview(tableView)
         tableView.rowHeight = 200
         tableView.snp.makeConstraints { $0.top.bottom.left.right.equalToSuperview() }
@@ -60,6 +61,7 @@ final class HomeVC: UIViewController {
        }
     @objc func settingButtonTapped() {
            let settingVC = SettingVC()
+           settingVC.hidesBottomBarWhenPushed = true
            self.navigationController?.pushViewController(settingVC, animated: true)
     }
     @objc func headButtonTapped() {
