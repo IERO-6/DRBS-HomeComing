@@ -9,7 +9,6 @@ final class CalendarVC: UIViewController {
         $0.calendar = .current
         $0.locale = .current
         $0.fontDesign = .rounded
-        
     }
     private var selectedDate: DateComponents?
     weak var calendarDelegate: CalendarDelegate?

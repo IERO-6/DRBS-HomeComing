@@ -388,6 +388,7 @@ final class CheckVC2: UIViewController {
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(56)}
     }
+    
     private func setUpLabel() {
         //*만 빨갛게 바꾸는 콛
         let labels = [보증금, 월세]
@@ -396,8 +397,10 @@ final class CheckVC2: UIViewController {
             let attribtuedString = NSMutableAttributedString(string: fullText)
             let range = (fullText as NSString).range(of: "*")
             attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
-            texts.attributedText = attribtuedString}
+            texts.attributedText = attribtuedString
+        }
     }
+    
     private func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "추가하기"
@@ -435,7 +438,6 @@ final class CheckVC2: UIViewController {
     
     //MARK: - Actions
     @objc func vc2buttonTapped(_ sender: UIButton) {
-        print("--------\(sender.currentTitle!)버튼 눌림-------")
         switch sender.currentTitle {
         case "전기", "가스", "수도", "인터넷", "TV", "기타":
             guard sender.backgroundColor == Constant.appColor else {
@@ -539,7 +541,6 @@ extension CheckVC2: CalendarDelegate {
         self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
         self.입주가능일button.setTitleColor(.black, for: .normal)
         self.houseViewModel.입주가능일 = date
-        
     }
 }
 

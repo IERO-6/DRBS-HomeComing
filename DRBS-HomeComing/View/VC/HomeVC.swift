@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import Then
 
-class HomeVC: UIViewController {
+final class HomeVC: UIViewController {
     //MARK: - Properties
     // 뷰컨트롤러가 뷰모델을 소유
     private var viewModel = HouseViewModel()
@@ -18,7 +18,7 @@ class HomeVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setupHomeBarAppearance()
+        self.configureNav()
     }
     
     //MARK: - Helpers
@@ -31,11 +31,24 @@ class HomeVC: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
         
     }
-    func settingTV() {
+    private func settingTV() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         tableView.separatorStyle = .none
+    }
+    
+    private func configureNav() {
+        let appearance = UINavigationBarAppearance().then {
+            $0.configureWithOpaqueBackground()
+            $0.backgroundColor = .white
+            $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+        }
+        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     //MARK: - Actions

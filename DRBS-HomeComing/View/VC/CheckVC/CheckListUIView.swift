@@ -2,7 +2,7 @@ import UIKit
 import Then
 import SnapKit
 
-class CheckListUIView: UIView {
+final class CheckListUIView: UIView {
     //MARK: - Properties
     
     var checkViewModel = CheckViewModel()

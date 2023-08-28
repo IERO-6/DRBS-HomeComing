@@ -3,7 +3,7 @@ import Then
 import SnapKit
 import MapKit
 
-class MyHouseVC: UIViewController {
+final class MyHouseVC: UIViewController {
     //MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()

@@ -2,7 +2,7 @@ import Then
 import SnapKit
 import UIKit
 
-class PopUpView: UIView {
+final class PopUpView: UIView {
     //MARK: - Properties
     
     lazy var popupView = UIImageView().then {
