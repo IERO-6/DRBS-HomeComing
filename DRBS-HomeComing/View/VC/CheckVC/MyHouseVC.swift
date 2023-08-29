@@ -3,7 +3,7 @@ import Then
 import SnapKit
 import MapKit
 
-class MyHouseVC: UIViewController {
+final class MyHouseVC: UIViewController {
     //MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -83,22 +83,13 @@ class MyHouseVC: UIViewController {
         $0.setTitle("확인", for: .normal)
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true}
-    private lazy var checkView = UIView().then {
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-        $0.layer.borderWidth = 1}
+    private lazy var checkView = UIView()
     private lazy var checkLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
         $0.text = "체크 리스트"}
-    private lazy var 방향label = UILabel()
-    private lazy var 방음label = UILabel()
-    private lazy var 수압label = UILabel()
-    private lazy var 벌레label = UILabel()
-    private lazy var 통풍label = UILabel()
-    private lazy var 보안label = UILabel()
-    private lazy var 곰팡이label = UILabel()
+    private lazy var CheckListView = CheckListUIView()
+    
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -129,11 +120,13 @@ class MyHouseVC: UIViewController {
         secondContainView.addSubviews(tradeMethodLabel, costLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
+        checkView.addSubviews(checkLabel, CheckListView)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
                                 mainView,
                                 mapStackView,
                                 memoView,
+                                checkView,
                                 button)
 
         contentView.snp.makeConstraints {$0.edges.width.equalTo(scrollView)}
@@ -237,10 +230,27 @@ class MyHouseVC: UIViewController {
             $0.bottom.equalTo(textCountLabel.snp.top).offset(-5)
         }
         
+        checkView.snp.makeConstraints {
+            $0.top.equalTo(memoView.snp.bottom).offset(30)
+            $0.leading.equalToSuperview().offset(12)
+            $0.trailing.equalToSuperview().offset(-12)
+            $0.height.equalTo(550)
+        }
+        
+        checkLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(5)
+        }
+        
+        CheckListView.snp.makeConstraints {
+            $0.top.equalTo(checkLabel.snp.bottom).offset(10)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        
         
         
         button.snp.makeConstraints {
-            $0.top.equalTo(memoView.snp.bottom).offset(200)   //바꿔야함
+            $0.top.equalTo(checkView.snp.bottom).offset(200)   //바꿔야함
             $0.leading.equalToSuperview().offset(15)
             $0.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(50)

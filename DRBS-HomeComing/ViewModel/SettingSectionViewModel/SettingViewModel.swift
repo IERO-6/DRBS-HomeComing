@@ -23,7 +23,7 @@ class SettingsViewModel {
         let notice = [NoticeModel(title: "공지사항")]
 
         let options = [
-            OptionModel(title: "위치 기반 서비스 이용 동의 설정"),
+            OptionModel(title: "문의하기"),
             OptionModel(title: "App Store 리뷰하기")
         ]
 

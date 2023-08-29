@@ -1,6 +1,7 @@
 import UIKit
 import Then
 import SnapKit
+import MessageUI
 import SafariServices
 
 final class SettingVC: UIViewController {
@@ -38,13 +39,7 @@ final class SettingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
         configureNav()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: - Helpers
@@ -197,10 +192,20 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
             case .option(let models):
                 let option = models[indexPath.row]
                 switch option.title {
-                    case "위치 기반 서비스 이용 동의 설정":
-                        let _ = models[indexPath.row]
-                        let locationSettingVC = LocationSettingVC()
-                        self.navigationController?.pushViewController(locationSettingVC, animated: true)
+                    case "문의하기":
+                        if MFMailComposeViewController.canSendMail() {
+                            let mailComposerVC = MFMailComposeViewController()
+                            mailComposerVC.mailComposeDelegate = self
+                            mailComposerVC.setToRecipients(["iero.drbs@gmail.com"])
+                            mailComposerVC.setSubject("문의하기")
+                            
+                            self.present(mailComposerVC, animated: true, completion: nil)
+                        } else {
+                            // 메일 앱을 사용할 수 없는 경우 처리
+                            let alertController = UIAlertController(title: "메일을 보낼 수 없습니다.", message: "기기에서 이메일을 보낼 수 없습니다. 메일 설정을 확인 해주세요.", preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                         break
                     case "App Store 리뷰하기":
                         if let appStoreReviewURL = URL(string: "https://apps.apple.com/kr/app/%EC%8A%A4%ED%84%B0%EB%94%94%EC%9C%97%EB%AF%B8/id6446102842") {
@@ -245,4 +250,12 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+}
+
+// MARK: - MFMailComposeViewControllerDelegate
+
+extension SettingVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
 }

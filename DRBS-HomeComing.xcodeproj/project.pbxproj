@@ -16,26 +16,23 @@
 		2158BA572A9508160064AFC4 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA562A9508160064AFC4 /* CalendarVC.swift */; };
 		2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */; };
 		215BDC662A889D7F007151A1 /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC652A889D7F007151A1 /* CheckList.swift */; };
-		216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A42A8BA5EA004D0279 /* LocationSetting.swift */; };
 		216FA0A72A8BA5F1004D0279 /* NoticeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A62A8BA5F1004D0279 /* NoticeList.swift */; };
 		216FA0A92A8BA5FE004D0279 /* SettingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A82A8BA5FE004D0279 /* SettingSection.swift */; };
 		216FA0AC2A8BA641004D0279 /* AccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0AB2A8BA641004D0279 /* AccountSettingCell.swift */; };
 		216FA0AE2A8BA651004D0279 /* AppVersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0AD2A8BA651004D0279 /* AppVersionCell.swift */; };
 		216FA0B02A8BA65D004D0279 /* LisenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0AF2A8BA65D004D0279 /* LisenseCell.swift */; };
-		216FA0B22A8BA667004D0279 /* LocationSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0B12A8BA667004D0279 /* LocationSettingCell.swift */; };
 		216FA0B42A8BA672004D0279 /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0B32A8BA672004D0279 /* NoticeCell.swift */; };
 		216FA0B62A8BA67C004D0279 /* NoticeListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0B52A8BA67C004D0279 /* NoticeListCell.swift */; };
 		216FA0B82A8BA684004D0279 /* OptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0B72A8BA684004D0279 /* OptionCell.swift */; };
-		216FA0BB2A8BA708004D0279 /* LocationConsentDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0BA2A8BA708004D0279 /* LocationConsentDetail.swift */; };
-		216FA0BD2A8BA711004D0279 /* LocationSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0BC2A8BA711004D0279 /* LocationSettingVC.swift */; };
 		216FA0BF2A8BA71A004D0279 /* NoticeListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0BE2A8BA71A004D0279 /* NoticeListVC.swift */; };
 		216FA0C12A8BA726004D0279 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C02A8BA726004D0279 /* SettingVC.swift */; };
 		216FA0C32A8BA739004D0279 /* WithdrawVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C22A8BA739004D0279 /* WithdrawVC.swift */; };
-		216FA0C62A8BA7A3004D0279 /* LocationSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C52A8BA7A3004D0279 /* LocationSettingViewModel.swift */; };
 		216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C72A8BA7AF004D0279 /* NoticeListViewModel.swift */; };
 		216FA0CA2A8BA7BA004D0279 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C92A8BA7BA004D0279 /* SettingViewModel.swift */; };
 		217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83EC2A76847600363ED2 /* HouseTVCell.swift */; };
 		217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83F02A76858F00363ED2 /* ApartCell.swift */; };
+		218111A32A9AE938009A82C4 /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A22A9AE938009A82C4 /* PopUpVC.swift */; };
+		218111A52A9AECD7009A82C4 /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A42A9AECD7009A82C4 /* PopUpView.swift */; };
 		218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE22A75262400687EE6 /* AppDelegate.swift */; };
 		218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE42A75262400687EE6 /* SceneDelegate.swift */; };
 		218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE62A75262400687EE6 /* HomeVC.swift */; };
@@ -86,26 +83,23 @@
 		2158BA562A9508160064AFC4 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListUIView.swift; sourceTree = "<group>"; };
 		215BDC652A889D7F007151A1 /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
-		216FA0A42A8BA5EA004D0279 /* LocationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSetting.swift; sourceTree = "<group>"; };
 		216FA0A62A8BA5F1004D0279 /* NoticeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeList.swift; sourceTree = "<group>"; };
 		216FA0A82A8BA5FE004D0279 /* SettingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSection.swift; sourceTree = "<group>"; };
 		216FA0AB2A8BA641004D0279 /* AccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingCell.swift; sourceTree = "<group>"; };
 		216FA0AD2A8BA651004D0279 /* AppVersionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionCell.swift; sourceTree = "<group>"; };
 		216FA0AF2A8BA65D004D0279 /* LisenseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LisenseCell.swift; sourceTree = "<group>"; };
-		216FA0B12A8BA667004D0279 /* LocationSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingCell.swift; sourceTree = "<group>"; };
 		216FA0B32A8BA672004D0279 /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
 		216FA0B52A8BA67C004D0279 /* NoticeListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListCell.swift; sourceTree = "<group>"; };
 		216FA0B72A8BA684004D0279 /* OptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCell.swift; sourceTree = "<group>"; };
-		216FA0BA2A8BA708004D0279 /* LocationConsentDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationConsentDetail.swift; sourceTree = "<group>"; };
-		216FA0BC2A8BA711004D0279 /* LocationSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingVC.swift; sourceTree = "<group>"; };
 		216FA0BE2A8BA71A004D0279 /* NoticeListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListVC.swift; sourceTree = "<group>"; };
 		216FA0C02A8BA726004D0279 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		216FA0C22A8BA739004D0279 /* WithdrawVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawVC.swift; sourceTree = "<group>"; };
-		216FA0C52A8BA7A3004D0279 /* LocationSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingViewModel.swift; sourceTree = "<group>"; };
 		216FA0C72A8BA7AF004D0279 /* NoticeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewModel.swift; sourceTree = "<group>"; };
 		216FA0C92A8BA7BA004D0279 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		217C83EC2A76847600363ED2 /* HouseTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTVCell.swift; sourceTree = "<group>"; };
 		217C83F02A76858F00363ED2 /* ApartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartCell.swift; sourceTree = "<group>"; };
+		218111A22A9AE938009A82C4 /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
+		218111A42A9AECD7009A82C4 /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
 		218ACDDF2A75262400687EE6 /* DRBS-HomeComing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DRBS-HomeComing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		218ACDE22A75262400687EE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		218ACDE42A75262400687EE6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -165,7 +159,6 @@
 		216FA0A32A8BA5D8004D0279 /* SettingSectionModel */ = {
 			isa = PBXGroup;
 			children = (
-				216FA0A42A8BA5EA004D0279 /* LocationSetting.swift */,
 				216FA0A62A8BA5F1004D0279 /* NoticeList.swift */,
 				216FA0A82A8BA5FE004D0279 /* SettingSection.swift */,
 			);
@@ -178,7 +171,6 @@
 				216FA0AB2A8BA641004D0279 /* AccountSettingCell.swift */,
 				216FA0AD2A8BA651004D0279 /* AppVersionCell.swift */,
 				216FA0AF2A8BA65D004D0279 /* LisenseCell.swift */,
-				216FA0B12A8BA667004D0279 /* LocationSettingCell.swift */,
 				216FA0B32A8BA672004D0279 /* NoticeCell.swift */,
 				216FA0B52A8BA67C004D0279 /* NoticeListCell.swift */,
 				216FA0B72A8BA684004D0279 /* OptionCell.swift */,
@@ -189,8 +181,6 @@
 		216FA0B92A8BA6F6004D0279 /* SettingSectionVC */ = {
 			isa = PBXGroup;
 			children = (
-				216FA0BA2A8BA708004D0279 /* LocationConsentDetail.swift */,
-				216FA0BC2A8BA711004D0279 /* LocationSettingVC.swift */,
 				216FA0BE2A8BA71A004D0279 /* NoticeListVC.swift */,
 				216FA0C02A8BA726004D0279 /* SettingVC.swift */,
 				216FA0C22A8BA739004D0279 /* WithdrawVC.swift */,
@@ -201,7 +191,6 @@
 		216FA0C42A8BA783004D0279 /* SettingSectionViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				216FA0C52A8BA7A3004D0279 /* LocationSettingViewModel.swift */,
 				216FA0C72A8BA7AF004D0279 /* NoticeListViewModel.swift */,
 				216FA0C92A8BA7BA004D0279 /* SettingViewModel.swift */,
 			);
@@ -332,6 +321,8 @@
 			children = (
 				2192EA9E2A90A4BD006AB5B3 /* CheckVC1.swift */,
 				2192EA9C2A90A4BD006AB5B3 /* CheckVC2.swift */,
+				218111A22A9AE938009A82C4 /* PopUpVC.swift */,
+				218111A42A9AECD7009A82C4 /* PopUpView.swift */,
 				2192EA9D2A90A4BD006AB5B3 /* MyHouseVC.swift */,
 				2192EAA22A947740006AB5B3 /* RateVC.swift */,
 				2158BA562A9508160064AFC4 /* CalendarVC.swift */,
@@ -570,15 +561,11 @@
 				218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */,
 				218ACE092A76312400687EE6 /* MapVC.swift in Sources */,
 				21B627662A83838600081D5E /* LocationViewModel.swift in Sources */,
-				216FA0C62A8BA7A3004D0279 /* LocationSettingViewModel.swift in Sources */,
-				216FA0A52A8BA5EA004D0279 /* LocationSetting.swift in Sources */,
 				2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
 				EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
-				216FA0BB2A8BA708004D0279 /* LocationConsentDetail.swift in Sources */,
 				216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */,
-				216FA0B22A8BA667004D0279 /* LocationSettingCell.swift in Sources */,
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,
 				218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */,
 				2192EAA02A90A4BD006AB5B3 /* MyHouseVC.swift in Sources */,
@@ -596,10 +583,10 @@
 				21B6276C2A83844400081D5E /* ModalVC.swift in Sources */,
 				216FA0AE2A8BA651004D0279 /* AppVersionCell.swift in Sources */,
 				217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */,
-				216FA0BD2A8BA711004D0279 /* LocationSettingVC.swift in Sources */,
 				216FA0C32A8BA739004D0279 /* WithdrawVC.swift in Sources */,
 				2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
+				218111A52A9AECD7009A82C4 /* PopUpView.swift in Sources */,
 				216FA0B62A8BA67C004D0279 /* NoticeListCell.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
 				216FA0B02A8BA65D004D0279 /* LisenseCell.swift in Sources */,
@@ -609,6 +596,7 @@
 				21B627642A83834900081D5E /* Location.swift in Sources */,
 				218ACE0F2A763CBC00687EE6 /* Constants.swift in Sources */,
 				216FA0CA2A8BA7BA004D0279 /* SettingViewModel.swift in Sources */,
+				218111A32A9AE938009A82C4 /* PopUpVC.swift in Sources */,
 				218ACE112A763FA700687EE6 /* HouseViewModel.swift in Sources */,
 				186335602A8A0D2900E283D5 /* CheckViewModel.swift in Sources */,
 				217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */,
