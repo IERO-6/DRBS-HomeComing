@@ -421,7 +421,7 @@ final class CheckVC2: UIViewController {
         galleryImageView.isUserInteractionEnabled = true
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
         firstGalleryImageView.addGestureRecognizer(tapGesture1)
-        galleryImageView.isUserInteractionEnabled = true
+        firstGalleryImageView.isUserInteractionEnabled = true
         let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
         secondGalleryImageView.addGestureRecognizer(tapGesture2)
         secondGalleryImageView.isUserInteractionEnabled = true
