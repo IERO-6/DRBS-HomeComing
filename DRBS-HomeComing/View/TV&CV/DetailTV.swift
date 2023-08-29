@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetailTV: UIViewController {
+final class DetailTV: UIViewController {
     
     
     let tableView: UITableView = {

@@ -62,9 +62,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.searchCell.rawValue, for: indexPath) as! SearchCell
         let searchResults = self.searchResults[indexPath.row]
-        if searchResults.title.contains("대한민국") {
-            cell.locationLabel.text = searchResults.title
-        }
+        cell.locationLabel.text = searchResults.title
         return cell
     }
     
@@ -89,19 +87,14 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource {
     }
 }
 //MARK: - UISearchBarDelegate
-
 extension SearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
+        if searchText.isEmpty {
             searchResults.removeAll()
             tableView.reloadData()
         }
         searchCompleter.queryFragment = searchText
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
 }
 
 
@@ -110,11 +103,12 @@ extension SearchVC: MKLocalSearchCompleterDelegate {
         //위치 자동완성이 끝나면 completer 가 호출하는 delegate 메서드
         //자동완성한 결과를 TableView의 DataSource에서 참조하는 변수에 할당,
         // reloadData()를 통해 테이블뷰에 전달
-        searchResults = completer.results
+        var results: [MKLocalSearchCompletion] = []
+        for result in completer.results {
+            guard result.title.contains("대한민국") else { continue }
+            results.append(result)
+        }
+        searchResults = results
         tableView.reloadData()
     }
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-    
 }
