@@ -1,9 +1,15 @@
 import UIKit
 
+protocol CellSelectedDelegate: AnyObject {
+    func cellselected(indexPath: IndexPath)
+}
+
 class HouseTVCell: UITableViewCell {
     //MARK: - Properties
 
     var indexPath: Int?
+    
+    weak var cellselectedDelegate: CellSelectedDelegate?
     
     private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
        let layout = UICollectionViewFlowLayout()
@@ -86,5 +92,7 @@ extension HouseTVCell: UICollectionViewDataSource {
 extension HouseTVCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //셀 선택 됐을 때 해당 셀의 Id를 통해 파이어베이스에서 받아온 데이터로 디테일VC를 띄움
+        self.cellselectedDelegate?.cellselected(indexPath: indexPath)
+        
     }
 }

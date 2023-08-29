@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires you to allow location services</string>
+	<string>위치 권한 설정이 필요합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 권한 설정이 필요합니다.</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-5665531154477823~7245842966</string>
 	<key>NSAppTransportSecurity</key>
@@ -39,7 +41,5 @@
 	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>앨범 접근권한</string>
 </dict>
 </plist>

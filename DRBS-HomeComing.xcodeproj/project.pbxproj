@@ -752,7 +752,7 @@
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application requires location services to work";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Location is required to find out where you are";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -790,7 +790,7 @@
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This application requires location services to work";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Location is required to find out where you are";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
