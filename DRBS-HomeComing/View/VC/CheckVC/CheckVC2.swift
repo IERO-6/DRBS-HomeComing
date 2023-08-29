@@ -419,11 +419,11 @@ final class CheckVC2: UIViewController {
         thirdGalleryImageView.addGestureRecognizer(tapGesture3)
         thirdGalleryImageView.isUserInteractionEnabled = true
         let tapGesture4 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
-        thirdGalleryImageView.addGestureRecognizer(tapGesture4)
-        thirdGalleryImageView.isUserInteractionEnabled = true
+        fourthGalleryImageView.addGestureRecognizer(tapGesture4)
+        fourthGalleryImageView.isUserInteractionEnabled = true
         let tapGesture5 = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
-        thirdGalleryImageView.addGestureRecognizer(tapGesture5)
-        thirdGalleryImageView.isUserInteractionEnabled = true
+        fifthGalleryImageView.addGestureRecognizer(tapGesture5)
+        fifthGalleryImageView.isUserInteractionEnabled = true
     }
     
     //MARK: - Actions
