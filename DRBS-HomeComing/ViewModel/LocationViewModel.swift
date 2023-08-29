@@ -2,13 +2,12 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class LocationViewModel {
+final class LocationViewModel {
     //MARK: - Model
     var locationModel: Location?
     var locations: [Location] = []
     var fetchedLocations: [Location] = []
     var visibleRegion: MKCoordinateRegion?
-    
     
     //MARK: - Output
     

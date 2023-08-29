@@ -4,9 +4,6 @@ import MapKit
 import Then
 import SnapKit
 
-
-// https://co-dong.tistory.com/73 참고중..
-
 protocol searchViewDelegate: AnyObject {
     func setRegion(cood: CLLocationCoordinate2D)
 }
@@ -74,7 +71,9 @@ final class MapVC: UIViewController {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             $0.trailing.equalToSuperview().offset(-10)
             $0.width.equalTo(self.view.frame.width/8)
-            $0.height.equalTo(self.view.frame.width/4)}}
+            $0.height.equalTo(self.view.frame.width/4)
+        }
+    }
     
     private func settingMKMapView() {
         //MKMapView설정
@@ -85,9 +84,6 @@ final class MapVC: UIViewController {
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
         let annotations = self.locationViewModel.fetchedLocations
-        let centerCoordinate = CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5) // 대한민국 중심 좌표
-        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 500000, longitudinalMeters: 500000) // 반경 설정
-        self.mkMapView.region = region
         DispatchQueue.main.async {
             for customPin in annotations { self.mkMapView.addAnnotation(customPin) }
         }
@@ -105,31 +101,30 @@ final class MapVC: UIViewController {
         // 디바이스 자체 위치 서비스 관련 로직
         DispatchQueue.global(qos: .userInitiated).async {
             guard CLLocationManager.locationServicesEnabled() else {
-                print("디버깅: 현재 디바이스 위치 서비스 상태는 ❌")
+                // 디바이스 자체 위치 서비스를 켜려면 설정으로 이동하는 함수
                 self.showRequestLocationServiceAlert()
-                return}
-            print("디버깅: 현재 디바이스의 위치 서비스 상태는 ⭕️")
+                return
+            }
+            // 앱에 대해 위치 권한 설정
             let authStatus = self.locationManager.authorizationStatus
-            self.checkCurrentLocationAuth(authStatus)}}
+            self.checkCurrentLocationAuth(authStatus)
+        }
+    }
     
     private func checkCurrentLocationAuth(_ status: CLAuthorizationStatus) {
         // 디바이스 확인해서 허용이면, CLAuthorizationStatus를 통해 앱 설정
         switch status {
         case .notDetermined:
-            print("디버깅: notDetermined")
             // 사용자가 권한에 대한 설정을 선택하지 않은 상태
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
             locationManager.requestWhenInUseAuthorization()
-            print("requestWhenInUseAuthorization 실행됨")
             // 권한 요청을 보낸다.
         case .restricted, .denied:
             // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
             // 시스템 설정에서 설정값을 변경하도록 유도
-            print("디버깅: restricted, denied")
             showRequestLocationServiceAlert()
-        case .authorizedWhenInUse:
-            print("디버깅: authorizedWhenInUse ")
+        case .authorizedWhenInUse, .authorizedAlways:
             settingMKMapView()
             settingCLLocationManager()
             // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
@@ -155,7 +150,8 @@ final class MapVC: UIViewController {
     
     //MARK: - Actions
     @objc func currentLocationTapped() {
-        self.checkDeviceService()
+        let status = self.locationManager.authorizationStatus
+        checkCurrentLocationAuth(status)
     }
     
     @objc func searchButtonTapped() {
@@ -171,7 +167,8 @@ extension MapVC: MKMapViewDelegate {
         let modalVC = ModalVC()
         modalVC.modalPresentationStyle = .pageSheet
         //모달VC에 데이터 전달 => viewModel을 통해
-        present(modalVC, animated: true)}
+        present(modalVC, animated: true)
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
@@ -185,10 +182,8 @@ extension MapVC: MKMapViewDelegate {
         let annotationImage: UIImage!
         switch annotation.isBookMarked {
         case true:
-//            annotationImage = UIImage(named: "annotation_Bookmarked.png")
             annotationImage = UIImage(named: "testb1.png")
         case false:
-//            annotationImage = UIImage(named: "annotation_default.png")
             annotationImage = UIImage(named: "test1.png")
         }
 //        annotationImage.draw(in: CGRect(x: 0, y: 0, width: 20, height: 20))
@@ -199,6 +194,25 @@ extension MapVC: MKMapViewDelegate {
     
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let currentRegion = mkMapView.region
+        let koreaCoordinateRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5), // 대한민국 중심 좌표
+            span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0) // 지도 확대 정도
+        )
+        // 대한민국 좌표 범위 밖으로 나가려고 할 때, 대한민국 좌표 범위로 제한.
+        if currentRegion.center.latitude < koreaCoordinateRegion.center.latitude - koreaCoordinateRegion.span.latitudeDelta / 2 {
+            // 위로 스크롤 시
+            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.latitude > koreaCoordinateRegion.center.latitude + koreaCoordinateRegion.span.latitudeDelta / 2 {
+            // 아래로 스크롤 시
+            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.longitude < koreaCoordinateRegion.center.longitude - koreaCoordinateRegion.span.longitudeDelta / 2 {
+            // 왼쪽으로 스크롤 시
+            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.longitude > koreaCoordinateRegion.center.longitude + koreaCoordinateRegion.span.longitudeDelta / 2 {
+            // 오른쪽으로 스크롤 시
+            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
+        }
         self.locationViewModel.currentVisible(region: mapView.region)
         self.locationViewModel.locationsWhenRegionChanged()
         DispatchQueue.main.async {
@@ -215,9 +229,13 @@ extension MapVC: MKMapViewDelegate {
 extension MapVC: CLLocationManagerDelegate {
     // 사용자의 위치를 성공적으로 가져왔을 때 호출
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        self.mkMapView.showsUserLocation = true
-//        self.mkMapView.setUserTrackingMode(.follow, animated: true)
+        let koreaCoordinateRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5), // 대한민국 중심 좌표
+            span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0) // 지도 확대 정도
+        )
         
+        // MKMapView에 설정한 좌표 범위를 적용합니다.
+        mkMapView.setRegion(koreaCoordinateRegion, animated: false)
         // startUpdatingLocation()을 사용하여 사용자 위치를 가져왔다면
         // 불필요한 업데이트를 방지하기 위해 stopUpdatingLocation을 호출
         locationManager.stopUpdatingLocation()
@@ -229,7 +247,9 @@ extension MapVC: CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // 사용자 디바이스의 위치 서비스가 활성화 상태인지 확인하는 메서드 호출
-        checkDeviceService()}
+        print(#function)
+        checkDeviceService()
+    }
     
 }
 

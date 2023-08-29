@@ -65,8 +65,8 @@ final class HomeVC: UIViewController {
            self.navigationController?.pushViewController(settingVC, animated: true)
     }
     @objc func headButtonTapped() {
-        let myHouseVC = MyHouseVC()
-        self.navigationController?.pushViewController(myHouseVC, animated: true)
+        let detailVC = DetailTV()
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
 }
@@ -104,8 +104,16 @@ extension HomeVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.houseCell.rawValue, for: indexPath) as! HouseTVCell
+        cell.cellselectedDelegate = self
         cell.selectionStyle = .none
         cell.indexPath = indexPath.section
         return cell
+    }
+}
+
+extension HomeVC: CellSelectedDelegate {
+    func cellselected(indexPath: IndexPath) {
+        let myHouseVC = MyHouseVC()
+        navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }

@@ -2,12 +2,9 @@ import UIKit
 
 class SearchCell: UITableViewCell {
     //MARK: - Properties
-    static let identifier = "SearchCell"
-
     var locationLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "개포동"
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = .black
         return label
