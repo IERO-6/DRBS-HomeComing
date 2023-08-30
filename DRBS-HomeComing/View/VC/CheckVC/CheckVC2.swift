@@ -28,9 +28,7 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
-    
+        $0.keyboardType = .numbersAndPunctuation}
     private let 월세 = UILabel().then {
         $0.text = "월세*"
         $0.font = UIFont(name: Constant.font, size: 16)}
@@ -203,9 +201,11 @@ final class CheckVC2: UIViewController {
         setupNavigationBar()
         initPicker()
         setupImageViewGesture()
+        setUpKeyBoard()
         보증금TextField.delegate = self
         월세TextField.delegate = self
         관리비TextField.delegate = self
+        memoTextView.delegate = self
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -401,6 +401,12 @@ final class CheckVC2: UIViewController {
         }
     }
     
+    private func setUpKeyBoard() {
+        // 다른 곳을 누르면 키보드가 내려가게 됨
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     private func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "추가하기"
@@ -471,6 +477,9 @@ final class CheckVC2: UIViewController {
             print("버전 낮음")
         }
     }
+    @objc func handleTap() {
+        self.view.endEditing(true)
+    }
     // 앨범 권한설정(사진 다운로드때문에)
     @objc func openLibrary() {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -530,6 +539,15 @@ extension CheckVC2: UITextFieldDelegate {
             return newString.length <= maxLenght
         }
         return true
+    }
+}
+
+//MARK: - UITextViewDelegate
+extension CheckVC2: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let str = textView.text else { return true}
+        let newLength = str.count + text.count - range.length
+        return newLength <= 500
     }
 }
 
