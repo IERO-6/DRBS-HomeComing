@@ -6,14 +6,16 @@ final class WithdrawVC: UIViewController {
     
     // MARK: - Properties
     
+    private var responder: UIResponder?
+    
     private let infoTexts = [
-        "탈퇴 하시게 되면 저장했던 모든 정보는 삭제 됩니다.",
         "탈퇴 후에는 작성하신 리뷰를 수정, 삭제하실 수 없습니다. 탈퇴 하시기 전에 확인해주세요!",
-        "탈퇴 하시게 되면 저장했던 모든 정보는 삭제 됩니다."
+        "탈퇴 하시게 되면 등록, 저장했던 모든 정보는 삭제되어 복구할 수 없습니다.",
+        "이상의 내용에 동의하여 탈퇴를 원하실 경우, 아래의 동의 체크박스 버튼을 클릭하고 탈퇴하기 버튼을 눌러주세요."
     ]
     
     private let titleLabel = UILabel().then {
-        $0.text = "정말 탈퇴하시겠어요?"
+        $0.text = "정말 떠나시는 건가요?"
         $0.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
     }
     
@@ -28,7 +30,7 @@ final class WithdrawVC: UIViewController {
                 $0.text = text
                 $0.numberOfLines = 0
                 $0.lineBreakMode = .byWordWrapping
-                $0.font = UIFont.systemFont(ofSize: 14)
+                $0.font = UIFont.systemFont(ofSize: 12)
             }
             
             let stackView = UIStackView(arrangedSubviews: [icon, label]).then {
@@ -58,13 +60,16 @@ final class WithdrawVC: UIViewController {
     }
 
     private let reasonLabel = UILabel().then {
-        $0.text = "탈퇴하시는 이유를 알려주세요."
-        $0.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        $0.text = "DRBS를 떠나는 이유를 알려주세요."
+        $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     }
 
     private let reasonTextView = UITextView().then {
         $0.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.96, alpha: 1.00)
         $0.layer.cornerRadius = 10
+        $0.text = "떠나는 이유를 50자 이내로 입력해주세요."
+        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.textColor = .lightGray
     }
 
     private lazy var withdrawButton = UIButton().then {
@@ -98,8 +103,8 @@ final class WithdrawVC: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.extendedLayoutIncludesOpaqueBars = true
     }
@@ -137,6 +142,9 @@ final class WithdrawVC: UIViewController {
         contentView.addSubviews(titleLabel, checkBoxStackView, reasonLabel, reasonTextView, withdrawButton)
         infoViews.forEach(contentView.addSubview)
         
+        reasonTextView.delegate = self
+        reasonTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 0, right: 0)
+        
         scrollView.snp.makeConstraints {
             $0.edges.equalTo(view)
         }
@@ -163,27 +171,28 @@ final class WithdrawVC: UIViewController {
         }
 
         checkBoxStackView.snp.makeConstraints {
-            $0.top.equalTo(previousView.snp.bottom).offset(80)
+            $0.top.equalTo(previousView.snp.bottom).offset(40)
             $0.left.equalTo(contentView).offset(20)
         }
 
         reasonLabel.snp.makeConstraints {
-            $0.top.equalTo(checkBoxStackView.snp.bottom).offset(20)
+            $0.top.equalTo(checkBoxStackView.snp.bottom).offset(30)
             $0.left.equalTo(contentView).offset(20)
             $0.right.equalTo(contentView).offset(-20)
         }
 
         reasonTextView.snp.makeConstraints {
-            $0.top.equalTo(reasonLabel.snp.bottom).offset(10)
+            $0.top.equalTo(reasonLabel.snp.bottom).offset(20)
             $0.left.equalTo(contentView).offset(20)
-            $0.width.equalTo(350)
-            $0.height.equalTo(200)
+            $0.right.equalTo(contentView).offset(-20)
+            $0.height.equalTo(180)
         }
 
         withdrawButton.snp.makeConstraints {
-            $0.top.equalTo(reasonTextView.snp.bottom).offset(60)
+            $0.top.equalTo(reasonTextView.snp.bottom).offset(80)
+            $0.left.equalTo(contentView).offset(20)
+            $0.right.equalTo(contentView).offset(-20)
             $0.centerX.equalTo(contentView)
-            $0.width.equalTo(350)
             $0.height.equalTo(60)
             $0.bottom.equalTo(contentView).offset(-20)
         }
@@ -214,21 +223,58 @@ final class WithdrawVC: UIViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height / 2
-            }
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+
+        let keyboardHeight = keyboardSize.height
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+
+        var aRect = self.view.frame
+        aRect.size.height -= keyboardHeight
+
+        let activeTextFieldRect: CGRect = reasonTextView.convert(reasonTextView.bounds, to: scrollView)
+        let activeTextFieldBottom = activeTextFieldRect.origin.y + activeTextFieldRect.size.height
+        
+        if !aRect.contains(CGPoint(x: 0, y: activeTextFieldBottom)) {
+            scrollView.scrollRectToVisible(activeTextFieldRect, animated: true)
         }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
+        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension WithdrawVC: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "떠나는 이유를 50자 이내로 입력해주세요."
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        return updatedText.count <= 50
     }
 }
