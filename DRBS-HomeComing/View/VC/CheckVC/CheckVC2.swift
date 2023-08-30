@@ -441,11 +441,11 @@ final class CheckVC2: UIViewController {
         thirdGalleryImageView.addGestureRecognizer(tapGesture3)
         thirdGalleryImageView.isUserInteractionEnabled = true
         let tapGesture4 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        thirdGalleryImageView.addGestureRecognizer(tapGesture4)
-        thirdGalleryImageView.isUserInteractionEnabled = true
+        fourthGalleryImageView.addGestureRecognizer(tapGesture4)
+        fourthGalleryImageView.isUserInteractionEnabled = true
         let tapGesture5 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        thirdGalleryImageView.addGestureRecognizer(tapGesture5)
-        thirdGalleryImageView.isUserInteractionEnabled = true
+        fifthGalleryImageView.addGestureRecognizer(tapGesture5)
+        fifthGalleryImageView.isUserInteractionEnabled = true
     }
     
     //MARK: - Actions
@@ -522,9 +522,21 @@ final class CheckVC2: UIViewController {
             fatalError("Unknown authorization status.")
         }
     }
-    @objc func viewImages() {
+    @objc func viewImages(_ sender: UITapGestureRecognizer) {
         let popUpVC = PopUpVC()
         popUpVC.modalPresentationStyle = .overFullScreen
+        // 모든 이미지를 설정
+        popUpVC.images = [
+            firstGalleryImageView.image,
+            secondGalleryImageView.image,
+            thirdGalleryImageView.image,
+            fourthGalleryImageView.image,
+            fifthGalleryImageView.image,
+        ]
+        // 선택한 이미지의 인덱스를 설정
+        if let imageView = sender.view as? UIImageView {
+            popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === imageView.image }) ?? 0
+        }
         self.present(popUpVC, animated: true)
     }
 }
