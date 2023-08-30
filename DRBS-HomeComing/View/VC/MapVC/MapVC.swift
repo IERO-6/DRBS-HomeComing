@@ -4,9 +4,6 @@ import MapKit
 import Then
 import SnapKit
 
-protocol searchViewDelegate: AnyObject {
-    func setRegion(cood: CLLocationCoordinate2D)
-}
 
 
 final class MapVC: UIViewController {
@@ -119,6 +116,7 @@ final class MapVC: UIViewController {
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
             locationManager.requestWhenInUseAuthorization()
+            
             // 권한 요청을 보낸다.
         case .restricted, .denied:
             // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
@@ -225,7 +223,6 @@ extension MapVC: MKMapViewDelegate {
     }
 }
 //MARK: - CLLocationManagerDelegate
-
 extension MapVC: CLLocationManagerDelegate {
     // 사용자의 위치를 성공적으로 가져왔을 때 호출
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

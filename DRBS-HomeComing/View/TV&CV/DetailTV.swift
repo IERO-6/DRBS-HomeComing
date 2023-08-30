@@ -8,7 +8,8 @@
 import UIKit
 
 final class DetailTV: UIViewController {
-    
+    //MARK: - Properties
+
     
     let tableView: UITableView = {
         let tableView = UITableView()
@@ -17,6 +18,8 @@ final class DetailTV: UIViewController {
         return tableView
     }()
     
+    //MARK: - LifeCycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -28,7 +31,7 @@ final class DetailTV: UIViewController {
     }
 
     
-    //MARK: - SetupNavigationBar
+    //MARK: - Helpers
     
     func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
@@ -53,18 +56,20 @@ final class DetailTV: UIViewController {
     //MARK: - Actions
     
     @objc public func plusButtonTapped() {
-        let additionalVC = MyHouseVC()
+        let additionalVC = CheckVC1()
         additionalVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(additionalVC, animated: true)
     }
 }
+
+//MARK: - Extensions
 
 
 extension DetailTV {
     
     private func configure() {
         tableView.dataSource = self
-        tableView.rowHeight = 250
+        tableView.rowHeight = 290
         tableView.delegate = self
     }
     
@@ -74,7 +79,7 @@ extension DetailTV {
     
     private func autoLayout() {
         tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
@@ -89,13 +94,7 @@ extension DetailTV : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: DetailTVCell.identifier, for: indexPath) as! DetailTVCell
-        cell.selectionStyle = .default
-        cell.roomImageView.image = UIImage(named: "roomImage")
-        cell.nameLabel.text = "신대방역 근처 원룸"
-        cell.priceLabel.text = "1000/60"
-        cell.starsNumber.text = "5.0"
-        cell.bookMarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-        cell.starImageView.image = UIImage(named: "star")
+        
         return cell
     }
     

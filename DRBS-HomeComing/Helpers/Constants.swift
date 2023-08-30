@@ -9,6 +9,7 @@ struct Constant {
         case apartCell = "ApartCell"
         case oneroomCell = "OneroomCell"
         case officeCell = "OfficeCell"
+        case bookmarkCell = "BookMarkCell"
         case searchCell = "SearchCell"
         case annotationView = "AnnotaionView"
         case bookmarkedAnnotationView = "BookMarkedAnnotationView"

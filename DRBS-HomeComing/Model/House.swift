@@ -34,7 +34,7 @@ struct House: Codable {
         case isBookMarked = "isBookMarked"
         case livingType =   "livingType"
         case tradingType =  "tradingType"
-        case address =      "adress"
+        case address =      "address"
         case latitude =     "latitude"
         case longitude =    "longitude"
         case 보증금 =         "deposit"
