@@ -6,6 +6,21 @@ import Then
 class OneroomCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
+    var oneRoomHouse: House? {
+        didSet {
+            guard let house = self.oneRoomHouse else {
+                print("오잉또잉")
+                return
+            }
+            self.cellImage.image = UIImage(named: "roomImage.png")
+            self.titleLabel.text = house.title!
+            self.costLabel.text = house.보증금! + "/" + house.월세!
+            self.ratingImage.image = UIImage(named: "star")
+            self.ratingLabel.text = String(house.별점!)
+        }
+    }
+    
     private let baseView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -72,12 +87,20 @@ class OneroomCell: UICollectionViewCell {
     }
     
     // MARK: - Helpers
-    func configureCell(image: UIImage, title: String, cost: String, rating: Float) {
-        cellImage.image = image
-        titleLabel.text = title
-        costLabel.text = cost
-        ratingImage.image = UIImage(named: "star")
-        ratingLabel.text = "\(rating)"
+    private func configureCell(image: UIImage, title: String, cost: String, rating: Float) {
+        guard let house = self.oneRoomHouse else {
+            print("오잉또잉")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.cellImage.image = UIImage(named: "roomImage.png")
+            self.titleLabel.text = house.title!
+            self.costLabel.text = house.보증금! + "/" + house.월세!
+            self.ratingImage.image = UIImage(named: "star")
+            self.ratingLabel.text = String(house.별점!)
+        }
+        
     }
     
     private func setupViews() {

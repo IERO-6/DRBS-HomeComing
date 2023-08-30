@@ -324,7 +324,7 @@ final class CheckVC1: UIViewController {
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
-                self.houseViewModel.name = self.nameLabel.text
+                self.houseViewModel.name = self.nameTextField.text
                 let checkVC2 = CheckVC2()
                 checkVC2.houseViewModel = self.houseViewModel
                 self.navigationController?.pushViewController(checkVC2, animated: true)

@@ -3,10 +3,6 @@ import Then
 import SnapKit
 import PhotosUI
 
-protocol CalendarDelegate: AnyObject {
-    func dateSelected(date: Date)
-}
-
 final class CheckVC2: UIViewController {
     
     //MARK: - Properties
@@ -458,6 +454,7 @@ final class CheckVC2: UIViewController {
     @objc func completionButtonTapped() {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
+        self.houseViewModel.보증금 = self.보증금TextField.text
         rateVC.houseViewModel = self.houseViewModel
         self.present(rateVC, animated: true)
     }

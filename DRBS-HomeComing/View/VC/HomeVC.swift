@@ -8,6 +8,7 @@ final class HomeVC: UIViewController {
     private var viewModel = HouseViewModel()
     private let categories = ["아파트", "원룸", "오피스텔"]
     private lazy var tableView = UITableView()
+    var homeVChouses: [House]?
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -19,11 +20,12 @@ final class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.configureNav()
+//        tableView.reloadData()
     }
     
     //MARK: - Helpers
 
-    func configureUI() {
+    private func configureUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
         tableView.rowHeight = 200
@@ -51,6 +53,7 @@ final class HomeVC: UIViewController {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
+    
     
     //MARK: - Actions
 
@@ -107,6 +110,7 @@ extension HomeVC: UITableViewDataSource {
         cell.cellselectedDelegate = self
         cell.selectionStyle = .none
         cell.indexPath = indexPath.section
+        cell.houses = self.homeVChouses ?? []
         return cell
     }
 }

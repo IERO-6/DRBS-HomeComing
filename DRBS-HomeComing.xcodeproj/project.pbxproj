@@ -33,6 +33,7 @@
 		217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83F02A76858F00363ED2 /* ApartCell.swift */; };
 		218111A32A9AE938009A82C4 /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A22A9AE938009A82C4 /* PopUpVC.swift */; };
 		218111A52A9AECD7009A82C4 /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A42A9AECD7009A82C4 /* PopUpView.swift */; };
+		218111AA2A9F50E0009A82C4 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A92A9F50E0009A82C4 /* Protocols.swift */; };
 		218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE22A75262400687EE6 /* AppDelegate.swift */; };
 		218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE42A75262400687EE6 /* SceneDelegate.swift */; };
 		218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE62A75262400687EE6 /* HomeVC.swift */; };
@@ -100,6 +101,7 @@
 		217C83F02A76858F00363ED2 /* ApartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartCell.swift; sourceTree = "<group>"; };
 		218111A22A9AE938009A82C4 /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
 		218111A42A9AECD7009A82C4 /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
+		218111A92A9F50E0009A82C4 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		218ACDDF2A75262400687EE6 /* DRBS-HomeComing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DRBS-HomeComing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		218ACDE22A75262400687EE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		218ACDE42A75262400687EE6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 				218ACDE42A75262400687EE6 /* SceneDelegate.swift */,
 				218ACE0A2A763C0800687EE6 /* Extensions.swift */,
 				218ACE0E2A763CBC00687EE6 /* Constants.swift */,
+				218111A92A9F50E0009A82C4 /* Protocols.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				1863355E2A8A0D1D00E283D5 /* DetailTVCell.swift in Sources */,
 				2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */,
 				2192EAA12A90A4BD006AB5B3 /* CheckVC1.swift in Sources */,
+				218111AA2A9F50E0009A82C4 /* Protocols.swift in Sources */,
 				21B6276A2A83841200081D5E /* SearchCell.swift in Sources */,
 				218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */,
 				218ACE092A76312400687EE6 /* MapVC.swift in Sources */,

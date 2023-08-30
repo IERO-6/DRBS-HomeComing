@@ -71,7 +71,6 @@ final class RateVC: UIViewController {
     
     
     //MARK: - LifeCycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -102,14 +101,14 @@ final class RateVC: UIViewController {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
             $0.height.equalTo((view.frame.width - 46)/5)
-            $0.top.equalTo(subTitleLabel.snp.bottom).offset(30)}
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(40)}
         
         rateSlider.snp.makeConstraints {$0.top.leading.trailing.bottom.equalToSuperview()}
         
         saveButton.snp.makeConstraints {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
             $0.height.equalTo(56)}
     }
     

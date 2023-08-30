@@ -6,8 +6,6 @@ import CoreLocation
 // ⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️공식문서⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️
 // https://firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
 
-
-
 class NetworkingManager {
     //MARK: - Singleton Pattern
     static let shared = NetworkingManager()
@@ -39,17 +37,35 @@ class NetworkingManager {
                     var houses: [House] = []
                     for document in snapshot.documents {
                         let data = document.data()
-//                        let latitude = data["latitude"] as! Double
-//                        let longitude = data["longitude"] as! Double
-//                        let isBookMarked = data["isBookMarked"] as! Bool
+                        let uid = data["uid"] as! String
+                        let title = data["title"] as! String
+                        let isBookMarked = data["isBookMarked"] as! Bool
+                        let livingType = data["livingType"] as! String
+                        let tradingType = data["tradingType"] as! String
+                        let address = data["address"] as! String
+                        let latitude = data["latitude"] as! Double
+                        let longitude = data["longitude"] as! Double
+                        let 보증금 = data["deposit"] as! String
+                        let 월세 = data["rent_payment"] as! String
+                        let 관리비 = data["maintenance_fee"] as! String
+                        let 관리비미포함목록 = data["maintenance_non_list"] as! [String]
+                        let 면적 = data["area"] as! String
+//                        let 입주가능일 = data["movingDay"] as! Date
+                        let 계약기간 = data["contractTerm"] as! String
+//                        let 체크리스트 = data["checkList"] as! CheckList
+                        let 사진 = data["photos"] as! [String]
+                        let 기록 = data["memo"] as! String
+                        let 별점 = data["rate"] as! Double
                         
-//                        locations.append(location)
+                        let house = House(uid: uid, title: title, isBookMarked: isBookMarked, livingType: livingType, tradingType: tradingType, address: address, latitude: latitude, longitude: longitude, 보증금: 보증금, 월세: 월세, 관리비: 관리비, 관리비미포함목록: 관리비미포함목록, 면적: 면적, 입주가능일: Date(), 계약기간: 계약기간, 체크리스트: CheckList(), 기록: 기록, 사진: 사진, 별점: 별점)
+                        houses.append(house)
                     }
                     completion(houses)
                 } else {
                     print("\(String(describing: error?.localizedDescription))")
                 }
-            }        }
+            }
+        }
         
         
         
