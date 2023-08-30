@@ -28,9 +28,7 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
-    
+        $0.keyboardType = .numbersAndPunctuation}
     private let 월세 = UILabel().then {
         $0.text = "월세*"
         $0.font = UIFont(name: Constant.font, size: 16)}
@@ -203,9 +201,13 @@ final class CheckVC2: UIViewController {
         setupNavigationBar()
         initPicker()
         setupImageViewGesture()
+        setUpKeyBoard()
         보증금TextField.delegate = self
         월세TextField.delegate = self
         관리비TextField.delegate = self
+        면적TextField.delegate = self
+        계약기간TextField.delegate = self
+        memoTextView.delegate = self
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -391,6 +393,10 @@ final class CheckVC2: UIViewController {
     
     private func setUpLabel() {
         //*만 빨갛게 바꾸는 콛
+        self.월세.text = self.houseViewModel.tradingType! + "*" // 월세,전세,매매버튼 반영
+        if self.houseViewModel.tradingType == "매매" {
+            self.보증금.text = "매매*"
+            self.월세.text = "기보증금/월세*"}
         let labels = [보증금, 월세]
         for texts in labels {
             let fullText = texts.text ?? ""
@@ -399,6 +405,12 @@ final class CheckVC2: UIViewController {
             attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
             texts.attributedText = attribtuedString
         }
+    }
+    
+    private func setUpKeyBoard() {
+        // 다른 곳을 누르면 키보드가 내려가게 됨
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
     }
     
     private func setupNavigationBar() {
@@ -456,6 +468,14 @@ final class CheckVC2: UIViewController {
         }
     }
     @objc func completionButtonTapped() {
+        guard let deposit = 보증금TextField.text, !deposit.isEmpty,
+              let rent = 월세TextField.text, !rent.isEmpty else {
+            let alert = UIAlertController(title: "항목입력을 완료해주세요.", message: "필수사항을 모두 입력해 주세요.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
         rateVC.houseViewModel = self.houseViewModel
@@ -470,6 +490,9 @@ final class CheckVC2: UIViewController {
         } else {
             print("버전 낮음")
         }
+    }
+    @objc func handleTap() {
+        self.view.endEditing(true)
     }
     // 앨범 권한설정(사진 다운로드때문에)
     @objc func openLibrary() {
@@ -512,24 +535,31 @@ extension CheckVC2: UITextFieldDelegate {
         textField.delegate = self
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard Double(string) != nil || string.isEmpty else { return false }
-        if textField == 보증금TextField {
-            let maxLenght = 6
-            let currentString: NSString = (textField.text ?? "") as NSString
-            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
-            return newString.length <= maxLenght
-        } else if textField == 월세TextField {
-            let maxLenght = 3
-            let currentString: NSString = (textField.text ?? "") as NSString
-            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
-            return newString.length <= maxLenght
-        } else if textField == 관리비TextField {
-            let maxLenght = 2
-            let currentString: NSString = (textField.text ?? "") as NSString
-            let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
-            return newString.length <= maxLenght
+        // check if the replacementString is a number or dot
+        let allowedCharacters = CharacterSet(charactersIn:".0123456789")
+        let characterSet = CharacterSet(charactersIn: string)
+        if !allowedCharacters.isSuperset(of: characterSet) {
+            return false
         }
+        
+        // check if the textfield's new text will be <= 6
+        let currentString: NSString = (textField.text ?? "") as NSString
+        let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+        if newString.length > 6 {
+            return false
+        }
+
+        // allow the change
         return true
+    }
+}
+
+//MARK: - UITextViewDelegate
+extension CheckVC2: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let str = textView.text else { return true}
+        let newLength = str.count + text.count - range.length
+        return newLength <= 500
     }
 }
 
