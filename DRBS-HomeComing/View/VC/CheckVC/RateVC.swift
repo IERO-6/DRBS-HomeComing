@@ -120,6 +120,14 @@ final class RateVC: UIViewController {
         }
     }
     
+    private func removeNavStack() {
+        //처음화면으로 돌아가는 메서드
+        //쌓인 네비게이션 스택을 제거하고 돌아가기...?쉽지 않다.
+        
+    }
+
+    
+    
     //MARK: - Actions
     @objc func valueChanged(_ sender: UISlider) {
         let floatValue = Double(sender.value)
@@ -142,7 +150,7 @@ final class RateVC: UIViewController {
         self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         self.houseViewModel.makeHouseModel()
         NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
-        dump(self.houseViewModel.house)
+        removeNavStack()
     }
     
 }

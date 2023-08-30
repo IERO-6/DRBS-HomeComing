@@ -4,7 +4,6 @@ import SnapKit
 import PhotosUI
 
 final class CheckVC2: UIViewController {
-    
     //MARK: - Properties
     var houseViewModel = HouseViewModel()
     private let checkListUIView = CheckListUIView()
@@ -110,8 +109,7 @@ final class CheckVC2: UIViewController {
         $0.rightViewMode = .always
         $0.keyboardType = .numbersAndPunctuation
     }
-    private let 입주가능일 = UILabel().then {
-        $0.text = "입주 가능일"}
+    private let 입주가능일 = UILabel().then {$0.text = "입주 가능일"}
     private lazy var 입주가능일button = UIButton().then {
         $0.setTitle("e) 23.08.28", for: .normal)
         $0.setTitleColor(UIColor.systemGray4, for: .normal)
@@ -475,6 +473,13 @@ final class CheckVC2: UIViewController {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
         self.houseViewModel.보증금 = self.보증금TextField.text
+        self.houseViewModel.월세or전세금 = self.월세TextField.text
+        self.houseViewModel.관리비 = self.관리비TextField.text
+        self.houseViewModel.checkList = self.checkListUIView.checkViewModel.makeCheckListModel()
+        self.houseViewModel.면적 = self.면적TextField.text
+        self.houseViewModel.계약기간 = self.계약기간TextField.text
+//        self.houseViewModel.photo = 여기에 사진 넣는 메서드
+        self.houseViewModel.memo = self.memoTextView.text
         rateVC.houseViewModel = self.houseViewModel
         self.present(rateVC, animated: true)
     }

@@ -7,11 +7,17 @@ final class HouseTVCell: UITableViewCell {
     
     weak var cellselectedDelegate: CellSelectedDelegate?
     
+    var apartCellCount: Int?
     var oneRoomCellCount: Int?
-    
+    var officeCellCount: Int?
+    var bookmarkCellCount: Int?
+
     var houses: [House] = [] {
         didSet {
-            self.oneRoomCellCount = houses.filter{$0.livingType! == "아파트"}.count
+            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸"}.count
+            self.officeCellCount = houses.filter{$0.livingType! == "오피스텔"}.count
+            self.apartCellCount = houses.filter{$0.livingType! == "아파트"}.count
+            self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
         }
     }
     
@@ -20,7 +26,7 @@ final class HouseTVCell: UITableViewCell {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 8.0
         layout.minimumInteritemSpacing = 0
-        layout.itemSize = .init(width: 200, height: 180)
+        layout.itemSize = .init(width: 160, height: 170)
         
         return layout
     }()
@@ -36,6 +42,7 @@ final class HouseTVCell: UITableViewCell {
         view.register(ApartCell.self, forCellWithReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         view.register(OneroomCell.self, forCellWithReuseIdentifier: Constant.Identifier.oneroomCell.rawValue)
         view.register(OfficeCell.self, forCellWithReuseIdentifier: Constant.Identifier.officeCell.rawValue)
+        view.register(BookMarkCell.self, forCellWithReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue)
       view.translatesAutoresizingMaskIntoConstraints = false
       return view
     }()
@@ -75,14 +82,19 @@ extension HouseTVCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch self.indexPath {
         case 0:
-            return 1
+            guard let count = apartCellCount else { return 0 }
+            return count
         case 1:
-            guard let count = oneRoomCellCount else { return 5 }
+            guard let count = oneRoomCellCount else { return 0 }
             return count
         case 2:
-            return 2
+            guard let count = officeCellCount else { return 0 }
+            return count
+        case 3:
+            guard let count = bookmarkCellCount else { return 0 }
+            return count
         default:
-            return 2
+            return 10
         }
     }
     
@@ -90,22 +102,27 @@ extension HouseTVCell: UICollectionViewDataSource {
         switch self.indexPath {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.houseCell.rawValue, for: indexPath) as! ApartCell
+            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트" }[indexPath.row]
                 return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
-            let oneRoomHouses = self.houses.filter{ $0.livingType! == "아파트" }
-            print("현재 카운트는\(oneRoomHouses.count)")
-            print(indexPath.row)
-            cell.oneRoomHouse = oneRoomHouses[indexPath.row]
+            cell.oneRoomHouse = self.houses.filter{ $0.livingType! == "원룸" }[indexPath.row]
                 return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.officeCell.rawValue, for: indexPath) as! OfficeCell
+            cell.officeHouse = self.houses.filter{ $0.livingType! == "오피스텔" }[indexPath.row]
                 return cell
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell
+            cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
+            return cell
         default:
             return UICollectionViewCell()
         }
     }
 }
+
+//MARK: - UICollectionViewDelegate
 
 extension HouseTVCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

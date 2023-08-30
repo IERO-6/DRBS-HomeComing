@@ -6,7 +6,7 @@ final class HomeVC: UIViewController {
     //MARK: - Properties
     // 뷰컨트롤러가 뷰모델을 소유
     private var viewModel = HouseViewModel()
-    private let categories = ["아파트", "원룸", "오피스텔"]
+    private let categories = ["아파트", "원룸", "오피스텔", "북마크"]
     private lazy var tableView = UITableView()
     var homeVChouses: [House]?
     
@@ -20,7 +20,7 @@ final class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.configureNav()
-//        tableView.reloadData()
+        tableView.reloadData()
     }
     
     //MARK: - Helpers
@@ -28,8 +28,11 @@ final class HomeVC: UIViewController {
     private func configureUI() {
         view.backgroundColor = .white
         view.addSubview(tableView)
-        tableView.rowHeight = 200
-        tableView.snp.makeConstraints { $0.top.bottom.left.right.equalToSuperview() }
+        tableView.rowHeight = 170
+        tableView.snp.makeConstraints {
+            $0.top.bottom.right.equalToSuperview()
+            $0.leading.equalToSuperview().offset(15)
+        }
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
         
@@ -39,6 +42,7 @@ final class HomeVC: UIViewController {
         tableView.delegate = self
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         tableView.separatorStyle = .none
+        
     }
     
     private func configureNav() {
@@ -75,16 +79,15 @@ final class HomeVC: UIViewController {
 }
 
 //MARK: - UITableViewDelegate
-
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
-            let titleButton = UIButton(frame: CGRect(x: 15, y: 0, width: 200, height: 40))
+            let titleButton = UIButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
             headerView.addSubview(titleButton)
             titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
-            titleButton.setTitleColor(.black, for: .normal)
+            titleButton.setTitleColor(.darkGray, for: .normal)
             titleButton.contentHorizontalAlignment = .left
-            titleButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+            titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
             titleButton.addTarget(self, action: #selector(headButtonTapped), for: .touchUpInside)
             titleButton.tag = section
             return headerView
@@ -93,7 +96,6 @@ extension HomeVC: UITableViewDelegate {
 }
 
 //MARK: - UITableViewDataSource
-
 extension HomeVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //섹션별 열의 개수
@@ -102,7 +104,7 @@ extension HomeVC: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         //섹션의 개수
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,6 +117,7 @@ extension HomeVC: UITableViewDataSource {
     }
 }
 
+//MARK: - CellSelectedDelegate
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()

@@ -3,16 +3,13 @@ import SnapKit
 import Then
 
 
-class OneroomCell: UICollectionViewCell {
+final class OneroomCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     var oneRoomHouse: House? {
         didSet {
-            guard let house = self.oneRoomHouse else {
-                print("오잉또잉")
-                return
-            }
+            guard let house = self.oneRoomHouse else { return }
             self.cellImage.image = UIImage(named: "roomImage.png")
             self.titleLabel.text = house.title!
             self.costLabel.text = house.보증금! + "/" + house.월세!
@@ -30,7 +27,7 @@ class OneroomCell: UICollectionViewCell {
     
     private let cellImage = UIImageView().then {
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 4
+        $0.layer.cornerRadius = 6
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.image = UIImage(named: "roomImage.png")
         $0.contentMode = .scaleAspectFill
@@ -40,27 +37,24 @@ class OneroomCell: UICollectionViewCell {
         $0.font = UIFont(name: "Pretendard-Bold", size: 14)
         $0.textColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.text = "@@"
 
     }
     
     private let costLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 12)
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.text = "@@"
         $0.textColor = UIColor(red: 0.36, green: 0.36, blue: 0.38, alpha: 1)
     }
     
     private let ratingImage = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.image = UIImage(named: "star")
+        $0.image = UIImage(named: "star_fill.png")
         $0.translatesAutoresizingMaskIntoConstraints = false
 
     }
     
     private let ratingLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 12)
-        $0.text = "@@"
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor(red: 0.36, green: 0.36, blue: 0.38, alpha: 1)
     }
@@ -88,10 +82,7 @@ class OneroomCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func configureCell(image: UIImage, title: String, cost: String, rating: Float) {
-        guard let house = self.oneRoomHouse else {
-            print("오잉또잉")
-            return
-        }
+        guard let house = self.oneRoomHouse else { return }
         
         DispatchQueue.main.async {
             self.cellImage.image = UIImage(named: "roomImage.png")
@@ -109,21 +100,24 @@ class OneroomCell: UICollectionViewCell {
         cellImage.snp.makeConstraints {
             $0.leading.trailing.top.equalToSuperview()
             $0.height.equalTo(120)
+            $0.width.equalTo(160)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(5)
+            $0.trailing.equalToSuperview()
             $0.top.equalTo(cellImage.snp.bottom).offset(6)
         }
         
         costLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.leading.equalToSuperview().offset(5)
+            $0.width.equalTo(100)
             $0.top.equalTo(titleLabel.snp.bottom).offset(6)
         }
         
         ratingLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
+            $0.trailing.equalToSuperview().offset(-5)
+            $0.centerY.equalTo(costLabel.snp.centerY)
         }
         
         ratingImage.snp.makeConstraints {
@@ -131,11 +125,7 @@ class OneroomCell: UICollectionViewCell {
             $0.height.width.equalTo(20)
             $0.centerY.equalTo(ratingLabel)
         }
-        
-//        contentView.snp.makeConstraints {
-//            $0.bottom.equalTo(costLabel.snp.bottom).offset(12)
-//            $0.leading.trailing.equalToSuperview()
-//        }
+
     }
     
     //MARK: - Action

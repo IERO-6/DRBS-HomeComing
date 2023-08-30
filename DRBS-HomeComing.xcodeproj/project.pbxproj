@@ -58,6 +58,7 @@
 		21B6276A2A83841200081D5E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627692A83841200081D5E /* SearchCell.swift */; };
 		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
 		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
+		21F954152A9F78DD00F395B0 /* BookMarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F954142A9F78DD00F395B0 /* BookMarkCell.swift */; };
 		B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B386B08A2A8EAA8200E68A2D /* LoginVC.swift */; };
 		B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B08D2A8F140500E68A2D /* Pretendard-SemiBold.otf */; };
 		B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B08E2A8F140500E68A2D /* Pretendard-Thin.otf */; };
@@ -129,6 +130,7 @@
 		21B6276B2A83844400081D5E /* ModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalVC.swift; sourceTree = "<group>"; };
 		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
 		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		21F954142A9F78DD00F395B0 /* BookMarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCell.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B386B08A2A8EAA8200E68A2D /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				217C83F02A76858F00363ED2 /* ApartCell.swift */,
 				2143CE352A7904DD00A5DB36 /* OneroomCell.swift */,
 				2143CE372A79051400A5DB36 /* OfficeCell.swift */,
+				21F954142A9F78DD00F395B0 /* BookMarkCell.swift */,
 			);
 			path = HomeCell;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */,
 				218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */,
 				218111A52A9AECD7009A82C4 /* PopUpView.swift in Sources */,
+				21F954152A9F78DD00F395B0 /* BookMarkCell.swift in Sources */,
 				216FA0B62A8BA67C004D0279 /* NoticeListCell.swift in Sources */,
 				218ACE0B2A763C0800687EE6 /* Extensions.swift in Sources */,
 				216FA0B02A8BA65D004D0279 /* LisenseCell.swift in Sources */,
