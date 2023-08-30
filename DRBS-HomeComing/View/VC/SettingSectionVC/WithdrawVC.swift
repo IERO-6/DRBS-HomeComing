@@ -6,8 +6,6 @@ final class WithdrawVC: UIViewController {
     
     // MARK: - Properties
     
-    private var responder: UIResponder?
-    
     private let infoTexts = [
         "탈퇴 후에는 작성하신 리뷰를 수정, 삭제하실 수 없습니다. 탈퇴 하시기 전에 확인해주세요!",
         "탈퇴 하시게 되면 등록, 저장했던 모든 정보는 삭제되어 복구할 수 없습니다.",
