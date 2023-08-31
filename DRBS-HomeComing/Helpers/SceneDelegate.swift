@@ -21,10 +21,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             nav1.setupHomeBarAppearance()
             nav2.setupMapBarAppearance()
             let tabbar = Tabbar()
-            tabbar.viewControllers = [nav1, nav2]
-            window.rootViewController = tabbar // 자신의 시작 ViewController
-            window.makeKeyAndVisible()
-            self.window = window
+            DispatchQueue.global().async {
+                NetworkingManager.shared.fetchHouses { houses in
+                    vc1.homeVChouses = houses
+                    DispatchQueue.main.async {
+                        tabbar.viewControllers = [nav1, nav2]
+                        window.rootViewController = tabbar // 자신의 시작 ViewController
+                        window.makeKeyAndVisible()
+                        self.window = window
+                    }
+                }
+            }
+   
         }
     
     func sceneDidDisconnect(_ scene: UIScene) {

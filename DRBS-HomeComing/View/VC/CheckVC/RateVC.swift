@@ -71,7 +71,6 @@ final class RateVC: UIViewController {
     
     
     //MARK: - LifeCycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -102,14 +101,14 @@ final class RateVC: UIViewController {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
             $0.height.equalTo((view.frame.width - 46)/5)
-            $0.top.equalTo(subTitleLabel.snp.bottom).offset(30)}
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(40)}
         
         rateSlider.snp.makeConstraints {$0.top.leading.trailing.bottom.equalToSuperview()}
         
         saveButton.snp.makeConstraints {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
             $0.height.equalTo(56)}
     }
     
@@ -120,6 +119,15 @@ final class RateVC: UIViewController {
             sheetPresentationController.preferredCornerRadius = 25
         }
     }
+    
+    private func removeNavStack() {
+        //처음화면으로 돌아가는 메서드
+        //쌓인 네비게이션 스택을 제거하고 돌아가기...?쉽지 않다.
+//        self.dismiss(animated: true, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
+        //여기서 completion을 통해 뭔갈 할 수 있을 것 같기도 하고..?
+    }
+
+    
     
     //MARK: - Actions
     @objc func valueChanged(_ sender: UISlider) {
@@ -143,7 +151,7 @@ final class RateVC: UIViewController {
         self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         self.houseViewModel.makeHouseModel()
         NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
-        dump(self.houseViewModel.house)
+        removeNavStack()
     }
     
 }
