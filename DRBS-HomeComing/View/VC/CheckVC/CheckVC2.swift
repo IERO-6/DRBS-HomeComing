@@ -99,6 +99,7 @@ final class CheckVC2: UIViewController {
     private let 면적 = UILabel().then {$0.text = "면적"}
     private let 면적TextField = UITextField().then {
         $0.placeholder = "면적을 입력해주세요"
+        $0.textAlignment = .right
         let label = UILabel()
         label.text = "㎡"
         label.sizeToFit()
@@ -109,11 +110,12 @@ final class CheckVC2: UIViewController {
     private lazy var 입주가능일button = UIButton().then {
         $0.setTitle("e) 23.08.28", for: .normal)
         $0.setTitleColor(UIColor.systemGray4, for: .normal)
-        $0.contentHorizontalAlignment = .left
+        $0.contentHorizontalAlignment = .right
         $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)}
     private let 계약기간 = UILabel().then {$0.text = "계약기간"}
     private let 계약기간TextField = UITextField().then {
         $0.placeholder = "0"
+        $0.textAlignment = .right
         let label = UILabel()
         label.text = " 년"
         label.sizeToFit()
@@ -209,6 +211,8 @@ final class CheckVC2: UIViewController {
         setupNavigationBar()
         initPicker()
         setUpKeyBoard()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -527,6 +531,29 @@ final class CheckVC2: UIViewController {
         popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === sender.currentImage }) ?? 0
         
         self.present(popUpVC, animated: true)
+    }
+    // 키보드가 나타날 때 memoTextView를 이동시키는 함수
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if memoTextView.isFirstResponder {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                let memoTextViewFrame = memoTextView.convert(memoTextView.bounds, to: self.view)
+                let keyboardTop = view.frame.size.height - keyboardSize.height // 화면의 높이에 키보드 사이즈 빼서 키보드의 위쪽 크기를 알 수 있다
+                let offset = memoTextViewFrame.maxY - keyboardTop + 20
+                if offset > 0 {
+                    scrollView.contentOffset.y += offset //키보드 위에 위치시킨다
+                }
+            }
+        }
+    }
+    // 키보드가 사라질 때 memoTextView를 원래 위치로 되돌리는 함수
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }
 
