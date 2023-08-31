@@ -9,14 +9,14 @@ final class HouseTVCell: UITableViewCell {
     
     var apartCellCount: Int?
     var oneRoomCellCount: Int?
-    var officeCellCount: Int?
+    var villaCellCount: Int?
     var bookmarkCellCount: Int?
 
     var houses: [House] = [] {
         didSet {
-            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸"}.count
-            self.officeCellCount = houses.filter{$0.livingType! == "오피스텔"}.count
-            self.apartCellCount = houses.filter{$0.livingType! == "아파트"}.count
+            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸/투룸+"}.count
+            self.villaCellCount = houses.filter{$0.livingType! == "빌라/주택"}.count
+            self.apartCellCount = houses.filter{$0.livingType! == "아파트/오피스텔"}.count
             self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
         }
     }
@@ -39,9 +39,9 @@ final class HouseTVCell: UITableViewCell {
       view.contentInset = .zero
       view.backgroundColor = .clear
       view.clipsToBounds = true
-        view.register(ApartCell.self, forCellWithReuseIdentifier: Constant.Identifier.houseCell.rawValue)
+        view.register(ApartCell.self, forCellWithReuseIdentifier: Constant.Identifier.apartCell.rawValue)
         view.register(OneroomCell.self, forCellWithReuseIdentifier: Constant.Identifier.oneroomCell.rawValue)
-        view.register(OfficeCell.self, forCellWithReuseIdentifier: Constant.Identifier.officeCell.rawValue)
+        view.register(VillaCell.self, forCellWithReuseIdentifier: Constant.Identifier.villaCell.rawValue)
         view.register(BookMarkCell.self, forCellWithReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue)
       view.translatesAutoresizingMaskIntoConstraints = false
       return view
@@ -85,10 +85,10 @@ extension HouseTVCell: UICollectionViewDataSource {
             guard let count = apartCellCount else { return 0 }
             return count
         case 1:
-            guard let count = oneRoomCellCount else { return 0 }
+            guard let count = villaCellCount else { return 0 }
             return count
         case 2:
-            guard let count = officeCellCount else { return 0 }
+            guard let count = oneRoomCellCount else { return 0 }
             return count
         case 3:
             guard let count = bookmarkCellCount else { return 0 }
@@ -101,16 +101,16 @@ extension HouseTVCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch self.indexPath {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.houseCell.rawValue, for: indexPath) as! ApartCell
-            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트" }[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.apartCell.rawValue, for: indexPath) as! ApartCell
+            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
                 return cell
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
-            cell.oneRoomHouse = self.houses.filter{ $0.livingType! == "원룸" }[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.villaCell.rawValue, for: indexPath) as! VillaCell
+            cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
                 return cell
         case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.officeCell.rawValue, for: indexPath) as! OfficeCell
-            cell.officeHouse = self.houses.filter{ $0.livingType! == "오피스텔" }[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
+            cell.oneRoomHouse = self.houses.filter{ $0.livingType! == "원룸/투룸+" }[indexPath.row]
                 return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell

@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class DetailTVCell: UITableViewCell {
+final class DetailCell: UITableViewCell {
     //MARK: - Properties
 
     static let identifier = "DetailTVCell"

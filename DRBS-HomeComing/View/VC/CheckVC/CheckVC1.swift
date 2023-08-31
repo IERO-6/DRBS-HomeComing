@@ -59,7 +59,7 @@ final class CheckVC1: UIViewController {
     }
     
     private lazy var 아파트버튼 = UIButton().then {
-        $0.setTitle("아파트", for: .normal)
+        $0.setTitle("아파트/오피스텔", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
@@ -68,7 +68,7 @@ final class CheckVC1: UIViewController {
     }
     
     private lazy var 투룸버튼 = UIButton().then {
-        $0.setTitle("빌라/투룸+", for: .normal)
+        $0.setTitle("빌라/주택", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
@@ -86,7 +86,7 @@ final class CheckVC1: UIViewController {
     }
     
     private lazy var 원룸버튼 = UIButton().then {
-        $0.setTitle("원룸", for: .normal)
+        $0.setTitle("원룸/투룸+", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.systemGray4.cgColor
@@ -143,7 +143,7 @@ final class CheckVC1: UIViewController {
         view.backgroundColor = .white
         view.addSubviews(nameLabel, nameTextField, tradeLabel,
                          월세버튼, 전세버튼, 매매버튼, livingLabel,
-                         아파트버튼, 투룸버튼, 오피스텔버튼, 원룸버튼,
+                         아파트버튼, 투룸버튼,  원룸버튼,
                         addressLabel, addressTextField, nextButton)
         
         nameLabel.snp.makeConstraints {
@@ -192,7 +192,7 @@ final class CheckVC1: UIViewController {
         아파트버튼.snp.makeConstraints {
             $0.top.equalTo(livingLabel.snp.bottom).offset(20)
             $0.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(23)
-            $0.width.equalTo(75)
+            $0.width.equalTo(150)
             $0.height.equalTo(45)
         }
         
@@ -203,17 +203,17 @@ final class CheckVC1: UIViewController {
             $0.height.equalTo(45)
         }
         
-        오피스텔버튼.snp.makeConstraints {
-            $0.top.equalTo(아파트버튼)
-            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
-            $0.width.equalTo(100)
-            $0.height.equalTo(45)
-        }
+//        오피스텔버튼.snp.makeConstraints {
+//            $0.top.equalTo(아파트버튼)
+//            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
+//            $0.width.equalTo(100)
+//            $0.height.equalTo(45)
+//        }
         
         원룸버튼.snp.makeConstraints {
             $0.top.equalTo(아파트버튼.snp.bottom).offset(10)
             $0.leading.equalTo(아파트버튼)
-            $0.width.equalTo(75)
+            $0.width.equalTo(120)
             $0.height.equalTo(45)
         }
         
@@ -279,7 +279,7 @@ final class CheckVC1: UIViewController {
                     continue
                 }
             }
-        case "아파트", "빌라/투룸+", "오피스텔", "원룸":
+        case "아파트/오피스텔", "빌라/주택", "원룸/투룸+":
             self.houseViewModel.livingType = sender.currentTitle
             sender.setTitleColor(.white, for: .normal)
             sender.backgroundColor = Constant.appColor
