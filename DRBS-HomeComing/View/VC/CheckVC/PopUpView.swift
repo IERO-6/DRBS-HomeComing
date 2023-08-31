@@ -4,6 +4,7 @@ import UIKit
 
 final class PopUpView: UIView {
     //MARK: - Properties
+    var image: UIImage?
     
     lazy var popupView = UIImageView().then {
         $0.layer.cornerRadius = 12
@@ -21,13 +22,10 @@ final class PopUpView: UIView {
         $0.tintColor = .white
     }
     
-    
     //MARK: - LifeCycle
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -37,6 +35,7 @@ final class PopUpView: UIView {
     //MARK: - Helpers
     private func configureUI() {
         self.backgroundColor = .black.withAlphaComponent(0.3)
+        popupView.image = image
         self.addSubviews(self.popupView, self.leftButton, self.rightButton)
         self.popupView.snp.makeConstraints {
             $0.left.right.equalToSuperview().inset(32)
@@ -55,6 +54,9 @@ final class PopUpView: UIView {
         }
     }
     
+    func updateImage(_ image: UIImage?) {
+        popupView.image = image
+    }
     
     
     //MARK: - Actions

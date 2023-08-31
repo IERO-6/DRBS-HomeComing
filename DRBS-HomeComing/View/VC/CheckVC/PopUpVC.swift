@@ -4,6 +4,8 @@ import Then
 
 final class PopUpVC: UIViewController {
     //MARK: - Properties
+    var images: [UIImage?] = [] // 모든 이미지를 포함하는 배열
+    var currentIndex: Int = 0 // 현재 표시된 이미지의 인덱스
     lazy var popUpView = PopUpView()
         
     //MARK: - LifeCycle
@@ -11,6 +13,7 @@ final class PopUpVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingActions()
+        popUpView.updateImage(images[currentIndex])
     }
     
     
@@ -35,13 +38,19 @@ final class PopUpVC: UIViewController {
     
     @objc func leftButtonTapped() {
         print(#function)
+        currentIndex = (currentIndex - 1 + images.count) % images.count
+        popUpView.updateImage(images[currentIndex])
     }
+    
     @objc func rightButtonTapped() {
         print(#function)
-
+        currentIndex = (currentIndex + 1) % images.count
+        popUpView.updateImage(images[currentIndex])
     }
+    
     @objc func tapGesture() {
-        print(#function)
+//        print(#function)
+        print(currentIndex)
         dismiss(animated: true)
     }
 }
