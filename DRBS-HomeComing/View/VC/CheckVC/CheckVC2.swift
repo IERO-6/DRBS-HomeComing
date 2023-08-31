@@ -132,30 +132,54 @@ final class CheckVC2: UIViewController {
         $0.showsHorizontalScrollIndicator = false
         $0.isScrollEnabled = true}
     private var picker: PHPickerViewController!
-    private let galleryImageView = UIImageView().then {
+    private lazy var galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
         $0.image = UIImage(systemName: "camera")
         $0.tintColor = .black
         $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.backgroundColor = UIColor.systemGray6}
-    private let firstGalleryImageView = UIImageView().then {
+        $0.backgroundColor = UIColor.systemGray6
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
+        $0.addGestureRecognizer(tapGesture)
+        $0.isUserInteractionEnabled = true
+    }
+    private lazy var firstImageButton = UIButton().then {
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10}
-    private let secondGalleryImageView = UIImageView().then {
+        $0.tag = 0
+        $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
+    }
+    private lazy var secondImageButton = UIButton().then {
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10}
-    private let thirdGalleryImageView = UIImageView().then {
+        $0.tag = 1
+        $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
+    }
+    private lazy var thirdImageButton = UIButton().then {
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10}
-    private let fourthGalleryImageView = UIImageView().then {
+        $0.tag = 2
+        $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
+    }
+    private lazy var fourthImageButton = UIButton().then {
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10}
-    private let fifthGalleryImageView = UIImageView().then {
+        $0.tag = 3
+        $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
+    }
+    private lazy var fifthImageButton = UIButton().then {
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10}
-    private lazy var imageViewArray: [UIImageView] = [firstGalleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView]     //이미지뷰가 초기화되기전에 초기화되면 에러가 발생할 수 있어 지연저장속성 사용
+        $0.tag = 4
+        $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
+    }
+    private lazy var imageButtonArray: [UIButton] = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
     private let memoTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
         $0.font = UIFont.systemFont(ofSize: 13)
@@ -184,7 +208,6 @@ final class CheckVC2: UIViewController {
         setUpLabel()
         setupNavigationBar()
         initPicker()
-        setupImageViewGesture()
         setUpKeyBoard()
     }
     override func viewDidLayoutSubviews() {
@@ -195,7 +218,7 @@ final class CheckVC2: UIViewController {
         입주가능일button.layer.addBottomLayer()
         계약기간TextField.layer.addBottomLayer()
         let contentHeight = completionButton.frame.maxY + 20
-        let contentWidth = 140 * (imageViewArray.count + 1) + 13 * (imageViewArray.count)
+        let contentWidth = 140 * (imageButtonArray.count + 1) + 13 * (imageButtonArray.count)
         imageScrollView.contentSize = CGSize(width: contentWidth, height: 140)
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)
     }
@@ -208,7 +231,8 @@ final class CheckVC2: UIViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()}
-        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주가능일button, 계약기간TextField, memoTextView, imageScrollView)
+        scrollView.addSubviews(backView, 보증금TextField, 월세TextField, 관리비TextField, 면적TextField, 입주가능일button, 계약기간TextField, memoTextView,
+                               imageScrollView)
         backView.snp.makeConstraints {
             $0.top.equalTo(scrollView)
             $0.left.right.bottom.equalTo(view) // 가로 방향에 대해 화면 너비와 동일하게 설정
@@ -321,7 +345,7 @@ final class CheckVC2: UIViewController {
         view.backgroundColor = .white
         backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, completionButton)
         memoTextView.delegate = self
-        imageScrollView.addSubviews(galleryImageView, firstGalleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView)
+        imageScrollView.addSubviews(galleryImageView, firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton)
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
@@ -341,25 +365,25 @@ final class CheckVC2: UIViewController {
         galleryImageView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.height.width.equalTo(140)}
-        firstGalleryImageView.snp.makeConstraints {
+        firstImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
             $0.leading.equalTo(galleryImageView.snp.trailing).offset(10)
             $0.height.width.equalTo(140)}
-        secondGalleryImageView.snp.makeConstraints {
+        secondImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
-            $0.leading.equalTo(firstGalleryImageView.snp.trailing).offset(10)
+            $0.leading.equalTo(firstImageButton.snp.trailing).offset(10)
             $0.height.width.equalTo(140)}
-        thirdGalleryImageView.snp.makeConstraints {
+        thirdImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
-            $0.leading.equalTo(secondGalleryImageView.snp.trailing).offset(10)
+            $0.leading.equalTo(secondImageButton.snp.trailing).offset(10)
             $0.height.width.equalTo(140)}
-        fourthGalleryImageView.snp.makeConstraints {
+        fourthImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
-            $0.leading.equalTo(thirdGalleryImageView.snp.trailing).offset(10)
+            $0.leading.equalTo(thirdImageButton.snp.trailing).offset(10)
             $0.height.width.equalTo(140)}
-        fifthGalleryImageView.snp.makeConstraints {
+        fifthImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
-            $0.leading.equalTo(fourthGalleryImageView.snp.trailing).offset(10)
+            $0.leading.equalTo(fourthImageButton.snp.trailing).offset(10)
             $0.height.width.equalTo(140)
             $0.trailing.equalTo(imageScrollView.snp.trailing)}
         memoTextView.snp.makeConstraints {
@@ -405,27 +429,6 @@ final class CheckVC2: UIViewController {
         configuration.filter = .images // 이미지만 선택할 수 있게 설정
         picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
-    }
-    private func setupImageViewGesture() {
-        // 모든 이미지뷰에서 앨버으로 접근하려면 새로운 객체를 만들어야 한다.
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openLibrary))
-        galleryImageView.addGestureRecognizer(tapGesture)
-        galleryImageView.isUserInteractionEnabled = true
-        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        firstGalleryImageView.addGestureRecognizer(tapGesture1)
-        firstGalleryImageView.isUserInteractionEnabled = true
-        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        secondGalleryImageView.addGestureRecognizer(tapGesture2)
-        secondGalleryImageView.isUserInteractionEnabled = true
-        let tapGesture3 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        thirdGalleryImageView.addGestureRecognizer(tapGesture3)
-        thirdGalleryImageView.isUserInteractionEnabled = true
-        let tapGesture4 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        fourthGalleryImageView.addGestureRecognizer(tapGesture4)
-        fourthGalleryImageView.isUserInteractionEnabled = true
-        let tapGesture5 = UITapGestureRecognizer(target: self, action: #selector(viewImages))
-        fifthGalleryImageView.addGestureRecognizer(tapGesture5)
-        fifthGalleryImageView.isUserInteractionEnabled = true
     }
     
     //MARK: - Actions
@@ -510,21 +513,19 @@ final class CheckVC2: UIViewController {
             fatalError("Unknown authorization status.")
         }
     }
-    @objc func viewImages(_ sender: UITapGestureRecognizer) {
+    
+    @objc func imageButtonTapped(_ sender: UIButton) {
+        guard sender.currentImage != nil else { return }
         let popUpVC = PopUpVC()
         popUpVC.modalPresentationStyle = .overFullScreen
         // 모든 이미지를 설정
-        popUpVC.images = [
-            firstGalleryImageView.image,
-            secondGalleryImageView.image,
-            thirdGalleryImageView.image,
-            fourthGalleryImageView.image,
-            fifthGalleryImageView.image,
-        ]
-        // 선택한 이미지의 인덱스를 설정
-        if let imageView = sender.view as? UIImageView {
-            popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === imageView.image }) ?? 0
+        for button in imageButtonArray {
+            guard button.currentImage != nil else { continue }
+            popUpVC.images.append(button.currentImage)
         }
+        // 선택한 이미지의 인덱스를 설정
+        popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === sender.currentImage }) ?? 0
+        
         self.present(popUpVC, animated: true)
     }
 }
@@ -575,15 +576,24 @@ extension CheckVC2: PHPickerViewControllerDelegate {
         picker.dismiss(animated: true)
         guard !results.isEmpty else { return }
         DispatchQueue.main.async {
-            self.imageViewArray.forEach { $0.image = .none }
+            self.imageButtonArray.forEach { $0.setImage(.none, for: .normal) }
+
         }
         for (index, result) in results.enumerated() {
             result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                if error != nil {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "에러", message: "사진의 확장자가 알맞지 않습니다.", preferredStyle: .alert)
+                        let goSetting = UIAlertAction(title: "확인", style: .default)
+                        alert.addAction(goSetting)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
                 if let image = object as? UIImage {
                     DispatchQueue.main.async {
-                        if index < self.imageViewArray.count {
-                            self.imageViewArray[index].image = image
-                            self.imageViewArray[index].contentMode = .scaleAspectFill
+                        if index < self.imageButtonArray.count {
+                            self.imageButtonArray[index].setImage(image, for: .normal)
+                            self.imageButtonArray[index].contentMode = .scaleAspectFill
                         }
                     }
                 }
