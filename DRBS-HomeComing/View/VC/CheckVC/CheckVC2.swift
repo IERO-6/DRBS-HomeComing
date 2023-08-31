@@ -590,6 +590,8 @@ extension CheckVC2: PHPickerViewControllerDelegate {
                     }
                 }
                 if let image = object as? UIImage {
+                    self.houseViewModel.uiImages = []
+                    self.houseViewModel.uiImages?.append(image)
                     DispatchQueue.main.async {
                         if index < self.imageButtonArray.count {
                             self.imageButtonArray[index].setImage(image, for: .normal)

@@ -28,9 +28,10 @@ class HouseViewModel {
     var 입주가능일: Date?
     var 계약기간: String?
     var checkList: CheckList?
-    var photo: [String]?
+    var stringImages: [String]?
     var memo: String?
     var rate: Double?
+    var uiImages: [UIImage]?
     
     //MARK: - Output
     
@@ -93,6 +94,31 @@ class HouseViewModel {
         default:
             return 0.0
         }
+    }
+    
+    func makeUIImageToString() {
+        guard let photos = self.uiImages else {
+            print("HouseViewModel 101Line Error")
+            return
+        }
+        for image in photos {
+            if let data = image.pngData() {
+                print("HouseViewModel 106Line Error")
+                let base64encodedData = data.base64EncodedString()
+                self.stringImages = []
+                self.stringImages?.append(base64encodedData)
+            }
+            if let data = image.jpegData(compressionQuality: 0.7) {
+                print("HouseViewModel 112Line Error")
+                let base64encodedData = data.base64EncodedString()
+                self.stringImages = []
+                self.stringImages?.append(base64encodedData)
+            }
+        }
+//        if let data = image.pngData() {
+//            let base64 = data.base64EncodedString()
+//            self.dataModel.base64s[index] = base64
+//        }
     }
     
 }

@@ -10,7 +10,18 @@ final class ApartCell: UICollectionViewCell {
     var apartHouse: House? {
         didSet {
             guard let house = self.apartHouse else { return }
-            self.cellImage.image = UIImage(named: "roomImage.png")
+            
+            if let 사진 = house.사진 {
+                if !사진.isEmpty {
+                    self.cellImage.image = makeStringToUIImage(string: 사진[0])
+                } else {
+                    //이미지가 없습니다!
+                    self.cellImage.image = UIImage(systemName: "eye.slash")
+                    self.cellImage.tintColor = .darkGray
+                    
+                }
+            }
+            
             self.titleLabel.text = house.title!
             self.costLabel.text = house.보증금! + "/" + house.월세!
             self.ratingImage.image = UIImage(named: "star")
@@ -29,7 +40,7 @@ final class ApartCell: UICollectionViewCell {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 6
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.image = UIImage(named: "roomImage.png")
+//        $0.image = UIImage(named: "roomImage.png")
         $0.contentMode = .scaleAspectFill
     }
     
@@ -126,6 +137,12 @@ final class ApartCell: UICollectionViewCell {
             $0.centerY.equalTo(ratingLabel)
         }
 
+    }
+    func makeStringToUIImage(string: String) -> UIImage? {
+        if let data = Data(base64Encoded: string, options: .ignoreUnknownCharacters) {
+            return UIImage(data: data)
+        }
+        return nil
     }
     
     //MARK: - Action
