@@ -2,11 +2,13 @@ import UIKit
 import Then
 import SnapKit
 
-//+버튼 눌렀을 때 나오는 화면
 final class CheckVC1: UIViewController {
+    
     //MARK: - Properties
+    
     var nameIndex: Int?
     private let houseViewModel = HouseViewModel()
+    
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
         $0.font = UIFont(name: Constant.font, size: 16)
@@ -96,6 +98,7 @@ final class CheckVC1: UIViewController {
     
     private lazy var livingButtons = [아파트버튼, 투룸버튼, 오피스텔버튼, 원룸버튼]
     private let addressLabel = UILabel().then { $0.text = "주소*" }
+    
     private lazy var addressTextField = UITextField().then {
         $0.placeholder = "경기도 수원시 권선구 매실로 70"
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
@@ -266,6 +269,7 @@ final class CheckVC1: UIViewController {
     }
     
     //MARK: - Actions
+    
     @objc func buttonTapped(_ sender: UIButton) {
         switch sender.currentTitle {
         case "월세", "전세", "매매":
@@ -349,18 +353,19 @@ final class CheckVC1: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         if addressTextField.isFirstResponder {
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if self.view.frame.origin.y == 0 {
-                    self.view.frame.origin.y -= keyboardSize.height / 5
+                let textFieldBottom = addressTextField.frame.origin.y + addressTextField.frame.size.height
+                let keyboardTop = view.frame.size.height - keyboardSize.height
+                let offset = textFieldBottom - keyboardTop + 20
+                if offset > 0 {
+                    self.view.frame.origin.y = -offset
                 }
             }
         }
     }
-    
+
     @objc func keyboardWillHide(notification: NSNotification) {
-        if addressTextField.isFirstResponder {
-            if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y = 0
-            }
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
         }
     }
 
