@@ -572,10 +572,11 @@ extension CheckVC2: CalendarDelegate {
 //MARK: - PHPickerViewControllerDelegate
 extension CheckVC2: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        guard !results.isEmpty else { return }
         DispatchQueue.main.async {
             self.imageViewArray.forEach { $0.image = .none }
         }
-        picker.dismiss(animated: true)
         for (index, result) in results.enumerated() {
             result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
                 if let image = object as? UIImage {
