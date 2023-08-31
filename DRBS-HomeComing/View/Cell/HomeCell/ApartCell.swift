@@ -13,7 +13,7 @@ final class ApartCell: UICollectionViewCell {
             
             if let 사진 = house.사진 {
                 if !사진.isEmpty {
-                    self.cellImage.image = makeStringToUIImage(string: 사진[0])
+                    self.cellImage.image = 사진[0].toImage()
                 } else {
                     //이미지가 없습니다!
                     self.cellImage.image = UIImage(systemName: "eye.slash")

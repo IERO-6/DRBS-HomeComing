@@ -467,9 +467,11 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.checkList = self.checkListUIView.checkViewModel.makeCheckListModel()
         self.houseViewModel.면적 = self.면적TextField.text
         self.houseViewModel.계약기간 = self.계약기간TextField.text
-//        self.houseViewModel.photo = 여기에 사진 넣는 메서드
         self.houseViewModel.memo = self.memoTextView.text
+        self.houseViewModel.makeUIImageToString()
         rateVC.houseViewModel = self.houseViewModel
+        print("UIImage는 지금 이만큼입니다\(rateVC.houseViewModel.uiImages)")
+        print(rateVC.houseViewModel.stringImages.count)
         self.present(rateVC, animated: true)
     }
     @objc func textFieldTapped() {
@@ -577,7 +579,6 @@ extension CheckVC2: PHPickerViewControllerDelegate {
         guard !results.isEmpty else { return }
         DispatchQueue.main.async {
             self.imageButtonArray.forEach { $0.setImage(.none, for: .normal) }
-
         }
         for (index, result) in results.enumerated() {
             result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
@@ -590,8 +591,7 @@ extension CheckVC2: PHPickerViewControllerDelegate {
                     }
                 }
                 if let image = object as? UIImage {
-                    self.houseViewModel.uiImages = []
-                    self.houseViewModel.uiImages?.append(image)
+                    self.houseViewModel.uiImages.append(image)
                     DispatchQueue.main.async {
                         if index < self.imageButtonArray.count {
                             self.imageButtonArray[index].setImage(image, for: .normal)

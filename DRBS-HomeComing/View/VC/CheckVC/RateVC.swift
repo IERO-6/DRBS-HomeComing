@@ -73,13 +73,13 @@ final class RateVC: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
         configureUI()
-                settingModal()
+        settingModal()
         
     }
     //MARK: - Helpers
     private func configureUI() {
+        self.view.backgroundColor = .white
         view.addSubviews(mainTitleLabel, subTitleLabel,
                          imageStackView, saveButton)
         imageStackView.addArrangedSubviews(firstImageView, secondImageView,
@@ -150,9 +150,7 @@ final class RateVC: UIViewController {
     @objc func saveButtonTapped() {
         self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         self.houseViewModel.makeHouseModel()
-        self.houseViewModel.makeUIImageToString()
+//        self.houseViewModel.makeUIImageToString()
         NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
-        removeNavStack()
     }
-    
 }
