@@ -6,7 +6,7 @@ final class HomeVC: UIViewController {
     //MARK: - Properties
     // 뷰컨트롤러가 뷰모델을 소유
     private var viewModel = HouseViewModel()
-    private let categories = ["아파트", "원룸", "오피스텔", "북마크"]
+    private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
     private lazy var tableView = UITableView()
     var homeVChouses: [House]?
     
@@ -72,7 +72,7 @@ final class HomeVC: UIViewController {
            self.navigationController?.pushViewController(settingVC, animated: true)
     }
     @objc func headButtonTapped() {
-        let detailVC = DetailTV()
+        let detailVC = DetailVC()
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     

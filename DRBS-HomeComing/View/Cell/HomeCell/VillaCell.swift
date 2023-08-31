@@ -3,13 +3,13 @@ import SnapKit
 import Then
 
 
-final class OfficeCell: UICollectionViewCell {
+final class VillaCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var officeHouse: House? {
+    var villaHouse: House? {
         didSet {
-            guard let house = self.officeHouse else { return }
+            guard let house = self.villaHouse else { return }
             self.cellImage.image = UIImage(named: "roomImage.png")
             self.titleLabel.text = house.title!
             self.costLabel.text = house.보증금! + "/" + house.월세!
@@ -82,7 +82,7 @@ final class OfficeCell: UICollectionViewCell {
     
     // MARK: - Helpers
     private func configureCell(image: UIImage, title: String, cost: String, rating: Float) {
-        guard let house = self.officeHouse else { return }
+        guard let house = self.villaHouse else { return }
         
         DispatchQueue.main.async {
             self.cellImage.image = UIImage(named: "roomImage.png")
