@@ -6,7 +6,6 @@ final class PopUpVC: UIViewController {
     //MARK: - Properties
     var images: [UIImage?] = [] // 모든 이미지를 포함하는 배열
     var currentIndex: Int = 0 // 현재 표시된 이미지의 인덱스
-    
     lazy var popUpView = PopUpView()
         
     //MARK: - LifeCycle

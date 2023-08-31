@@ -22,9 +22,7 @@ final class PopUpView: UIView {
         $0.tintColor = .white
     }
     
-    
     //MARK: - LifeCycle
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()

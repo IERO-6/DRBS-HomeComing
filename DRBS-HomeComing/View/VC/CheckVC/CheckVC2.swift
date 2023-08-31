@@ -13,8 +13,7 @@ final class CheckVC2: UIViewController {
     private lazy var backView = UIView().then {$0.backgroundColor = .white}
     private let 보증금 = UILabel().then {
         $0.text = "보증금*"
-        $0.font = UIFont(name: Constant.font, size: 16)
-    }
+        $0.font = UIFont(name: Constant.font, size: 16)}
     private let 보증금TextField = UITextField().then {
         $0.placeholder = "000 "
         $0.textAlignment = .right
@@ -35,8 +34,7 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
+        $0.keyboardType = .numbersAndPunctuation}
     private let 관리비 = UILabel().then {$0.text = "관리비" }
     var 관리비TextField = UITextField().then {
         $0.placeholder = "0"
@@ -46,8 +44,7 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
+        $0.keyboardType = .numbersAndPunctuation}
     private let 관리비미포함 = UILabel().then {$0.text = "관리비 미포함 목록"}
     private lazy var 전기버튼 = UIButton().then {
         $0.setTitle("전기", for: .normal)
@@ -107,15 +104,13 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
+        $0.keyboardType = .numbersAndPunctuation}
     private let 입주가능일 = UILabel().then {$0.text = "입주 가능일"}
     private lazy var 입주가능일button = UIButton().then {
         $0.setTitle("e) 23.08.28", for: .normal)
         $0.setTitleColor(UIColor.systemGray4, for: .normal)
         $0.contentHorizontalAlignment = .left
-        $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)
-    }
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)}
     private let 계약기간 = UILabel().then {$0.text = "계약기간"}
     private let 계약기간TextField = UITextField().then {
         $0.placeholder = "0"
@@ -124,8 +119,7 @@ final class CheckVC2: UIViewController {
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
-        $0.keyboardType = .numbersAndPunctuation
-    }
+        $0.keyboardType = .numbersAndPunctuation}
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
         $0.font = UIFont(name: Constant.font, size: 18)}
@@ -136,8 +130,7 @@ final class CheckVC2: UIViewController {
     private lazy var imageScrollView = UIScrollView(frame: self.view.frame).then {
         $0.isPagingEnabled = true
         $0.showsHorizontalScrollIndicator = false
-        $0.isScrollEnabled = true
-    }
+        $0.isScrollEnabled = true}
     private var picker: PHPickerViewController!
     private let galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
@@ -146,12 +139,10 @@ final class CheckVC2: UIViewController {
         $0.contentMode = .scaleAspectFit
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.backgroundColor = UIColor.systemGray6
-    }
+        $0.backgroundColor = UIColor.systemGray6}
     private let firstGalleryImageView = UIImageView().then {
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10
-    }
+        $0.layer.cornerRadius = 10}
     private let secondGalleryImageView = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10}
@@ -164,7 +155,6 @@ final class CheckVC2: UIViewController {
     private let fifthGalleryImageView = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10}
-    
     private lazy var imageViewArray: [UIImageView] = [firstGalleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView]     //이미지뷰가 초기화되기전에 초기화되면 에러가 발생할 수 있어 지연저장속성 사용
     private let memoTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
@@ -196,12 +186,6 @@ final class CheckVC2: UIViewController {
         initPicker()
         setupImageViewGesture()
         setUpKeyBoard()
-        보증금TextField.delegate = self
-        월세TextField.delegate = self
-        관리비TextField.delegate = self
-        면적TextField.delegate = self
-        계약기간TextField.delegate = self
-        memoTextView.delegate = self
     }
     override func viewDidLayoutSubviews() {
         보증금TextField.layer.addBottomLayer()
@@ -234,6 +218,8 @@ final class CheckVC2: UIViewController {
     private func configureUI() {
         view.backgroundColor = .white
         backView.addSubviews(보증금, 월세, 관리비, 관리비미포함, 전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼, separatorLine)
+        보증금TextField.delegate = self
+        월세TextField.delegate = self
         보증금.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.leading.equalToSuperview().offset(20)}
@@ -299,6 +285,9 @@ final class CheckVC2: UIViewController {
     private func configureUI2() {
         view.backgroundColor = .white
         backView.addSubviews(면적, 입주가능일, 계약기간, separatorLine2)
+        관리비TextField.delegate = self
+        면적TextField.delegate = self
+        계약기간TextField.delegate = self
         면적.snp.makeConstraints {
             $0.top.equalTo(separatorLine.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(20)}
@@ -331,6 +320,7 @@ final class CheckVC2: UIViewController {
     private func configureUI3() {
         view.backgroundColor = .white
         backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, completionButton)
+        memoTextView.delegate = self
         imageScrollView.addSubviews(galleryImageView, firstGalleryImageView, secondGalleryImageView, thirdGalleryImageView, fourthGalleryImageView, fifthGalleryImageView)
         checkListLabel.snp.makeConstraints {
             $0.top.equalTo(separatorLine2.snp.bottom).offset(30)
@@ -347,8 +337,7 @@ final class CheckVC2: UIViewController {
             $0.top.equalTo(recodeLabel.snp.bottom).offset(20)
             $0.leading.equalTo(checkListLabel)
             $0.trailing.equalTo(면적TextField)
-            $0.height.equalTo(140)
-        }
+            $0.height.equalTo(140)}
         galleryImageView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.height.width.equalTo(140)}
@@ -384,7 +373,6 @@ final class CheckVC2: UIViewController {
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(56)}
     }
-    
     private func setUpLabel() {
         //*만 빨갛게 바꾸는 콛
         self.월세.text = self.houseViewModel.tradingType! + "*" // 월세,전세,매매버튼 반영
@@ -400,13 +388,11 @@ final class CheckVC2: UIViewController {
             texts.attributedText = attribtuedString
         }
     }
-    
     private func setUpKeyBoard() {
         // 다른 곳을 누르면 키보드가 내려가게 됨
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
-    }
-    
+}
     private func setupNavigationBar() {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "추가하기"
@@ -549,21 +535,16 @@ extension CheckVC2: UITextFieldDelegate {
         textField.delegate = self
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // check if the replacementString is a number or dot
         let allowedCharacters = CharacterSet(charactersIn:".0123456789")
         let characterSet = CharacterSet(charactersIn: string)
         if !allowedCharacters.isSuperset(of: characterSet) {
             return false
         }
-        
-        // check if the textfield's new text will be <= 6
         let currentString: NSString = (textField.text ?? "") as NSString
         let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
         if newString.length > 6 {
             return false
         }
-
-        // allow the change
         return true
     }
 }
