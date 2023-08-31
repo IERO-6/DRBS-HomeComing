@@ -1,39 +1,30 @@
-//
-//  DetailTV.swift
-//  DRBS-HomeComing
-//
-//  Created by 김성호 on 2023/08/14.
-//
-
 import UIKit
+import SnapKit
+import Then
 
-final class DetailTV: UIViewController {
+final class DetailVC: UIViewController {
     //MARK: - Properties
-
-    
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(DetailTVCell.self, forCellReuseIdentifier: DetailTVCell.identifier)
-        return tableView
-    }()
+    private lazy var tableView = UITableView()
     
     //MARK: - LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        setupNavigationBar()
-        configure()
-        addSubView()
-        autoLayout()
+        configureUI()
+        settingNav()
     }
 
     
     //MARK: - Helpers
+    private func configureUI() {
+        view.backgroundColor = .white
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
     
-    func setupNavigationBar() {
+    private func settingNav() {
         self.navigationController?.navigationBar.topItem?.title = ""
         let checkVC1 = CheckVC1()
         print(checkVC1.nameIndex)
@@ -53,6 +44,13 @@ final class DetailTV: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
     }
     
+    private func settingTV() {
+        tableView.register(DetailCell.self, forCellReuseIdentifier: Constant.Identifier.detailCell.rawValue)
+        tableView.dataSource = self
+        tableView.rowHeight = 290
+        tableView.delegate = self
+    }
+    
     //MARK: - Actions
     
     @objc public func plusButtonTapped() {
@@ -62,38 +60,14 @@ final class DetailTV: UIViewController {
     }
 }
 
-//MARK: - Extensions
-
-
-extension DetailTV {
-    
-    private func configure() {
-        tableView.dataSource = self
-        tableView.rowHeight = 290
-        tableView.delegate = self
-    }
-    
-    private func addSubView() {
-        view.addSubview(tableView)
-    }
-    
-    private func autoLayout() {
-        tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-}
-
 //MARK: - UITableViewDataSource
-
-extension DetailTV : UITableViewDataSource {
+extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: DetailTVCell.identifier, for: indexPath) as! DetailTVCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.detailCell.rawValue, for: indexPath) as! DetailCell
         
         return cell
     }
@@ -101,8 +75,7 @@ extension DetailTV : UITableViewDataSource {
 }
 
 //MARK: - UITableViewDelegate
-
-extension DetailTV : UITableViewDelegate {
+extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select \(indexPath.row)")
     }
