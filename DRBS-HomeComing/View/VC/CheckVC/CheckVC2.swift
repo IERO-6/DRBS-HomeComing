@@ -14,7 +14,6 @@ final class CheckVC2: UIViewController {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false
     }
-    2
     private lazy var backView = UIView().then { $0.backgroundColor = .white }
     
     private let 보증금 = UILabel().then {
