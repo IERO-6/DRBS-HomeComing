@@ -1,5 +1,5 @@
-# DRBS
 
+![DRBS Banner](https://github.com/Insuuu24/DRBS-HomeComing/assets/117909631/70e8e5d3-0faa-424a-84cc-d439d0fd95e5)
 
 ## iOS Developers
 
@@ -7,7 +7,7 @@
 |:---:|:---:|:---:|:---:|
 |[유준호](https://github.com/ryuwon2407)|[김은상](https://github.com/kes3035)|[박인수](https://github.com/Insuuu24)|[김성호](https://github.com/Enoun)|
 
-[😶‍🌫️ 팀원들 트러블 슈팅 보러가기 😶‍🌫️](https://ryuwon-project.notion.site/DRBS-af392606cb8c4c2dac5e704a33efd2bc?pvs=4)
+[😶‍🌫️ 팀원 트러블 슈팅 보러가기 😶‍🌫️](https://ryuwon-project.notion.site/DRBS-af392606cb8c4c2dac5e704a33efd2bc?pvs=4)
 
 ## 개발 환경 및 라이브러리
 
@@ -29,7 +29,7 @@
 ## Ground Rule
 
 | 제목        | URL                                                                             |
-| ----------- | -------------------------------------------------------------------------------- |
+| ------------ | ---------------------------------------------------------------------------------- |
 |Code Convention|https://ryuwon-project.notion.site/Code-Convention-b7017639c5c64a85bc39c545ef7fef96|
 |Commit Convention|https://ryuwon-project.notion.site/Git-Convention-0bb7afd8770c4d269be25556f693c642|
 |Git Flow|https://www.|

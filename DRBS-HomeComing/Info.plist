@@ -2,12 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치 권한 설정이 필요합니다.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>위치 권한 설정이 필요합니다.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao${KAKAO_APP_KEY}</string>
+			</array>
+		</dict>
+	</array>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-5665531154477823~7245842966</string>
+	<key>KAKAO_APP_KEY</key>
+	<string>${KAKAO_APP_KEY}</string>
 	<key>NSAppTransportSecurity</key>
 	<dict/>
 	<key>UIAppFonts</key>
@@ -39,5 +48,14 @@
 			</array>
 		</dict>
 	</dict>
+    
+    <key>LSApplicationQueriesSchemes</key>
+     <array>
+         <!-- 카카오톡으로 로그인 -->
+         <string>kakaokompassauth</string>
+         <!-- 카카오톡 공유 -->
+         <string>kakaolink</string>
+     </array>
+     
 </dict>
 </plist>

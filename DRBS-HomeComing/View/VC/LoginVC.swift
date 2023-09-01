@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import FirebaseAuth
 
 class LoginVC: UIViewController {
     
@@ -26,14 +27,16 @@ class LoginVC: UIViewController {
         $0.textColor = .white
     }
     
-    let appleLoginButton = UIButton(type: .custom).then {
+    private lazy var appleLoginButton = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "login-apple-button"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(appleLoginButtonTapped), for: .touchUpInside)
     }
     
-    let kakaoLoginButton = UIButton(type: .custom).then {
+    private lazy var kakaoLoginButton = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "login-kakao-button"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFit
+        $0.addTarget(self, action: #selector(kakaoLoginButtonTapped), for: .touchUpInside)
     }
     
     let versionLabel = UILabel().then {
@@ -52,6 +55,8 @@ class LoginVC: UIViewController {
         $0.axis = .vertical
         $0.spacing = 10
     }
+    
+    private lazy var authVM: AuthViewModel = AuthViewModel()
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -104,5 +109,15 @@ class LoginVC: UIViewController {
     }
     
     // MARK: - Action
+    @objc func appleLoginButtonTapped() {
+        print("appleLoginButtonTapped()")
+        /// 애플 로그인 로직
+    }
     
+    @objc func kakaoLoginButtonTapped() {
+        print("kakaoLoginButtonTapped()")
+        authVM.kakaoLogin()
+        
+        /// 비동기라 여기 작성하기가 힘들듯. Combine Publisher 사용..?
+    }
 }
