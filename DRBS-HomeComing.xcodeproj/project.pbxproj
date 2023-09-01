@@ -332,10 +332,10 @@
 			children = (
 				2192EA9E2A90A4BD006AB5B3 /* CheckVC1.swift */,
 				2192EA9C2A90A4BD006AB5B3 /* CheckVC2.swift */,
+				2192EAA22A947740006AB5B3 /* RateVC.swift */,
 				218111A22A9AE938009A82C4 /* PopUpVC.swift */,
 				218111A42A9AECD7009A82C4 /* PopUpView.swift */,
 				2192EA9D2A90A4BD006AB5B3 /* MyHouseVC.swift */,
-				2192EAA22A947740006AB5B3 /* RateVC.swift */,
 				2158BA562A9508160064AFC4 /* CalendarVC.swift */,
 				2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */,
 			);
