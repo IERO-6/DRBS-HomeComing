@@ -18,6 +18,7 @@ final class SettingVC: UIViewController {
     }
     
     private lazy var settingViewModel = SettingsViewModel()
+    private lazy var authVM: AuthViewModel = AuthViewModel()
     
     // MARK: - View Lifecycle
     
@@ -74,8 +75,10 @@ final class SettingVC: UIViewController {
     
     private func showLogoutAlert() {
         let alertController = UIAlertController(title: nil, message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "예", style: .default, handler: { _ in
+        alertController.addAction(UIAlertAction(title: "예", style: .default, handler: { [self] _ in
             // 로그아웃 처리 로직
+            authVM.authLogout()
+            //화면 전환
         }))
         alertController.addAction(UIAlertAction(title: "아니오", style: .cancel, handler: nil))
         self.present(alertController, animated: true, completion: nil)

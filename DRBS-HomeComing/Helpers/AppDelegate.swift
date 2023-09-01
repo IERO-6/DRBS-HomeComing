@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseCore
+import KakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
        func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+           let kakaoAppKey = Bundle.main.infoDictionary?["KAKAO_APP_KEY"] ?? "" ///값 가져오기
+           KakaoSDK.initSDK(appKey: kakaoAppKey as! String) ///kakao SDK init
            
            // 13이상인 경우에는 SceneDelegate에서 이미 초기화 되었으니까 바로 return
            if #available(iOS 13.0, *) {
