@@ -10,23 +10,21 @@ final class ApartCell: UICollectionViewCell {
     var apartHouse: House? {
         didSet {
             guard let house = self.apartHouse else { return }
-            
             if let 사진 = house.사진 {
                 if !사진.isEmpty {
                     self.cellImage.image = 사진[0].toImage()
+                    self.cellImage.contentMode = .scaleAspectFill
                 } else {
-                    //이미지가 없습니다!
-                    let customImage = UIImage(named: "eye.slash")
-                    let newWidth = 30
-                    let newHeight = 30
-                    let newImageRect = CGRect(x: 0, y: 0, width: newWidth, height: newHeight)
-                    UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
-                    customImage?.draw(in: newImageRect)
-                    let newImage = UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(.alwaysOriginal)
-                    UIGraphicsEndImageContext()
-                    self.cellImage.image = newImage
-                    self.cellImage.tintColor = .darkGray
-                    
+                    let emptyImageView = UIImageView().then {
+                        $0.image = UIImage(systemName: "eye.slash")
+                        $0.tintColor = .darkGray
+                        $0.contentMode = .scaleAspectFill
+                    }
+                    self.cellImage.addSubview(emptyImageView)
+                    emptyImageView.snp.makeConstraints {
+                        $0.centerX.centerY.equalToSuperview()
+                        $0.width.height.equalTo(30)
+                    }
                 }
             }
             
@@ -47,9 +45,6 @@ final class ApartCell: UICollectionViewCell {
     private let cellImage = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 6
-        $0.translatesAutoresizingMaskIntoConstraints = false
-//        $0.image = UIImage(named: "roomImage.png")
-        $0.contentMode = .scaleAspectFill
     }
     
     private let titleLabel = UILabel().then {
