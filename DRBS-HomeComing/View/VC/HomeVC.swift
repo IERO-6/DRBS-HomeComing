@@ -7,7 +7,7 @@ final class HomeVC: UIViewController {
     // 뷰컨트롤러가 뷰모델을 소유
     private var viewModel = HouseViewModel()
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
-    private lazy var tableView = UITableView()
+    private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var homeVChouses: [House]?
     
     //MARK: - LifeCycle
@@ -41,7 +41,10 @@ final class HomeVC: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
+        tableView.backgroundColor = .white
         tableView.separatorStyle = .none
+        let navBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: navBarHeight - 20))
         
     }
     
@@ -82,10 +85,12 @@ final class HomeVC: UIViewController {
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
+            headerView.backgroundColor = .white
             let titleButton = UIButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
             headerView.addSubview(titleButton)
             titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
             titleButton.setTitleColor(.darkGray, for: .normal)
+        titleButton.backgroundColor = .white
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
             titleButton.addTarget(self, action: #selector(headButtonTapped), for: .touchUpInside)

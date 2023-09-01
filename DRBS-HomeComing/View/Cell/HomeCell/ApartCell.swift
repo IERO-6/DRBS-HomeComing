@@ -16,7 +16,15 @@ final class ApartCell: UICollectionViewCell {
                     self.cellImage.image = 사진[0].toImage()
                 } else {
                     //이미지가 없습니다!
-                    self.cellImage.image = UIImage(systemName: "eye.slash")
+                    let customImage = UIImage(named: "eye.slash")
+                    let newWidth = 30
+                    let newHeight = 30
+                    let newImageRect = CGRect(x: 0, y: 0, width: newWidth, height: newHeight)
+                    UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+                    customImage?.draw(in: newImageRect)
+                    let newImage = UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(.alwaysOriginal)
+                    UIGraphicsEndImageContext()
+                    self.cellImage.image = newImage
                     self.cellImage.tintColor = .darkGray
                     
                 }
