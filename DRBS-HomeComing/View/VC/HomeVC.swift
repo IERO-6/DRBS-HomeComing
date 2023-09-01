@@ -22,7 +22,7 @@ final class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.configureNav()
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     //MARK: - Helpers
@@ -90,10 +90,12 @@ final class HomeVC: UIViewController {
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
+            headerView.backgroundColor = .white
             let titleButton = UIButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
             headerView.addSubview(titleButton)
             titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
             titleButton.setTitleColor(.darkGray, for: .normal)
+        titleButton.backgroundColor = .white
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
             titleButton.addTarget(self, action: #selector(headButtonTapped), for: .touchUpInside)

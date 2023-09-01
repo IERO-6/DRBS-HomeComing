@@ -28,14 +28,15 @@ class HouseViewModel {
     var 입주가능일: Date?
     var 계약기간: String?
     var checkList: CheckList?
-    var photo: [String]?
+    var stringImages: [String] = []
     var memo: String?
     var rate: Double?
+    var uiImages: [UIImage] = []
     
     //MARK: - Output
     
     func makeHouseModel() {
-        self.house = House(uid: "자동으로 만들어지겠지", title: self.name, isBookMarked: true, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: [], 별점: self.rate)
+        self.house = House(uid: "자동으로 만들어지겠지", title: self.name, isBookMarked: false, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: stringImages, 별점: self.rate)
     }
     
     
@@ -93,6 +94,19 @@ class HouseViewModel {
         default:
             return 0.0
         }
+    }
+    
+    func makeUIImageToString() {
+        for image in uiImages {
+            guard let convertedImage = image.toPngString() else {
+                print("HouseViewModel 107Line Error: toPng실패")
+                return
+            }
+            self.stringImages.append(convertedImage)
+        }
+        print(self.stringImages)
+
+
     }
     
 }
