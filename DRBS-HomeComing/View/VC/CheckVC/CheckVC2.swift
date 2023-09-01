@@ -623,6 +623,9 @@ final class CheckVC2: UIViewController {
     
     @objc func handleTap() {
         self.view.endEditing(true)
+        if memoTextView.isFirstResponder {
+            scrollView.contentOffset = originalContentOffset
+        }
     }
     
     // 앨범 권한설정(사진 다운로드때문에)
@@ -669,22 +672,25 @@ final class CheckVC2: UIViewController {
         self.present(popUpVC, animated: true)
     }
     // 키보드가 나타날 때 memoTextView를 이동시키는 함수
+    var originalContentOffset: CGPoint = .zero
+
     @objc func keyboardWillShow(notification: NSNotification) {
         if memoTextView.isFirstResponder {
+            originalContentOffset = scrollView.contentOffset
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
                 let memoTextViewFrame = memoTextView.convert(memoTextView.bounds, to: self.view)
-                let keyboardTop = view.frame.size.height - keyboardSize.height // 화면의 높이에 키보드 사이즈 빼서 키보드의 위쪽 크기를 알 수 있다
+                let keyboardTop = view.frame.size.height - keyboardSize.height
                 let offset = memoTextViewFrame.maxY - keyboardTop + 20
                 if offset > 0 {
-                    scrollView.contentOffset.y += offset //키보드 위에 위치시킨다
+                    scrollView.contentOffset.y += offset
                 }
             }
         }
     }
-    // 키보드가 사라질 때 memoTextView를 원래 위치로 되돌리는 함수
+
     @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
+        if memoTextView.isFirstResponder {
+            scrollView.contentOffset = originalContentOffset
         }
     }
     deinit {
