@@ -9,25 +9,29 @@ import SnapKit
 final class MapVC: UIViewController {
     //MARK: - Properties
     
-    private lazy var locationViewModel = LocationViewModel()
+    lazy var locationViewModel = LocationViewModel()
+    
     private lazy var mkMapView = MKMapView(frame: self.view.frame)
+    
     private lazy var locationManager = CLLocationManager()
     
     private lazy var currentLocationButton = UIButton().then {
         $0.setImage(UIImage(systemName: "location"), for: .normal)
         $0.backgroundColor = .white
         $0.clipsToBounds = true
-        $0.tintColor = .gray
-        $0.addTarget(self, action: #selector(currentLocationTapped), for: .touchUpInside)}
+        $0.tintColor = .darkGray
+        $0.addTarget(self, action: #selector(currentLocationTapped), for: .touchUpInside)
+    }
     
+    private lazy var separateLine = UIView().then {$0.backgroundColor = .darkGray}
+
     private lazy var searchButton = UIButton().then {
         $0.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         $0.backgroundColor = .white
         $0.clipsToBounds = true
-        $0.tintColor = .gray
-        $0.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)}
-    
-    private lazy var separateLine = UIView().then {$0.backgroundColor = .systemGray4}
+        $0.tintColor = .darkGray
+        $0.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    }
     
     private lazy var stackView = UIStackView().then {
         $0.spacing = 0
@@ -35,7 +39,8 @@ final class MapVC: UIViewController {
         $0.distribution = .fill
         $0.alignment = .fill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = self.view.frame.width/30}
+        $0.layer.cornerRadius = self.view.frame.width/30
+    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -77,6 +82,7 @@ final class MapVC: UIViewController {
         self.mkMapView.isPitchEnabled = false
         self.mkMapView.isRotateEnabled = false
         self.mkMapView.delegate = self
+        self.locationManager.delegate = self
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
@@ -86,62 +92,40 @@ final class MapVC: UIViewController {
         }
     }
     
-    private func settingCLLocationManager() { locationManager.delegate = self }
     
     private func removeAllAnnotations() {
         let annotations = mkMapView.annotations
-        if !annotations.isEmpty {for annotation in annotations {mkMapView.removeAnnotation(annotation)}}
+        if !annotations.isEmpty {
+            for annotation in annotations {
+                mkMapView.removeAnnotation(annotation)
+            }
+        }
     }
     
     //MARK: - 권한설정탭(아마불변)
     private func checkDeviceService() {
-        // 디바이스 자체 위치 서비스 관련 로직
         DispatchQueue.global(qos: .userInitiated).async {
             guard CLLocationManager.locationServicesEnabled() else {
-                // 디바이스 자체 위치 서비스를 켜려면 설정으로 이동하는 함수
-                self.showRequestLocationServiceAlert()
+                self.goSettingAlert()
                 return
             }
-            // 앱에 대해 위치 권한 설정
             let authStatus = self.locationManager.authorizationStatus
             self.checkCurrentLocationAuth(authStatus)
         }
     }
     
     private func checkCurrentLocationAuth(_ status: CLAuthorizationStatus) {
-        // 디바이스 확인해서 허용이면, CLAuthorizationStatus를 통해 앱 설정
         switch status {
         case .notDetermined:
-            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
-            locationManager.requestWhenInUseAuthorization()
-            
-            // 권한 요청을 보낸다.
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.requestWhenInUseAuthorization()
         case .restricted, .denied:
-            // 안심 자녀 서비스 등 위치 서비스 활성화가 제한된 상태
-            // 시스템 설정에서 설정값을 변경하도록 유도
-            showRequestLocationServiceAlert()
+            self.goSettingAlert()
         case .authorizedWhenInUse, .authorizedAlways:
             settingMKMapView()
-            settingCLLocationManager()
-            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
-            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
-            locationManager.startUpdatingLocation()
+            self.locationManager.startUpdatingLocation()
         default:
             print("디버깅: default")
-        }
-    }
-    private func showRequestLocationServiceAlert() {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
-            let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
-                if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(appSetting)
-                }
-            }
-            alert.addAction(goSetting)
-            self.present(alert, animated: true)
         }
     }
     
@@ -149,7 +133,16 @@ final class MapVC: UIViewController {
     //MARK: - Actions
     @objc func currentLocationTapped() {
         let status = self.locationManager.authorizationStatus
-        checkCurrentLocationAuth(status)
+        switch status {
+        case .notDetermined:
+            self.goSettingAlert()
+        case .restricted, .denied:
+            self.goSettingAlert()
+        case .authorizedWhenInUse, .authorizedAlways:
+            self.locationManager.startUpdatingLocation()
+        default:
+            print("디버깅: default")
+        }
     }
     
     @objc func searchButtonTapped() {
@@ -164,7 +157,6 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let modalVC = ModalVC()
         modalVC.modalPresentationStyle = .pageSheet
-        //모달VC에 데이터 전달 => viewModel을 통해
         present(modalVC, animated: true)
     }
     
@@ -193,31 +185,13 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentRegion = mkMapView.region
-        let koreaCoordinateRegion = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5), // 대한민국 중심 좌표
-            span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0) // 지도 확대 정도
-        )
-        // 대한민국 좌표 범위 밖으로 나가려고 할 때, 대한민국 좌표 범위로 제한.
-        if currentRegion.center.latitude < koreaCoordinateRegion.center.latitude - koreaCoordinateRegion.span.latitudeDelta / 2 {
-            // 위로 스크롤 시
-            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
-        } else if currentRegion.center.latitude > koreaCoordinateRegion.center.latitude + koreaCoordinateRegion.span.latitudeDelta / 2 {
-            // 아래로 스크롤 시
-            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
-        } else if currentRegion.center.longitude < koreaCoordinateRegion.center.longitude - koreaCoordinateRegion.span.longitudeDelta / 2 {
-            // 왼쪽으로 스크롤 시
-            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
-        } else if currentRegion.center.longitude > koreaCoordinateRegion.center.longitude + koreaCoordinateRegion.span.longitudeDelta / 2 {
-            // 오른쪽으로 스크롤 시
-            mkMapView.setRegion(koreaCoordinateRegion, animated: true)
-        }
+        mapView.limitRegionToKorea(currentRegion: currentRegion)
         self.locationViewModel.currentVisible(region: mapView.region)
-        self.locationViewModel.locationsWhenRegionChanged()
         DispatchQueue.main.async {
             self.removeAllAnnotations()
             let annotations = self.locationViewModel.getAnnotations()
             for customPin in annotations {
-                self.mkMapView.addAnnotation(customPin)
+                mapView.addAnnotation(customPin)
             }
         }
     }

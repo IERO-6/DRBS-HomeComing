@@ -24,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             DispatchQueue.global().async {
                 NetworkingManager.shared.fetchHouses { houses in
                     vc1.homeVChouses = houses
+                    vc2.locationViewModel.houses = houses
                     DispatchQueue.main.async {
                         tabbar.viewControllers = [nav1, nav2]
                         window.rootViewController = tabbar // 자신의 시작 ViewController

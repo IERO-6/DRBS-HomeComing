@@ -268,10 +268,10 @@ final class MyHouseVC: UIViewController {
     }
         
         private func settingNav() {
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-            self.navigationController?.navigationBar.isTranslucent = true
+            self.navigationController?.navigationBar.backgroundColor = Constant.appColor
+//            self.navigationController?.navigationBar.shadowImage = UIImage()
+//            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            self.navigationController?.navigationBar.isTranslucent = false
             self.navigationController?.navigationBar.topItem?.title = ""
             self.navigationController?.navigationBar.tintColor = .white
         }

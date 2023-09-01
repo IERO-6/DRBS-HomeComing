@@ -187,22 +187,22 @@ final class DetailCell: UITableViewCell {
         firstImageView.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.size.width-60)/4)
         }
         secondImageView.snp.makeConstraints {
             $0.leading.equalTo(firstImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.size.width-60)/4)
         }
         thirdImageView.snp.makeConstraints {
             $0.leading.equalTo(secondImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.size.width-60)/4)
         }
         fourthImageView.snp.makeConstraints {
             $0.leading.equalTo(thirdImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.size.width-60)/4)
         }
         memoTextView.snp.makeConstraints {
             $0.top.equalTo(firstImageView.snp.bottom).offset(12)
