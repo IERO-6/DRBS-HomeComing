@@ -24,6 +24,7 @@ disabled_rules:
     - function_body_length              # 함수내부 코드길이 제한
     - comma
     - type_body_length
+    - file_length
     
 # 선택적으로 추가할 규칙
 opt_in_rules:
