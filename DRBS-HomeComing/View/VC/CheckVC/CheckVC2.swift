@@ -14,7 +14,6 @@ final class CheckVC2: UIViewController {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false
     }
-    
     private lazy var backView = UIView().then { $0.backgroundColor = .white }
     
     private let 보증금 = UILabel().then {
@@ -130,6 +129,7 @@ final class CheckVC2: UIViewController {
     
     private let 면적TextField = UITextField().then {
         $0.placeholder = "면적을 입력해주세요"
+        $0.textAlignment = .right
         let label = UILabel()
         label.text = "㎡"
         label.sizeToFit()
@@ -143,14 +143,12 @@ final class CheckVC2: UIViewController {
     private lazy var 입주가능일button = UIButton().then {
         $0.setTitle("e) 23.08.28", for: .normal)
         $0.setTitleColor(UIColor.systemGray4, for: .normal)
-        $0.contentHorizontalAlignment = .left
-        $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)
-    }
-    
-    private let 계약기간 = UILabel().then { $0.text = "계약기간" }
-    
+        $0.contentHorizontalAlignment = .right
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)}
+    private let 계약기간 = UILabel().then {$0.text = "계약기간"}
     private let 계약기간TextField = UITextField().then {
         $0.placeholder = "0"
+        $0.textAlignment = .right
         let label = UILabel()
         label.text = " 년"
         label.sizeToFit()
@@ -264,6 +262,8 @@ final class CheckVC2: UIViewController {
         configureNav()
         initPicker()
         setUpKeyBoard()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -623,6 +623,9 @@ final class CheckVC2: UIViewController {
     
     @objc func handleTap() {
         self.view.endEditing(true)
+        if memoTextView.isFirstResponder {
+            scrollView.contentOffset = originalContentOffset
+        }
     }
     
     // 앨범 권한설정(사진 다운로드때문에)
@@ -667,6 +670,32 @@ final class CheckVC2: UIViewController {
         popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === sender.currentImage }) ?? 0
         
         self.present(popUpVC, animated: true)
+    }
+    // 키보드가 나타날 때 memoTextView를 이동시키는 함수
+    var originalContentOffset: CGPoint = .zero
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if memoTextView.isFirstResponder {
+            originalContentOffset = scrollView.contentOffset
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                let memoTextViewFrame = memoTextView.convert(memoTextView.bounds, to: self.view)
+                let keyboardTop = view.frame.size.height - keyboardSize.height
+                let offset = memoTextViewFrame.maxY - keyboardTop + 20
+                if offset > 0 {
+                    scrollView.contentOffset.y += offset
+                }
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if memoTextView.isFirstResponder {
+            scrollView.contentOffset = originalContentOffset
+        }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }
 
