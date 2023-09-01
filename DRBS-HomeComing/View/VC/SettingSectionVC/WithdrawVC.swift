@@ -88,7 +88,8 @@ final class WithdrawVC: UIViewController {
     }
     
     private let contentView = UIView()
-
+    private lazy var authVM: AuthViewModel = AuthViewModel()
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -214,6 +215,9 @@ final class WithdrawVC: UIViewController {
     
     @objc func withdrawButtonTapped() {
         // 회원탈퇴 로직
+        print("withdrawButtonTapped()")
+        
+        authVM.authDelete()
     }
     
     @objc func dismissKeyboard() {

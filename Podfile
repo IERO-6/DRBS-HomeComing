@@ -14,4 +14,7 @@ target 'DRBS-HomeComing' do
   pod 'FirebaseFirestore'
   pod 'FirebaseAnalytics'
   pod 'Google-Mobile-Ads-SDK' 
+  pod 'KakaoSDKCommon'
+  pod 'KakaoSDKAuth'
+  pod 'KakaoSDKUser'
 end
