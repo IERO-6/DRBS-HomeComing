@@ -3,14 +3,16 @@ import SnapKit
 import Then
 
 final class HomeVC: UIViewController {
+    
     //MARK: - Properties
-    // 뷰컨트롤러가 뷰모델을 소유
+    
     private var viewModel = HouseViewModel()
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var homeVChouses: [House]?
     
     //MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -24,29 +26,6 @@ final class HomeVC: UIViewController {
     }
     
     //MARK: - Helpers
-
-    private func configureUI() {
-        view.backgroundColor = .white
-        view.addSubview(tableView)
-        tableView.rowHeight = 170
-        tableView.snp.makeConstraints {
-            $0.top.bottom.right.equalToSuperview()
-            $0.leading.equalToSuperview().offset(15)
-        }
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
-        
-    }
-    private func settingTV() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
-        tableView.backgroundColor = .white
-        tableView.separatorStyle = .none
-        let navBarHeight = navigationController?.navigationBar.frame.height ?? 0
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: navBarHeight - 20))
-        
-    }
     
     private func configureNav() {
         let appearance = UINavigationBarAppearance().then {
@@ -60,7 +39,31 @@ final class HomeVC: UIViewController {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
+
+    private func configureUI() {
+        view.backgroundColor = .white
+        tableView.backgroundColor = .white
+        view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints {
+            $0.top.bottom.right.equalToSuperview()
+            $0.leading.equalToSuperview().offset(15)
+        }
+        
+        let navBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: navBarHeight - 20))
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
+    }
     
+    private func settingTV() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = 170
+        tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
+        tableView.separatorStyle = .none
+    }
     
     //MARK: - Actions
 
@@ -69,19 +72,21 @@ final class HomeVC: UIViewController {
            checkVC.hidesBottomBarWhenPushed = true
            self.navigationController?.pushViewController(checkVC, animated: true)
        }
+    
     @objc func settingButtonTapped() {
            let settingVC = SettingVC()
            settingVC.hidesBottomBarWhenPushed = true
            self.navigationController?.pushViewController(settingVC, animated: true)
     }
+    
     @objc func headButtonTapped() {
         let detailVC = DetailVC()
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
-    
 }
 
 //MARK: - UITableViewDelegate
+
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
@@ -97,19 +102,19 @@ extension HomeVC: UITableViewDelegate {
             titleButton.tag = section
             return headerView
         }
-   
 }
 
 //MARK: - UITableViewDataSource
+
 extension HomeVC: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //섹션별 열의 개수
-        return 1
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         //섹션의 개수
         return 4
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //섹션별 열의 개수
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -123,6 +128,7 @@ extension HomeVC: UITableViewDataSource {
 }
 
 //MARK: - CellSelectedDelegate
+
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
