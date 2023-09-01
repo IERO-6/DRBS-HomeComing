@@ -10,7 +10,24 @@ final class ApartCell: UICollectionViewCell {
     var apartHouse: House? {
         didSet {
             guard let house = self.apartHouse else { return }
-            self.cellImage.image = UIImage(named: "roomImage.png")
+            if let 사진 = house.사진 {
+                if !사진.isEmpty {
+                    self.cellImage.image = 사진[0].toImage()
+                    self.cellImage.contentMode = .scaleAspectFill
+                } else {
+                    let emptyImageView = UIImageView().then {
+                        $0.image = UIImage(systemName: "eye.slash")
+                        $0.tintColor = .darkGray
+                        $0.contentMode = .scaleAspectFill
+                    }
+                    self.cellImage.addSubview(emptyImageView)
+                    emptyImageView.snp.makeConstraints {
+                        $0.centerX.centerY.equalToSuperview()
+                        $0.width.height.equalTo(30)
+                    }
+                }
+            }
+            
             self.titleLabel.text = house.title!
             self.costLabel.text = house.보증금! + "/" + house.월세!
             self.ratingImage.image = UIImage(named: "star")
@@ -28,9 +45,6 @@ final class ApartCell: UICollectionViewCell {
     private let cellImage = UIImageView().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 6
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.image = UIImage(named: "roomImage.png")
-        $0.contentMode = .scaleAspectFill
     }
     
     private let titleLabel = UILabel().then {
@@ -126,6 +140,12 @@ final class ApartCell: UICollectionViewCell {
             $0.centerY.equalTo(ratingLabel)
         }
 
+    }
+    func makeStringToUIImage(string: String) -> UIImage? {
+        if let data = Data(base64Encoded: string, options: .ignoreUnknownCharacters) {
+            return UIImage(data: data)
+        }
+        return nil
     }
     
     //MARK: - Action

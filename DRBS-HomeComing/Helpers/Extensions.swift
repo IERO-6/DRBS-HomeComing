@@ -90,3 +90,27 @@ extension UIWindow {
         }
     }
 }
+
+extension String {
+    func makeStringToUIImage(string: String) -> UIImage? {
+        if let data = Data(base64Encoded: string, options: .ignoreUnknownCharacters) {
+            return UIImage(data: data)
+        }
+        return nil
+    }
+    func toImage() -> UIImage? {
+        if let data = Data(base64Encoded: self, options: .ignoreUnknownCharacters){
+            return UIImage(data: data)
+        }
+        return nil
+    }
+}
+extension UIImage {
+    func toPngString() -> String? {
+        let data = self.pngData()
+//        let encodedString = data?.base64EncodedString(options: .endLineWithLineFeed)
+        let encodedString = data?.base64EncodedString()
+
+        return encodedString
+    }
+}
