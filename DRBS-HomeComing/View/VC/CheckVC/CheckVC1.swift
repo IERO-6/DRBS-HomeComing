@@ -11,7 +11,7 @@ final class CheckVC1: UIViewController {
     
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.font = UIFont(name: Constant.font, size: 16)
     }
     
     private lazy var nameTextField = UITextField().then {
@@ -21,7 +21,7 @@ final class CheckVC1: UIViewController {
     
     private let tradeLabel = UILabel().then {
         $0.text = "거래 방식*"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray
     }
     
@@ -56,7 +56,7 @@ final class CheckVC1: UIViewController {
     
     private let livingLabel = UILabel().then {
         $0.text = "주거 형태*"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.font = UIFont(name: Constant.font, size: 16)
         $0.textColor = .darkGray
     }
     
@@ -206,6 +206,13 @@ final class CheckVC1: UIViewController {
             $0.height.equalTo(45)
         }
         
+//        오피스텔버튼.snp.makeConstraints {
+//            $0.top.equalTo(아파트버튼)
+//            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
+//            $0.width.equalTo(100)
+//            $0.height.equalTo(45)
+//        }
+        
         원룸버튼.snp.makeConstraints {
             $0.top.equalTo(아파트버튼.snp.bottom).offset(10)
             $0.leading.equalTo(아파트버튼)
@@ -295,22 +302,29 @@ final class CheckVC1: UIViewController {
     @objc public func nextButtonTapped() {
         guard let name = self.nameTextField.text,
               let address = self.addressTextField.text,
-                !name.isEmpty &&
-                !address.isEmpty &&
-                self.houseViewModel.tradingType != nil &&
-                self.houseViewModel.livingType != nil else {
-                self.presentAlert(alertTitle: "항목 입력을 완료해주세요.",
-                                  message: "모든 항목이 입력되지 않았습니다.",
-                                  confirmMessage: "확인")
+            !name.isEmpty && !address.isEmpty && self.houseViewModel.tradingType != nil && self.houseViewModel.livingType != nil else {
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "항목 입력을 완료해주세요.", message: "모든 항목이 입력되지 않았습니다.", preferredStyle: .alert)
+                let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                }
+                alert.addAction(confirm)
+                self.present(alert, animated: true)
+            }
             return
         }
+        
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
-                    self.presentAlert(alertTitle: "주소 형식이 맞지 않습니다.",
-                                      message: "주소를 다시 입력해주세요",
-                                      confirmMessage: "확인")
-                print("\(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "주소 형식이 맞지 않습니다.", message: "주소를 다시 입력해주세요.", preferredStyle: .alert)
+                    let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                    }
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                }
+                print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
+//                self.houseViewModel.address = coordinate
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
@@ -332,7 +346,9 @@ final class CheckVC1: UIViewController {
         }
     }
     
-    @objc func dismissKeyboard() { view.endEditing(true) }
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if addressTextField.isFirstResponder {

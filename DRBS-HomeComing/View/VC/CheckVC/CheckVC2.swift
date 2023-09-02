@@ -18,7 +18,7 @@ final class CheckVC2: UIViewController {
     
     private let 보증금 = UILabel().then {
         $0.text = "보증금*"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.font = UIFont(name: Constant.font, size: 16)
     }
     
     private let 보증금TextField = UITextField().then {
@@ -34,7 +34,7 @@ final class CheckVC2: UIViewController {
     
     private let 월세 = UILabel().then {
         $0.text = "월세*"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.font = UIFont(name: Constant.font, size: 16)
     }
     
     private let 월세TextField = UITextField().then {
@@ -159,12 +159,12 @@ final class CheckVC2: UIViewController {
     
     private let checkListLabel = UILabel().then {
         $0.text = "체크 리스트"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 18)
+        $0.font = UIFont(name: Constant.font, size: 18)
     }
     
     private let recodeLabel = UILabel().then {
         $0.text = "기록"
-        $0.font = UIFont(name: "Pretendard-Bold", size: 18)
+        $0.font = UIFont(name: Constant.font, size: 18)
     }
     
     private lazy var imageScrollView = UIScrollView(frame: self.view.frame).then {
@@ -652,7 +652,7 @@ final class CheckVC2: UIViewController {
                     }
                 }
             }
-        default:
+        @unknown default:
             fatalError("Unknown authorization status.")
         }
     }

@@ -54,7 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nav2.setupMapBarAppearance()
         
         vc1.homeVChouses = houses
-        vc2.locationViewModel.houses = houses
         
         let tabbarController = UITabBarController()
         tabbarController.viewControllers=[nav1 ,nav2]

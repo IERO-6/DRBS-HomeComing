@@ -12,7 +12,6 @@ final class DetailVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingNav()
-        settingTV()
     }
 
     

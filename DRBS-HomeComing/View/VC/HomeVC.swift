@@ -132,7 +132,6 @@ extension HomeVC: UITableViewDataSource {
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
-        myHouseVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }

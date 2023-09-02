@@ -7,12 +7,7 @@ final class LocationViewModel {
     var locationModel: Location?
     var locations: [Location] = []
     var fetchedLocations: [Location] = []
-    var houses: [House] = []
-    var visibleRegion: MKCoordinateRegion? {
-        didSet {
-            locationsWhenRegionChanged()
-        }
-    }
+    var visibleRegion: MKCoordinateRegion?
     
     //MARK: - Output
     

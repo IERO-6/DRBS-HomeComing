@@ -29,7 +29,7 @@
 		216FA0C32A8BA739004D0279 /* WithdrawVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C22A8BA739004D0279 /* WithdrawVC.swift */; };
 		216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C72A8BA7AF004D0279 /* NoticeListViewModel.swift */; };
 		216FA0CA2A8BA7BA004D0279 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0C92A8BA7BA004D0279 /* SettingViewModel.swift */; };
-		217AD4822AA3233F0071D3B7 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 217AD4812AA3233F0071D3B7 /* config.xcconfig */; };
+		217AD4862AA32DAB0071D3B7 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 217AD4852AA32DAB0071D3B7 /* config.xcconfig */; };
 		217C83ED2A76847600363ED2 /* HouseTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83EC2A76847600363ED2 /* HouseTVCell.swift */; };
 		217C83F12A76858F00363ED2 /* ApartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C83F02A76858F00363ED2 /* ApartCell.swift */; };
 		218111A32A9AE938009A82C4 /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218111A22A9AE938009A82C4 /* PopUpVC.swift */; };
@@ -99,7 +99,7 @@
 		216FA0C22A8BA739004D0279 /* WithdrawVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawVC.swift; sourceTree = "<group>"; };
 		216FA0C72A8BA7AF004D0279 /* NoticeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewModel.swift; sourceTree = "<group>"; };
 		216FA0C92A8BA7BA004D0279 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
-		217AD4812AA3233F0071D3B7 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		217AD4852AA32DAB0071D3B7 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		217C83EC2A76847600363ED2 /* HouseTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTVCell.swift; sourceTree = "<group>"; };
 		217C83F02A76858F00363ED2 /* ApartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApartCell.swift; sourceTree = "<group>"; };
 		218111A22A9AE938009A82C4 /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
@@ -257,7 +257,7 @@
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				217AD4812AA3233F0071D3B7 /* config.xcconfig */,
+				217AD4852AA32DAB0071D3B7 /* config.xcconfig */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -487,7 +487,7 @@
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
-				217AD4822AA3233F0071D3B7 /* config.xcconfig in Resources */,
+				217AD4862AA32DAB0071D3B7 /* config.xcconfig in Resources */,
 				B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
@@ -637,7 +637,7 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 217AD4812AA3233F0071D3B7 /* config.xcconfig */;
+			baseConfigurationReference = 217AD4852AA32DAB0071D3B7 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -699,7 +699,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 217AD4812AA3233F0071D3B7 /* config.xcconfig */;
+			baseConfigurationReference = 217AD4852AA32DAB0071D3B7 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
