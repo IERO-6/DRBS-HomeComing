@@ -26,15 +26,6 @@ class CheckViewModel {
         return checkList
     }
     func checkListButton(_ sender: KeyedButton) {
-        if sender.tag == 1 {
-            if !self.방향.contains(sender.key ?? "") {
-                self.방향.append(sender.key ?? "")
-            } else {
-                self.방향 = self.방향.filter { $0 != (sender.key ?? "") }
-            }
-        }
-        
-        
         switch sender.tag {
         case 1:
             if !self.방향.contains(sender.key ?? "") {
