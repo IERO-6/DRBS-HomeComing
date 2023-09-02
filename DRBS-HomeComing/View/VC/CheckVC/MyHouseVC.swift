@@ -276,22 +276,32 @@ final class MyHouseVC: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        spacer.width = 15
-        let ellipsis = self.navigationItem.makeSFSymbolButton(self, action: #selector(ellipsisButtonTapped), symbolName: "ellipsis.circle")
+        let ellipsis = self.navigationItem.makeSFSymbolButtonWithMenu(self, action: #selector(ellipsisButtonTapped), symbolName: "ellipsis.circle")
         let bookmark = self.navigationItem.makeSFSymbolButton(self, action: #selector(bookmarkButtonTapped), symbolName: "bookmark")
-        navigationItem.rightBarButtonItems = [ellipsis, spacer, bookmark]
+        let barButtonItem = UIBarButtonItem(customView: ellipsis)
+        barButtonItem.customView?.translatesAutoresizingMaskIntoConstraints = false
+        barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
+            //여기서 CheckVC1으로 데이터를 넘기고 CheckVC1으로 이동!
+            print("편집하기")
+            
+        })
+        let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
+            //삭제하면 홈화면으로 돌아가면서 해당 부동산Id를 completionHandler를 통해 넘겨서 서버에서 삭제
+            print("삭제하기")
+            
+        })
+        
+        ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
+                             image: nil,
+                             identifier: nil,
+                             options: .displayInline,
+                             children: [edit, delete])
+        navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
     }
     
     //MARK: - Actions
-    @objc func editButtonTapped() {
-        
-    }
-    
-    @objc func deleteButtonTapped() {
-        
-        
-    }
     
     @objc func bookmarkButtonTapped() {
         print("b")
