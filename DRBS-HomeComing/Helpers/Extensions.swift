@@ -21,6 +21,30 @@ extension UINavigationController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
 }
+//MARK: - 네비게이션 아이템
+extension UINavigationItem {
+    func makeSFSymbolButton(_ target: Any?, action: Selector, symbolName: String) -> UIBarButtonItem {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: symbolName), for: .normal)
+        button.addTarget(target, action: action, for: .touchUpInside)
+        button.tintColor = .black
+        let barButtonItem = UIBarButtonItem(customView: button)
+        barButtonItem.customView?.translatesAutoresizingMaskIntoConstraints = false
+        barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
+            
+        return barButtonItem
+    }
+    func makeSFSymbolButtonWithMenu(_ target: Any?, action: Selector, symbolName: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: symbolName), for: .normal)
+        button.addTarget(target, action: action, for: .touchUpInside)
+        button.tintColor = .black
+        
+        
+        return button
+    }
+}
 
 //MARK: - 뷰
 
@@ -35,12 +59,15 @@ extension UIView {
         return separator
     }
 }
+//MARK: - 스택뷰
 
 extension UIStackView {
     func addArrangedSubviews(_ views: UIView...) {
         for view in views {addArrangedSubview(view)}
     }
 }
+
+//MARK: - CALayer
 
 extension CALayer {
     func addBottomLayer() {
@@ -52,6 +79,9 @@ extension CALayer {
         self.masksToBounds = true
     }
 }
+
+//MARK: - Encodable
+
 extension Encodable {
     /// Object to Dictionary
     /// cf) Dictionary to Object: JSONDecoder().decode(Object.self, from: dictionary)
@@ -61,35 +91,8 @@ extension Encodable {
         return dictinoary
     }
 }
-extension UIWindow {
-    
-    public var visibleViewController: UIViewController? {
-        return self.visibleViewControllerFrom(vc: self.rootViewController)
-    }
-    
-    /**
-     # visibleViewControllerFrom
-     - Author: suni
-     - Date:
-     - Parameters:
-        - vc: rootViewController 혹은 UITapViewController
-     - Returns: UIViewController?
-     - Note: vc내에서 가장 최상위에 있는 뷰컨트롤러 반환
-    */
-    public func visibleViewControllerFrom(vc: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let nc = vc as? UINavigationController {
-            return self.visibleViewControllerFrom(vc: nc.visibleViewController)
-        } else if let tc = vc as? UITabBarController {
-            return self.visibleViewControllerFrom(vc: tc.selectedViewController)
-        } else {
-            if let pvc = vc?.presentedViewController {
-                return self.visibleViewControllerFrom(vc: pvc)
-            } else {
-                return vc
-            }
-        }
-    }
-}
+
+//MARK: - String
 
 extension String {
     func makeStringToUIImage(string: String) -> UIImage? {
@@ -105,6 +108,8 @@ extension String {
         return nil
     }
 }
+
+//MARK: - UIImage
 extension UIImage {
     func toPngString() -> String? {
         let data = self.pngData()
@@ -112,5 +117,51 @@ extension UIImage {
         let encodedString = data?.base64EncodedString()
 
         return encodedString
+    }
+}
+
+//MARK: - 뷰컨
+extension UIViewController {
+    func presentAlert(alertTitle: String, message: String, confirmMessage: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: alertTitle, message: message, preferredStyle: .alert)
+            let confirm = UIAlertAction(title: confirmMessage, style: .default)
+            alert.addAction(confirm)
+            self.present(alert, animated: true)
+        }
+    }
+    func goSettingAlert() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
+            let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+                if let appSetting = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSetting)
+                }
+            }
+            alert.addAction(goSetting)
+            self.present(alert, animated: true)
+        }
+    }
+}
+//MARK: - MKMapView
+extension MKMapView {
+    func limitRegionToKorea(currentRegion: MKCoordinateRegion) {
+        let koreaCoordinateRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5), // 대한민국 중심 좌표
+            span: MKCoordinateSpan(latitudeDelta: 5.0, longitudeDelta: 5.0) // 지도 확대 정도
+        )
+        if currentRegion.center.latitude < koreaCoordinateRegion.center.latitude - koreaCoordinateRegion.span.latitudeDelta / 2 {
+            // 위로 스크롤 시
+            self.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.latitude > koreaCoordinateRegion.center.latitude + koreaCoordinateRegion.span.latitudeDelta / 2 {
+            // 아래로 스크롤 시
+            self.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.longitude < koreaCoordinateRegion.center.longitude - koreaCoordinateRegion.span.longitudeDelta / 2 {
+            // 왼쪽으로 스크롤 시
+            self.setRegion(koreaCoordinateRegion, animated: true)
+        } else if currentRegion.center.longitude > koreaCoordinateRegion.center.longitude + koreaCoordinateRegion.span.longitudeDelta / 2 {
+            // 오른쪽으로 스크롤 시
+            self.setRegion(koreaCoordinateRegion, animated: true)
+        }
     }
 }
