@@ -89,7 +89,8 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"}
     private lazy var CheckListView = CheckListUIView()
-   
+    
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -261,56 +262,22 @@ final class MyHouseVC: UIViewController {
             $0.width.equalToSuperview()
 
         }
+        
+        
+        
     }
         
-    
-    
-    private func settingNav() {
-        let appearance = UINavigationBarAppearance().then {
-            $0.configureWithOpaqueBackground()
-            $0.backgroundColor = .white
-            $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+        private func settingNav() {
+            self.navigationController?.navigationBar.shadowImage = UIImage()
+            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            self.navigationController?.navigationBar.shadowImage = UIImage()
+            self.navigationController?.navigationBar.isTranslucent = true
+            self.navigationController?.navigationBar.topItem?.title = ""
+            self.navigationController?.navigationBar.tintColor = .white
         }
-        navigationController?.navigationBar.topItem?.title = ""
-        navigationController?.navigationBar.tintColor = .black
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        let ellipsis = self.navigationItem.makeSFSymbolButtonWithMenu(self, action: #selector(ellipsisButtonTapped), symbolName: "ellipsis.circle")
-        let bookmark = self.navigationItem.makeSFSymbolButton(self, action: #selector(bookmarkButtonTapped), symbolName: "bookmark")
-        let barButtonItem = UIBarButtonItem(customView: ellipsis)
-        barButtonItem.customView?.translatesAutoresizingMaskIntoConstraints = false
-        barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            //여기서 CheckVC1으로 데이터를 넘기고 CheckVC1으로 이동!
-            print("편집하기")
-            
-        })
-        let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            //삭제하면 홈화면으로 돌아가면서 해당 부동산Id를 completionHandler를 통해 넘겨서 서버에서 삭제
-            print("삭제하기")
-            
-        })
-        
-        ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
-                             image: nil,
-                             identifier: nil,
-                             options: .displayInline,
-                             children: [edit, delete])
-        navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
-    }
     
     //MARK: - Actions
-    
-    @objc func bookmarkButtonTapped() {
-        print("b")
-        
-    }
-    
-    @objc func ellipsisButtonTapped() {
-        print("e")
-        
-    }
+
+
 
 }
