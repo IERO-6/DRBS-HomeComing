@@ -7,6 +7,7 @@ struct House: Codable {
 //        @DocumentID var documentID: String?
     
     var uid: String?                        //유저ID
+    var houseId: String?                    //부동산모델 Id
     var title: String?                      //타이틀
     var isBookMarked: Bool?                 //북마크여부
     var livingType: String?                 //주거 ex) 아파트, 원룸 등..
@@ -30,6 +31,7 @@ struct House: Codable {
         // 왼쪽: Project에서 사용하는 이름, 오른쪽 : Firebase에서 사용될 이름
         
         case uid =          "uid"
+        case houseId =      "houseId"
         case title =        "title"
         case isBookMarked = "isBookMarked"
         case livingType =   "livingType"

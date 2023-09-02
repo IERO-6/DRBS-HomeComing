@@ -16,7 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Auth 로그인 상태 검증
         if Auth.auth().currentUser != nil {
             DispatchQueue.global().async {
-                NetworkingManager.shared.fetchHouses { houses in
+                let cuid = Auth.auth().currentUser?.uid
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
                     DispatchQueue.main.async {
                         let tabbarController = self.setupTabBarController(with: houses)
                         self.window?.rootViewController = tabbarController
@@ -53,9 +54,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nav1.setupHomeBarAppearance()
         nav2.setupMapBarAppearance()
         
-        vc1.homeVChouses = houses
+        vc1.allHouseModels = houses
         
         let tabbarController = UITabBarController()
+        tabbarController.tabBar.tintColor = Constant.appColor
+        tabbarController.tabBar.backgroundColor = .white
         tabbarController.viewControllers=[nav1 ,nav2]
         
         return tabbarController

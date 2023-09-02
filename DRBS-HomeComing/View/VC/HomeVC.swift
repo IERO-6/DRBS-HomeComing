@@ -9,7 +9,7 @@ final class HomeVC: UIViewController {
     private var viewModel = HouseViewModel()
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
-    var homeVChouses: [House]?
+    var allHouseModels: [House]?
     
     //MARK: - LifeCycle
     
@@ -122,7 +122,7 @@ extension HomeVC: UITableViewDataSource {
         cell.cellselectedDelegate = self
         cell.selectionStyle = .none
         cell.indexPath = indexPath.section
-        cell.houses = self.homeVChouses ?? []
+        cell.houses = self.allHouseModels ?? []
         return cell
     }
 }
