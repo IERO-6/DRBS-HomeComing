@@ -283,10 +283,22 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            //여기서 CheckVC1으로 데이터를 넘기고 CheckVC1으로 이동!
-            print("편집하기")
-            
+            // 데이터 가져오기
+            let rateVC = RateVC()
+            let uid = rateVC.houseViewModel.house?.uid
+            NetworkingManager.shared.fetchHouses { [weak self] houses in
+                // 특정 집 데이터 가져오기
+                let house = houses.first { $0.uid == uid }
+                
+                // 데이터 전달
+                let checkVC1 = CheckVC1()
+                checkVC1.house = house
+                
+                // 화면 전환
+                self?.navigationController?.pushViewController(checkVC1, animated: true)
+            }
         })
+        
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
             //삭제하면 홈화면으로 돌아가면서 해당 부동산Id를 completionHandler를 통해 넘겨서 서버에서 삭제
             print("삭제하기")

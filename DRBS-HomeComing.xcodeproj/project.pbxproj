@@ -15,7 +15,6 @@
 		2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA522A949B510064AFC4 /* CustomSlider.swift */; };
 		2158BA572A9508160064AFC4 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA562A9508160064AFC4 /* CalendarVC.swift */; };
 		2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */; };
-		2159620C2AA346CC0092A899 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2159620B2AA346CC0092A899 /* config.xcconfig */; };
 		215BDC662A889D7F007151A1 /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC652A889D7F007151A1 /* CheckList.swift */; };
 		216FA0A72A8BA5F1004D0279 /* NoticeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A62A8BA5F1004D0279 /* NoticeList.swift */; };
 		216FA0A92A8BA5FE004D0279 /* SettingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A82A8BA5FE004D0279 /* SettingSection.swift */; };
@@ -76,7 +75,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18048F062AA34F9A002B7FF0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		18048F072AA350D2002B7FF0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		186335592A8A0D0B00E283D5 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckViewModel.swift; sourceTree = "<group>"; };
@@ -86,7 +85,6 @@
 		2158BA522A949B510064AFC4 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		2158BA562A9508160064AFC4 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListUIView.swift; sourceTree = "<group>"; };
-		2159620B2AA346CC0092A899 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		215BDC652A889D7F007151A1 /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
 		216FA0A62A8BA5F1004D0279 /* NoticeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeList.swift; sourceTree = "<group>"; };
 		216FA0A82A8BA5FE004D0279 /* SettingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSection.swift; sourceTree = "<group>"; };
@@ -163,14 +161,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		18048F052AA34F5B002B7FF0 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				2159620B2AA346CC0092A899 /* config.xcconfig */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		216FA0A32A8BA5D8004D0279 /* SettingSectionModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,7 +231,6 @@
 				218ACDE02A75262400687EE6 /* Products */,
 				9360B786DD59331CA82EFBCE /* Pods */,
 				57FAD258E927479E3F71361D /* Frameworks */,
-				18048F052AA34F5B002B7FF0 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -265,7 +254,7 @@
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				18048F062AA34F9A002B7FF0 /* Config.xcconfig */,
+				18048F072AA350D2002B7FF0 /* Config.xcconfig */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -493,7 +482,6 @@
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
-				2159620C2AA346CC0092A899 /* config.xcconfig in Resources */,
 				B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
@@ -643,7 +631,7 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 18048F062AA34F9A002B7FF0 /* Config.xcconfig */;
+			baseConfigurationReference = 18048F072AA350D2002B7FF0 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -705,7 +693,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 18048F062AA34F9A002B7FF0 /* Config.xcconfig */;
+			baseConfigurationReference = 18048F072AA350D2002B7FF0 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
