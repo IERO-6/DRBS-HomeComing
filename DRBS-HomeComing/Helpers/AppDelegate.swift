@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseCore
 import KakaoSDKCommon
+import GoogleMobileAds
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            window = UIWindow()
            window?.makeKeyAndVisible()
            FirebaseApp.configure()  ///Firebase 구동
+           GADMobileAds.sharedInstance().start(completionHandler: nil)
            return true
        }
 
