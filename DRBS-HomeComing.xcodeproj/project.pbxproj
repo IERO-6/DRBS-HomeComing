@@ -15,6 +15,7 @@
 		2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA522A949B510064AFC4 /* CustomSlider.swift */; };
 		2158BA572A9508160064AFC4 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA562A9508160064AFC4 /* CalendarVC.swift */; };
 		2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */; };
+		2159620C2AA346CC0092A899 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2159620B2AA346CC0092A899 /* config.xcconfig */; };
 		215BDC662A889D7F007151A1 /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BDC652A889D7F007151A1 /* CheckList.swift */; };
 		216FA0A72A8BA5F1004D0279 /* NoticeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A62A8BA5F1004D0279 /* NoticeList.swift */; };
 		216FA0A92A8BA5FE004D0279 /* SettingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216FA0A82A8BA5FE004D0279 /* SettingSection.swift */; };
@@ -84,6 +85,7 @@
 		2158BA522A949B510064AFC4 /* CustomSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSlider.swift; sourceTree = "<group>"; };
 		2158BA562A9508160064AFC4 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		2158BA5B2A9632C90064AFC4 /* CheckListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListUIView.swift; sourceTree = "<group>"; };
+		2159620B2AA346CC0092A899 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		215BDC652A889D7F007151A1 /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
 		216FA0A62A8BA5F1004D0279 /* NoticeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeList.swift; sourceTree = "<group>"; };
 		216FA0A82A8BA5FE004D0279 /* SettingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSection.swift; sourceTree = "<group>"; };
@@ -130,7 +132,6 @@
 		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
 		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		21F954142A9F78DD00F395B0 /* BookMarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCell.swift; sourceTree = "<group>"; };
-		62D9C7BA5F15637BEB476443 /* Pods-DRBS-HomeComing.release config.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release config.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release config.xcconfig"; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B386B08A2A8EAA8200E68A2D /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
@@ -143,9 +144,7 @@
 		B386B0932A8F140500E68A2D /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		B386B0942A8F140500E68A2D /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
-		B3BD7A6A2AA1044E005D29F7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		EA8B5940E19DAEDA05926F1E /* Pods-DRBS-HomeComing.debug config.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug config.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug config.xcconfig"; sourceTree = "<group>"; };
 		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
@@ -256,7 +255,7 @@
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				B3BD7A6A2AA1044E005D29F7 /* Config.xcconfig */,
+				2159620B2AA346CC0092A899 /* config.xcconfig */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -388,8 +387,6 @@
 			children = (
 				6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */,
 				F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */,
-				EA8B5940E19DAEDA05926F1E /* Pods-DRBS-HomeComing.debug config.xcconfig */,
-				62D9C7BA5F15637BEB476443 /* Pods-DRBS-HomeComing.release config.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -486,6 +483,7 @@
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
+				2159620C2AA346CC0092A899 /* config.xcconfig in Resources */,
 				B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
@@ -635,7 +633,7 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B3BD7A6A2AA1044E005D29F7 /* Config.xcconfig */;
+			baseConfigurationReference = 2159620B2AA346CC0092A899 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -697,7 +695,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B3BD7A6A2AA1044E005D29F7 /* Config.xcconfig */;
+			baseConfigurationReference = 2159620B2AA346CC0092A899 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
