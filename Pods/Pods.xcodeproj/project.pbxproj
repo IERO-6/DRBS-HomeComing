@@ -31691,22 +31691,6 @@
 			};
 			name = Release;
 		};
-		26BBFF16A4CEFE9FE4D653250234473D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8690EA40CE7A1FD183DBBD921CC2CD04 /* gRPC-C++.debug.xcconfig */;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
-				IBSC_MODULE = grpcpp;
-				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				PRODUCT_NAME = "gRPCCertificates-Cpp";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
 		26EA5A9600226D2B7D8D25152A304F3B /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DE682231E639E03E720E74622A9EE1F7 /* SwiftLint.release.xcconfig */;
@@ -32526,6 +32510,23 @@
 			};
 			name = Release;
 		};
+		936DF174AD180CABC01821728B1CE23B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8690EA40CE7A1FD183DBBD921CC2CD04 /* gRPC-C++.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
+				IBSC_MODULE = grpcpp;
+				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_NAME = "gRPCCertificates-Cpp";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
 		9553C89E183877A5CB2F3C6801BEC129 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -32951,6 +32952,23 @@
 			};
 			name = Debug;
 		};
+		BD1D07FEB38EBDFC9B176BC0B3EAA18F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DF88F623D33EF0E584ADCD15EE86C63 /* gRPC-C++.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
+				IBSC_MODULE = grpcpp;
+				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_NAME = "gRPCCertificates-Cpp";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		BDE5C3D17C22843C55B5C49ADDDE6B89 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8690EA40CE7A1FD183DBBD921CC2CD04 /* gRPC-C++.debug.xcconfig */;
@@ -33211,22 +33229,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
-		};
-		F01BCC9FBF9DE50B743F30713D2928D0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2DF88F623D33EF0E584ADCD15EE86C63 /* gRPC-C++.release.xcconfig */;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
-				IBSC_MODULE = grpcpp;
-				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				PRODUCT_NAME = "gRPCCertificates-Cpp";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
 		};
 		F1A3BC4B2B10EC3FD5F0515D3DD7185E /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -33537,8 +33539,8 @@
 		655FDB7FE22FD0828F63CB0C676A51DE /* Build configuration list for PBXNativeTarget "gRPC-C++-gRPCCertificates-Cpp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				26BBFF16A4CEFE9FE4D653250234473D /* Debug */,
-				F01BCC9FBF9DE50B743F30713D2928D0 /* Release */,
+				936DF174AD180CABC01821728B1CE23B /* Debug */,
+				BD1D07FEB38EBDFC9B176BC0B3EAA18F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

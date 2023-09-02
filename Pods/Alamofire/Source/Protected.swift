@@ -49,13 +49,13 @@ extension Lock {
     }
 }
 
-#if os(Linux) || os(Windows) || os(Android)
+#if os(Linux) || os(Windows)
 
 extension NSLock: Lock {}
 
 #endif
 
-#if canImport(Darwin)
+#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 /// An `os_unfair_lock` wrapper.
 final class UnfairLock: Lock {
     private let unfairLock: os_unfair_lock_t
@@ -84,9 +84,9 @@ final class UnfairLock: Lock {
 @propertyWrapper
 @dynamicMemberLookup
 final class Protected<T> {
-    #if canImport(Darwin)
+    #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
     private let lock = UnfairLock()
-    #elseif os(Linux) || os(Windows) || os(Android)
+    #elseif os(Linux) || os(Windows)
     private let lock = NSLock()
     #endif
     private var value: T
