@@ -124,6 +124,8 @@ final class MapVC: UIViewController {
         case .authorizedWhenInUse, .authorizedAlways:
             settingMKMapView()
             self.locationManager.startUpdatingLocation()
+            self.mkMapView.showsUserLocation = true
+            self.mkMapView.setUserTrackingMode(.follow, animated: true)
         default:
             print("디버깅: default")
         }
@@ -140,6 +142,8 @@ final class MapVC: UIViewController {
             self.goSettingAlert()
         case .authorizedWhenInUse, .authorizedAlways:
             self.locationManager.startUpdatingLocation()
+            self.mkMapView.showsUserLocation = true
+            self.mkMapView.setUserTrackingMode(.follow, animated: true)
         default:
             print("디버깅: default")
         }

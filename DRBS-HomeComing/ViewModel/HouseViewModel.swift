@@ -7,6 +7,8 @@
  */
 import CoreLocation
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class HouseViewModel {
     //MARK: - Model
@@ -25,7 +27,7 @@ class HouseViewModel {
     var 관리비: String?
     var 관리비미포함목록: [String] = []
     var 면적: String?
-    var 입주가능일: Date?
+    var 입주가능일: String?
     var 계약기간: String?
     var checkList: CheckList?
     var stringImages: [String] = []
@@ -36,7 +38,10 @@ class HouseViewModel {
     //MARK: - Output
     
     func makeHouseModel() {
-        self.house = House(uid: "자동으로 만들어지겠지", title: self.name, isBookMarked: false, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: stringImages, 별점: self.rate)
+        if let user = Auth.auth().currentUser {
+            
+            self.house = House(uid: user.uid, houseId: "",title: self.name, isBookMarked: false, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: stringImages, 별점: self.rate)
+        }
     }
     
     
