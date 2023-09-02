@@ -19,14 +19,8 @@
 
 #include <grpc/support/port_platform.h>
 
-#include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/channel/channel_fwd.h"
 #include "src/core/lib/channel/channel_stack.h"
-#include "src/core/lib/gprpp/time.h"
-#include "src/core/lib/iomgr/call_combiner.h"
-#include "src/core/lib/iomgr/closure.h"
-#include "src/core/lib/resource_quota/arena.h"
-#include "src/core/lib/transport/transport.h"
+#include "src/core/lib/iomgr/timer.h"
 
 namespace grpc_core {
 class TimerState;
@@ -36,8 +30,7 @@ class TimerState;
 // Must be the first field in the filter's call_data.
 struct grpc_deadline_state {
   grpc_deadline_state(grpc_call_element* elem,
-                      const grpc_call_element_args& args,
-                      grpc_core::Timestamp deadline);
+                      const grpc_call_element_args& args, grpc_millis deadline);
   ~grpc_deadline_state();
 
   // We take a reference to the call stack for the timer callback.
@@ -68,7 +61,7 @@ struct grpc_deadline_state {
 //
 // Note: Must be called while holding the call combiner.
 void grpc_deadline_state_reset(grpc_call_element* elem,
-                               grpc_core::Timestamp new_deadline);
+                               grpc_millis new_deadline);
 
 // To be called from the client-side filter's start_transport_stream_op_batch()
 // method.  Ensures that the deadline timer is cancelled when the call
@@ -82,7 +75,7 @@ void grpc_deadline_state_client_start_transport_stream_op_batch(
     grpc_call_element* elem, grpc_transport_stream_op_batch* op);
 
 // Should deadline checking be performed (according to channel args)
-bool grpc_deadline_checking_enabled(const grpc_core::ChannelArgs& args);
+bool grpc_deadline_checking_enabled(const grpc_channel_args* args);
 
 // Deadline filters for direct client channels and server channels.
 // Note: Deadlines for non-direct client channels are handled by the

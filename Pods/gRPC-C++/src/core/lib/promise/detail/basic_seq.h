@@ -17,8 +17,6 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stddef.h>
-
 #include <array>
 #include <cassert>
 #include <new>
@@ -31,29 +29,13 @@
 
 #include "src/core/lib/gprpp/construct_destruct.h"
 #include "src/core/lib/promise/detail/promise_factory.h"
-#include "src/core/lib/promise/detail/promise_like.h"
+#include "src/core/lib/promise/detail/switch.h"
 #include "src/core/lib/promise/poll.h"
 
 namespace grpc_core {
 namespace promise_detail {
-
-// Given f0, ..., fn, call function idx and return the result.
-template <typename R, typename A, R (*... f)(A* arg)>
-class JumpTable {
- public:
-  JumpTable() = delete;
-  JumpTable(const JumpTable&) = delete;
-
-  static R Run(size_t idx, A* arg) { return fs_[idx](arg); }
-
- private:
-  using Fn = R (*)(A* arg);
-  static const Fn fs_[sizeof...(f)];
-};
-
-template <typename R, typename A, R (*... f)(A* arg)>
-const typename JumpTable<R, A, f...>::Fn
-    JumpTable<R, A, f...>::fs_[sizeof...(f)] = {f...};
+template <typename F>
+class PromiseLike;
 
 // Helper for SeqState to evaluate some common types to all partial
 // specializations.
@@ -180,9 +162,9 @@ absl::enable_if_t<I <= J, SeqState<Traits, I, Fs...>*> GetSeqState(
 }
 
 template <template <typename> class Traits, char I, typename... Fs, typename T>
-auto CallNext(SeqState<Traits, I, Fs...>* state, T&& arg)
-    -> decltype(SeqState<Traits, I, Fs...>::Types::PromiseResultTraits::
-                    CallFactory(&state->next_factory, std::forward<T>(arg))) {
+auto CallNext(SeqState<Traits, I, Fs...>* state, T&& arg) -> decltype(
+    SeqState<Traits, I, Fs...>::Types::PromiseResultTraits::CallFactory(
+        &state->next_factory, std::forward<T>(arg))) {
   return SeqState<Traits, I, Fs...>::Types::PromiseResultTraits::CallFactory(
       &state->next_factory, std::forward<T>(arg));
 }
@@ -353,14 +335,16 @@ class BasicSeq {
   // parameter unpacking can work.
   template <char I>
   struct RunStateStruct {
-    static Poll<Result> Run(BasicSeq* s) { return s->RunState<I>(); }
+    BasicSeq* s;
+    Poll<Result> operator()() { return s->RunState<I>(); }
   };
 
   // Similarly placate those compilers for
   // DestructCurrentPromiseAndSubsequentFactories
   template <char I>
   struct DestructCurrentPromiseAndSubsequentFactoriesStruct {
-    static void Run(BasicSeq* s) {
+    BasicSeq* s;
+    void operator()() {
       return s->DestructCurrentPromiseAndSubsequentFactories<I>();
     }
   };
@@ -373,8 +357,7 @@ class BasicSeq {
   // Duff's device like mechanic for evaluating sequences.
   template <char... I>
   Poll<Result> Run(absl::integer_sequence<char, I...>) {
-    return JumpTable<Poll<Result>, BasicSeq, RunStateStruct<I>::Run...>::Run(
-        state_, this);
+    return Switch<Poll<Result>>(state_, RunStateStruct<I>{this}...);
   }
 
   // Run the appropriate destructors for a given state.
@@ -384,9 +367,8 @@ class BasicSeq {
   // which can choose the correct instance at runtime to destroy everything.
   template <char... I>
   void RunDestruct(absl::integer_sequence<char, I...>) {
-    JumpTable<void, BasicSeq,
-              DestructCurrentPromiseAndSubsequentFactoriesStruct<I>::Run...>::
-        Run(state_, this);
+    Switch<void>(
+        state_, DestructCurrentPromiseAndSubsequentFactoriesStruct<I>{this}...);
   }
 
  public:
@@ -417,97 +399,6 @@ class BasicSeq {
   Poll<Result> operator()() {
     return Run(absl::make_integer_sequence<char, N>());
   }
-};
-
-// As above, but models a sequence of unknown size
-// At each element, the accumulator A and the current value V is passed to some
-// function of type IterTraits::Factory as f(V, IterTraits::Argument); f is
-// expected to return a promise that resolves to IterTraits::Wrapped.
-template <class IterTraits>
-class BasicSeqIter {
- private:
-  using Traits = typename IterTraits::Traits;
-  using Iter = typename IterTraits::Iter;
-  using Factory = typename IterTraits::Factory;
-  using Argument = typename IterTraits::Argument;
-  using IterValue = typename IterTraits::IterValue;
-  using StateCreated = typename IterTraits::StateCreated;
-  using State = typename IterTraits::State;
-  using Wrapped = typename IterTraits::Wrapped;
-
- public:
-  BasicSeqIter(Iter begin, Iter end, Factory f, Argument arg)
-      : cur_(begin), end_(end), f_(std::move(f)) {
-    if (cur_ == end_) {
-      Construct(&result_, std::move(arg));
-    } else {
-      Construct(&state_, f_(*cur_, std::move(arg)));
-    }
-  }
-
-  ~BasicSeqIter() {
-    if (cur_ == end_) {
-      Destruct(&result_);
-    } else {
-      Destruct(&state_);
-    }
-  }
-
-  BasicSeqIter(const BasicSeqIter& other) = delete;
-  BasicSeqIter& operator=(const BasicSeqIter&) = delete;
-
-  BasicSeqIter(BasicSeqIter&& other) noexcept
-      : cur_(other.cur_), end_(other.end_), f_(std::move(other.f_)) {
-    if (cur_ == end_) {
-      Construct(&result_, std::move(other.result_));
-    } else {
-      Construct(&state_, std::move(other.state_));
-    }
-  }
-  BasicSeqIter& operator=(BasicSeqIter&& other) noexcept {
-    cur_ = other.cur_;
-    end_ = other.end_;
-    if (cur_ == end_) {
-      Construct(&result_, std::move(other.result_));
-    } else {
-      Construct(&state_, std::move(other.state_));
-    }
-    return *this;
-  }
-
-  Poll<Wrapped> operator()() {
-    if (cur_ == end_) {
-      return std::move(result_);
-    }
-    return PollNonEmpty();
-  }
-
- private:
-  Poll<Wrapped> PollNonEmpty() {
-    Poll<Wrapped> r = state_();
-    if (absl::holds_alternative<Pending>(r)) return r;
-    return Traits::template CheckResultAndRunNext<Wrapped>(
-        std::move(absl::get<Wrapped>(r)), [this](Wrapped arg) -> Poll<Wrapped> {
-          auto next = cur_;
-          ++next;
-          if (next == end_) {
-            return std::move(arg);
-          }
-          cur_ = next;
-          state_.~State();
-          Construct(&state_,
-                    Traits::template CallSeqFactory(f_, *cur_, std::move(arg)));
-          return PollNonEmpty();
-        });
-  }
-
-  Iter cur_;
-  const Iter end_;
-  GPR_NO_UNIQUE_ADDRESS Factory f_;
-  union {
-    GPR_NO_UNIQUE_ADDRESS State state_;
-    GPR_NO_UNIQUE_ADDRESS Argument result_;
-  };
 };
 
 }  // namespace promise_detail

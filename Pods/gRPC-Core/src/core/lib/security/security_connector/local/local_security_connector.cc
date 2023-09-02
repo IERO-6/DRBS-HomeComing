@@ -20,19 +20,10 @@
 
 #include "src/core/lib/security/security_connector/local/local_security_connector.h"
 
+#include <stdbool.h>
 #include <string.h>
 
-#include <string>
-#include <utility>
-
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
-#include "absl/strings/match.h"
-#include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
-
 #include <grpc/grpc.h>
-#include <grpc/grpc_security_constants.h>
 #include <grpc/support/alloc.h>
 #include <grpc/support/log.h>
 #include <grpc/support/string_util.h>
@@ -41,28 +32,16 @@
 #include "src/core/lib/address_utils/parse_address.h"
 #include "src/core/lib/address_utils/sockaddr_utils.h"
 #include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/gprpp/debug_location.h"
 #include "src/core/lib/gprpp/ref_counted_ptr.h"
-#include "src/core/lib/iomgr/closure.h"
-#include "src/core/lib/iomgr/endpoint.h"
-#include "src/core/lib/iomgr/error.h"
-#include "src/core/lib/iomgr/exec_ctx.h"
-#include "src/core/lib/iomgr/iomgr_fwd.h"
-#include "src/core/lib/iomgr/resolved_address.h"
+#include "src/core/lib/iomgr/pollset.h"
+#include "src/core/lib/iomgr/resolve_address.h"
 #include "src/core/lib/iomgr/sockaddr.h"
 #include "src/core/lib/iomgr/socket_utils.h"
 #include "src/core/lib/iomgr/unix_sockets_posix.h"
-#include "src/core/lib/promise/arena_promise.h"
-#include "src/core/lib/promise/promise.h"
-#include "src/core/lib/security/context/security_context.h"
-#include "src/core/lib/security/credentials/credentials.h"
 #include "src/core/lib/security/credentials/local/local_credentials.h"
 #include "src/core/lib/security/transport/security_handshaker.h"
-#include "src/core/lib/transport/handshaker.h"
 #include "src/core/lib/uri/uri_parser.h"
 #include "src/core/tsi/local_transport_security.h"
-#include "src/core/tsi/transport_security.h"
-#include "src/core/tsi/transport_security_interface.h"
 
 #define GRPC_UDS_URI_PATTERN "unix:"
 #define GRPC_ABSTRACT_UDS_URI_PATTERN "unix-abstract:"
@@ -172,18 +151,18 @@ class grpc_local_channel_security_connector final
       grpc_core::RefCountedPtr<grpc_channel_credentials> channel_creds,
       grpc_core::RefCountedPtr<grpc_call_credentials> request_metadata_creds,
       const char* target_name)
-      : grpc_channel_security_connector({}, std::move(channel_creds),
+      : grpc_channel_security_connector(nullptr, std::move(channel_creds),
                                         std::move(request_metadata_creds)),
         target_name_(gpr_strdup(target_name)) {}
 
   ~grpc_local_channel_security_connector() override { gpr_free(target_name_); }
 
   void add_handshakers(
-      const grpc_core::ChannelArgs& args,
-      grpc_pollset_set* /*interested_parties*/,
+      const grpc_channel_args* args, grpc_pollset_set* /*interested_parties*/,
       grpc_core::HandshakeManager* handshake_manager) override {
     tsi_handshaker* handshaker = nullptr;
-    GPR_ASSERT(tsi_local_handshaker_create(&handshaker) == TSI_OK);
+    GPR_ASSERT(tsi_local_handshaker_create(true /* is_client */, &handshaker) ==
+               TSI_OK);
     handshake_manager->Add(
         grpc_core::SecurityHandshakerCreate(handshaker, this, args));
   }
@@ -198,7 +177,6 @@ class grpc_local_channel_security_connector final
   }
 
   void check_peer(tsi_peer peer, grpc_endpoint* ep,
-                  const grpc_core::ChannelArgs& /*args*/,
                   grpc_core::RefCountedPtr<grpc_auth_context>* auth_context,
                   grpc_closure* on_peer_checked) override {
     grpc_local_credentials* creds =
@@ -212,13 +190,20 @@ class grpc_local_channel_security_connector final
     GRPC_ERROR_UNREF(error);
   }
 
-  grpc_core::ArenaPromise<absl::Status> CheckCallHost(
-      absl::string_view host, grpc_auth_context*) override {
+  bool check_call_host(absl::string_view host,
+                       grpc_auth_context* /*auth_context*/,
+                       grpc_closure* /*on_call_host_checked*/,
+                       grpc_error_handle* error) override {
     if (host.empty() || host != target_name_) {
-      return grpc_core::Immediate(absl::UnauthenticatedError(
-          "local call host does not match target name"));
+      *error = GRPC_ERROR_CREATE_FROM_STATIC_STRING(
+          "local call host does not match target name");
     }
-    return grpc_core::ImmediateOkStatus();
+    return true;
+  }
+
+  void cancel_check_call_host(grpc_closure* /*on_call_host_checked*/,
+                              grpc_error_handle error) override {
+    GRPC_ERROR_UNREF(error);
   }
 
   const char* target_name() const { return target_name_; }
@@ -232,21 +217,20 @@ class grpc_local_server_security_connector final
  public:
   explicit grpc_local_server_security_connector(
       grpc_core::RefCountedPtr<grpc_server_credentials> server_creds)
-      : grpc_server_security_connector({}, std::move(server_creds)) {}
+      : grpc_server_security_connector(nullptr, std::move(server_creds)) {}
   ~grpc_local_server_security_connector() override = default;
 
   void add_handshakers(
-      const grpc_core::ChannelArgs& args,
-      grpc_pollset_set* /*interested_parties*/,
+      const grpc_channel_args* args, grpc_pollset_set* /*interested_parties*/,
       grpc_core::HandshakeManager* handshake_manager) override {
     tsi_handshaker* handshaker = nullptr;
-    GPR_ASSERT(tsi_local_handshaker_create(&handshaker) == TSI_OK);
+    GPR_ASSERT(tsi_local_handshaker_create(false /* is_client */,
+                                           &handshaker) == TSI_OK);
     handshake_manager->Add(
         grpc_core::SecurityHandshakerCreate(handshaker, this, args));
   }
 
   void check_peer(tsi_peer peer, grpc_endpoint* ep,
-                  const grpc_core::ChannelArgs& /*args*/,
                   grpc_core::RefCountedPtr<grpc_auth_context>* auth_context,
                   grpc_closure* on_peer_checked) override {
     grpc_local_server_credentials* creds =
@@ -271,7 +255,7 @@ grpc_core::RefCountedPtr<grpc_channel_security_connector>
 grpc_local_channel_security_connector_create(
     grpc_core::RefCountedPtr<grpc_channel_credentials> channel_creds,
     grpc_core::RefCountedPtr<grpc_call_credentials> request_metadata_creds,
-    const grpc_core::ChannelArgs& args, const char* target_name) {
+    const grpc_channel_args* args, const char* target_name) {
   if (channel_creds == nullptr || target_name == nullptr) {
     gpr_log(
         GPR_ERROR,
@@ -282,11 +266,14 @@ grpc_local_channel_security_connector_create(
   // will be done during check_peer procedure.
   grpc_local_credentials* creds =
       static_cast<grpc_local_credentials*>(channel_creds.get());
-  absl::string_view server_uri_str =
-      args.GetString(GRPC_ARG_SERVER_URI).value_or("");
+  const grpc_arg* server_uri_arg =
+      grpc_channel_args_find(args, GRPC_ARG_SERVER_URI);
+  const char* server_uri_str = grpc_channel_arg_get_string(server_uri_arg);
   if (creds->connect_type() == UDS &&
-      !absl::StartsWith(server_uri_str, GRPC_UDS_URI_PATTERN) &&
-      !absl::StartsWith(server_uri_str, GRPC_ABSTRACT_UDS_URI_PATTERN)) {
+      strncmp(GRPC_UDS_URI_PATTERN, server_uri_str,
+              strlen(GRPC_UDS_URI_PATTERN)) != 0 &&
+      strncmp(GRPC_ABSTRACT_UDS_URI_PATTERN, server_uri_str,
+              strlen(GRPC_ABSTRACT_UDS_URI_PATTERN)) != 0) {
     gpr_log(GPR_ERROR,
             "Invalid UDS target name to "
             "grpc_local_channel_security_connector_create()");

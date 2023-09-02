@@ -31,12 +31,13 @@
 
 #include <atomic>
 #include <memory>
+#include <new>
 #include <utility>
 
-#include <grpc/event_engine/memory_allocator.h>
+#include <grpc/support/alloc.h>
+#include <grpc/support/sync.h>
 
 #include "src/core/lib/gpr/alloc.h"
-#include "src/core/lib/gprpp/construct_destruct.h"
 #include "src/core/lib/promise/context.h"
 #include "src/core/lib/resource_quota/memory_quota.h"
 
@@ -76,34 +77,13 @@ class Arena {
   template <typename T, typename... Args>
   T* New(Args&&... args) {
     T* t = static_cast<T*>(Alloc(sizeof(T)));
-    Construct(t, std::forward<Args>(args)...);
+    new (t) T(std::forward<Args>(args)...);
     return t;
-  }
-
-  // Like New, but has the arena call p->~T() at arena destruction time.
-  template <typename T, typename... Args>
-  T* ManagedNew(Args&&... args) {
-    auto* p = New<ManagedNewImpl<T>>(std::forward<Args>(args)...);
-    p->Link(&managed_new_head_);
-    return &p->t;
   }
 
  private:
   struct Zone {
     Zone* prev;
-  };
-
-  struct ManagedNewObject {
-    ManagedNewObject* next = nullptr;
-    void Link(std::atomic<ManagedNewObject*>* head);
-    virtual ~ManagedNewObject() = default;
-  };
-
-  template <typename T>
-  struct ManagedNewImpl : public ManagedNewObject {
-    T t;
-    template <typename... Args>
-    explicit ManagedNewImpl(Args&&... args) : t(std::forward<Args>(args)...) {}
   };
 
   // Initialize an arena.
@@ -139,7 +119,6 @@ class Arena {
   // and (2) the allocated memory. The arena itself maintains a pointer to the
   // last zone; the zone list is reverse-walked during arena destruction only.
   std::atomic<Zone*> last_zone_{nullptr};
-  std::atomic<ManagedNewObject*> managed_new_head_{nullptr};
   // The backing memory quota
   MemoryAllocator* const memory_allocator_;
 };

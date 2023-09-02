@@ -20,24 +20,14 @@
 
 #include "src/core/lib/resolver/server_address.h"
 
-#include <string.h>
-
-#include <algorithm>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
-#include "absl/strings/str_format.h"
 #include "absl/strings/str_join.h"
 
 #include "src/core/lib/address_utils/sockaddr_utils.h"
-#include "src/core/lib/channel/channel_args.h"
-
-// IWYU pragma: no_include <sys/socket.h>
 
 namespace grpc_core {
 
@@ -52,12 +42,12 @@ const char* ServerAddressWeightAttribute::kServerAddressWeightAttributeKey =
 //
 
 ServerAddress::ServerAddress(
-    const grpc_resolved_address& address, const ChannelArgs& args,
+    const grpc_resolved_address& address, grpc_channel_args* args,
     std::map<const char*, std::unique_ptr<AttributeInterface>> attributes)
     : address_(address), args_(args), attributes_(std::move(attributes)) {}
 
 ServerAddress::ServerAddress(
-    const void* address, size_t address_len, const ChannelArgs& args,
+    const void* address, size_t address_len, grpc_channel_args* args,
     std::map<const char*, std::unique_ptr<AttributeInterface>> attributes)
     : args_(args), attributes_(std::move(attributes)) {
   memcpy(address_.addr, address, address_len);
@@ -65,7 +55,7 @@ ServerAddress::ServerAddress(
 }
 
 ServerAddress::ServerAddress(const ServerAddress& other)
-    : address_(other.address_), args_(other.args_) {
+    : address_(other.address_), args_(grpc_channel_args_copy(other.args_)) {
   for (const auto& p : other.attributes_) {
     attributes_[p.first] = p.second->Copy();
   }
@@ -75,7 +65,8 @@ ServerAddress& ServerAddress::operator=(const ServerAddress& other) {
     return *this;
   }
   address_ = other.address_;
-  args_ = other.args_;
+  grpc_channel_args_destroy(args_);
+  args_ = grpc_channel_args_copy(other.args_);
   attributes_.clear();
   for (const auto& p : other.attributes_) {
     attributes_[p.first] = p.second->Copy();
@@ -85,12 +76,15 @@ ServerAddress& ServerAddress::operator=(const ServerAddress& other) {
 
 ServerAddress::ServerAddress(ServerAddress&& other) noexcept
     : address_(other.address_),
-      args_(std::move(other.args_)),
-      attributes_(std::move(other.attributes_)) {}
-
+      args_(other.args_),
+      attributes_(std::move(other.attributes_)) {
+  other.args_ = nullptr;
+}
 ServerAddress& ServerAddress::operator=(ServerAddress&& other) noexcept {
   address_ = other.address_;
-  args_ = std::move(other.args_);
+  grpc_channel_args_destroy(args_);
+  args_ = other.args_;
+  other.args_ = nullptr;
   attributes_ = std::move(other.attributes_);
   return *this;
 }
@@ -129,7 +123,7 @@ int ServerAddress::Cmp(const ServerAddress& other) const {
   if (address_.len < other.address_.len) return -1;
   int retval = memcmp(address_.addr, other.address_.addr, address_.len);
   if (retval != 0) return retval;
-  retval = QsortCompare(args_, other.args_);
+  retval = grpc_channel_args_compare(args_, other.args_);
   if (retval != 0) return retval;
   return CompareAttributes(attributes_, other.attributes_);
 }
@@ -155,12 +149,12 @@ ServerAddress ServerAddress::WithAttribute(
 }
 
 std::string ServerAddress::ToString() const {
-  auto addr_str = grpc_sockaddr_to_string(&address_, false);
   std::vector<std::string> parts = {
-      addr_str.ok() ? addr_str.value() : addr_str.status().ToString(),
+      grpc_sockaddr_to_string(&address_, false),
   };
-  if (args_ != ChannelArgs()) {
-    parts.emplace_back(absl::StrCat("args=", args_.ToString()));
+  if (args_ != nullptr) {
+    parts.emplace_back(
+        absl::StrCat("args={", grpc_channel_args_string(args_), "}"));
   }
   if (!attributes_.empty()) {
     std::vector<std::string> attrs;
@@ -171,10 +165,6 @@ std::string ServerAddress::ToString() const {
         absl::StrCat("attributes={", absl::StrJoin(attrs, ", "), "}"));
   }
   return absl::StrJoin(parts, " ");
-}
-
-std::string ServerAddressWeightAttribute::ToString() const {
-  return absl::StrFormat("%d", weight_);
 }
 
 }  // namespace grpc_core

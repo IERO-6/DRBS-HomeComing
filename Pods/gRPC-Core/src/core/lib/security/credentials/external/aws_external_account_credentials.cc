@@ -17,32 +17,11 @@
 
 #include "src/core/lib/security/credentials/external/aws_external_account_credentials.h"
 
-#include <string.h>
-
-#include <map>
-#include <utility>
-
-#include "absl/memory/memory.h"
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
-#include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
+#include "absl/strings/str_join.h"
 #include "absl/strings/str_replace.h"
-#include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
 
-#include <grpc/grpc.h>
-#include <grpc/grpc_security.h>
-#include <grpc/support/alloc.h>
-#include <grpc/support/log.h>
-#include <grpc/support/string_util.h>
-
-#include "src/core/lib/gprpp/env.h"
-#include "src/core/lib/http/httpcli_ssl_credentials.h"
-#include "src/core/lib/iomgr/closure.h"
-#include "src/core/lib/json/json.h"
-#include "src/core/lib/security/credentials/credentials.h"
-#include "src/core/lib/uri/uri_parser.h"
+#include "src/core/lib/gpr/env.h"
 
 namespace grpc_core {
 
@@ -82,7 +61,7 @@ AwsExternalAccountCredentials::Create(Options options,
                                       grpc_error_handle* error) {
   auto creds = MakeRefCounted<AwsExternalAccountCredentials>(
       std::move(options), std::move(scopes), error);
-  if (GRPC_ERROR_IS_NONE(*error)) {
+  if (*error == GRPC_ERROR_NONE) {
     return creds;
   } else {
     return nullptr;
@@ -139,12 +118,6 @@ AwsExternalAccountCredentials::AwsExternalAccountCredentials(
     return;
   }
   regional_cred_verification_url_ = it->second.string_value();
-  it =
-      options.credential_source.object_value().find("imdsv2_session_token_url");
-  if (it != options.credential_source.object_value().end() &&
-      it->second.type() == Json::Type::STRING) {
-    imdsv2_session_token_url_ = it->second.string_value();
-  }
 }
 
 void AwsExternalAccountCredentials::RetrieveSubjectToken(
@@ -159,62 +132,6 @@ void AwsExternalAccountCredentials::RetrieveSubjectToken(
   }
   ctx_ = ctx;
   cb_ = cb;
-  if (!imdsv2_session_token_url_.empty()) {
-    RetrieveImdsV2SessionToken();
-  } else if (signer_ != nullptr) {
-    BuildSubjectToken();
-  } else {
-    RetrieveRegion();
-  }
-}
-
-void AwsExternalAccountCredentials::RetrieveImdsV2SessionToken() {
-  absl::StatusOr<URI> uri = URI::Parse(imdsv2_session_token_url_);
-  if (!uri.ok()) {
-    return;
-  }
-  grpc_http_header* headers =
-      static_cast<grpc_http_header*>(gpr_malloc(sizeof(grpc_http_header)));
-  headers[0].key = gpr_strdup("x-aws-ec2-metadata-token-ttl-seconds");
-  headers[0].value = gpr_strdup("300");
-  grpc_http_request request;
-  memset(&request, 0, sizeof(grpc_http_request));
-  request.hdr_count = 1;
-  request.hdrs = headers;
-  grpc_http_response_destroy(&ctx_->response);
-  ctx_->response = {};
-  GRPC_CLOSURE_INIT(&ctx_->closure, OnRetrieveImdsV2SessionToken, this,
-                    nullptr);
-  RefCountedPtr<grpc_channel_credentials> http_request_creds;
-  if (uri->scheme() == "http") {
-    http_request_creds = RefCountedPtr<grpc_channel_credentials>(
-        grpc_insecure_credentials_create());
-  } else {
-    http_request_creds = CreateHttpRequestSSLCredentials();
-  }
-  http_request_ =
-      HttpRequest::Put(std::move(*uri), nullptr /* channel args */,
-                       ctx_->pollent, &request, ctx_->deadline, &ctx_->closure,
-                       &ctx_->response, std::move(http_request_creds));
-  http_request_->Start();
-  grpc_http_request_destroy(&request);
-}
-
-void AwsExternalAccountCredentials::OnRetrieveImdsV2SessionToken(
-    void* arg, grpc_error_handle error) {
-  AwsExternalAccountCredentials* self =
-      static_cast<AwsExternalAccountCredentials*>(arg);
-  self->OnRetrieveImdsV2SessionTokenInternal(GRPC_ERROR_REF(error));
-}
-
-void AwsExternalAccountCredentials::OnRetrieveImdsV2SessionTokenInternal(
-    grpc_error_handle error) {
-  if (!GRPC_ERROR_IS_NONE(error)) {
-    FinishRetrieveSubjectToken("", error);
-    return;
-  }
-  imdsv2_session_token_ =
-      std::string(ctx_->response.body, ctx_->response.body_length);
   if (signer_ != nullptr) {
     BuildSubjectToken();
   } else {
@@ -222,27 +139,13 @@ void AwsExternalAccountCredentials::OnRetrieveImdsV2SessionTokenInternal(
   }
 }
 
-void AwsExternalAccountCredentials::AddMetadataRequestHeaders(
-    grpc_http_request* request) {
-  if (!imdsv2_session_token_.empty()) {
-    GPR_ASSERT(request->hdr_count == 0);
-    GPR_ASSERT(request->hdrs == nullptr);
-    grpc_http_header* headers =
-        static_cast<grpc_http_header*>(gpr_malloc(sizeof(grpc_http_header)));
-    headers[0].key = gpr_strdup("x-aws-ec2-metadata-token");
-    headers[0].value = gpr_strdup(imdsv2_session_token_.c_str());
-    request->hdr_count = 1;
-    request->hdrs = headers;
-  }
-}
-
 void AwsExternalAccountCredentials::RetrieveRegion() {
-  auto region_from_env = GetEnv(kRegionEnvVar);
-  if (!region_from_env.has_value()) {
-    region_from_env = GetEnv(kDefaultRegionEnvVar);
+  UniquePtr<char> region_from_env(gpr_getenv(kRegionEnvVar));
+  if (region_from_env == nullptr) {
+    region_from_env = UniquePtr<char>(gpr_getenv(kDefaultRegionEnvVar));
   }
-  if (region_from_env.has_value()) {
-    region_ = std::move(*region_from_env);
+  if (region_from_env != nullptr) {
+    region_ = std::string(region_from_env.get());
     if (url_.empty()) {
       RetrieveSigningKeys();
     } else {
@@ -257,25 +160,18 @@ void AwsExternalAccountCredentials::RetrieveRegion() {
                 "Invalid region url. %s", uri.status().ToString())));
     return;
   }
-  grpc_http_request request;
-  memset(&request, 0, sizeof(grpc_http_request));
+  grpc_httpcli_request request;
+  memset(&request, 0, sizeof(grpc_httpcli_request));
+  request.host = const_cast<char*>(uri->authority().c_str());
+  request.http.path = gpr_strdup(uri->path().c_str());
+  request.handshaker =
+      uri->scheme() == "https" ? &grpc_httpcli_ssl : &grpc_httpcli_plaintext;
   grpc_http_response_destroy(&ctx_->response);
   ctx_->response = {};
-  AddMetadataRequestHeaders(&request);
   GRPC_CLOSURE_INIT(&ctx_->closure, OnRetrieveRegion, this, nullptr);
-  RefCountedPtr<grpc_channel_credentials> http_request_creds;
-  if (uri->scheme() == "http") {
-    http_request_creds = RefCountedPtr<grpc_channel_credentials>(
-        grpc_insecure_credentials_create());
-  } else {
-    http_request_creds = CreateHttpRequestSSLCredentials();
-  }
-  http_request_ =
-      HttpRequest::Get(std::move(*uri), nullptr /* channel args */,
-                       ctx_->pollent, &request, ctx_->deadline, &ctx_->closure,
-                       &ctx_->response, std::move(http_request_creds));
-  http_request_->Start();
-  grpc_http_request_destroy(&request);
+  grpc_httpcli_get(ctx_->pollent, ResourceQuota::Default(), &request,
+                   ctx_->deadline, &ctx_->closure, &ctx_->response);
+  grpc_http_request_destroy(&request.http);
 }
 
 void AwsExternalAccountCredentials::OnRetrieveRegion(void* arg,
@@ -287,7 +183,7 @@ void AwsExternalAccountCredentials::OnRetrieveRegion(void* arg,
 
 void AwsExternalAccountCredentials::OnRetrieveRegionInternal(
     grpc_error_handle error) {
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     FinishRetrieveSubjectToken("", error);
     return;
   }
@@ -310,26 +206,19 @@ void AwsExternalAccountCredentials::RetrieveRoleName() {
                 absl::StrFormat("Invalid url: %s.", uri.status().ToString())));
     return;
   }
-  grpc_http_request request;
-  memset(&request, 0, sizeof(grpc_http_request));
+  grpc_httpcli_request request;
+  memset(&request, 0, sizeof(grpc_httpcli_request));
+  request.host = const_cast<char*>(uri->authority().c_str());
+  request.http.path = gpr_strdup(uri->path().c_str());
+  request.handshaker =
+      uri->scheme() == "https" ? &grpc_httpcli_ssl : &grpc_httpcli_plaintext;
   grpc_http_response_destroy(&ctx_->response);
   ctx_->response = {};
-  AddMetadataRequestHeaders(&request);
   GRPC_CLOSURE_INIT(&ctx_->closure, OnRetrieveRoleName, this, nullptr);
   // TODO(ctiller): use the caller's resource quota.
-  RefCountedPtr<grpc_channel_credentials> http_request_creds;
-  if (uri->scheme() == "http") {
-    http_request_creds = RefCountedPtr<grpc_channel_credentials>(
-        grpc_insecure_credentials_create());
-  } else {
-    http_request_creds = CreateHttpRequestSSLCredentials();
-  }
-  http_request_ =
-      HttpRequest::Get(std::move(*uri), nullptr /* channel args */,
-                       ctx_->pollent, &request, ctx_->deadline, &ctx_->closure,
-                       &ctx_->response, std::move(http_request_creds));
-  http_request_->Start();
-  grpc_http_request_destroy(&request);
+  grpc_httpcli_get(ctx_->pollent, ResourceQuota::Default(), &request,
+                   ctx_->deadline, &ctx_->closure, &ctx_->response);
+  grpc_http_request_destroy(&request.http);
 }
 
 void AwsExternalAccountCredentials::OnRetrieveRoleName(
@@ -341,7 +230,7 @@ void AwsExternalAccountCredentials::OnRetrieveRoleName(
 
 void AwsExternalAccountCredentials::OnRetrieveRoleNameInternal(
     grpc_error_handle error) {
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     FinishRetrieveSubjectToken("", error);
     return;
   }
@@ -350,14 +239,15 @@ void AwsExternalAccountCredentials::OnRetrieveRoleNameInternal(
 }
 
 void AwsExternalAccountCredentials::RetrieveSigningKeys() {
-  auto access_key_id_from_env = GetEnv(kAccessKeyIdEnvVar);
-  auto secret_access_key_from_env = GetEnv(kSecretAccessKeyEnvVar);
-  auto token_from_env = GetEnv(kSessionTokenEnvVar);
-  if (access_key_id_from_env.has_value() &&
-      secret_access_key_from_env.has_value() && token_from_env.has_value()) {
-    access_key_id_ = std::move(*access_key_id_from_env);
-    secret_access_key_ = std::move(*secret_access_key_from_env);
-    token_ = std::move(*token_from_env);
+  UniquePtr<char> access_key_id_from_env(gpr_getenv(kAccessKeyIdEnvVar));
+  UniquePtr<char> secret_access_key_from_env(
+      gpr_getenv(kSecretAccessKeyEnvVar));
+  UniquePtr<char> token_from_env(gpr_getenv(kSessionTokenEnvVar));
+  if (access_key_id_from_env != nullptr &&
+      secret_access_key_from_env != nullptr && token_from_env != nullptr) {
+    access_key_id_ = std::string(access_key_id_from_env.get());
+    secret_access_key_ = std::string(secret_access_key_from_env.get());
+    token_ = std::string(token_from_env.get());
     BuildSubjectToken();
     return;
   }
@@ -375,26 +265,19 @@ void AwsExternalAccountCredentials::RetrieveSigningKeys() {
                 "Invalid url with role name: %s.", uri.status().ToString())));
     return;
   }
-  grpc_http_request request;
-  memset(&request, 0, sizeof(grpc_http_request));
+  grpc_httpcli_request request;
+  memset(&request, 0, sizeof(grpc_httpcli_request));
+  request.host = const_cast<char*>(uri->authority().c_str());
+  request.http.path = gpr_strdup(uri->path().c_str());
+  request.handshaker =
+      uri->scheme() == "https" ? &grpc_httpcli_ssl : &grpc_httpcli_plaintext;
   grpc_http_response_destroy(&ctx_->response);
   ctx_->response = {};
-  AddMetadataRequestHeaders(&request);
   GRPC_CLOSURE_INIT(&ctx_->closure, OnRetrieveSigningKeys, this, nullptr);
   // TODO(ctiller): use the caller's resource quota.
-  RefCountedPtr<grpc_channel_credentials> http_request_creds;
-  if (uri->scheme() == "http") {
-    http_request_creds = RefCountedPtr<grpc_channel_credentials>(
-        grpc_insecure_credentials_create());
-  } else {
-    http_request_creds = CreateHttpRequestSSLCredentials();
-  }
-  http_request_ =
-      HttpRequest::Get(std::move(*uri), nullptr /* channel args */,
-                       ctx_->pollent, &request, ctx_->deadline, &ctx_->closure,
-                       &ctx_->response, std::move(http_request_creds));
-  http_request_->Start();
-  grpc_http_request_destroy(&request);
+  grpc_httpcli_get(ctx_->pollent, ResourceQuota::Default(), &request,
+                   ctx_->deadline, &ctx_->closure, &ctx_->response);
+  grpc_http_request_destroy(&request.http);
 }
 
 void AwsExternalAccountCredentials::OnRetrieveSigningKeys(
@@ -406,29 +289,22 @@ void AwsExternalAccountCredentials::OnRetrieveSigningKeys(
 
 void AwsExternalAccountCredentials::OnRetrieveSigningKeysInternal(
     grpc_error_handle error) {
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     FinishRetrieveSubjectToken("", error);
     return;
   }
   absl::string_view response_body(ctx_->response.body,
                                   ctx_->response.body_length);
-  auto json = Json::Parse(response_body);
-  if (!json.ok()) {
+  Json json = Json::Parse(response_body, &error);
+  if (error != GRPC_ERROR_NONE || json.type() != Json::Type::OBJECT) {
     FinishRetrieveSubjectToken(
-        "", GRPC_ERROR_CREATE_FROM_CPP_STRING(
-                absl::StrCat("Invalid retrieve signing keys response: ",
-                             json.status().ToString())));
+        "", GRPC_ERROR_CREATE_REFERENCING_FROM_STATIC_STRING(
+                "Invalid retrieve signing keys response.", &error, 1));
+    GRPC_ERROR_UNREF(error);
     return;
   }
-  if (json->type() != Json::Type::OBJECT) {
-    FinishRetrieveSubjectToken("",
-                               GRPC_ERROR_CREATE_FROM_STATIC_STRING(
-                                   "Invalid retrieve signing keys response: "
-                                   "JSON type is not object"));
-    return;
-  }
-  auto it = json->object_value().find("AccessKeyId");
-  if (it != json->object_value().end() &&
+  auto it = json.object_value().find("AccessKeyId");
+  if (it != json.object_value().end() &&
       it->second.type() == Json::Type::STRING) {
     access_key_id_ = it->second.string_value();
   } else {
@@ -437,8 +313,8 @@ void AwsExternalAccountCredentials::OnRetrieveSigningKeysInternal(
                 "Missing or invalid AccessKeyId in %s.", response_body)));
     return;
   }
-  it = json->object_value().find("SecretAccessKey");
-  if (it != json->object_value().end() &&
+  it = json.object_value().find("SecretAccessKey");
+  if (it != json.object_value().end() &&
       it->second.type() == Json::Type::STRING) {
     secret_access_key_ = it->second.string_value();
   } else {
@@ -447,8 +323,8 @@ void AwsExternalAccountCredentials::OnRetrieveSigningKeysInternal(
                 "Missing or invalid SecretAccessKey in %s.", response_body)));
     return;
   }
-  it = json->object_value().find("Token");
-  if (it != json->object_value().end() &&
+  it = json.object_value().find("Token");
+  if (it != json.object_value().end() &&
       it->second.type() == Json::Type::STRING) {
     token_ = it->second.string_value();
   } else {
@@ -469,7 +345,7 @@ void AwsExternalAccountCredentials::BuildSubjectToken() {
         access_key_id_, secret_access_key_, token_, "POST",
         cred_verification_url_, region_, "",
         std::map<std::string, std::string>(), &error);
-    if (!GRPC_ERROR_IS_NONE(error)) {
+    if (error != GRPC_ERROR_NONE) {
       FinishRetrieveSubjectToken(
           "", GRPC_ERROR_CREATE_REFERENCING_FROM_STATIC_STRING(
                   "Creating aws request signer failed.", &error, 1));
@@ -478,7 +354,7 @@ void AwsExternalAccountCredentials::BuildSubjectToken() {
     }
   }
   auto signed_headers = signer_->GetSignedRequestHeaders();
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     FinishRetrieveSubjectToken("",
                                GRPC_ERROR_CREATE_REFERENCING_FROM_STATIC_STRING(
                                    "Invalid getting signed request"
@@ -514,7 +390,7 @@ void AwsExternalAccountCredentials::FinishRetrieveSubjectToken(
   auto cb = cb_;
   cb_ = nullptr;
   // Invoke the callback.
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     cb("", error);
   } else {
     cb(subject_token, GRPC_ERROR_NONE);

@@ -18,23 +18,22 @@
 
 #include "src/core/ext/filters/fault_injection/service_config_parser.h"
 
-#include <algorithm>
 #include <vector>
 
-#include "absl/memory/memory.h"
-#include "absl/status/status.h"
 #include "absl/strings/str_cat.h"
-#include "absl/types/optional.h"
+#include "absl/strings/string_view.h"
 
 #include "src/core/ext/filters/fault_injection/fault_injection_filter.h"
 #include "src/core/lib/channel/channel_args.h"
 #include "src/core/lib/channel/status_util.h"
-#include "src/core/lib/iomgr/error.h"
+#include "src/core/lib/gpr/string.h"
 #include "src/core/lib/json/json_util.h"
 
 namespace grpc_core {
 
 namespace {
+
+size_t g_fault_injection_parser_index;
 
 std::vector<FaultInjectionMethodParsedConfig::FaultInjectionPolicy>
 ParseFaultInjectionPolicy(const Json::Array& policies_json_array,
@@ -141,12 +140,13 @@ ParseFaultInjectionPolicy(const Json::Array& policies_json_array,
 
 }  // namespace
 
-absl::StatusOr<std::unique_ptr<ServiceConfigParser::ParsedConfig>>
-FaultInjectionServiceConfigParser::ParsePerMethodParams(const ChannelArgs& args,
-                                                        const Json& json) {
+std::unique_ptr<ServiceConfigParser::ParsedConfig>
+FaultInjectionServiceConfigParser::ParsePerMethodParams(
+    const grpc_channel_args* args, const Json& json, grpc_error_handle* error) {
+  GPR_DEBUG_ASSERT(error != nullptr && *error == GRPC_ERROR_NONE);
   // Only parse fault injection policy if the following channel arg is present.
-  if (!args.GetBool(GRPC_ARG_PARSE_FAULT_INJECTION_METHOD_CONFIG)
-           .value_or(false)) {
+  if (!grpc_channel_args_find_bool(
+          args, GRPC_ARG_PARSE_FAULT_INJECTION_METHOD_CONFIG, false)) {
     return nullptr;
   }
   // Parse fault injection policy from given Json
@@ -159,29 +159,21 @@ FaultInjectionServiceConfigParser::ParsePerMethodParams(const ChannelArgs& args,
     fault_injection_policies =
         ParseFaultInjectionPolicy(*policies_json_array, &error_list);
   }
-  if (!error_list.empty()) {
-    grpc_error_handle error =
-        GRPC_ERROR_CREATE_FROM_VECTOR("Fault injection parser", &error_list);
-    absl::Status status = absl::InvalidArgumentError(
-        absl::StrCat("error parsing fault injection method parameters: ",
-                     grpc_error_std_string(error)));
-    GRPC_ERROR_UNREF(error);
-    return status;
+  *error = GRPC_ERROR_CREATE_FROM_VECTOR("Fault injection parser", &error_list);
+  if (*error != GRPC_ERROR_NONE || fault_injection_policies.empty()) {
+    return nullptr;
   }
-  if (fault_injection_policies.empty()) return nullptr;
   return absl::make_unique<FaultInjectionMethodParsedConfig>(
       std::move(fault_injection_policies));
 }
 
-void FaultInjectionServiceConfigParser::Register(
-    CoreConfiguration::Builder* builder) {
-  builder->service_config_parser()->RegisterParser(
+void FaultInjectionServiceConfigParser::Register() {
+  g_fault_injection_parser_index = ServiceConfigParser::RegisterParser(
       absl::make_unique<FaultInjectionServiceConfigParser>());
 }
 
 size_t FaultInjectionServiceConfigParser::ParserIndex() {
-  return CoreConfiguration::Get().service_config_parser().GetParserIndex(
-      parser_name());
+  return g_fault_injection_parser_index;
 }
 
 }  // namespace grpc_core

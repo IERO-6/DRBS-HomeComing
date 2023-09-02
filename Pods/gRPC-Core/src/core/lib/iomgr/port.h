@@ -20,15 +20,16 @@
 
 #include <grpc/support/port_platform.h>
 
-// IWYU pragma: no_include <features.h>
-// IWYU pragma: no_include <linux/version.h>
-
 /* This needs to be separate from the other conditions because it needs to
  * apply to custom sockets too */
 #ifdef GPR_WINDOWS
 #define GRPC_ARES_RESOLVE_LOCALHOST_MANUALLY 1
 #endif
-#if defined(GPR_WINDOWS)
+#if defined(GRPC_CUSTOM_SOCKET)
+// Do Nothing
+#elif defined(GRPC_USE_EVENT_ENGINE)
+// Do Nothing
+#elif defined(GPR_WINDOWS)
 #define GRPC_WINSOCK_SOCKET 1
 #define GRPC_WINDOWS_SOCKETUTILS 1
 #define GRPC_WINDOWS_SOCKET_ARES_EV_DRIVER 1
@@ -108,6 +109,7 @@
 #define GRPC_POSIX_SOCKET_ARES_EV_DRIVER 1
 #define GRPC_POSIX_SOCKET_EV 1
 #define GRPC_POSIX_SOCKET_EV_EPOLL1 1
+#define GRPC_POSIX_SOCKET_EV_EPOLLEX 1
 #define GRPC_POSIX_SOCKET_EV_POLL 1
 #define GRPC_POSIX_SOCKET_IF_NAMETOINDEX 1
 #define GRPC_POSIX_SOCKET_RESOLVE_ADDRESS 1
@@ -156,17 +158,6 @@
 #define GRPC_POSIX_SOCKET 1
 #define GRPC_POSIX_SOCKETUTILS 1
 #define GRPC_POSIX_WAKEUP_FD 1
-#elif defined(GPR_NETBSD)
-#define GRPC_HAVE_ARPA_NAMESER 1
-#define GRPC_HAVE_IFADDRS 1
-#define GRPC_HAVE_IPV6_RECVPKTINFO 1
-#define GRPC_HAVE_SO_NOSIGPIPE 1
-#define GRPC_HAVE_UNIX_SOCKET 1
-#define GRPC_POSIX_FORK 1
-#define GRPC_POSIX_NO_SPECIAL_WAKEUP_FD 1
-#define GRPC_POSIX_SOCKET 1
-#define GRPC_POSIX_SOCKETUTILS 1
-#define GRPC_POSIX_WAKEUP_FD 1
 #elif defined(GPR_NACL)
 #define GRPC_HAVE_ARPA_NAMESER 1
 #define GRPC_POSIX_NO_SPECIAL_WAKEUP_FD 1
@@ -189,30 +180,22 @@
 // TODO(rudominer) Check this does something we want.
 #define GRPC_POSIX_SOCKETUTILS 1
 #define GRPC_TIMER_USE_GENERIC 1
-#elif defined(GPR_HAIKU)
-#define GRPC_HAVE_ARPA_NAMESER 1
-#define GRPC_HAVE_IFADDRS 1
-#define GRPC_HAVE_IPV6_RECVPKTINFO 1
-#define GRPC_HAVE_UNIX_SOCKET 1
-#define GRPC_POSIX_FORK 1
-#define GRPC_POSIX_NO_SPECIAL_WAKEUP_FD 1
-#define GRPC_POSIX_SOCKET 1
-#define GRPC_POSIX_SOCKETUTILS 1
-#define GRPC_POSIX_WAKEUP_FD 1
 #elif !defined(GPR_NO_AUTODETECT_PLATFORM)
 #error "Platform not recognized"
 #endif
 
 #if defined(GRPC_POSIX_SOCKET) + defined(GRPC_WINSOCK_SOCKET) + \
-        defined(GRPC_CFSTREAM) !=                               \
+        defined(GRPC_CUSTOM_SOCKET) + defined(GRPC_CFSTREAM) +  \
+        defined(GRPC_USE_EVENT_ENGINE) !=                       \
     1
 #error \
-    "Must define exactly one of GRPC_POSIX_SOCKET, GRPC_WINSOCK_SOCKET, GRPC_CFSTREAM"
+    "Must define exactly one of GRPC_POSIX_SOCKET, GRPC_WINSOCK_SOCKET, GRPC_CUSTOM_SOCKET, GRPC_CFSTREAM, GRPC_USE_EVENT_ENGINE"
 #endif
 
 #ifdef GRPC_POSIX_SOCKET
 #define GRPC_POSIX_SOCKET_ARES_EV_DRIVER 1
 #define GRPC_POSIX_SOCKET_EV 1
+#define GRPC_POSIX_SOCKET_EV_EPOLLEX 1
 #define GRPC_POSIX_SOCKET_EV_POLL 1
 #define GRPC_POSIX_SOCKET_EV_EPOLL1 1
 #define GRPC_POSIX_SOCKET_IF_NAMETOINDEX 1

@@ -21,18 +21,11 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
-#include <vector>
-
-#include <grpc/slice.h>
+#include <stddef.h>
 
 #include "src/core/ext/transport/chttp2/transport/frame.h"
 #include "src/core/ext/transport/chttp2/transport/hpack_parser_table.h"
-#include "src/core/lib/iomgr/error.h"
 #include "src/core/lib/transport/metadata_batch.h"
-
-// IWYU pragma: no_include <type_traits>
 
 namespace grpc_core {
 

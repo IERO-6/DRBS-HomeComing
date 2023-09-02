@@ -21,15 +21,7 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <string>
-
-#include <grpc/grpc_security.h>
-
-#include "src/core/lib/gprpp/ref_counted_ptr.h"
-#include "src/core/lib/gprpp/time.h"
-#include "src/core/lib/iomgr/error.h"
-#include "src/core/lib/json/json.h"
-#include "src/core/lib/security/certificate_provider/certificate_provider_factory.h"
+#include "src/core/ext/xds/certificate_provider_factory.h"
 
 namespace grpc_core {
 
@@ -53,13 +45,13 @@ class FileWatcherCertificateProviderFactory
 
     const std::string& root_cert_file() const { return root_cert_file_; }
 
-    Duration refresh_interval() const { return refresh_interval_; }
+    grpc_millis refresh_interval_ms() const { return refresh_interval_ms_; }
 
    private:
     std::string identity_cert_file_;
     std::string private_key_file_;
     std::string root_cert_file_;
-    Duration refresh_interval_;
+    grpc_millis refresh_interval_ms_;
   };
 
   const char* name() const override;

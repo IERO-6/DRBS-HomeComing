@@ -19,6 +19,8 @@
 
 #include <grpc/support/port_platform.h>
 
+#include <stddef.h>
+
 #include <map>
 #include <string>
 #include <vector>
@@ -60,7 +62,6 @@ class URI {
   URI(URI&&) = default;
   URI& operator=(URI&&) = default;
 
-  static std::string PercentEncodeAuthority(absl::string_view str);
   static std::string PercentEncodePath(absl::string_view str);
 
   static std::string PercentDecode(absl::string_view str);

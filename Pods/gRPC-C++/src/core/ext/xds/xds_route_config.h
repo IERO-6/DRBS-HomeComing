@@ -19,29 +19,21 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
-#include <algorithm>
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
-#include "absl/status/statusor.h"
-#include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 #include "absl/types/variant.h"
 #include "envoy/config/route/v3/route.upb.h"
 #include "envoy/config/route/v3/route.upbdefs.h"
 #include "re2/re2.h"
-#include "upb/def.h"
 
-#include "src/core/ext/xds/xds_cluster_specifier_plugin.h"
+#include "src/core/ext/xds/xds_client.h"
+#include "src/core/ext/xds/xds_common_types.h"
 #include "src/core/ext/xds/xds_http_filters.h"
-#include "src/core/ext/xds/xds_resource_type.h"
 #include "src/core/ext/xds/xds_resource_type_impl.h"
 #include "src/core/lib/channel/status_util.h"
-#include "src/core/lib/gprpp/time.h"
 #include "src/core/lib/matchers/matchers.h"
 
 namespace grpc_core {
@@ -51,10 +43,6 @@ bool XdsRbacEnabled();
 struct XdsRouteConfigResource {
   using TypedPerFilterConfig =
       std::map<std::string, XdsHttpFilterImpl::FilterConfig>;
-
-  using ClusterSpecifierPluginMap =
-      std::map<std::string /*cluster_specifier_plugin_name*/,
-               std::string /*LB policy config*/>;
 
   struct RetryPolicy {
     internal::StatusCodeSet retry_on;
@@ -79,6 +67,8 @@ struct XdsRouteConfigResource {
     std::string ToString() const;
   };
 
+  // TODO(donnadionne): When we can use absl::variant<>, consider using that
+  // for: PathMatcher, HeaderMatcher, cluster_name and weighted_clusters
   struct Route {
     // Matchers for this route.
     struct Matchers {
@@ -124,14 +114,6 @@ struct XdsRouteConfigResource {
         std::string ToString() const;
       };
 
-      struct ClusterName {
-        std::string cluster_name;
-
-        bool operator==(const ClusterName& other) const {
-          return cluster_name == other.cluster_name;
-        }
-      };
-
       struct ClusterWeight {
         std::string name;
         uint32_t weight;
@@ -144,22 +126,14 @@ struct XdsRouteConfigResource {
         std::string ToString() const;
       };
 
-      struct ClusterSpecifierPluginName {
-        std::string cluster_specifier_plugin_name;
-
-        bool operator==(const ClusterSpecifierPluginName& other) const {
-          return cluster_specifier_plugin_name ==
-                 other.cluster_specifier_plugin_name;
-        }
-      };
-
       std::vector<HashPolicy> hash_policies;
       absl::optional<RetryPolicy> retry_policy;
 
       // Action for this route.
-      absl::variant<ClusterName, std::vector<ClusterWeight>,
-                    ClusterSpecifierPluginName>
-          action;
+      // TODO(roth): When we can use absl::variant<>, consider using that
+      // here, to enforce the fact that only one of the two fields can be set.
+      std::string cluster_name;
+      std::vector<ClusterWeight> weighted_clusters;
       // Storing the timeout duration from route action:
       // RouteAction.max_stream_duration.grpc_timeout_header_max or
       // RouteAction.max_stream_duration.max_stream_duration if the former is
@@ -168,7 +142,9 @@ struct XdsRouteConfigResource {
 
       bool operator==(const RouteAction& other) const {
         return hash_policies == other.hash_policies &&
-               retry_policy == other.retry_policy && action == other.action &&
+               retry_policy == other.retry_policy &&
+               cluster_name == other.cluster_name &&
+               weighted_clusters == other.weighted_clusters &&
                max_stream_duration == other.max_stream_duration;
       }
       std::string ToString() const;
@@ -202,17 +178,16 @@ struct XdsRouteConfigResource {
   };
 
   std::vector<VirtualHost> virtual_hosts;
-  ClusterSpecifierPluginMap cluster_specifier_plugin_map;
 
   bool operator==(const XdsRouteConfigResource& other) const {
-    return virtual_hosts == other.virtual_hosts &&
-           cluster_specifier_plugin_map == other.cluster_specifier_plugin_map;
+    return virtual_hosts == other.virtual_hosts;
   }
   std::string ToString() const;
 
-  static absl::StatusOr<XdsRouteConfigResource> Parse(
-      const XdsResourceType::DecodeContext& context,
-      const envoy_config_route_v3_RouteConfiguration* route_config);
+  static grpc_error_handle Parse(
+      const XdsEncodingContext& context,
+      const envoy_config_route_v3_RouteConfiguration* route_config,
+      XdsRouteConfigResource* rds_update);
 };
 
 class XdsRouteConfigResourceType
@@ -226,13 +201,12 @@ class XdsRouteConfigResourceType
     return "envoy.api.v2.RouteConfiguration";
   }
 
-  DecodeResult Decode(const XdsResourceType::DecodeContext& context,
-                      absl::string_view serialized_resource,
-                      bool /*is_v2*/) const override;
+  absl::StatusOr<DecodeResult> Decode(const XdsEncodingContext& context,
+                                      absl::string_view serialized_resource,
+                                      bool /*is_v2*/) const override;
 
-  void InitUpbSymtab(upb_DefPool* symtab) const override {
+  void InitUpbSymtab(upb_symtab* symtab) const override {
     envoy_config_route_v3_RouteConfiguration_getmsgdef(symtab);
-    XdsClusterSpecifierPluginRegistry::PopulateSymtab(symtab);
   }
 };
 

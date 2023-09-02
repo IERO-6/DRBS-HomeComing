@@ -21,6 +21,10 @@
 
 #include <grpc/support/port_platform.h>
 
+#include <grpc/slice.h>
+
+#include "src/core/lib/iomgr/error.h"
+
 /* defined in internal.h */
 typedef struct grpc_chttp2_stream grpc_chttp2_stream;
 typedef struct grpc_chttp2_transport grpc_chttp2_transport;

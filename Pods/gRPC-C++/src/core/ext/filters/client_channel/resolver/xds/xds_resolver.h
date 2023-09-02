@@ -19,11 +19,9 @@
 
 #include <grpc/support/port_platform.h>
 
-#include "src/core/lib/gprpp/unique_type_name.h"
-
 namespace grpc_core {
 
-UniqueTypeName XdsClusterAttributeTypeName();
+extern const char* kXdsClusterAttribute;
 
 }  // namespace grpc_core
 

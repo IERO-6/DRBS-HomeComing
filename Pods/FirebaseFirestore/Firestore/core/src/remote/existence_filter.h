@@ -17,53 +17,26 @@
 #ifndef FIRESTORE_CORE_SRC_REMOTE_EXISTENCE_FILTER_H_
 #define FIRESTORE_CORE_SRC_REMOTE_EXISTENCE_FILTER_H_
 
-#include <utility>
-
-#include "Firestore/core/src/nanopb/byte_string.h"
-#include "Firestore/core/src/remote/bloom_filter.h"
-
 namespace firebase {
 namespace firestore {
 namespace remote {
 
-struct BloomFilterParameters {
-  nanopb::ByteString bitmap;
-  int32_t padding;
-  int32_t hash_count;
-};
-
-inline bool operator==(const BloomFilterParameters& lhs,
-                       const BloomFilterParameters& rhs) {
-  return lhs.padding == rhs.padding && lhs.hash_count == rhs.hash_count &&
-         lhs.bitmap == rhs.bitmap;
-}
-
 class ExistenceFilter {
  public:
   ExistenceFilter() = default;
-
-  ExistenceFilter(int count,
-                  absl::optional<BloomFilterParameters> bloom_filter_parameters)
-      : count_{count},
-        bloom_filter_parameters_{std::move(bloom_filter_parameters)} {
+  explicit ExistenceFilter(int count) : count_{count} {
   }
 
   int count() const {
     return count_;
   }
 
-  const absl::optional<BloomFilterParameters>& bloom_filter_parameters() const {
-    return bloom_filter_parameters_;
-  }
-
  private:
   int count_ = 0;
-  absl::optional<BloomFilterParameters> bloom_filter_parameters_;
 };
 
 inline bool operator==(const ExistenceFilter& lhs, const ExistenceFilter& rhs) {
-  return lhs.count() == rhs.count() &&
-         lhs.bloom_filter_parameters() == rhs.bloom_filter_parameters();
+  return lhs.count() == rhs.count();
 }
 
 }  // namespace remote

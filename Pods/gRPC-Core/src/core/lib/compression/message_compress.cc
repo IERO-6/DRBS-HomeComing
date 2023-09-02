@@ -22,14 +22,12 @@
 
 #include <string.h>
 
-#include <zconf.h>
 #include <zlib.h>
 
-#include <grpc/slice_buffer.h>
 #include <grpc/support/alloc.h>
 #include <grpc/support/log.h>
 
-#include "src/core/lib/slice/slice_refcount.h"
+#include "src/core/lib/slice/slice_internal.h"
 
 #define OUTPUT_BLOCK_SIZE 1024
 

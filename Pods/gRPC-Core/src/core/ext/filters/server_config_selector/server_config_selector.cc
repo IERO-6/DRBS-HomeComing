@@ -19,7 +19,6 @@
 #include "src/core/ext/filters/server_config_selector/server_config_selector.h"
 
 #include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/gpr/useful.h"
 
 namespace grpc_core {
 namespace {
@@ -55,8 +54,14 @@ grpc_arg ServerConfigSelectorProvider::MakeChannelArg() const {
       const_cast<ServerConfigSelectorProvider*>(this), &kChannelArgVtable);
 }
 
-absl::string_view ServerConfigSelectorProvider::ChannelArgName() {
-  return kServerConfigSelectorProviderChannelArgName;
+RefCountedPtr<ServerConfigSelectorProvider>
+ServerConfigSelectorProvider::GetFromChannelArgs(
+    const grpc_channel_args& args) {
+  ServerConfigSelectorProvider* config_selector_provider =
+      grpc_channel_args_find_pointer<ServerConfigSelectorProvider>(
+          &args, kServerConfigSelectorProviderChannelArgName);
+  return config_selector_provider != nullptr ? config_selector_provider->Ref()
+                                             : nullptr;
 }
 
 }  // namespace grpc_core

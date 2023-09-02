@@ -18,18 +18,16 @@
 
 #ifndef GRPC_CORE_EXT_FILTERS_CLIENT_CHANNEL_LB_POLICY_GRPCLB_LOAD_BALANCER_API_H
 #define GRPC_CORE_EXT_FILTERS_CLIENT_CHANNEL_LB_POLICY_GRPCLB_LOAD_BALANCER_API_H
-#include <grpc/support/port_platform.h>
 
-#include <stdint.h>
+#include <grpc/support/port_platform.h>
 
 #include <vector>
 
-#include "upb/arena.h"
-
-#include <grpc/slice.h>
+#include <grpc/slice_buffer.h>
 
 #include "src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_client_stats.h"
-#include "src/core/lib/gprpp/time.h"
+#include "src/core/lib/iomgr/exec_ctx.h"
+#include "src/proto/grpc/lb/v1/load_balancer.upb.h"
 
 #define GRPC_GRPCLB_SERVICE_NAME_MAX_LENGTH 128
 #define GRPC_GRPCLB_SERVER_IP_ADDRESS_MAX_SIZE 16
@@ -51,12 +49,12 @@ struct GrpcLbServer {
 
 struct GrpcLbResponse {
   enum { INITIAL, SERVERLIST, FALLBACK } type;
-  Duration client_stats_report_interval;
+  grpc_millis client_stats_report_interval = 0;
   std::vector<GrpcLbServer> serverlist;
 };
 
 // Creates a serialized grpclb request.
-grpc_slice GrpcLbRequestCreate(const char* lb_service_name, upb_Arena* arena);
+grpc_slice GrpcLbRequestCreate(const char* lb_service_name, upb_arena* arena);
 
 // Creates a serialized grpclb load report request.
 grpc_slice GrpcLbLoadReportRequestCreate(
@@ -64,11 +62,11 @@ grpc_slice GrpcLbLoadReportRequestCreate(
     int64_t num_calls_finished_with_client_failed_to_send,
     int64_t num_calls_finished_known_received,
     const GrpcLbClientStats::DroppedCallCounts* drop_token_counts,
-    upb_Arena* arena);
+    upb_arena* arena);
 
 // Deserialize a grpclb response.
 bool GrpcLbResponseParse(const grpc_slice& serialized_response,
-                         upb_Arena* arena, GrpcLbResponse* result);
+                         upb_arena* arena, GrpcLbResponse* result);
 
 }  // namespace grpc_core
 

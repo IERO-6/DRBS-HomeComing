@@ -50,9 +50,10 @@ class TlsTypeConstrainer {
 
 #include <pthread.h>
 
-#include <algorithm>
 #include <array>
 #include <cstring>
+
+#include <grpc/support/log.h> /* for GPR_ASSERT */
 
 namespace grpc_core {
 
@@ -93,14 +94,14 @@ class PthreadTlsImpl : TlsTypeConstrainer<T> {
           typename std::remove_const<decltype(PthreadTlsImpl::keys_)>::type
               keys;
           for (pthread_key_t& key : keys) {
-            if (0 != pthread_key_create(&key, nullptr)) abort();
+            GPR_ASSERT(0 == pthread_key_create(&key, nullptr));
           }
           return keys;
         }()) {}
   PthreadTlsImpl(T t) : PthreadTlsImpl() { *this = t; }
   ~PthreadTlsImpl() {
     for (pthread_key_t key : keys_) {
-      if (0 != pthread_key_delete(key)) abort();
+      GPR_ASSERT(0 == pthread_key_delete(key));
     }
   }
 
@@ -130,7 +131,7 @@ class PthreadTlsImpl : TlsTypeConstrainer<T> {
       size_t remaining = reinterpret_cast<char*>(&t + 1) - src;
       size_t step = std::min(sizeof(dst), remaining);
       memcpy(&dst, src, step);
-      if (0 != pthread_setspecific(key, reinterpret_cast<void*>(dst))) abort();
+      GPR_ASSERT(0 == pthread_setspecific(key, reinterpret_cast<void*>(dst)));
       src += step;
     }
     return t;

@@ -84,11 +84,10 @@ class node_handle_base {
     PolicyTraits::transfer(alloc(), slot(), s);
   }
 
-  struct construct_tag_t {};
-  template <typename... Args>
-  node_handle_base(construct_tag_t, const allocator_type& a, Args&&... args)
+  struct move_tag_t {};
+  node_handle_base(move_tag_t, const allocator_type& a, slot_type* s)
       : alloc_(a) {
-    PolicyTraits::construct(alloc(), slot(), std::forward<Args>(args)...);
+    PolicyTraits::construct(alloc(), slot(), s);
   }
 
   void destroy() {
@@ -187,8 +186,8 @@ struct CommonAccess {
   }
 
   template <typename T, typename... Args>
-  static T Construct(Args&&... args) {
-    return T(typename T::construct_tag_t{}, std::forward<Args>(args)...);
+  static T Move(Args&&... args) {
+    return T(typename T::move_tag_t{}, std::forward<Args>(args)...);
   }
 };
 

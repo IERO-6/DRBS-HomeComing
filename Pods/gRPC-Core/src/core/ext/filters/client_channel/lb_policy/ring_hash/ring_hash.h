@@ -19,29 +19,19 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
+#include <stdlib.h>
 
-#include "src/core/lib/gprpp/unique_type_name.h"
-#include "src/core/lib/gprpp/validation_errors.h"
+#include "src/core/lib/iomgr/error.h"
 #include "src/core/lib/json/json.h"
-#include "src/core/lib/json/json_args.h"
-#include "src/core/lib/json/json_object_loader.h"
 
 namespace grpc_core {
-
-UniqueTypeName RequestHashAttributeName();
+extern const char* kRequestRingHashAttribute;
 
 // Helper Parsing method to parse ring hash policy configs; for example, ring
 // hash size validity.
-struct RingHashConfig {
-  uint64_t min_ring_size = 1024;
-  uint64_t max_ring_size = 8388608;
-
-  static const JsonLoaderInterface* JsonLoader(const JsonArgs&);
-  void JsonPostLoad(const Json& json, const JsonArgs&,
-                    ValidationErrors* errors);
-};
-
+void ParseRingHashLbConfig(const Json& json, size_t* min_ring_size,
+                           size_t* max_ring_size,
+                           std::vector<grpc_error_handle>* error_list);
 }  // namespace grpc_core
 
 #endif  // GRPC_CORE_EXT_FILTERS_CLIENT_CHANNEL_LB_POLICY_RING_HASH_RING_HASH_H

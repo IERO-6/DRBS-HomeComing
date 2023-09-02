@@ -21,12 +21,9 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
 #include <cstring>
 
 #include <grpc/slice.h>
-#include <grpc/support/log.h>
 
 #include "src/core/lib/iomgr/error.h"
 

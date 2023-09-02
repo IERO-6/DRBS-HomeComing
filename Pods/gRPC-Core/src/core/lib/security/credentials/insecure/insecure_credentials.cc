@@ -18,54 +18,45 @@
 
 #include <grpc/support/port_platform.h>
 
-#include "src/core/lib/security/credentials/insecure/insecure_credentials.h"
+#include <grpc/grpc_security.h>
 
-#include <utility>
-
-#include "absl/strings/string_view.h"
-
-#include "src/core/lib/channel/channel_args.h"
+#include "src/core/lib/security/credentials/credentials.h"
 #include "src/core/lib/security/security_connector/insecure/insecure_security_connector.h"
 
 namespace grpc_core {
+namespace {
 
-RefCountedPtr<grpc_channel_security_connector>
-InsecureCredentials::create_security_connector(
-    RefCountedPtr<grpc_call_credentials> request_metadata_creds,
-    const char* /* target_name */, ChannelArgs* /* args */) {
-  return MakeRefCounted<InsecureChannelSecurityConnector>(
-      Ref(), std::move(request_metadata_creds));
-}
+constexpr char kCredentialsTypeInsecure[] = "insecure";
 
-UniqueTypeName InsecureCredentials::Type() {
-  static UniqueTypeName::Factory kFactory("Insecure");
-  return kFactory.Create();
-}
+class InsecureCredentials final : public grpc_channel_credentials {
+ public:
+  InsecureCredentials() : grpc_channel_credentials(kCredentialsTypeInsecure) {}
 
-int InsecureCredentials::cmp_impl(
-    const grpc_channel_credentials* /* other */) const {
-  // All insecure credentials objects should compare equal.
-  return 0;
-}
+  RefCountedPtr<grpc_channel_security_connector> create_security_connector(
+      RefCountedPtr<grpc_call_credentials> call_creds,
+      const char* /* target_name */, const grpc_channel_args* /* args */,
+      grpc_channel_args** /* new_args */) override {
+    return MakeRefCounted<InsecureChannelSecurityConnector>(
+        Ref(), std::move(call_creds));
+  }
+};
 
-RefCountedPtr<grpc_server_security_connector>
-InsecureServerCredentials::create_security_connector(
-    const ChannelArgs& /* args */) {
-  return MakeRefCounted<InsecureServerSecurityConnector>(Ref());
-}
+class InsecureServerCredentials final : public grpc_server_credentials {
+ public:
+  InsecureServerCredentials()
+      : grpc_server_credentials(kCredentialsTypeInsecure) {}
 
-UniqueTypeName InsecureServerCredentials::Type() {
-  static auto* kFactory = new UniqueTypeName::Factory("Insecure");
-  return kFactory->Create();
-}
+  RefCountedPtr<grpc_server_security_connector> create_security_connector(
+      const grpc_channel_args* /* args */) override {
+    return MakeRefCounted<InsecureServerSecurityConnector>(Ref());
+  }
+};
 
+}  // namespace
 }  // namespace grpc_core
 
 grpc_channel_credentials* grpc_insecure_credentials_create() {
-  // Create a singleton object for InsecureCredentials so that channels to the
-  // same target with InsecureCredentials can reuse the subchannels.
-  static auto* creds = new grpc_core::InsecureCredentials();
-  return creds->Ref().release();
+  return new grpc_core::InsecureCredentials();
 }
 
 grpc_server_credentials* grpc_insecure_server_credentials_create() {

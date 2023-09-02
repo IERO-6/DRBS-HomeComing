@@ -20,17 +20,8 @@
 
 #include "src/core/ext/xds/xds_certificate_provider.h"
 
-#include <utility>
-
 #include "absl/functional/bind_front.h"
-#include "absl/memory/memory.h"
-#include "absl/types/optional.h"
-
-#include <grpc/support/log.h>
-
-#include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/iomgr/error.h"
-#include "src/core/lib/security/security_connector/ssl_utils.h"
+#include "absl/strings/str_cat.h"
 
 namespace grpc_core {
 
@@ -60,7 +51,7 @@ class RootCertificatesWatcher
 
   void OnError(grpc_error_handle root_cert_error,
                grpc_error_handle identity_cert_error) override {
-    if (!GRPC_ERROR_IS_NONE(root_cert_error)) {
+    if (root_cert_error != GRPC_ERROR_NONE) {
       parent_->SetErrorForCert(cert_name_, root_cert_error /* pass the ref */,
                                absl::nullopt);
     }
@@ -95,7 +86,7 @@ class IdentityCertificatesWatcher
 
   void OnError(grpc_error_handle root_cert_error,
                grpc_error_handle identity_cert_error) override {
-    if (!GRPC_ERROR_IS_NONE(identity_cert_error)) {
+    if (identity_cert_error != GRPC_ERROR_NONE) {
       parent_->SetErrorForCert(cert_name_, absl::nullopt,
                                identity_cert_error /* pass the ref */);
     }
@@ -270,11 +261,6 @@ XdsCertificateProvider::XdsCertificateProvider()
 
 XdsCertificateProvider::~XdsCertificateProvider() {
   distributor_->SetWatchStatusCallback(nullptr);
-}
-
-UniqueTypeName XdsCertificateProvider::type() const {
-  static UniqueTypeName::Factory kFactory("Xds");
-  return kFactory.Create();
 }
 
 bool XdsCertificateProvider::ProvidesRootCerts(const std::string& cert_name) {

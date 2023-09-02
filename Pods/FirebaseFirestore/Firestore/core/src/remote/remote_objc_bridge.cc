@@ -20,8 +20,6 @@
 
 #include "Firestore/core/src/core/database_info.h"
 #include "Firestore/core/src/core/query.h"
-#include "Firestore/core/src/model/aggregate_alias.h"
-#include "Firestore/core/src/model/aggregate_field.h"
 #include "Firestore/core/src/model/document.h"
 #include "Firestore/core/src/model/document_key.h"
 #include "Firestore/core/src/model/mutation.h"
@@ -37,21 +35,16 @@
 #include "Firestore/core/src/util/statusor.h"
 #include "grpcpp/support/status.h"
 
-#include "absl/container/flat_hash_map.h"
-#include "absl/strings/str_format.h"
-
 namespace firebase {
 namespace firestore {
 namespace remote {
 
 using core::DatabaseInfo;
 using local::TargetData;
-using model::AggregateField;
 using model::Document;
 using model::DocumentKey;
 using model::Mutation;
 using model::MutationResult;
-using model::ObjectValue;
 using model::SnapshotVersion;
 using model::TargetId;
 using nanopb::ByteString;
@@ -272,11 +265,8 @@ DatastoreSerializer::MergeLookupResponses(
   return result;
 }
 
-Message<google_firestore_v1_RunAggregationQueryRequest>
-DatastoreSerializer::EncodeAggregateQueryRequest(
-    const core::Query& query,
-    const std::vector<AggregateField>& aggregates,
-    absl::flat_hash_map<std::string, std::string>& aliasMap) const {
+nanopb::Message<google_firestore_v1_RunAggregationQueryRequest>
+DatastoreSerializer::EncodeCountQueryRequest(const core::Query& query) const {
   Message<google_firestore_v1_RunAggregationQueryRequest> result;
   auto encodedTarget = serializer_.EncodeQueryTarget(query.ToTarget());
   result->parent = encodedTarget.parent;
@@ -288,86 +278,22 @@ DatastoreSerializer::EncodeAggregateQueryRequest(
   result->query_type.structured_aggregation_query.structured_query =
       encodedTarget.structured_query;
 
-  // De-duplicate aggregates based on the alias.
-  // Since aliases are auto-computed from the operation and path,
-  // equal aggregate will have the same alias.
-  absl::flat_hash_map<std::string, AggregateField> uniqueAggregates;
-  for (const AggregateField& aggregate : aggregates) {
-    auto pair = std::pair<std::string, AggregateField>(
-        aggregate.alias.StringValue(), aggregate);
-    uniqueAggregates.insert(std::move(pair));
-  }
-
-  pb_size_t count = static_cast<pb_size_t>(uniqueAggregates.size());
-  pb_size_t aggregationNum = 0;
-  result->query_type.structured_aggregation_query.aggregations_count = count;
+  result->query_type.structured_aggregation_query.aggregations_count = 1;
   result->query_type.structured_aggregation_query.aggregations =
-      MakeArray<_google_firestore_v1_StructuredAggregationQuery_Aggregation>(
-          count);
-  for (const auto& aggregatePair : uniqueAggregates) {
-    // Map all client-side aliases to a unique short-form
-    // alias. This avoids issues with client-side aliases that
-    // exceed the 1500-byte string size limit.
-    std::string clientAlias = aggregatePair.first;
-    std::string serverAlias = absl::StrFormat("aggregation_%d", aggregationNum);
-    auto pair = std::pair<std::string, std::string>(serverAlias, clientAlias);
-    aliasMap.insert(std::move(pair));
-
-    // Send the server alias in the request to the backend
-    result->query_type.structured_aggregation_query.aggregations[aggregationNum]
-        .alias = nanopb::MakeBytesArray(serverAlias);
-
-    if (aggregatePair.second.op == AggregateField::OpKind::Count) {
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .which_operator =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_count_tag;
-
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .count =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_Count{};
-    } else if (aggregatePair.second.op == AggregateField::OpKind::Sum) {
-      google_firestore_v1_StructuredQuery_FieldReference field{};
-
-      field.field_path = nanopb::MakeBytesArray(
-          aggregatePair.second.fieldPath.CanonicalString());
-
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .which_operator =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_sum_tag;
-
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .sum =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_Sum{field};
-
-    } else if (aggregatePair.second.op == AggregateField::OpKind::Avg) {
-      google_firestore_v1_StructuredQuery_FieldReference field{};
-      field.field_path = nanopb::MakeBytesArray(
-          aggregatePair.second.fieldPath.CanonicalString());
-
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .which_operator =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_avg_tag;
-
-      result->query_type.structured_aggregation_query
-          .aggregations[aggregationNum]
-          .avg =
-          google_firestore_v1_StructuredAggregationQuery_Aggregation_Avg{field};
-    }
-
-    ++aggregationNum;
-  }
+      MakeArray<_google_firestore_v1_StructuredAggregationQuery_Aggregation>(1);
+  result->query_type.structured_aggregation_query.aggregations[0].alias =
+      nanopb::MakeBytesArray("count_alias");
+  result->query_type.structured_aggregation_query.aggregations[0]
+      .which_operator =
+      google_firestore_v1_StructuredAggregationQuery_Aggregation_count_tag;
+  result->query_type.structured_aggregation_query.aggregations[0].count =
+      google_firestore_v1_StructuredAggregationQuery_Aggregation_Count{};
 
   return result;
 }
 
-util::StatusOr<ObjectValue> DatastoreSerializer::DecodeAggregateQueryResponse(
-    const grpc::ByteBuffer& response,
-    const absl::flat_hash_map<std::string, std::string>& aliasMap) const {
+util::StatusOr<int64_t> DatastoreSerializer::DecodeCountQueryResponse(
+    const grpc::ByteBuffer& response) const {
   ByteBufferReader reader{response};
   auto message =
       Message<google_firestore_v1_RunAggregationQueryResponse>::TryParse(
@@ -376,11 +302,12 @@ util::StatusOr<ObjectValue> DatastoreSerializer::DecodeAggregateQueryResponse(
     return reader.status();
   }
 
-  HARD_ASSERT(message->result.aggregate_fields != nullptr);
-
-  return ObjectValue::FromAggregateFieldsEntry(
-      message->result.aggregate_fields, message->result.aggregate_fields_count,
-      aliasMap);
+  HARD_ASSERT(message->result.aggregate_fields_count == 1);
+  HARD_ASSERT(nanopb::MakeStringView(message->result.aggregate_fields[0].key) ==
+              "count_alias");
+  HARD_ASSERT(message->result.aggregate_fields[0].value.which_value_type ==
+              google_firestore_v1_Value_integer_value_tag);
+  return message->result.aggregate_fields[0].value.integer_value;
 }
 
 }  // namespace remote

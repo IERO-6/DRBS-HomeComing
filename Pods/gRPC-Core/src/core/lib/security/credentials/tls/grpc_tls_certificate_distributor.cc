@@ -18,11 +18,12 @@
 
 #include "src/core/lib/security/credentials/tls/grpc_tls_certificate_distributor.h"
 
-#include <algorithm>
-#include <vector>
+#include <stdlib.h>
+#include <string.h>
 
-#include <grpc/grpc_security.h>
+#include <grpc/support/alloc.h>
 #include <grpc/support/log.h>
+#include <grpc/support/string_util.h>
 
 void grpc_tls_certificate_distributor::SetKeyMaterials(
     const std::string& cert_name, absl::optional<std::string> pem_root_certs,
@@ -153,7 +154,7 @@ void grpc_tls_certificate_distributor::SetErrorForCert(
 };
 
 void grpc_tls_certificate_distributor::SetError(grpc_error_handle error) {
-  GPR_ASSERT(!GRPC_ERROR_IS_NONE(error));
+  GPR_ASSERT(error != GRPC_ERROR_NONE);
   grpc_core::MutexLock lock(&mu_);
   for (const auto& watcher : watchers_) {
     const auto watcher_ptr = watcher.first;
@@ -231,8 +232,7 @@ void grpc_tls_certificate_distributor::WatchTlsCertificates(
                                          std::move(updated_identity_pairs));
     }
     // Notify this watcher if the certs it is watching already had some errors.
-    if (!GRPC_ERROR_IS_NONE(root_error) ||
-        !GRPC_ERROR_IS_NONE(identity_error)) {
+    if (root_error != GRPC_ERROR_NONE || identity_error != GRPC_ERROR_NONE) {
       watcher_ptr->OnError(GRPC_ERROR_REF(root_error),
                            GRPC_ERROR_REF(identity_error));
     }

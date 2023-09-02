@@ -23,6 +23,7 @@
 
 #include <grpc/support/port_platform.h>
 
+#include <stdbool.h>
 #include <stdint.h>
 
 enum grpc_chttp2_setting_id {

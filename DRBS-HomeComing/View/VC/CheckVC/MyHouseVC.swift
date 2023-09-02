@@ -89,8 +89,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"}
     private lazy var CheckListView = CheckListUIView()
-    
-    
+   
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -262,22 +261,46 @@ final class MyHouseVC: UIViewController {
             $0.width.equalToSuperview()
 
         }
+    }
         
+    
+    
+    private func settingNav() {
+        let appearance = UINavigationBarAppearance().then {
+            $0.configureWithOpaqueBackground()
+            $0.backgroundColor = .white
+            $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+        }
+        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        spacer.width = 15
+        let ellipsis = self.navigationItem.makeSFSymbolButton(self, action: #selector(ellipsisButtonTapped), symbolName: "ellipsis.circle")
+        let bookmark = self.navigationItem.makeSFSymbolButton(self, action: #selector(bookmarkButtonTapped), symbolName: "bookmark")
+        navigationItem.rightBarButtonItems = [ellipsis, spacer, bookmark]
+    }
+    
+    //MARK: - Actions
+    @objc func editButtonTapped() {
+        
+    }
+    
+    @objc func deleteButtonTapped() {
         
         
     }
-        
-        private func settingNav() {
-            self.navigationController?.navigationBar.backgroundColor = Constant.appColor
-//            self.navigationController?.navigationBar.shadowImage = UIImage()
-//            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.navigationController?.navigationBar.isTranslucent = false
-            self.navigationController?.navigationBar.topItem?.title = ""
-            self.navigationController?.navigationBar.tintColor = .white
-        }
     
-    //MARK: - Actions
-
-
+    @objc func bookmarkButtonTapped() {
+        print("b")
+        
+    }
+    
+    @objc func ellipsisButtonTapped() {
+        print("e")
+        
+    }
 
 }

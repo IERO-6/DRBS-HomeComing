@@ -17,7 +17,6 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <atomic>
 #include <memory>
 #include <string>
 #include <utility>
@@ -69,6 +68,8 @@ struct grpc_binder_transport {
   absl::flat_hash_map<int, grpc_binder_stream*> registered_stream;
   grpc_core::Combiner* combiner;
 
+  grpc_closure accept_stream_closure;
+
   // The callback and the data for the callback when the stream is connected
   // between client and server.
   void (*accept_stream_fn)(void* user_data, grpc_transport* transport,
@@ -79,7 +80,7 @@ struct grpc_binder_transport {
   grpc_core::RefCount refs;
 
  private:
-  std::atomic<int> next_free_tx_code{grpc_binder::kFirstCallId};
+  int next_free_tx_code = grpc_binder::kFirstCallId;
 };
 
 grpc_transport* grpc_create_binder_transport_client(

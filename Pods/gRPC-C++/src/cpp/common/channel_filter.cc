@@ -18,19 +18,13 @@
 
 #include "src/cpp/common/channel_filter.h"
 
-#include <memory>
+#include <string.h>
 
-#include "absl/strings/str_cat.h"
-#include "absl/strings/string_view.h"
+#include <grpcpp/impl/codegen/slice.h>
 
-#include <grpc/support/log.h>
-
-#include "src/core/lib/channel/channel_args.h"
 #include "src/core/lib/channel/channel_stack.h"
 #include "src/core/lib/channel/channel_stack_builder.h"
 #include "src/core/lib/config/core_configuration.h"
-#include "src/core/lib/slice/slice.h"
-#include "src/core/lib/surface/channel_init.h"
 
 namespace grpc {
 
@@ -77,14 +71,14 @@ void RegisterChannelFilter(
     std::function<bool(const grpc_channel_args&)> include_filter,
     const grpc_channel_filter* filter) {
   auto maybe_add_filter = [include_filter,
-                           filter](grpc_core::ChannelStackBuilder* builder) {
+                           filter](grpc_channel_stack_builder* builder) {
     if (include_filter != nullptr) {
-      if (!include_filter(*builder->channel_args().ToC())) {
-        return true;
-      }
+      const grpc_channel_args* args =
+          grpc_channel_stack_builder_get_channel_arguments(builder);
+      if (!include_filter(*args)) return true;
     }
-    builder->PrependFilter(filter);
-    return true;
+    return grpc_channel_stack_builder_prepend_filter(builder, filter, nullptr,
+                                                     nullptr);
   };
   grpc_core::CoreConfiguration::RegisterBuilder(
       [stack_type, priority,

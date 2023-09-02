@@ -21,12 +21,9 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
 #include <grpc/slice.h>
 
 #include "src/core/ext/transport/chttp2/transport/frame.h"
-#include "src/core/lib/iomgr/error.h"
 #include "src/core/lib/transport/transport.h"
 
 struct grpc_chttp2_rst_stream_parser {

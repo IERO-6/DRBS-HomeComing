@@ -26,6 +26,6 @@
 
 // a polling engine that utilizes a singleton epoll set and turnstile polling
 
-extern const grpc_event_engine_vtable grpc_ev_epoll1_posix;
+const grpc_event_engine_vtable* grpc_init_epoll1_linux(bool explicit_request);
 
 #endif /* GRPC_CORE_LIB_IOMGR_EV_EPOLL1_LINUX_H */

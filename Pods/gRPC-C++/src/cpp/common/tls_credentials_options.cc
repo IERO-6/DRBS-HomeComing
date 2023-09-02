@@ -16,17 +16,11 @@
  *
  */
 
-#include <memory>
-#include <string>
-#include <utility>
+#include "absl/container/inlined_vector.h"
 
 #include <grpc/grpc_security.h>
-#include <grpc/grpc_security_constants.h>
-#include <grpc/support/log.h>
-#include <grpcpp/security/tls_certificate_provider.h>
-#include <grpcpp/security/tls_certificate_verifier.h>
+#include <grpc/support/alloc.h>
 #include <grpcpp/security/tls_credentials_options.h>
-#include <grpcpp/support/config.h>
 
 namespace grpc {
 namespace experimental {
@@ -63,17 +57,6 @@ void TlsCredentialsOptions::set_identity_cert_name(
     const std::string& identity_cert_name) {
   grpc_tls_credentials_options_set_identity_cert_name(
       c_credentials_options_, identity_cert_name.c_str());
-}
-
-void TlsCredentialsOptions::set_crl_directory(const std::string& path) {
-  grpc_tls_credentials_options_set_crl_directory(c_credentials_options_,
-                                                 path.c_str());
-}
-
-void TlsCredentialsOptions::set_tls_session_key_log_file_path(
-    const std::string& tls_session_key_log_file_path) {
-  grpc_tls_credentials_options_set_tls_session_key_log_file_path(
-      c_credentials_options_, tls_session_key_log_file_path.c_str());
 }
 
 void TlsCredentialsOptions::set_certificate_verifier(

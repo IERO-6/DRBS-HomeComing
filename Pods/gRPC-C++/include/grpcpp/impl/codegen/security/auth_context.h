@@ -36,14 +36,9 @@ class SecureAuthContext;
 
 typedef std::pair<string_ref, string_ref> AuthProperty;
 
-class AuthPropertyIterator {
+class AuthPropertyIterator
+    : public std::iterator<std::input_iterator_tag, const AuthProperty> {
  public:
-  using iterator_category = std::forward_iterator_tag;
-  using value_type = const AuthProperty;
-  using pointer = void;
-  using reference = void;
-  using difference_type = std::ptrdiff_t;
-
   ~AuthPropertyIterator();
   AuthPropertyIterator& operator++();
   AuthPropertyIterator operator++(int);

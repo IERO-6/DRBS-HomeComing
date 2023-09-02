@@ -20,11 +20,13 @@
 
 #include "src/core/ext/filters/client_channel/client_channel_channelz.h"
 
-#include <map>
+#include <grpc/support/string_util.h>
 
+#include "src/core/ext/filters/client_channel/client_channel.h"
+#include "src/core/lib/channel/channelz_registry.h"
+#include "src/core/lib/gpr/useful.h"
+#include "src/core/lib/surface/channel.h"
 #include "src/core/lib/transport/connectivity_state.h"
-
-// IWYU pragma: no_include <type_traits>
 
 namespace grpc_core {
 namespace channelz {

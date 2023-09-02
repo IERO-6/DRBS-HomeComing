@@ -47,10 +47,6 @@ class LocalStore;
 class TargetData;
 }  // namespace local
 
-namespace model {
-class AggregateField;
-}  // namespace model
-
 namespace core {
 
 class SyncEngineCallback;
@@ -143,11 +139,10 @@ class SyncEngine : public remote::RemoteStoreCallback, public QueryEventSource {
                    core::TransactionResultCallback result_callback);
 
   /**
-   * Executes an aggregation query.
+   * Executes a count query using the given query as the base.
    */
-  void RunAggregateQuery(const core::Query& query,
-                         const std::vector<model::AggregateField>& aggregates,
-                         api::AggregateQueryCallback&& result_callback);
+  void RunCountQuery(const core::Query& query,
+                     api::CountQueryCallback&& result_callback);
 
   void HandleCredentialChange(const credentials::User& user);
 

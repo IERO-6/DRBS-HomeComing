@@ -23,9 +23,12 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stddef.h>
-
 #include <grpc/support/log.h>
+#include <grpc/support/sync.h>
+#include <grpc/support/thd_id.h>
+#include <grpc/support/time.h>
+
+#include "src/core/lib/gprpp/memory.h"
 
 namespace grpc_core {
 namespace internal {

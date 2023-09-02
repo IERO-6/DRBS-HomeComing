@@ -21,8 +21,6 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
 /* Helpers for hpack varint encoding */
 
 namespace grpc_core {

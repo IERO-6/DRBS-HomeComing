@@ -18,17 +18,9 @@
 
 #include "src/core/ext/xds/xds_endpoint.h"
 
-#include <stdlib.h>
-
-#include <algorithm>
-#include <vector>
-
 #include "absl/memory/memory.h"
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_join.h"
-#include "absl/types/optional.h"
 #include "envoy/config/core/v3/address.upb.h"
 #include "envoy/config/core/v3/base.upb.h"
 #include "envoy/config/core/v3/health_check.upb.h"
@@ -38,14 +30,12 @@
 #include "envoy/type/v3/percent.upb.h"
 #include "google/protobuf/wrappers.upb.h"
 #include "upb/text_encode.h"
-
-#include <grpc/support/log.h>
+#include "upb/upb.h"
+#include "upb/upb.hpp"
 
 #include "src/core/ext/xds/upb_utils.h"
-#include "src/core/ext/xds/xds_resource_type.h"
 #include "src/core/lib/address_utils/parse_address.h"
-#include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/debug/trace.h"
+#include "src/core/lib/address_utils/sockaddr_utils.h"
 
 namespace grpc_core {
 
@@ -126,28 +116,29 @@ std::string XdsEndpointResource::ToString() const {
 namespace {
 
 void MaybeLogClusterLoadAssignment(
-    const XdsResourceType::DecodeContext& context,
+    const XdsEncodingContext& context,
     const envoy_config_endpoint_v3_ClusterLoadAssignment* cla) {
   if (GRPC_TRACE_FLAG_ENABLED(*context.tracer) &&
       gpr_should_log(GPR_LOG_SEVERITY_DEBUG)) {
-    const upb_MessageDef* msg_type =
+    const upb_msgdef* msg_type =
         envoy_config_endpoint_v3_ClusterLoadAssignment_getmsgdef(
             context.symtab);
     char buf[10240];
-    upb_TextEncode(cla, msg_type, nullptr, 0, buf, sizeof(buf));
+    upb_text_encode(cla, msg_type, nullptr, 0, buf, sizeof(buf));
     gpr_log(GPR_DEBUG, "[xds_client %p] ClusterLoadAssignment: %s",
             context.client, buf);
   }
 }
 
-absl::StatusOr<absl::optional<ServerAddress>> ServerAddressParse(
-    const envoy_config_endpoint_v3_LbEndpoint* lb_endpoint) {
+grpc_error_handle ServerAddressParseAndAppend(
+    const envoy_config_endpoint_v3_LbEndpoint* lb_endpoint,
+    ServerAddressList* list) {
   // If health_status is not HEALTHY or UNKNOWN, skip this endpoint.
   const int32_t health_status =
       envoy_config_endpoint_v3_LbEndpoint_health_status(lb_endpoint);
   if (health_status != envoy_config_core_v3_UNKNOWN &&
       health_status != envoy_config_core_v3_HEALTHY) {
-    return absl::nullopt;
+    return GRPC_ERROR_NONE;
   }
   // Find the ip:port.
   const envoy_config_endpoint_v3_Endpoint* endpoint =
@@ -160,59 +151,61 @@ absl::StatusOr<absl::optional<ServerAddress>> ServerAddressParse(
       envoy_config_core_v3_SocketAddress_address(socket_address));
   uint32_t port = envoy_config_core_v3_SocketAddress_port_value(socket_address);
   if (GPR_UNLIKELY(port >> 16) != 0) {
-    return absl::InvalidArgumentError("Invalid port.");
+    return GRPC_ERROR_CREATE_FROM_STATIC_STRING("Invalid port.");
   }
   // Find load_balancing_weight for the endpoint.
-  uint32_t weight = 1;
   const google_protobuf_UInt32Value* load_balancing_weight =
       envoy_config_endpoint_v3_LbEndpoint_load_balancing_weight(lb_endpoint);
-  if (load_balancing_weight != nullptr) {
-    weight = google_protobuf_UInt32Value_value(load_balancing_weight);
-    if (weight == 0) {
-      return absl::InvalidArgumentError("Invalid endpoint weight of 0.");
-    }
+  const int32_t weight =
+      load_balancing_weight != nullptr
+          ? google_protobuf_UInt32Value_value(load_balancing_weight)
+          : 500;
+  if (weight == 0) {
+    return GRPC_ERROR_CREATE_FROM_STATIC_STRING(
+        "Invalid endpoint weight of 0.");
   }
   // Populate grpc_resolved_address.
-  auto addr = StringToSockaddr(address_str, port);
-  if (!addr.ok()) return addr.status();
+  grpc_resolved_address addr;
+  grpc_error_handle error =
+      grpc_string_to_sockaddr(&addr, address_str.c_str(), port);
+  if (error != GRPC_ERROR_NONE) return error;
   // Append the address to the list.
   std::map<const char*, std::unique_ptr<ServerAddress::AttributeInterface>>
       attributes;
   attributes[ServerAddressWeightAttribute::kServerAddressWeightAttributeKey] =
       absl::make_unique<ServerAddressWeightAttribute>(weight);
-  return ServerAddress(*addr, ChannelArgs(), std::move(attributes));
+  list->emplace_back(addr, nullptr, std::move(attributes));
+  return GRPC_ERROR_NONE;
 }
 
-struct ParsedLocality {
-  size_t priority;
-  XdsEndpointResource::Priority::Locality locality;
-};
-
-absl::StatusOr<ParsedLocality> LocalityParse(
-    const envoy_config_endpoint_v3_LocalityLbEndpoints* locality_lb_endpoints) {
-  ParsedLocality parsed_locality;
+grpc_error_handle LocalityParse(
+    const envoy_config_endpoint_v3_LocalityLbEndpoints* locality_lb_endpoints,
+    XdsEndpointResource::Priority::Locality* output_locality,
+    size_t* priority) {
   // Parse LB weight.
   const google_protobuf_UInt32Value* lb_weight =
       envoy_config_endpoint_v3_LocalityLbEndpoints_load_balancing_weight(
           locality_lb_endpoints);
   // If LB weight is not specified, it means this locality is assigned no load.
-  parsed_locality.locality.lb_weight =
+  // TODO(juanlishen): When we support CDS to configure the inter-locality
+  // policy, we should change the LB weight handling.
+  output_locality->lb_weight =
       lb_weight != nullptr ? google_protobuf_UInt32Value_value(lb_weight) : 0;
-  if (parsed_locality.locality.lb_weight == 0) return parsed_locality;
+  if (output_locality->lb_weight == 0) return GRPC_ERROR_NONE;
   // Parse locality name.
   const envoy_config_core_v3_Locality* locality =
       envoy_config_endpoint_v3_LocalityLbEndpoints_locality(
           locality_lb_endpoints);
   if (locality == nullptr) {
-    return absl::InvalidArgumentError("Empty locality.");
+    return GRPC_ERROR_CREATE_FROM_STATIC_STRING("Empty locality.");
   }
   std::string region =
       UpbStringToStdString(envoy_config_core_v3_Locality_region(locality));
   std::string zone =
-      UpbStringToStdString(envoy_config_core_v3_Locality_zone(locality));
+      UpbStringToStdString(envoy_config_core_v3_Locality_region(locality));
   std::string sub_zone =
       UpbStringToStdString(envoy_config_core_v3_Locality_sub_zone(locality));
-  parsed_locality.locality.name = MakeRefCounted<XdsLocalityName>(
+  output_locality->name = MakeRefCounted<XdsLocalityName>(
       std::move(region), std::move(zone), std::move(sub_zone));
   // Parse the addresses.
   size_t size;
@@ -220,20 +213,17 @@ absl::StatusOr<ParsedLocality> LocalityParse(
       envoy_config_endpoint_v3_LocalityLbEndpoints_lb_endpoints(
           locality_lb_endpoints, &size);
   for (size_t i = 0; i < size; ++i) {
-    auto address = ServerAddressParse(lb_endpoints[i]);
-    if (!address.ok()) return address.status();
-    if (address->has_value()) {
-      parsed_locality.locality.endpoints.push_back(std::move(**address));
-    }
+    grpc_error_handle error = ServerAddressParseAndAppend(
+        lb_endpoints[i], &output_locality->endpoints);
+    if (error != GRPC_ERROR_NONE) return error;
   }
   // Parse the priority.
-  parsed_locality.priority =
-      envoy_config_endpoint_v3_LocalityLbEndpoints_priority(
-          locality_lb_endpoints);
-  return parsed_locality;
+  *priority = envoy_config_endpoint_v3_LocalityLbEndpoints_priority(
+      locality_lb_endpoints);
+  return GRPC_ERROR_NONE;
 }
 
-absl::Status DropParseAndAppend(
+grpc_error_handle DropParseAndAppend(
     const envoy_config_endpoint_v3_ClusterLoadAssignment_Policy_DropOverload*
         drop_overload,
     XdsEndpointResource::DropConfig* drop_config) {
@@ -242,7 +232,7 @@ absl::Status DropParseAndAppend(
       envoy_config_endpoint_v3_ClusterLoadAssignment_Policy_DropOverload_category(
           drop_overload));
   if (category.empty()) {
-    return absl::InvalidArgumentError("Empty drop category name");
+    return GRPC_ERROR_CREATE_FROM_STATIC_STRING("Empty drop category name");
   }
   // Get the drop rate (per million).
   const envoy_type_v3_FractionalPercent* drop_percentage =
@@ -264,60 +254,51 @@ absl::Status DropParseAndAppend(
     case envoy_type_v3_FractionalPercent_MILLION:
       break;
     default:
-      return absl::InvalidArgumentError(
-          "drop config: unknown denominator type");
+      return GRPC_ERROR_CREATE_FROM_STATIC_STRING("Unknown denominator type");
   }
   // Cap numerator to 1000000.
   numerator = std::min(numerator, 1000000u);
   drop_config->AddCategory(std::move(category), numerator);
-  return absl::OkStatus();
+  return GRPC_ERROR_NONE;
 }
 
-absl::StatusOr<XdsEndpointResource> EdsResourceParse(
-    const XdsResourceType::DecodeContext& /*context*/,
+grpc_error_handle EdsResourceParse(
+    const XdsEncodingContext& /*context*/,
     const envoy_config_endpoint_v3_ClusterLoadAssignment*
         cluster_load_assignment,
-    bool /*is_v2*/) {
-  XdsEndpointResource eds_resource;
-  std::vector<std::string> errors;
+    bool /*is_v2*/, XdsEndpointResource* eds_update) {
+  std::vector<grpc_error_handle> errors;
   // Get the endpoints.
   size_t locality_size;
   const envoy_config_endpoint_v3_LocalityLbEndpoints* const* endpoints =
       envoy_config_endpoint_v3_ClusterLoadAssignment_endpoints(
           cluster_load_assignment, &locality_size);
   for (size_t j = 0; j < locality_size; ++j) {
-    auto parsed_locality = LocalityParse(endpoints[j]);
-    if (!parsed_locality.ok()) {
-      errors.emplace_back(parsed_locality.status().message());
+    size_t priority;
+    XdsEndpointResource::Priority::Locality locality;
+    grpc_error_handle error = LocalityParse(endpoints[j], &locality, &priority);
+    if (error != GRPC_ERROR_NONE) {
+      errors.push_back(error);
       continue;
     }
     // Filter out locality with weight 0.
-    if (parsed_locality->locality.lb_weight == 0) continue;
+    if (locality.lb_weight == 0) continue;
     // Make sure prorities is big enough. Note that they might not
     // arrive in priority order.
-    if (eds_resource.priorities.size() < parsed_locality->priority + 1) {
-      eds_resource.priorities.resize(parsed_locality->priority + 1);
+    while (eds_update->priorities.size() < priority + 1) {
+      eds_update->priorities.emplace_back();
     }
-    auto& locality_map =
-        eds_resource.priorities[parsed_locality->priority].localities;
-    auto it = locality_map.find(parsed_locality->locality.name.get());
-    if (it != locality_map.end()) {
-      errors.emplace_back(
-          absl::StrCat("duplicate locality ",
-                       parsed_locality->locality.name->AsHumanReadableString(),
-                       " found in priority ", parsed_locality->priority));
-    } else {
-      locality_map.emplace(parsed_locality->locality.name.get(),
-                           std::move(parsed_locality->locality));
-    }
+    eds_update->priorities[priority].localities.emplace(locality.name.get(),
+                                                        std::move(locality));
   }
-  for (const auto& priority : eds_resource.priorities) {
+  for (const auto& priority : eds_update->priorities) {
     if (priority.localities.empty()) {
-      errors.emplace_back("sparse priority list");
+      errors.push_back(
+          GRPC_ERROR_CREATE_FROM_STATIC_STRING("sparse priority list"));
     }
   }
   // Get the drop config.
-  eds_resource.drop_config = MakeRefCounted<XdsEndpointResource::DropConfig>();
+  eds_update->drop_config = MakeRefCounted<XdsEndpointResource::DropConfig>();
   const envoy_config_endpoint_v3_ClusterLoadAssignment_Policy* policy =
       envoy_config_endpoint_v3_ClusterLoadAssignment_policy(
           cluster_load_assignment);
@@ -328,56 +309,56 @@ absl::StatusOr<XdsEndpointResource> EdsResourceParse(
             envoy_config_endpoint_v3_ClusterLoadAssignment_Policy_drop_overloads(
                 policy, &drop_size);
     for (size_t j = 0; j < drop_size; ++j) {
-      absl::Status status =
-          DropParseAndAppend(drop_overload[j], eds_resource.drop_config.get());
-      if (!status.ok()) errors.emplace_back(status.message());
+      grpc_error_handle error =
+          DropParseAndAppend(drop_overload[j], eds_update->drop_config.get());
+      if (error != GRPC_ERROR_NONE) {
+        errors.push_back(
+            grpc_error_add_child(GRPC_ERROR_CREATE_FROM_STATIC_STRING(
+                                     "drop config validation error"),
+                                 error));
+      }
     }
   }
-  // Return result.
-  if (!errors.empty()) {
-    return absl::InvalidArgumentError(absl::StrCat(
-        "errors parsing EDS resource: [", absl::StrJoin(errors, "; "), "]"));
-  }
-  return eds_resource;
+  return GRPC_ERROR_CREATE_FROM_VECTOR("errors parsing EDS resource", &errors);
 }
 
 }  // namespace
 
-XdsResourceType::DecodeResult XdsEndpointResourceType::Decode(
-    const XdsResourceType::DecodeContext& context,
-    absl::string_view serialized_resource, bool is_v2) const {
-  DecodeResult result;
+absl::StatusOr<XdsResourceType::DecodeResult> XdsEndpointResourceType::Decode(
+    const XdsEncodingContext& context, absl::string_view serialized_resource,
+    bool is_v2) const {
   // Parse serialized proto.
   auto* resource = envoy_config_endpoint_v3_ClusterLoadAssignment_parse(
       serialized_resource.data(), serialized_resource.size(), context.arena);
   if (resource == nullptr) {
-    result.resource = absl::InvalidArgumentError(
+    return absl::InvalidArgumentError(
         "Can't parse ClusterLoadAssignment resource.");
-    return result;
   }
   MaybeLogClusterLoadAssignment(context, resource);
   // Validate resource.
+  DecodeResult result;
   result.name = UpbStringToStdString(
       envoy_config_endpoint_v3_ClusterLoadAssignment_cluster_name(resource));
-  auto eds_resource = EdsResourceParse(context, resource, is_v2);
-  if (!eds_resource.ok()) {
+  auto endpoint_data = absl::make_unique<ResourceDataSubclass>();
+  grpc_error_handle error =
+      EdsResourceParse(context, resource, is_v2, &endpoint_data->resource);
+  if (error != GRPC_ERROR_NONE) {
+    std::string error_str = grpc_error_std_string(error);
+    GRPC_ERROR_UNREF(error);
     if (GRPC_TRACE_FLAG_ENABLED(*context.tracer)) {
       gpr_log(GPR_ERROR, "[xds_client %p] invalid ClusterLoadAssignment %s: %s",
-              context.client, result.name->c_str(),
-              eds_resource.status().ToString().c_str());
+              context.client, result.name.c_str(), error_str.c_str());
     }
-    result.resource = eds_resource.status();
+    result.resource = absl::InvalidArgumentError(error_str);
   } else {
     if (GRPC_TRACE_FLAG_ENABLED(*context.tracer)) {
       gpr_log(GPR_INFO, "[xds_client %p] parsed ClusterLoadAssignment %s: %s",
-              context.client, result.name->c_str(),
-              eds_resource->ToString().c_str());
+              context.client, result.name.c_str(),
+              endpoint_data->resource.ToString().c_str());
     }
-    auto resource = absl::make_unique<ResourceDataSubclass>();
-    resource->resource = std::move(*eds_resource);
-    result.resource = std::move(resource);
+    result.resource = std::move(endpoint_data);
   }
-  return result;
+  return std::move(result);
 }
 
 }  // namespace grpc_core

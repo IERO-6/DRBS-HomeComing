@@ -24,11 +24,6 @@
 
 #include "absl/random/internal/platform.h"
 
-#if !defined(__UCLIBC__) && defined(__GLIBC__) && \
-    (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16))
-#define ABSL_HAVE_GETAUXVAL
-#endif
-
 #if defined(ABSL_ARCH_X86_64)
 #define ABSL_INTERNAL_USE_X86_CPUID
 #elif defined(ABSL_ARCH_PPC) || defined(ABSL_ARCH_ARM) || \
@@ -36,7 +31,7 @@
 #if defined(__ANDROID__)
 #define ABSL_INTERNAL_USE_ANDROID_GETAUXVAL
 #define ABSL_INTERNAL_USE_GETAUXVAL
-#elif defined(__linux__) && defined(ABSL_HAVE_GETAUXVAL)
+#elif defined(__linux__)
 #define ABSL_INTERNAL_USE_LINUX_GETAUXVAL
 #define ABSL_INTERNAL_USE_GETAUXVAL
 #endif
@@ -45,6 +40,7 @@
 #if defined(ABSL_INTERNAL_USE_X86_CPUID)
 #if defined(_WIN32) || defined(_WIN64)
 #include <intrin.h>  // NOLINT(build/include_order)
+#pragma intrinsic(__cpuid)
 #else
 // MSVC-equivalent __cpuid intrinsic function.
 static void __cpuid(int cpu_info[4], int info_type) {

@@ -18,8 +18,11 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <grpc/grpc_security.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <grpc/support/alloc.h>
+#include <grpc/support/log.h>
 
 #include "src/core/lib/security/credentials/alts/grpc_alts_credentials_options.h"
 #include "src/core/tsi/alts/handshaker/transport_security_common_api.h"

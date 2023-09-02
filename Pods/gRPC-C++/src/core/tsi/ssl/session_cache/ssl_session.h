@@ -21,8 +21,6 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <memory>
-
 #if COCOAPODS==1
   #include <openssl_grpc/ssl.h>
 #else

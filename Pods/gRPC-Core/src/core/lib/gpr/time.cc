@@ -77,18 +77,16 @@ static gpr_timespec to_seconds_from_sub_second_time(int64_t time_in_units,
   } else if (time_in_units == INT64_MIN) {
     out = gpr_inf_past(type);
   } else {
-    GPR_DEBUG_ASSERT(GPR_NS_PER_SEC % units_per_sec == 0);
-
-    out.tv_sec = time_in_units / units_per_sec;
-    out.tv_nsec =
-        static_cast<int32_t>((time_in_units - (out.tv_sec * units_per_sec)) *
-                             (GPR_NS_PER_SEC / units_per_sec));
-    /// `out.tv_nsec` should always be positive.
-    if (out.tv_nsec < 0) {
-      out.tv_nsec += GPR_NS_PER_SEC;
-      out.tv_sec--;
+    if (time_in_units >= 0) {
+      out.tv_sec = time_in_units / units_per_sec;
+    } else {
+      out.tv_sec = (-((units_per_sec - 1) - (time_in_units + units_per_sec)) /
+                    units_per_sec) -
+                   1;
     }
-
+    out.tv_nsec =
+        static_cast<int32_t>((time_in_units - out.tv_sec * units_per_sec) *
+                             GPR_NS_PER_SEC / units_per_sec);
     out.clock_type = type;
   }
   return out;
@@ -186,8 +184,7 @@ gpr_timespec gpr_time_sub(gpr_timespec a, gpr_timespec b) {
     dec++;
   }
   if (a.tv_sec == INT64_MAX || a.tv_sec == INT64_MIN) {
-    diff.tv_sec = a.tv_sec;
-    diff.tv_nsec = a.tv_nsec;
+    diff = a;
   } else if (b.tv_sec == INT64_MIN ||
              (b.tv_sec <= 0 && a.tv_sec >= INT64_MAX + b.tv_sec)) {
     diff = gpr_inf_future(GPR_CLOCK_REALTIME);

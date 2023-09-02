@@ -17,11 +17,6 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stddef.h>
-#include <stdint.h>
-
-#include <limits>
-
 #include "absl/container/inlined_vector.h"
 
 #include "src/core/ext/transport/chttp2/transport/hpack_constants.h"
@@ -32,13 +27,9 @@ namespace grpc_core {
 // sizes.
 class HPackEncoderTable {
  public:
-  using EntrySize = uint16_t;
-
   HPackEncoderTable() : elem_size_(hpack_constants::kInitialTableEntries) {}
 
-  static constexpr size_t MaxEntrySize() {
-    return std::numeric_limits<EntrySize>::max();
-  }
+  static constexpr size_t MaxEntrySize() { return 65535; }
 
   // Reserve space in table for the new element, evict entries if needed.
   // Return the new index of the element. Return 0 to indicate not adding to
@@ -71,7 +62,7 @@ class HPackEncoderTable {
   uint32_t table_elems_ = 0;
   uint32_t table_size_ = 0;
   // The size of each element in the HPACK table.
-  absl::InlinedVector<EntrySize, hpack_constants::kInitialTableEntries>
+  absl::InlinedVector<uint16_t, hpack_constants::kInitialTableEntries>
       elem_size_;
 };
 

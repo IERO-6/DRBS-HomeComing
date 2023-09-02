@@ -22,24 +22,36 @@
 #include <string>
 #include <vector>
 
-#include "absl/status/statusor.h"
-#include "absl/strings/string_view.h"
+#include "absl/strings/str_format.h"
 #include "envoy/extensions/transport_sockets/tls/v3/tls.upb.h"
 #include "google/protobuf/any.upb.h"
 #include "google/protobuf/duration.upb.h"
-#include "xds/type/v3/typed_struct.upb.h"
 
-#include "src/core/ext/xds/xds_resource_type.h"
-#include "src/core/lib/gprpp/time.h"
+#include "src/core/ext/xds/upb_utils.h"
 #include "src/core/lib/matchers/matchers.h"
 
 namespace grpc_core {
 
-inline Duration ParseDuration(const google_protobuf_Duration* proto_duration) {
-  return Duration::FromSecondsAndNanoseconds(
-      google_protobuf_Duration_seconds(proto_duration),
-      google_protobuf_Duration_nanos(proto_duration));
-}
+struct Duration {
+  int64_t seconds = 0;
+  int32_t nanos = 0;
+
+  Duration() = default;
+
+  bool operator==(const Duration& other) const {
+    return seconds == other.seconds && nanos == other.nanos;
+  }
+  std::string ToString() const {
+    return absl::StrFormat("Duration seconds: %ld, nanos %d", seconds, nanos);
+  }
+
+  static Duration Parse(const google_protobuf_Duration* proto_duration) {
+    Duration duration;
+    duration.seconds = google_protobuf_Duration_seconds(proto_duration);
+    duration.nanos = google_protobuf_Duration_nanos(proto_duration);
+    return duration;
+  }
+};
 
 struct CommonTlsContext {
   struct CertificateProviderPluginInstance {
@@ -82,20 +94,16 @@ struct CommonTlsContext {
   std::string ToString() const;
   bool Empty() const;
 
-  static absl::StatusOr<CommonTlsContext> Parse(
-      const XdsResourceType::DecodeContext& context,
+  static grpc_error_handle Parse(
+      const XdsEncodingContext& context,
       const envoy_extensions_transport_sockets_tls_v3_CommonTlsContext*
-          common_tls_context_proto);
+          common_tls_context_proto,
+      CommonTlsContext* common_tls_context);
 };
 
-struct ExtractExtensionTypeNameResult {
-  absl::string_view type;
-  xds_type_v3_TypedStruct* typed_struct = nullptr;
-};
-
-absl::StatusOr<ExtractExtensionTypeNameResult> ExtractExtensionTypeName(
-    const XdsResourceType::DecodeContext& context,
-    const google_protobuf_Any* any);
+grpc_error_handle ExtractHttpFilterTypeName(const XdsEncodingContext& context,
+                                            const google_protobuf_Any* any,
+                                            absl::string_view* filter_type);
 
 }  // namespace grpc_core
 

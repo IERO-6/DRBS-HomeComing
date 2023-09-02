@@ -19,9 +19,11 @@
 
 #include <grpc/support/port_platform.h>
 
+#include <stdio.h>
 #include <time.h>
 
 #include "absl/status/status.h"
+#include "absl/strings/string_view.h"
 
 namespace grpc_core {
 

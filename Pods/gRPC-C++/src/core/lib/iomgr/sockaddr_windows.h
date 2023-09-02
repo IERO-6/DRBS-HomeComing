@@ -21,8 +21,6 @@
 
 #include <grpc/support/port_platform.h>
 
-// IWYU pragma: private, include "src/core/lib/iomgr/sockaddr.h"
-
 #include "src/core/lib/iomgr/port.h"
 
 #ifdef GRPC_WINSOCK_SOCKET

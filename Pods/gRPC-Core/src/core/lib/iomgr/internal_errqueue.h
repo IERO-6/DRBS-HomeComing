@@ -177,10 +177,15 @@ struct tcp_info {
 /* Returns true if kernel is capable of supporting errqueue and timestamping.
  * Currently allowing only linux kernels above 4.0.0
  */
-bool KernelSupportsErrqueue();
+bool kernel_supports_errqueue();
 
 } /* namespace grpc_core */
 
 #endif /* GRPC_POSIX_SOCKET_TCP */
+
+namespace grpc_core {
+/* Initializes errqueue support */
+void grpc_errqueue_init();
+} /* namespace grpc_core */
 
 #endif /* GRPC_CORE_LIB_IOMGR_INTERNAL_ERRQUEUE_H */

@@ -20,12 +20,17 @@
 
 #include "src/core/lib/resource_quota/arena.h"
 
-#include <atomic>
+#include <string.h>
+
 #include <new>
 
 #include <grpc/support/alloc.h>
+#include <grpc/support/atm.h>
+#include <grpc/support/log.h>
+#include <grpc/support/sync.h>
 
 #include "src/core/lib/gpr/alloc.h"
+#include "src/core/lib/gprpp/memory.h"
 
 namespace {
 
@@ -50,7 +55,7 @@ Arena::~Arena() {
   Zone* z = last_zone_;
   while (z) {
     Zone* prev_z = z->prev;
-    Destruct(z);
+    z->~Zone();
     gpr_free_aligned(z);
     z = prev_z;
   }
@@ -72,16 +77,6 @@ std::pair<Arena*, void*> Arena::CreateWithAlloc(
 }
 
 size_t Arena::Destroy() {
-  ManagedNewObject* p;
-  // Outer loop: clear the managed new object list.
-  // We do this repeatedly in case a destructor ends up allocating something.
-  while ((p = managed_new_head_.exchange(nullptr, std::memory_order_relaxed)) !=
-         nullptr) {
-    // Inner loop: destruct a batch of objects.
-    while (p != nullptr) {
-      Destruct(std::exchange(p, p->next));
-    }
-  }
   size_t size = total_used_.load(std::memory_order_relaxed);
   memory_allocator_->Release(total_allocated_.load(std::memory_order_relaxed));
   this->~Arena();
@@ -107,13 +102,6 @@ void* Arena::AllocZone(size_t size) {
   } while (!last_zone_.compare_exchange_weak(prev, z, std::memory_order_relaxed,
                                              std::memory_order_relaxed));
   return reinterpret_cast<char*>(z) + zone_base_size;
-}
-
-void Arena::ManagedNewObject::Link(std::atomic<ManagedNewObject*>* head) {
-  next = head->load(std::memory_order_relaxed);
-  while (!head->compare_exchange_weak(next, this, std::memory_order_acq_rel,
-                                      std::memory_order_relaxed)) {
-  }
 }
 
 }  // namespace grpc_core

@@ -21,9 +21,7 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <stdint.h>
-
-#include "src/core/lib/gprpp/global_config_generic.h"  // IWYU pragma: export
+#include "src/core/lib/gprpp/global_config_generic.h"
 #include "src/core/lib/gprpp/memory.h"
 
 namespace grpc_core {

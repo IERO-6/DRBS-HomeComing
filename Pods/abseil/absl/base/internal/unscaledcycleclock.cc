@@ -24,13 +24,8 @@
 #ifdef __GLIBC__
 #include <sys/platform/ppc.h>
 #elif defined(__FreeBSD__)
-// clang-format off
-// This order does actually matter =(.
-#include <sys/types.h>
 #include <sys/sysctl.h>
-// clang-format on
-
-#include "absl/base/call_once.h"
+#include <sys/types.h>
 #endif
 #endif
 
@@ -53,6 +48,12 @@ double UnscaledCycleClock::Frequency() {
 }
 
 #elif defined(__x86_64__)
+
+int64_t UnscaledCycleClock::Now() {
+  uint64_t low, high;
+  __asm__ volatile("rdtsc" : "=a"(low), "=d"(high));
+  return (high << 32) | low;
+}
 
 double UnscaledCycleClock::Frequency() {
   return base_internal::NominalCPUFrequency();

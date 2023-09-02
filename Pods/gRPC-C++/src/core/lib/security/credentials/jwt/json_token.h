@@ -22,12 +22,12 @@
 #include <grpc/support/port_platform.h>
 
 #if COCOAPODS==1
-  #include <openssl_grpc/crypto.h>
+  #include <openssl_grpc/rsa.h>
 #else
-  #include <openssl/crypto.h>
+  #include <openssl/rsa.h>
 #endif
 
-#include <grpc/impl/codegen/gpr_types.h>
+#include <grpc/slice.h>
 
 #include "src/core/lib/json/json.h"
 

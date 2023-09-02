@@ -30,8 +30,7 @@ public class _ObjC_HeartbeatController: NSObject {
   /// Asynchronously logs a new heartbeat, if needed.
   ///
   /// - Note: This API is thread-safe.
-  /// - Parameter agent: The string agent (i.e. Firebase User Agent) to associate the logged
-  /// heartbeat with.
+  /// - Parameter agent: The string agent (i.e. Firebase User Agent) to associate the logged heartbeat with.
   public func log(_ agent: String) {
     heartbeatController.log(agent)
   }

@@ -18,77 +18,29 @@
 
 #include <grpc/support/port_platform.h>
 
-#include <string.h>
-
-#include <algorithm>
-#include <array>
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include "absl/base/thread_annotations.h"
-#include "absl/status/status.h"
-#include "absl/status/statusor.h"
-#include "absl/strings/match.h"
-#include "absl/strings/numbers.h"
-#include "absl/strings/str_cat.h"
 #include "absl/strings/str_join.h"
 #include "absl/strings/str_replace.h"
-#include "absl/strings/string_view.h"
-#include "absl/types/optional.h"
-#include "absl/types/variant.h"
-
-#include <grpc/grpc.h>
-#include <grpc/grpc_security.h>
-#include <grpc/impl/codegen/grpc_types.h>
-#include <grpc/slice.h>
-#include <grpc/status.h>
-#include <grpc/support/log.h>
 
 #include "src/core/ext/filters/server_config_selector/server_config_selector.h"
 #include "src/core/ext/filters/server_config_selector/server_config_selector_filter.h"
-#include "src/core/ext/xds/certificate_provider_store.h"
-#include "src/core/ext/xds/xds_bootstrap_grpc.h"
 #include "src/core/ext/xds/xds_certificate_provider.h"
 #include "src/core/ext/xds/xds_channel_stack_modifier.h"
-#include "src/core/ext/xds/xds_client_grpc.h"
-#include "src/core/ext/xds/xds_common_types.h"
-#include "src/core/ext/xds/xds_http_filters.h"
+#include "src/core/ext/xds/xds_client.h"
 #include "src/core/ext/xds/xds_listener.h"
-#include "src/core/ext/xds/xds_resource_type_impl.h"
 #include "src/core/ext/xds/xds_route_config.h"
 #include "src/core/ext/xds/xds_routing.h"
 #include "src/core/lib/address_utils/parse_address.h"
 #include "src/core/lib/address_utils/sockaddr_utils.h"
 #include "src/core/lib/channel/channel_args.h"
-#include "src/core/lib/channel/channel_args_preconditioning.h"
-#include "src/core/lib/channel/channel_fwd.h"
 #include "src/core/lib/config/core_configuration.h"
-#include "src/core/lib/debug/trace.h"
-#include "src/core/lib/gprpp/debug_location.h"
 #include "src/core/lib/gprpp/host_port.h"
-#include "src/core/lib/gprpp/ref_counted_ptr.h"
-#include "src/core/lib/gprpp/sync.h"
-#include "src/core/lib/gprpp/unique_type_name.h"
-#include "src/core/lib/iomgr/endpoint.h"
-#include "src/core/lib/iomgr/error.h"
-#include "src/core/lib/iomgr/exec_ctx.h"
-#include "src/core/lib/iomgr/iomgr_fwd.h"
-#include "src/core/lib/iomgr/resolved_address.h"
 #include "src/core/lib/iomgr/sockaddr.h"
 #include "src/core/lib/iomgr/socket_utils.h"
-#include "src/core/lib/security/credentials/credentials.h"
-#include "src/core/lib/security/credentials/tls/grpc_tls_certificate_distributor.h"
-#include "src/core/lib/security/credentials/tls/grpc_tls_certificate_provider.h"
 #include "src/core/lib/security/credentials/xds/xds_credentials.h"
-#include "src/core/lib/service_config/service_config.h"
-#include "src/core/lib/service_config/service_config_impl.h"
+#include "src/core/lib/slice/slice_utils.h"
 #include "src/core/lib/surface/api_trace.h"
 #include "src/core/lib/surface/server.h"
-#include "src/core/lib/transport/metadata_batch.h"
+#include "src/core/lib/transport/error_utils.h"
 #include "src/core/lib/uri/uri_parser.h"
 
 namespace grpc_core {
@@ -101,12 +53,8 @@ TraceFlag grpc_xds_server_config_fetcher_trace(false,
 // listeners from the xDS control plane.
 class XdsServerConfigFetcher : public grpc_server_config_fetcher {
  public:
-  XdsServerConfigFetcher(RefCountedPtr<GrpcXdsClient> xds_client,
+  XdsServerConfigFetcher(RefCountedPtr<XdsClient> xds_client,
                          grpc_server_xds_status_notifier notifier);
-
-  ~XdsServerConfigFetcher() override {
-    xds_client_.reset(DEBUG_LOCATION, "XdsServerConfigFetcher");
-  }
 
   void StartWatch(std::string listening_address,
                   std::unique_ptr<grpc_server_config_fetcher::WatcherInterface>
@@ -123,7 +71,7 @@ class XdsServerConfigFetcher : public grpc_server_config_fetcher {
  private:
   class ListenerWatcher;
 
-  RefCountedPtr<GrpcXdsClient> xds_client_;
+  const RefCountedPtr<XdsClient> xds_client_;
   const grpc_server_xds_status_notifier serving_status_notifier_;
   Mutex mu_;
   std::map<grpc_server_config_fetcher::WatcherInterface*, ListenerWatcher*>
@@ -143,19 +91,15 @@ class XdsServerConfigFetcher : public grpc_server_config_fetcher {
 class XdsServerConfigFetcher::ListenerWatcher
     : public XdsListenerResourceType::WatcherInterface {
  public:
-  ListenerWatcher(RefCountedPtr<GrpcXdsClient> xds_client,
+  ListenerWatcher(RefCountedPtr<XdsClient> xds_client,
                   std::unique_ptr<grpc_server_config_fetcher::WatcherInterface>
                       server_config_watcher,
                   grpc_server_xds_status_notifier serving_status_notifier,
                   std::string listening_address);
 
-  ~ListenerWatcher() override {
-    xds_client_.reset(DEBUG_LOCATION, "ListenerWatcher");
-  }
-
   void OnResourceChanged(XdsListenerResource listener) override;
 
-  void OnError(absl::Status status) override;
+  void OnError(grpc_error_handle error) override;
 
   void OnResourceDoesNotExist() override;
 
@@ -179,7 +123,7 @@ class XdsServerConfigFetcher::ListenerWatcher
       FilterChainMatchManager* filter_chain_match_manager)
       ABSL_EXCLUSIVE_LOCKS_REQUIRED(&mu_);
 
-  RefCountedPtr<GrpcXdsClient> xds_client_;
+  const RefCountedPtr<XdsClient> xds_client_;
   const std::unique_ptr<grpc_server_config_fetcher::WatcherInterface>
       server_config_watcher_;
   const grpc_server_xds_status_notifier serving_status_notifier_;
@@ -199,17 +143,13 @@ class XdsServerConfigFetcher::ListenerWatcher
 class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager
     : public grpc_server_config_fetcher::ConnectionManager {
  public:
-  FilterChainMatchManager(RefCountedPtr<GrpcXdsClient> xds_client,
+  FilterChainMatchManager(RefCountedPtr<XdsClient> xds_client,
                           XdsListenerResource::FilterChainMap filter_chain_map,
                           absl::optional<XdsListenerResource::FilterChainData>
                               default_filter_chain);
 
-  ~FilterChainMatchManager() override {
-    xds_client_.reset(DEBUG_LOCATION, "FilterChainMatchManager");
-  }
-
-  absl::StatusOr<ChannelArgs> UpdateChannelArgsForConnection(
-      const ChannelArgs& args, grpc_endpoint* tcp) override;
+  absl::StatusOr<grpc_channel_args*> UpdateChannelArgsForConnection(
+      grpc_channel_args* args, grpc_endpoint* tcp) override;
 
   void Orphan() override;
 
@@ -254,10 +194,10 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager
   // RDS resources.
   void OnRouteConfigChanged(const std::string& resource_name,
                             XdsRouteConfigResource route_config);
-  void OnError(const std::string& resource_name, absl::Status status);
+  void OnError(const std::string& resource_name, grpc_error_handle error);
   void OnResourceDoesNotExist(const std::string& resource_name);
 
-  RefCountedPtr<GrpcXdsClient> xds_client_;
+  RefCountedPtr<XdsClient> xds_client_;
   // This ref is only kept around till the FilterChainMatchManager becomes
   // ready.
   RefCountedPtr<ListenerWatcher> listener_watcher_;
@@ -292,8 +232,8 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
                                                       std::move(route_config));
   }
 
-  void OnError(absl::Status status) override {
-    filter_chain_match_manager_->OnError(resource_name_, status);
+  void OnError(grpc_error_handle error) override {
+    filter_chain_match_manager_->OnError(resource_name_, error);
   }
 
   void OnResourceDoesNotExist() override {
@@ -413,14 +353,10 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
     : public ServerConfigSelectorProvider {
  public:
   DynamicXdsServerConfigSelectorProvider(
-      RefCountedPtr<GrpcXdsClient> xds_client, std::string resource_name,
+      RefCountedPtr<XdsClient> xds_client, std::string resource_name,
       absl::StatusOr<XdsRouteConfigResource> initial_resource,
       std::vector<XdsListenerResource::HttpConnectionManager::HttpFilter>
           http_filters);
-
-  ~DynamicXdsServerConfigSelectorProvider() override {
-    xds_client_.reset(DEBUG_LOCATION, "DynamicXdsServerConfigSelectorProvider");
-  }
 
   void Orphan() override;
 
@@ -433,10 +369,10 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
   class RouteConfigWatcher;
 
   void OnRouteConfigChanged(XdsRouteConfigResource rds_update);
-  void OnError(absl::Status status);
+  void OnError(grpc_error_handle error);
   void OnResourceDoesNotExist();
 
-  RefCountedPtr<GrpcXdsClient> xds_client_;
+  RefCountedPtr<XdsClient> xds_client_;
   std::string resource_name_;
   std::vector<XdsListenerResource::HttpConnectionManager::HttpFilter>
       http_filters_;
@@ -461,7 +397,7 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
     parent_->OnRouteConfigChanged(std::move(route_config));
   }
 
-  void OnError(absl::Status status) override { parent_->OnError(status); }
+  void OnError(grpc_error_handle error) override { parent_->OnError(error); }
 
   void OnResourceDoesNotExist() override { parent_->OnResourceDoesNotExist(); }
 
@@ -474,7 +410,7 @@ class XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
 //
 
 XdsServerConfigFetcher::XdsServerConfigFetcher(
-    RefCountedPtr<GrpcXdsClient> xds_client,
+    RefCountedPtr<XdsClient> xds_client,
     grpc_server_xds_status_notifier notifier)
     : xds_client_(std::move(xds_client)), serving_status_notifier_(notifier) {
   GPR_ASSERT(xds_client_ != nullptr);
@@ -496,14 +432,13 @@ void XdsServerConfigFetcher::StartWatch(
     std::unique_ptr<grpc_server_config_fetcher::WatcherInterface> watcher) {
   grpc_server_config_fetcher::WatcherInterface* watcher_ptr = watcher.get();
   auto listener_watcher = MakeRefCounted<ListenerWatcher>(
-      xds_client_->Ref(DEBUG_LOCATION, "ListenerWatcher"), std::move(watcher),
-      serving_status_notifier_, listening_address);
+      xds_client_, std::move(watcher), serving_status_notifier_,
+      listening_address);
   auto* listener_watcher_ptr = listener_watcher.get();
   XdsListenerResourceType::StartWatch(
       xds_client_.get(),
       ListenerResourceName(
-          static_cast<const GrpcXdsBootstrap&>(xds_client_->bootstrap())
-              .server_listener_resource_name_template(),
+          xds_client_->bootstrap().server_listener_resource_name_template(),
           listening_address),
       std::move(listener_watcher));
   MutexLock lock(&mu_);
@@ -519,8 +454,7 @@ void XdsServerConfigFetcher::CancelWatch(
     XdsListenerResourceType::CancelWatch(
         xds_client_.get(),
         ListenerResourceName(
-            static_cast<const GrpcXdsBootstrap&>(xds_client_->bootstrap())
-                .server_listener_resource_name_template(),
+            xds_client_->bootstrap().server_listener_resource_name_template(),
             it->second->listening_address()),
         it->second, false /* delay_unsubscription */);
     listener_watchers_.erase(it);
@@ -532,7 +466,7 @@ void XdsServerConfigFetcher::CancelWatch(
 //
 
 XdsServerConfigFetcher::ListenerWatcher::ListenerWatcher(
-    RefCountedPtr<GrpcXdsClient> xds_client,
+    RefCountedPtr<XdsClient> xds_client,
     std::unique_ptr<grpc_server_config_fetcher::WatcherInterface>
         server_config_watcher,
     grpc_server_xds_status_notifier serving_status_notifier,
@@ -556,8 +490,7 @@ void XdsServerConfigFetcher::ListenerWatcher::OnResourceChanged(
     return;
   }
   auto new_filter_chain_match_manager = MakeRefCounted<FilterChainMatchManager>(
-      xds_client_->Ref(DEBUG_LOCATION, "FilterChainMatchManager"),
-      std::move(listener.filter_chain_map),
+      xds_client_, std::move(listener.filter_chain_map),
       std::move(listener.default_filter_chain));
   MutexLock lock(&mu_);
   if (filter_chain_match_manager_ == nullptr ||
@@ -576,26 +509,29 @@ void XdsServerConfigFetcher::ListenerWatcher::OnResourceChanged(
   }
 }
 
-void XdsServerConfigFetcher::ListenerWatcher::OnError(absl::Status status) {
+void XdsServerConfigFetcher::ListenerWatcher::OnError(grpc_error_handle error) {
   MutexLock lock(&mu_);
   if (filter_chain_match_manager_ != nullptr ||
       pending_filter_chain_match_manager_ != nullptr) {
     gpr_log(GPR_ERROR,
             "ListenerWatcher:%p XdsClient reports error: %s for %s; "
             "ignoring in favor of existing resource",
-            this, status.ToString().c_str(), listening_address_.c_str());
+            this, grpc_error_std_string(error).c_str(),
+            listening_address_.c_str());
   } else {
     if (serving_status_notifier_.on_serving_status_update != nullptr) {
       serving_status_notifier_.on_serving_status_update(
           serving_status_notifier_.user_data, listening_address_.c_str(),
-          {GRPC_STATUS_UNAVAILABLE, status.ToString().c_str()});
+          {GRPC_STATUS_UNAVAILABLE, grpc_error_std_string(error).c_str()});
     } else {
       gpr_log(GPR_ERROR,
               "ListenerWatcher:%p error obtaining xDS Listener resource: %s; "
               "not serving on %s",
-              this, status.ToString().c_str(), listening_address_.c_str());
+              this, grpc_error_std_string(error).c_str(),
+              listening_address_.c_str());
     }
   }
+  GRPC_ERROR_UNREF(error);
 }
 
 void XdsServerConfigFetcher::ListenerWatcher::OnFatalError(
@@ -660,7 +596,7 @@ void XdsServerConfigFetcher::ListenerWatcher::
 
 XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
     FilterChainMatchManager(
-        RefCountedPtr<GrpcXdsClient> xds_client,
+        RefCountedPtr<XdsClient> xds_client,
         XdsListenerResource::FilterChainMap filter_chain_map,
         absl::optional<XdsListenerResource::FilterChainData>
             default_filter_chain)
@@ -841,7 +777,7 @@ void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
 }
 
 void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::OnError(
-    const std::string& resource_name, absl::Status status) {
+    const std::string& resource_name, grpc_error_handle error) {
   RefCountedPtr<ListenerWatcher> listener_watcher;
   {
     MutexLock lock(&mu_);
@@ -850,11 +786,11 @@ void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::OnError(
       if (--rds_resources_yet_to_fetch_ == 0) {
         listener_watcher = std::move(listener_watcher_);
       }
-      state.rds_update = status;
+      state.rds_update = grpc_error_to_absl_status(error);
     } else {
       // Prefer existing good version over current errored version
       if (!state.rds_update->ok()) {
-        state.rds_update = status;
+        state.rds_update = grpc_error_to_absl_status(error);
       }
     }
   }
@@ -863,6 +799,7 @@ void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::OnError(
   if (listener_watcher != nullptr) {
     listener_watcher->PendingFilterChainMatchManagerReady(this);
   }
+  GRPC_ERROR_UNREF(error);
 }
 
 void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
@@ -963,10 +900,13 @@ const XdsListenerResource::FilterChainData* FindFilterChainDataForSourceType(
   if (!SplitHostPort(source_uri->path(), &host, &port)) {
     return nullptr;
   }
-  auto source_addr = StringToSockaddr(host, 0);  // Port doesn't matter here.
-  if (!source_addr.ok()) {
-    gpr_log(GPR_DEBUG, "Could not parse \"%s\" as socket address: %s",
-            host.c_str(), source_addr.status().ToString().c_str());
+  grpc_resolved_address source_addr;
+  grpc_error_handle error = grpc_string_to_sockaddr(
+      &source_addr, host.c_str(), 0 /* port doesn't matter here */);
+  if (error != GRPC_ERROR_NONE) {
+    gpr_log(GPR_DEBUG, "Could not parse string to socket address: %s",
+            host.c_str());
+    GRPC_ERROR_UNREF(error);
     return nullptr;
   }
   // Use kAny only if kSameIporLoopback and kExternal are empty
@@ -980,20 +920,20 @@ const XdsListenerResource::FilterChainData* FindFilterChainDataForSourceType(
     return FindFilterChainDataForSourceIp(
         source_types_array[static_cast<int>(
             XdsListenerResource::FilterChainMap::ConnectionSourceType::kAny)],
-        &*source_addr, port);
+        &source_addr, port);
   }
-  if (IsLoopbackIp(&*source_addr) || host == destination_ip) {
+  if (IsLoopbackIp(&source_addr) || host == destination_ip) {
     return FindFilterChainDataForSourceIp(
         source_types_array[static_cast<int>(
             XdsListenerResource::FilterChainMap::ConnectionSourceType::
                 kSameIpOrLoopback)],
-        &*source_addr, port);
+        &source_addr, port);
   } else {
     return FindFilterChainDataForSourceIp(
         source_types_array[static_cast<int>(
             XdsListenerResource::FilterChainMap::ConnectionSourceType::
                 kExternal)],
-        &*source_addr, port);
+        &source_addr, port);
   }
 }
 
@@ -1011,11 +951,13 @@ const XdsListenerResource::FilterChainData* FindFilterChainDataForDestinationIp(
   if (!SplitHostPort(destination_uri->path(), &host, &port)) {
     return nullptr;
   }
-  auto destination_addr =
-      StringToSockaddr(host, 0);  // Port doesn't matter here.
-  if (!destination_addr.ok()) {
-    gpr_log(GPR_DEBUG, "Could not parse \"%s\" as socket address: %s",
-            host.c_str(), destination_addr.status().ToString().c_str());
+  grpc_resolved_address destination_addr;
+  grpc_error_handle error = grpc_string_to_sockaddr(
+      &destination_addr, host.c_str(), 0 /* port doesn't matter here */);
+  if (error != GRPC_ERROR_NONE) {
+    gpr_log(GPR_DEBUG, "Could not parse string to socket address: %s",
+            host.c_str());
+    GRPC_ERROR_UNREF(error);
     return nullptr;
   }
   const XdsListenerResource::FilterChainMap::DestinationIp* best_match =
@@ -1033,7 +975,7 @@ const XdsListenerResource::FilterChainData* FindFilterChainDataForDestinationIp(
             entry.prefix_range->prefix_len) {
       continue;
     }
-    if (grpc_sockaddr_match_subnet(&*destination_addr,
+    if (grpc_sockaddr_match_subnet(&destination_addr,
                                    &entry.prefix_range->address,
                                    entry.prefix_range->prefix_len)) {
       best_match = &entry;
@@ -1044,18 +986,19 @@ const XdsListenerResource::FilterChainData* FindFilterChainDataForDestinationIp(
                                           host);
 }
 
-absl::StatusOr<ChannelArgs> XdsServerConfigFetcher::ListenerWatcher::
+absl::StatusOr<grpc_channel_args*> XdsServerConfigFetcher::ListenerWatcher::
     FilterChainMatchManager::UpdateChannelArgsForConnection(
-        const ChannelArgs& input_args, grpc_endpoint* tcp) {
-  ChannelArgs args = input_args;
+        grpc_channel_args* args, grpc_endpoint* tcp) {
   const auto* filter_chain = FindFilterChainDataForDestinationIp(
       filter_chain_map_.destination_ip_vector, tcp);
   if (filter_chain == nullptr && default_filter_chain_.has_value()) {
     filter_chain = &default_filter_chain_.value();
   }
   if (filter_chain == nullptr) {
+    grpc_channel_args_destroy(args);
     return absl::UnavailableError("No matching filter chain found");
   }
+  absl::InlinedVector<grpc_arg, 3> args_to_add;
   RefCountedPtr<ServerConfigSelectorProvider> server_config_selector_provider;
   RefCountedPtr<XdsChannelStackModifier> channel_stack_modifier;
   RefCountedPtr<XdsCertificateProvider> xds_certificate_provider;
@@ -1096,27 +1039,33 @@ absl::StatusOr<ChannelArgs> XdsServerConfigFetcher::ListenerWatcher::
       }
       server_config_selector_provider =
           MakeRefCounted<DynamicXdsServerConfigSelectorProvider>(
-              xds_client_->Ref(DEBUG_LOCATION,
-                               "DynamicXdsServerConfigSelectorProvider"),
+              xds_client_,
               filter_chain->http_connection_manager.route_config_name,
               std::move(initial_resource),
               filter_chain->http_connection_manager.http_filters);
     }
-    args = args.SetObject(server_config_selector_provider)
-               .SetObject(channel_stack_modifier);
+    args_to_add.emplace_back(server_config_selector_provider->MakeChannelArg());
+    args_to_add.emplace_back(channel_stack_modifier->MakeChannelArg());
   }
   // Add XdsCertificateProvider if credentials are xDS.
-  auto* server_creds = args.GetObject<grpc_server_credentials>();
-  if (server_creds != nullptr &&
-      server_creds->type() == XdsServerCredentials::Type()) {
+  grpc_server_credentials* server_creds =
+      grpc_find_server_credentials_in_args(args);
+  if (server_creds != nullptr && server_creds->type() == kCredentialsTypeXds) {
     absl::StatusOr<RefCountedPtr<XdsCertificateProvider>> result =
         CreateOrGetXdsCertificateProviderFromFilterChainData(filter_chain);
     if (!result.ok()) {
+      grpc_channel_args_destroy(args);
       return result.status();
     }
     xds_certificate_provider = std::move(*result);
     GPR_ASSERT(xds_certificate_provider != nullptr);
-    args = args.SetObject(xds_certificate_provider);
+    args_to_add.emplace_back(xds_certificate_provider->MakeChannelArg());
+  }
+  if (!args_to_add.empty()) {
+    grpc_channel_args* updated_args = grpc_channel_args_copy_and_add(
+        args, args_to_add.data(), args_to_add.size());
+    grpc_channel_args_destroy(args);
+    args = updated_args;
   }
   return args;
 }
@@ -1146,12 +1095,15 @@ XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
       config_selector_route.unsupported_action =
           absl::get_if<XdsRouteConfigResource::Route::NonForwardingAction>(
               &route.action) == nullptr;
-      auto result = XdsRouting::GeneratePerHTTPFilterConfigs(
-          http_filters, vhost, route, nullptr, ChannelArgs());
-      if (!result.ok()) return result.status();
+      XdsRouting::GeneratePerHttpFilterConfigsResult result =
+          XdsRouting::GeneratePerHTTPFilterConfigs(http_filters, vhost, route,
+                                                   nullptr, nullptr);
+      if (result.error != GRPC_ERROR_NONE) {
+        return grpc_error_to_absl_status(result.error);
+      }
       std::vector<std::string> fields;
-      fields.reserve(result->per_filter_configs.size());
-      for (const auto& p : result->per_filter_configs) {
+      fields.reserve(result.per_filter_configs.size());
+      for (const auto& p : result.per_filter_configs) {
         fields.emplace_back(absl::StrCat("    \"", p.first, "\": [\n",
                                          absl::StrJoin(p.second, ",\n"),
                                          "\n    ]"));
@@ -1167,9 +1119,12 @@ XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
             absl::StrJoin(fields, ",\n"),
             "\n  } ]\n"
             "}");
+        grpc_error_handle error = GRPC_ERROR_NONE;
         config_selector_route.method_config =
-            ServiceConfigImpl::Create(result->args, json.c_str()).value();
+            ServiceConfig::Create(result.args, json.c_str(), &error);
+        GPR_ASSERT(error == GRPC_ERROR_NONE);
       }
+      grpc_channel_args_destroy(result.args);
     }
   }
   return config_selector;
@@ -1235,7 +1190,7 @@ ServerConfigSelector::CallConfig XdsServerConfigFetcher::ListenerWatcher::
 XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
     DynamicXdsServerConfigSelectorProvider::
         DynamicXdsServerConfigSelectorProvider(
-            RefCountedPtr<GrpcXdsClient> xds_client, std::string resource_name,
+            RefCountedPtr<XdsClient> xds_client, std::string resource_name,
             absl::StatusOr<XdsRouteConfigResource> initial_resource,
             std::vector<XdsListenerResource::HttpConnectionManager::HttpFilter>
                 http_filters)
@@ -1302,13 +1257,15 @@ void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
 }
 
 void XdsServerConfigFetcher::ListenerWatcher::FilterChainMatchManager::
-    DynamicXdsServerConfigSelectorProvider::OnError(absl::Status status) {
+    DynamicXdsServerConfigSelectorProvider::OnError(grpc_error_handle error) {
   MutexLock lock(&mu_);
   // Prefer existing good update.
   if (resource_.ok()) {
+    GRPC_ERROR_UNREF(error);
     return;
   }
-  resource_ = status;
+  resource_ = grpc_error_to_absl_status(error);
+  GRPC_ERROR_UNREF(error);
   if (watcher_ == nullptr) {
     return;
   }
@@ -1332,22 +1289,24 @@ grpc_server_config_fetcher* grpc_server_config_fetcher_xds_create(
     grpc_server_xds_status_notifier notifier, const grpc_channel_args* args) {
   grpc_core::ApplicationCallbackExecCtx callback_exec_ctx;
   grpc_core::ExecCtx exec_ctx;
-  grpc_core::ChannelArgs channel_args = grpc_core::CoreConfiguration::Get()
-                                            .channel_args_preconditioning()
-                                            .PreconditionChannelArgs(args);
+  args = grpc_core::CoreConfiguration::Get()
+             .channel_args_preconditioning()
+             .PreconditionChannelArgs(args);
   GRPC_API_TRACE(
       "grpc_server_config_fetcher_xds_create(notifier={on_serving_status_"
       "update=%p, user_data=%p}, args=%p)",
       3, (notifier.on_serving_status_update, notifier.user_data, args));
-  auto xds_client = grpc_core::GrpcXdsClient::GetOrCreate(
-      channel_args, "XdsServerConfigFetcher");
-  if (!xds_client.ok()) {
+  grpc_error_handle error = GRPC_ERROR_NONE;
+  grpc_core::RefCountedPtr<grpc_core::XdsClient> xds_client =
+      grpc_core::XdsClient::GetOrCreate(args, &error);
+  grpc_channel_args_destroy(args);
+  if (error != GRPC_ERROR_NONE) {
     gpr_log(GPR_ERROR, "Failed to create xds client: %s",
-            xds_client.status().ToString().c_str());
+            grpc_error_std_string(error).c_str());
+    GRPC_ERROR_UNREF(error);
     return nullptr;
   }
-  if (static_cast<const grpc_core::GrpcXdsBootstrap&>(
-          (*xds_client)->bootstrap())
+  if (xds_client->bootstrap()
           .server_listener_resource_name_template()
           .empty()) {
     gpr_log(GPR_ERROR,
@@ -1355,6 +1314,5 @@ grpc_server_config_fetcher* grpc_server_config_fetcher_xds_create(
             "file.");
     return nullptr;
   }
-  return new grpc_core::XdsServerConfigFetcher(std::move(*xds_client),
-                                               notifier);
+  return new grpc_core::XdsServerConfigFetcher(std::move(xds_client), notifier);
 }

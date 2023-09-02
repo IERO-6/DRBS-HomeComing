@@ -41,8 +41,6 @@ class TargetData;
 
 namespace remote {
 
-enum class BloomFilterApplicationStatus { kSuccess, kSkipped, kFalsePositive };
-
 /**
  * Interface implemented by `RemoteStore` to expose target metadata to the
  * `WatchChangeAggregator`.
@@ -64,9 +62,6 @@ class TargetMetadataProvider {
    */
   virtual absl::optional<local::TargetData> GetTargetDataForTarget(
       model::TargetId target_id) const = 0;
-
-  /** Returns the database ID of the Firestore instance. */
-  virtual const model::DatabaseId& GetDatabaseId() const = 0;
 };
 
 /**
@@ -248,12 +243,11 @@ class TargetState {
 class RemoteEvent {
  public:
   using TargetChangeMap = std::unordered_map<model::TargetId, TargetChange>;
-  using TargetMismatchMap =
-      std::unordered_map<model::TargetId, local::QueryPurpose>;
+  using TargetSet = std::unordered_set<model::TargetId>;
 
   RemoteEvent(model::SnapshotVersion snapshot_version,
               TargetChangeMap target_changes,
-              TargetMismatchMap target_mismatches,
+              TargetSet target_mismatches,
               model::DocumentUpdateMap document_updates,
               model::DocumentKeySet limbo_document_changes)
       : snapshot_version_{snapshot_version},
@@ -274,11 +268,10 @@ class RemoteEvent {
   }
 
   /**
-   * A map of targets that is known to be inconsistent, and the purpose for
-   * re-listening. Listens for these targets should be re-established without
-   * resume tokens.
+   * A set of targets that is known to be inconsistent. Listens for these
+   * targets should be re-established without resume tokens.
    */
-  const TargetMismatchMap& target_mismatches() const {
+  const TargetSet& target_mismatches() const {
     return target_mismatches_;
   }
 
@@ -300,7 +293,7 @@ class RemoteEvent {
  private:
   model::SnapshotVersion snapshot_version_;
   TargetChangeMap target_changes_;
-  TargetMismatchMap target_mismatches_;
+  TargetSet target_mismatches_;
   model::DocumentUpdateMap document_updates_;
   model::DocumentKeySet limbo_document_changes_;
 };
@@ -417,19 +410,6 @@ class WatchChangeAggregator {
   bool TargetContainsDocument(model::TargetId target_id,
                               const model::DocumentKey& key);
 
-  /**
-   * Apply bloom filter to remove the deleted documents, and return the
-   * application status.
-   */
-  BloomFilterApplicationStatus ApplyBloomFilter(
-      const ExistenceFilterWatchChange& existence_filter, int current_count);
-
-  /**
-   * Filter out removed documents based on bloom filter membership result and
-   * return number of documents removed.
-   */
-  int FilterRemovedDocuments(const BloomFilter& bloom_filter, int target_id);
-
   /** The internal state of all tracked targets. */
   std::unordered_map<model::TargetId, TargetState> target_states_;
 
@@ -443,11 +423,11 @@ class WatchChangeAggregator {
       pending_document_target_mappings_;
 
   /**
-   * A map of targets with existence filter mismatches. These targets are known
+   * A list of targets with existence filter mismatches. These targets are known
    * to be inconsistent and their listens needs to be re-established by
    * `RemoteStore`.
    */
-  RemoteEvent::TargetMismatchMap pending_target_resets_;
+  RemoteEvent::TargetSet pending_target_resets_;
 
   TargetMetadataProvider* target_metadata_provider_ = nullptr;
 };

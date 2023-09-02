@@ -147,7 +147,7 @@ static void CallWriteCb(CFStreamEndpoint* ep, grpc_error_handle error) {
 static void ReadAction(void* arg, grpc_error_handle error) {
   CFStreamEndpoint* ep = static_cast<CFStreamEndpoint*>(arg);
   GPR_ASSERT(ep->read_cb != nullptr);
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     grpc_slice_buffer_reset_and_unref_internal(ep->read_slices);
     CallReadCb(ep, GRPC_ERROR_REF(error));
     EP_UNREF(ep, "read");
@@ -189,7 +189,7 @@ static void ReadAction(void* arg, grpc_error_handle error) {
 static void WriteAction(void* arg, grpc_error_handle error) {
   CFStreamEndpoint* ep = static_cast<CFStreamEndpoint*>(arg);
   GPR_ASSERT(ep->write_cb != nullptr);
-  if (!GRPC_ERROR_IS_NONE(error)) {
+  if (error != GRPC_ERROR_NONE) {
     grpc_slice_buffer_reset_and_unref_internal(ep->write_slices);
     CallWriteCb(ep, GRPC_ERROR_REF(error));
     EP_UNREF(ep, "write");
@@ -237,8 +237,7 @@ static void WriteAction(void* arg, grpc_error_handle error) {
 }
 
 static void CFStreamRead(grpc_endpoint* ep, grpc_slice_buffer* slices,
-                         grpc_closure* cb, bool urgent,
-                         int /*min_progress_size*/) {
+                         grpc_closure* cb, bool urgent) {
   CFStreamEndpoint* ep_impl = reinterpret_cast<CFStreamEndpoint*>(ep);
   if (grpc_tcp_trace.enabled()) {
     gpr_log(GPR_DEBUG, "CFStream endpoint:%p read (%p, %p) length:%zu", ep_impl,
@@ -255,7 +254,7 @@ static void CFStreamRead(grpc_endpoint* ep, grpc_slice_buffer* slices,
 }
 
 static void CFStreamWrite(grpc_endpoint* ep, grpc_slice_buffer* slices,
-                          grpc_closure* cb, void* arg, int /*max_frame_size*/) {
+                          grpc_closure* cb, void* arg) {
   CFStreamEndpoint* ep_impl = reinterpret_cast<CFStreamEndpoint*>(ep);
   if (grpc_tcp_trace.enabled()) {
     gpr_log(GPR_DEBUG, "CFStream endpoint:%p write (%p, %p) length:%zu",
@@ -352,13 +351,11 @@ grpc_endpoint* grpc_cfstream_endpoint_create(CFReadStreamRef read_stream,
   if (native_handle) {
     CFRelease(native_handle);
   }
-  absl::StatusOr<std::string> addr_uri;
   if (getsockname(sockfd, reinterpret_cast<sockaddr*>(resolved_local_addr.addr),
-                  &resolved_local_addr.len) < 0 ||
-      !(addr_uri = grpc_sockaddr_to_uri(&resolved_local_addr)).ok()) {
+                  &resolved_local_addr.len) < 0) {
     ep_impl->local_address = "";
   } else {
-    ep_impl->local_address = addr_uri.value();
+    ep_impl->local_address = grpc_sockaddr_to_uri(&resolved_local_addr);
   }
   ep_impl->read_cb = nil;
   ep_impl->write_cb = nil;
