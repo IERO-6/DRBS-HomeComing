@@ -67,7 +67,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if vc is Tabbar {
             DispatchQueue.global().async {
-                NetworkingManager.shared.fetchHouses { houses in
+                let cuid = Auth.auth().currentUser?.uid
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
                     DispatchQueue.main.async {
                         let tabbarController = self.setupTabBarController(with: houses)
                         self.window?.rootViewController = tabbarController

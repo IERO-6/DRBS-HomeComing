@@ -19,7 +19,7 @@ struct House: Codable {
     var 관리비: String?
     var 관리비미포함목록: [String]?
     var 면적: String?
-    var 입주가능일: Date?
+    var 입주가능일: String?
     var 계약기간: String?
     var 체크리스트: CheckList?
     var 기록: String?

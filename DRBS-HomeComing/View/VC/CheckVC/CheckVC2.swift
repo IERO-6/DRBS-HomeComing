@@ -652,7 +652,7 @@ final class CheckVC2: UIViewController {
                     }
                 }
             }
-        @unknown default:
+        default:
             fatalError("Unknown authorization status.")
         }
     }
@@ -739,7 +739,7 @@ extension CheckVC2: CalendarDelegate {
         myFormatter.dateFormat = "yy.MM.dd"
         self.입주가능일button.setTitle(myFormatter.string(from: date), for: .normal)
         self.입주가능일button.setTitleColor(.black, for: .normal)
-        self.houseViewModel.입주가능일 = date
+        self.houseViewModel.입주가능일 = myFormatter.string(from: date)
     }
 }
 
