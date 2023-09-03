@@ -45,8 +45,6 @@ class SettingsViewModel {
                 self?.withdrawAction?()
             }
         )
-        
-        let admob = AdmobModel(adUnitID: "YOUR_AD_UNIT_ID_HERE")
 
         sections = [
             .notice(notice),
@@ -54,7 +52,6 @@ class SettingsViewModel {
             .license(licenses),
             .appVersion([version]),
             .accountActions([accountActionsModel]),
-            .admob(admob)
         ]
     }
 

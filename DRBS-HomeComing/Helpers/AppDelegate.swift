@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            window = UIWindow()
            window?.makeKeyAndVisible()
            FirebaseApp.configure()  ///Firebase 구동
-           GADMobileAds.sharedInstance().start(completionHandler: nil)
+           GADMobileAds.sharedInstance().start(completionHandler: nil) // AdMob Setting
            return true
        }
 

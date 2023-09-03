@@ -6,7 +6,6 @@ enum SettingSection {
     case license([LicenseModel])
     case appVersion([AppVersionModel])
     case accountActions([AccountActionModel])
-    case admob(AdmobModel)
 }
 
 struct NoticeModel {
@@ -31,9 +30,4 @@ struct AccountActionModel {
     let withdrawTitle: String
     let logoutAction: () -> Void
     let withdrawAction: () -> Void
-}
-
-struct AdmobModel {
-    let adUnitID: String
-    // 추후에 추가적인 정보나 설정을 포함할 때 추가
 }
