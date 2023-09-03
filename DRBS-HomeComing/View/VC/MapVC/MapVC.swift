@@ -158,7 +158,8 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let modalVC = ModalVC()
         guard let selectedAnnotation = view.annotation as? House else { return }
-        modalVC.houseViewModel?.house = selectedAnnotation
+        modalVC.houseViewModel.house = selectedAnnotation
+        print(modalVC.houseViewModel.house)
         present(modalVC, animated: true)
     }
     
