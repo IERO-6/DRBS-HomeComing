@@ -79,8 +79,20 @@ final class HomeVC: UIViewController {
            self.navigationController?.pushViewController(settingVC, animated: true)
     }
     
-    @objc func headButtonTapped() {
+    @objc func headButtonTapped(_ sender: KeyedButton) {
         let detailVC = DetailVC()
+        switch sender.tag {
+        case 0:
+            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "아파트/오피스텔"}
+        case 1:
+            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "빌라/주택"}
+        case 2:
+            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "원룸/투룸+"}
+        case 3:
+            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.isBookMarked! == true}
+        default:
+            break
+        }
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
@@ -91,14 +103,15 @@ extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             let headerView = UIView()
             headerView.backgroundColor = .white
-            let titleButton = UIButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
+            let titleButton = KeyedButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
             headerView.addSubview(titleButton)
             titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
             titleButton.setTitleColor(.darkGray, for: .normal)
         titleButton.backgroundColor = .white
+        titleButton.tag = section
             titleButton.contentHorizontalAlignment = .left
             titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
-            titleButton.addTarget(self, action: #selector(headButtonTapped), for: .touchUpInside)
+        titleButton.addTarget(self, action: #selector(headButtonTapped(_:)), for: .touchUpInside)
             titleButton.tag = section
             return headerView
         }
@@ -132,6 +145,7 @@ extension HomeVC: UITableViewDataSource {
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
+        myHouseVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }

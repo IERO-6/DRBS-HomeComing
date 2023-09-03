@@ -5,6 +5,7 @@ import Then
 final class DetailVC: UIViewController {
     //MARK: - Properties
     private lazy var tableView = UITableView()
+    var houseViewModel = HouseViewModel()
     
     //MARK: - LifeCycle
 
@@ -26,20 +27,6 @@ final class DetailVC: UIViewController {
     }
     
     private func settingNav() {
-        self.navigationController?.navigationBar.topItem?.title = ""
-        let checkVC1 = CheckVC1()
-        print(checkVC1.nameIndex)
-        if checkVC1.nameIndex == 4 {
-            self.navigationItem.title = "아파트"
-        } else if checkVC1.nameIndex == 5 {
-            self.navigationItem.title = "투룸"
-        } else if checkVC1.nameIndex == 6 {
-            self.navigationItem.title = "오피스텔"
-        } else if checkVC1.nameIndex == 7 {
-            self.navigationItem.title = "원룸"
-        }
-        
-        //        self.navigationItem.title = "추가하기"
         self.navigationController?.navigationBar.backItem?.title = ""
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
@@ -64,12 +51,12 @@ final class DetailVC: UIViewController {
 //MARK: - UITableViewDataSource
 extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return self.houseViewModel.houses.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.detailCell.rawValue, for: indexPath) as! DetailCell
-        
+        cell.house = self.houseViewModel.houses[indexPath.row]
         return cell
     }
     

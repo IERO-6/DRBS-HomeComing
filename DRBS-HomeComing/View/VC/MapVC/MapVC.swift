@@ -157,7 +157,8 @@ final class MapVC: UIViewController {
 extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let modalVC = ModalVC()
-        modalVC.modalPresentationStyle = .pageSheet
+        guard let selectedAnnotation = view.annotation as? House else { return }
+        modalVC.houseViewModel.house = selectedAnnotation
         present(modalVC, animated: true)
     }
     
