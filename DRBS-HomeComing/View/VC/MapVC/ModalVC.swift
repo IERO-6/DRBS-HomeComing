@@ -163,7 +163,7 @@ final class ModalVC: UIViewController {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
             $0.height.equalTo(30)
-            $0.trailing.equalTo(starImageView.snp.leading).offset(10)
+            $0.trailing.equalTo(starImageView.snp.leading).offset(-10)
         }
         
         tradingTypeLabel.snp.makeConstraints {
@@ -184,7 +184,7 @@ final class ModalVC: UIViewController {
             $0.leading.equalToSuperview()
             $0.top.equalTo(tradingTypeLabel)
             $0.bottom.equalTo(tradingTypeLabel)
-            $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(10)
+            $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(-10)
         }
         
         priceLabel.snp.makeConstraints {

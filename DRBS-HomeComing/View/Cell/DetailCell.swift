@@ -125,10 +125,11 @@ final class DetailCell: UITableViewCell {
         contentView.backgroundColor = .white
         self.addSubview(contentView)
         contentView.addSubviews(backView)
-//        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
+        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
                             addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel,
-                             firstImageView, secondImageView, thirdImageView, fourthImageView,
+                             imageStackView,
+//                             firstImageView, secondImageView, thirdImageView, fourthImageView,
                                 memoTextView)
         contentView.snp.makeConstraints {$0.edges.equalToSuperview()}
         backView.snp.makeConstraints {
@@ -137,15 +138,8 @@ final class DetailCell: UITableViewCell {
             $0.trailing.equalToSuperview().offset(-15)
             $0.bottom.equalToSuperview()
         }
-        nameLabel.snp.makeConstraints {
-            $0.top.equalTo(backView)
-            $0.leading.equalTo(backView)
-            $0.height.equalTo(30)
-            $0.width.equalTo(self.contentView.frame.width/2)
-        }
-        
         bookMarkButton.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel.snp.centerY)
+            $0.top.equalTo(backView)
             $0.trailing.equalTo(backView)
             $0.width.height.equalTo(30)
         }
@@ -155,63 +149,78 @@ final class DetailCell: UITableViewCell {
             $0.height.equalTo(30)
             $0.trailing.equalTo(bookMarkButton.snp.leading).inset(5)
         }
+        
         starImageView.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel.snp.centerY)
+            $0.centerY.equalTo(rateLabel.snp.centerY)
             $0.width.equalTo(15)
             $0.height.equalTo(15)
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
         }
         
-        addressLabel.snp.makeConstraints {
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(backView)
             $0.leading.equalTo(backView)
-            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
             $0.height.equalTo(30)
-            $0.width.equalTo(self.contentView.frame.width*0.66)
+            $0.trailing.equalTo(starImageView.snp.leading).offset(-10)
         }
+        
+        
         
         tradingTypeLabel.snp.makeConstraints {
             $0.trailing.equalTo(backView)
-            $0.top.equalTo(addressLabel)
-            $0.bottom.equalTo(addressLabel)
+            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
+            $0.height.equalTo(30)
             $0.width.equalTo(40)
         }
         
         livingTypeLabel.snp.makeConstraints {
             $0.trailing.equalTo(tradingTypeLabel.snp.leading).offset(-8)
-            $0.top.equalTo(addressLabel)
-            $0.bottom.equalTo(addressLabel)
+            $0.top.equalTo(tradingTypeLabel)
+            $0.height.equalTo(30)
             $0.width.equalTo(40)
         }
-        
+        addressLabel.snp.makeConstraints {
+            $0.leading.equalTo(backView)
+            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
+            $0.height.equalTo(30)
+            $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(-10)
+        }
         priceLabel.snp.makeConstraints {
             $0.top.equalTo(addressLabel.snp.bottom).offset(5)
             $0.leading.equalTo(backView)
             $0.height.equalTo(30)
             $0.width.equalTo(backView)
         }
-        firstImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+        
+        imageStackView.snp.makeConstraints {
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo((self.contentView.frame.width-60)/4)
         }
-        secondImageView.snp.makeConstraints {
-            $0.leading.equalTo(firstImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
-        }
-        thirdImageView.snp.makeConstraints {
-            $0.leading.equalTo(secondImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
-        }
-        fourthImageView.snp.makeConstraints {
-            $0.leading.equalTo(thirdImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
-        }
+        
+//        firstImageView.snp.makeConstraints {
+//            $0.leading.equalToSuperview()
+//            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+//            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
+//        }
+//        secondImageView.snp.makeConstraints {
+//            $0.leading.equalTo(firstImageView.snp.trailing).offset(10)
+//            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+//            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
+//        }
+//        thirdImageView.snp.makeConstraints {
+//            $0.leading.equalTo(secondImageView.snp.trailing).offset(10)
+//            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+//            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
+//        }
+//        fourthImageView.snp.makeConstraints {
+//            $0.leading.equalTo(thirdImageView.snp.trailing).offset(10)
+//            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+//            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
+//        }
 
         memoTextView.snp.makeConstraints {
-            $0.top.equalTo(firstImageView.snp.bottom).offset(12)
+            $0.top.equalTo(imageStackView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(backView)
             $0.height.equalTo(62)
         }
