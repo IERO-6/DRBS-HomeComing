@@ -115,16 +115,16 @@ class HouseViewModel {
         }
     }
     
-//    func makeUIImageToString() {
-//        for image in uiImages {
-//            guard let convertedImage = image.toPngString() else {
-//                print("HouseViewModel 107Line Error: toPng실패")
-//                return
-//            }
-//            self.stringImages.append(convertedImage)
-//        }
-//        print(self.stringImages)
-//    }
+    func makeUIImageToString() {
+        for image in uiImages {
+            guard let convertedImage = image.toPngString() else {
+                print("HouseViewModel 107Line Error: toPng실패")
+                return
+            }
+            self.stringImages.append(convertedImage)
+        }
+        print(self.stringImages)
+    }
     
     func getAnnotations() -> [House] { return self.visibleHouses }
     
@@ -132,7 +132,7 @@ class HouseViewModel {
 
     
     func locationsWhenRegionChanged() {
-        guard let visibleRegion = visibleRegion else { return }
+        guard let visibleRegion = self.visibleRegion else { return }
         let housesInvisibleRegion = houses.filter { location in
             let locationCoordinate = location.coordinate
             let deltaLatitude = abs(visibleRegion.center.latitude - locationCoordinate.latitude)
@@ -144,6 +144,9 @@ class HouseViewModel {
  
     func makeAnnotationsWithFiltered(houses: [House]) {
         self.willDeleteHouses = self.visibleHouses.filter {!houses.contains($0)}
+        print("안보이게 된 부동산 갯수는 \(self.willDeleteHouses.count)")
         self.visibleHouses = houses.filter {!self.visibleHouses.contains($0)}
+        print("새로 보이게 된 부동산 갯수는 \(self.visibleHouses.count)")
+
     }
 }

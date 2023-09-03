@@ -189,13 +189,16 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentRegion = mkMapView.region
         mapView.limitRegionToKorea(currentRegion: currentRegion)
-        self.houseViewModel.currentVisible(region: mapView.region)
-        DispatchQueue.main.async {
-            mapView.removeAnnotations(self.houseViewModel.willDeleteHouses)
-            for customPin in self.houseViewModel.visibleHouses {
-                mapView.addAnnotation(customPin)
+        DispatchQueue.global().async {
+            self.houseViewModel.currentVisible(region: mapView.region)
+            DispatchQueue.main.async {
+                mapView.removeAnnotations(self.houseViewModel.willDeleteHouses)
+                for customPin in self.houseViewModel.visibleHouses {
+                    mapView.addAnnotation(customPin)
+                }
             }
         }
+        
     }
 }
 //MARK: - CLLocationManagerDelegate
