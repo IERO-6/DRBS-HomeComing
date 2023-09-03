@@ -3,10 +3,16 @@ import Then
 import SnapKit
 import MessageUI
 import SafariServices
+import GoogleMobileAds
 
 final class SettingVC: UIViewController {
     
     // MARK: - Properties
+    
+    private lazy var settingViewModel = SettingsViewModel()
+    private lazy var authVM: AuthViewModel = AuthViewModel()
+    
+    private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
     
     private let settingTableView = UITableView(frame: .zero, style: .grouped).then {
         $0.register(NoticeCell.self, forCellReuseIdentifier: NoticeCell.id)
@@ -17,15 +23,12 @@ final class SettingVC: UIViewController {
         $0.separatorStyle = .none
     }
     
-    private lazy var settingViewModel = SettingsViewModel()
-    private lazy var authVM: AuthViewModel = AuthViewModel()
-    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureTableView()
+        configureUI()
         
         settingViewModel.logoutAction = { [weak self] in
             self?.showLogoutAlert()
@@ -41,6 +44,7 @@ final class SettingVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNav()
+        bannerView.load(GADRequest())
     }
     
     // MARK: - Helpers
@@ -61,13 +65,27 @@ final class SettingVC: UIViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
-    private func configureTableView() {
+    private func configureUI() {
+        view.backgroundColor = settingTableView.backgroundColor
+
         settingTableView.dataSource = self
         settingTableView.delegate = self
         
         view.addSubview(settingTableView)
+        view.addSubview(bannerView)
+        
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // TestID
+        bannerView.rootViewController = self
+        bannerView.backgroundColor = settingTableView.backgroundColor
+
+        bannerView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-30)
+        }
+        
         settingTableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.left.right.equalToSuperview()
+            $0.bottom.equalTo(bannerView.snp.top)
         }
     }
     
@@ -106,8 +124,6 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 return models.count
             case .accountActions:
                 return 1
-            case .admob:
-                return 0
         }
     }
     
@@ -143,9 +159,6 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 cell.withdrawAction = settingViewModel.withdrawAction
                 cell.selectionStyle = .none
                 return cell
-                
-            case .admob:
-                return UITableViewCell()
         }
     }
     
@@ -245,9 +258,6 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
             case .appVersion:
                 return
             case .accountActions:
-                break
-            case .admob:
-                // AdMob 로직
                 return
         }
         tableView.deselectRow(at: indexPath, animated: true)
