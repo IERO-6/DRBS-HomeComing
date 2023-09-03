@@ -10,10 +10,7 @@ import Then
 import SnapKit
 
 final class DetailCell: UITableViewCell {
-    //MARK: - Properties
-
-    static let identifier = "DetailTVCell"
-    
+    //MARK: - Properties    
     private let backView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -76,6 +73,13 @@ final class DetailCell: UITableViewCell {
         $0.textAlignment = .left
     }
     
+    private lazy var imageStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 10
+        $0.distribution = .fillEqually
+        $0.alignment = .fill
+    }
+    
     private let firstImageView = UIImageView().then {
         $0.image = UIImage(named: "roomImage")
         $0.layer.cornerRadius = 5
@@ -110,8 +114,7 @@ final class DetailCell: UITableViewCell {
     }
     //MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-            
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
         configureUI()
     }
     
@@ -122,9 +125,12 @@ final class DetailCell: UITableViewCell {
         contentView.backgroundColor = .white
         self.addSubview(contentView)
         contentView.addSubviews(backView)
+//        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
-                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel, firstImageView, secondImageView, thirdImageView, fourthImageView,
+                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel,
+                             firstImageView, secondImageView, thirdImageView, fourthImageView,
                                 memoTextView)
+        contentView.snp.makeConstraints {$0.edges.equalToSuperview()}
         backView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview().offset(15)
@@ -132,19 +138,19 @@ final class DetailCell: UITableViewCell {
             $0.bottom.equalToSuperview()
         }
         nameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
+            $0.top.equalTo(backView)
+            $0.leading.equalTo(backView)
             $0.height.equalTo(30)
             $0.width.equalTo(self.contentView.frame.width/2)
         }
         
         bookMarkButton.snp.makeConstraints {
             $0.centerY.equalTo(nameLabel.snp.centerY)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalTo(backView)
             $0.width.height.equalTo(30)
         }
         rateLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(backView)
             $0.width.equalTo(30)
             $0.height.equalTo(30)
             $0.trailing.equalTo(bookMarkButton.snp.leading).inset(5)
@@ -157,14 +163,14 @@ final class DetailCell: UITableViewCell {
         }
         
         addressLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
+            $0.leading.equalTo(backView)
             $0.top.equalTo(nameLabel.snp.bottom).offset(10)
             $0.height.equalTo(30)
             $0.width.equalTo(self.contentView.frame.width*0.66)
         }
         
         tradingTypeLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalTo(backView)
             $0.top.equalTo(addressLabel)
             $0.bottom.equalTo(addressLabel)
             $0.width.equalTo(40)
@@ -178,35 +184,35 @@ final class DetailCell: UITableViewCell {
         }
         
         priceLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview()
             $0.top.equalTo(addressLabel.snp.bottom).offset(5)
+            $0.leading.equalTo(backView)
             $0.height.equalTo(30)
-            $0.width.equalToSuperview()
+            $0.width.equalTo(backView)
         }
-        
         firstImageView.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
         }
         secondImageView.snp.makeConstraints {
             $0.leading.equalTo(firstImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
         }
         thirdImageView.snp.makeConstraints {
             $0.leading.equalTo(secondImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
         }
         fourthImageView.snp.makeConstraints {
             $0.leading.equalTo(thirdImageView.snp.trailing).offset(10)
             $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.contentView.frame.size.width)/4)
+            $0.height.width.equalTo((self.contentView.frame.width)/4 + 2.5)
         }
+
         memoTextView.snp.makeConstraints {
             $0.top.equalTo(firstImageView.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalTo(backView)
             $0.height.equalTo(62)
         }
        

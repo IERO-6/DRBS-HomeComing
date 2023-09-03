@@ -5,7 +5,7 @@ import MapKit
 final class SearchVC: UIViewController {
     //MARK: - Properties
     
-    private lazy var searchLocationViewModel = LocationViewModel()
+    private lazy var searchLocationViewModel = HouseViewModel()
     private lazy var filtered: [String] = []
     private lazy var searchBar = UISearchBar()
     private lazy var tableView = UITableView(frame: self.view.frame)
