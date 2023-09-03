@@ -5,10 +5,8 @@ import Then
 import SnapKit
 
 
-
 final class MapVC: UIViewController {
     //MARK: - Properties
-    
     lazy var houseViewModel = HouseViewModel()
     
     private lazy var mkMapView = MKMapView(frame: self.view.frame)
@@ -45,7 +43,6 @@ final class MapVC: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.houseViewModel.fetchAnnotations()
         configureUI()
         checkDeviceService()
     }
@@ -86,9 +83,9 @@ final class MapVC: UIViewController {
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        let annotations = self.houseViewModel.fetchedLocations
         DispatchQueue.main.async {
-            for customPin in self.houseViewModel.houses { self.mkMapView.addAnnotation(customPin) }
+            //최초에 전체 어노테이션 추가하기
+            for customPin in self.houseViewModel.myHouses() { self.mkMapView.addAnnotation(customPin) }
         }
     }
     
@@ -194,9 +191,8 @@ extension MapVC: MKMapViewDelegate {
         mapView.limitRegionToKorea(currentRegion: currentRegion)
         self.houseViewModel.currentVisible(region: mapView.region)
         DispatchQueue.main.async {
-//            self.removeAllAnnotations()
-            let annotations = self.houseViewModel.getAnnotations()
-            for customPin in annotations {
+            mapView.removeAnnotations(self.houseViewModel.willDeleteHouses)
+            for customPin in self.houseViewModel.visibleHouses {
                 mapView.addAnnotation(customPin)
             }
         }

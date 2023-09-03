@@ -16,11 +16,14 @@ class HouseViewModel {
     var house: House?
     /* 뷰컨은 뷰모델이 소유한 데이터를 표기해야하기 때문에
      뷰모델은 뷰컨이 소유한 데이터와 관련있는 값도 가져야 함 */
-    var locationModel: Location?
     var visibleHouses: [House] = []
-    var fetchedLocations: [Location] = []
+    var willDeleteHouses: [House] = []
     var houses: [House] = []
-    var visibleRegion: MKCoordinateRegion?
+    var visibleRegion: MKCoordinateRegion? {
+        didSet {
+            locationsWhenRegionChanged()
+        }
+    }
     
     
     var name: String?
@@ -49,6 +52,10 @@ class HouseViewModel {
             
             self.house = House(uid: user.uid, houseId: "",title: self.name, isBookMarked: false, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: stringImages, 별점: self.rate)
         }
+    }
+    
+    func myHouses() -> [House] {
+        return self.houses
     }
     
     
@@ -108,68 +115,35 @@ class HouseViewModel {
         }
     }
     
-    func makeUIImageToString() {
-        for image in uiImages {
-            guard let convertedImage = image.toPngString() else {
-                print("HouseViewModel 107Line Error: toPng실패")
-                return
-            }
-            self.stringImages.append(convertedImage)
-        }
-        print(self.stringImages)
-
-
-    }
-    
-    
-    
-    
-    func getLocations() -> [Location] { return self.fetchedLocations }
+//    func makeUIImageToString() {
+//        for image in uiImages {
+//            guard let convertedImage = image.toPngString() else {
+//                print("HouseViewModel 107Line Error: toPng실패")
+//                return
+//            }
+//            self.stringImages.append(convertedImage)
+//        }
+//        print(self.stringImages)
+//    }
     
     func getAnnotations() -> [House] { return self.visibleHouses }
     
     func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
-    
-    
-    
-    func makeLocationWithHouses() {
-        for house in self.houses {
-            guard let latitude = house.latitude,
-                  let longitude = house.longitude,
-                  let isBookmarked = house.isBookMarked,
-                  let houseId = house.houseId else { return }
-            self.fetchedLocations.append(Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookmarked, id: houseId))
-        }
-    }
-    
-    func fetchAnnotations() {
-        //네트워킹 하는 로직 -> API 에서
-        NetworkingManager.shared.fetchAnnotations { self.fetchedLocations = $0 }
-        
-    }
-    
-    
+
     
     func locationsWhenRegionChanged() {
         guard let visibleRegion = visibleRegion else { return }
-        let locationsInVisibleRegion = houses.filter { location in
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
+        let housesInvisibleRegion = houses.filter { location in
             let locationCoordinate = location.coordinate
             let deltaLatitude = abs(visibleRegion.center.latitude - locationCoordinate.latitude)
             let deltaLongitude = abs(visibleRegion.center.longitude - locationCoordinate.longitude)
             return deltaLatitude <= visibleRegion.span.latitudeDelta / 2 && deltaLongitude <= visibleRegion.span.longitudeDelta / 2
         }
-        makeAnnotationsWithFiltered(locations: locationsInVisibleRegion)
+        makeAnnotationsWithFiltered(houses: housesInvisibleRegion)
     }
-    
-    func makeAnnotationsWithFiltered(locations: [House]) {
-        var annotations: [House] = []
-        for location in locations {
-//            let pin = House(coordinate: location.coordinate, isBookMarked: location.isBookMarked, id: "")
-            annotations.append(location)
-        }
-        self.visibleHouses = annotations
+ 
+    func makeAnnotationsWithFiltered(houses: [House]) {
+        self.willDeleteHouses = self.visibleHouses.filter {!houses.contains($0)}
+        self.visibleHouses = houses.filter {!self.visibleHouses.contains($0)}
     }
-    
 }
