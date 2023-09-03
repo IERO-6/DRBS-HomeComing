@@ -11,6 +11,7 @@ final class DetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        settingTV()
         settingNav()
     }
 

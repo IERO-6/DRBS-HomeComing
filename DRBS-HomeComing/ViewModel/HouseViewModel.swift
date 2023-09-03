@@ -9,12 +9,19 @@ import CoreLocation
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import MapKit
 
 class HouseViewModel {
     //MARK: - Model
     var house: House?
     /* 뷰컨은 뷰모델이 소유한 데이터를 표기해야하기 때문에
      뷰모델은 뷰컨이 소유한 데이터와 관련있는 값도 가져야 함 */
+    var locationModel: Location?
+    var visibleHouses: [House] = []
+    var fetchedLocations: [Location] = []
+    var houses: [House] = []
+    var visibleRegion: MKCoordinateRegion?
+    
     
     var name: String?
     var tradingType: String?
@@ -112,6 +119,57 @@ class HouseViewModel {
         print(self.stringImages)
 
 
+    }
+    
+    
+    
+    
+    func getLocations() -> [Location] { return self.fetchedLocations }
+    
+    func getAnnotations() -> [House] { return self.visibleHouses }
+    
+    func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
+    
+    
+    
+    func makeLocationWithHouses() {
+        for house in self.houses {
+            guard let latitude = house.latitude,
+                  let longitude = house.longitude,
+                  let isBookmarked = house.isBookMarked,
+                  let houseId = house.houseId else { return }
+            self.fetchedLocations.append(Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookmarked, id: houseId))
+        }
+    }
+    
+    func fetchAnnotations() {
+        //네트워킹 하는 로직 -> API 에서
+        NetworkingManager.shared.fetchAnnotations { self.fetchedLocations = $0 }
+        
+    }
+    
+    
+    
+    func locationsWhenRegionChanged() {
+        guard let visibleRegion = visibleRegion else { return }
+        let locationsInVisibleRegion = houses.filter { location in
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+            let locationCoordinate = location.coordinate
+            let deltaLatitude = abs(visibleRegion.center.latitude - locationCoordinate.latitude)
+            let deltaLongitude = abs(visibleRegion.center.longitude - locationCoordinate.longitude)
+            return deltaLatitude <= visibleRegion.span.latitudeDelta / 2 && deltaLongitude <= visibleRegion.span.longitudeDelta / 2
+        }
+        makeAnnotationsWithFiltered(locations: locationsInVisibleRegion)
+    }
+    
+    func makeAnnotationsWithFiltered(locations: [House]) {
+        var annotations: [House] = []
+        for location in locations {
+//            let pin = House(coordinate: location.coordinate, isBookMarked: location.isBookMarked, id: "")
+            annotations.append(location)
+        }
+        self.visibleHouses = annotations
     }
     
 }

@@ -9,7 +9,7 @@ import SnapKit
 final class MapVC: UIViewController {
     //MARK: - Properties
     
-    lazy var locationViewModel = LocationViewModel()
+    lazy var houseViewModel = HouseViewModel()
     
     private lazy var mkMapView = MKMapView(frame: self.view.frame)
     
@@ -45,7 +45,7 @@ final class MapVC: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.locationViewModel.fetchAnnotations()
+        self.houseViewModel.fetchAnnotations()
         configureUI()
         checkDeviceService()
     }
@@ -86,9 +86,9 @@ final class MapVC: UIViewController {
         self.mkMapView.register(AnnotationView.self, forAnnotationViewWithReuseIdentifier: Constant.Identifier.annotationView.rawValue)
         self.mkMapView.showsUserLocation = true
         self.mkMapView.setUserTrackingMode(.follow, animated: true)
-        let annotations = self.locationViewModel.fetchedLocations
+        let annotations = self.houseViewModel.fetchedLocations
         DispatchQueue.main.async {
-            for customPin in annotations { self.mkMapView.addAnnotation(customPin) }
+            for customPin in self.houseViewModel.houses { self.mkMapView.addAnnotation(customPin) }
         }
     }
     
@@ -166,7 +166,7 @@ extension MapVC: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // 커스텀 어노테이션 뷰 설정
-        guard let annotation = annotation as? Location else {return nil}
+        guard let annotation = annotation as? House else {return nil}
         var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: Constant.Identifier.annotationView.rawValue)
@@ -179,6 +179,8 @@ extension MapVC: MKMapViewDelegate {
             annotationImage = UIImage(named: "testb1.png")
         case false:
             annotationImage = UIImage(named: "test1.png")
+        default:
+            annotationImage = UIImage()
         }
 //        annotationImage.draw(in: CGRect(x: 0, y: 0, width: 20, height: 20))
         annotationView?.image = annotationImage
@@ -190,10 +192,10 @@ extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentRegion = mkMapView.region
         mapView.limitRegionToKorea(currentRegion: currentRegion)
-        self.locationViewModel.currentVisible(region: mapView.region)
+        self.houseViewModel.currentVisible(region: mapView.region)
         DispatchQueue.main.async {
-            self.removeAllAnnotations()
-            let annotations = self.locationViewModel.getAnnotations()
+//            self.removeAllAnnotations()
+            let annotations = self.houseViewModel.getAnnotations()
             for customPin in annotations {
                 mapView.addAnnotation(customPin)
             }

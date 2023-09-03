@@ -55,6 +55,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nav2.setupMapBarAppearance()
         
         vc1.allHouseModels = houses
+        vc2.houseViewModel.houses = houses
         
         let tabbarController = UITabBarController()
         tabbarController.tabBar.tintColor = Constant.appColor

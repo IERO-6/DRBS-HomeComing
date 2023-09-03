@@ -147,12 +147,13 @@ class NetworkingManager {
                         let latitude = data["latitude"] as! Double
                         let longitude = data["longitude"] as! Double
                         let isBookMarked = data["isBookMarked"] as! Bool
-                        let location = Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookMarked)
+                        let id = data["houseId"] as! String
+                        let location = Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookMarked, id: id)
                         locations.append(location)
                     }
                     completion(locations)
-                } else {
-                    print("\(String(describing: error?.localizedDescription))")
+                } else if let error = error {
+                    print(error.localizedDescription)
                 }
             }
             
