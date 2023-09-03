@@ -3,6 +3,7 @@ import MapKit
 
 class AnnotationView: MKAnnotationView {
     //MARK: - Properties
+    
     //MARK: - LifeCycle
     override init(annotation: MKAnnotation?, reuseIdentifier: String?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)

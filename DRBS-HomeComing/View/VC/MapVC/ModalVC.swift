@@ -5,6 +5,8 @@ import Then
 final class ModalVC: UIViewController {
     //MARK: - Properties
     
+    var houseViewModel: HouseViewModel?
+    
     private let backView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -92,6 +94,13 @@ final class ModalVC: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let imageContainView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 10
+        $0.distribution = .fillEqually
+        $0.alignment = .fill
+    }
+    
     private let memoTextView = UITextView().then {
         $0.backgroundColor = .systemGray6
         $0.isScrollEnabled = false
@@ -111,7 +120,6 @@ final class ModalVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        settingModal()
     }
     
     //MARK: - Helpers
@@ -120,23 +128,21 @@ final class ModalVC: UIViewController {
     private func configureUI() {
         view.backgroundColor = .white
         view.addSubviews(backView)
+        imageContainView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
-                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel, firstImageView, secondImageView, thirdImageView, fourthImageView,
+                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel,
+                             imageContainView,
+//                             firstImageView,
+//                             secondImageView, thirdImageView, fourthImageView,
                                 memoTextView, goButton)
         backView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(50)
             $0.leading.equalToSuperview().offset(20)
             $0.bottom.trailing.equalToSuperview().inset(20)
         }
-        nameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(30)
-            $0.width.equalTo(self.view.frame.width/2)
-        }
-        
+      
         bookMarkButton.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel.snp.centerY)
+            $0.top.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.width.height.equalTo(30)
         }
@@ -147,31 +153,38 @@ final class ModalVC: UIViewController {
             $0.trailing.equalTo(bookMarkButton.snp.leading).inset(5)
         }
         starImageView.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel.snp.centerY)
+            $0.centerY.equalTo(bookMarkButton.snp.centerY)
             $0.width.equalTo(15)
             $0.height.equalTo(15)
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
         }
         
-        addressLabel.snp.makeConstraints {
+        nameLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
             $0.height.equalTo(30)
-            $0.width.equalTo(self.view.frame.width*0.66)
+            $0.trailing.equalTo(starImageView.snp.leading).offset(10)
         }
         
         tradingTypeLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview()
-            $0.top.equalTo(addressLabel)
-            $0.bottom.equalTo(addressLabel)
+            $0.top.equalTo(nameLabel.snp.bottom).offset(10)
+            $0.height.equalTo(30)
             $0.width.equalTo(40)
         }
         
+        
         livingTypeLabel.snp.makeConstraints {
             $0.trailing.equalTo(tradingTypeLabel.snp.leading).offset(-8)
-            $0.top.equalTo(addressLabel)
-            $0.bottom.equalTo(addressLabel)
+            $0.top.equalTo(tradingTypeLabel)
+            $0.bottom.equalTo(tradingTypeLabel)
             $0.width.equalTo(40)
+        }
+        addressLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview()
+            $0.top.equalTo(tradingTypeLabel)
+            $0.bottom.equalTo(tradingTypeLabel)
+            $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(10)
         }
         
         priceLabel.snp.makeConstraints {
@@ -181,32 +194,14 @@ final class ModalVC: UIViewController {
             $0.width.equalToSuperview()
         }
         
-        firstImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.view.frame.width - 70)/4)
-            
+        imageContainView.snp.makeConstraints {
+            $0.top.equalTo(priceLabel.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo((self.view.frame.width-70)/4)
         }
         
-        secondImageView.snp.makeConstraints {
-            $0.leading.equalTo(firstImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.view.frame.width - 70)/4)
-            
-        }
-        thirdImageView.snp.makeConstraints {
-            $0.leading.equalTo(secondImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.view.frame.width - 70)/4)
-            
-        }
-        fourthImageView.snp.makeConstraints {
-            $0.leading.equalTo(thirdImageView.snp.trailing).offset(10)
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.height.width.equalTo((self.view.frame.width - 70)/4)
-        }
         memoTextView.snp.makeConstraints {
-            $0.top.equalTo(firstImageView.snp.bottom).offset(12)
+            $0.top.equalTo(imageContainView.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
@@ -218,14 +213,7 @@ final class ModalVC: UIViewController {
         
     }
     
-    
-    private func settingModal() {
-        if let sheetPresentationController = sheetPresentationController {
-            sheetPresentationController.detents = [.medium(), .large()]
-            sheetPresentationController.prefersGrabberVisible = true
-            sheetPresentationController.preferredCornerRadius = 25
-        }
-    }
+  
     //MARK: - Actions
 
 

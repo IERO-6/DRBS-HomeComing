@@ -25,7 +25,7 @@ class HouseViewModel {
         }
     }
     
-    
+    var houseId: String?
     var name: String?
     var tradingType: String?
     var livingType: String?
@@ -144,9 +144,6 @@ class HouseViewModel {
  
     func makeAnnotationsWithFiltered(houses: [House]) {
         self.willDeleteHouses = self.visibleHouses.filter {!houses.contains($0)}
-        print("안보이게 된 부동산 갯수는 \(self.willDeleteHouses.count)")
         self.visibleHouses = houses.filter {!self.visibleHouses.contains($0)}
-        print("새로 보이게 된 부동산 갯수는 \(self.visibleHouses.count)")
-
     }
 }
