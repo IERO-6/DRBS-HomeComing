@@ -100,7 +100,8 @@ final class ModalVC: UIViewController {
         $0.backgroundColor = .systemGray6
         $0.isScrollEnabled = false
         $0.font = UIFont.systemFont(ofSize: 16)
-        $0.textContainer.maximumNumberOfLines = 2
+        $0.isUserInteractionEnabled = false
+//        $0.textContainer.maximumNumberOfLines = 2
         $0.textContainer.lineBreakMode = .byTruncatingTail
     }
     
@@ -173,7 +174,7 @@ final class ModalVC: UIViewController {
             $0.trailing.equalTo(tradingTypeLabel.snp.leading).offset(-8)
             $0.top.equalTo(tradingTypeLabel)
             $0.bottom.equalTo(tradingTypeLabel)
-            $0.width.equalTo(80)
+            $0.width.equalTo(95)
         }
         addressLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
