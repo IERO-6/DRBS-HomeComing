@@ -48,7 +48,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         vc1.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
         vc2.tabBarItem = UITabBarItem(title: "지도", image: UIImage(systemName:"map"), selectedImage:UIImage(systemName:"map.fill"))
         
-        let nav1 = UINavigationController(rootViewController :vc1)
+//        let nav1 = UINavigationController(rootViewController :vc1)
+        let nav1 = DynamicStatusBarNavigation(rootViewController :vc1)
         let nav2 = UINavigationController(rootViewController :vc2)
         
         nav1.setupHomeBarAppearance()

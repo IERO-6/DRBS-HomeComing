@@ -234,6 +234,4 @@ extension MapVC: searchViewDelegate {
     func setRegion(cood: CLLocationCoordinate2D) {
         self.mkMapView.setRegion(.init(center: cood, span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
     }
-    
-    
 }

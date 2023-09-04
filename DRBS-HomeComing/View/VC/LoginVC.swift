@@ -9,9 +9,12 @@ import UIKit
 import SnapKit
 import Then
 import FirebaseAuth
+import AuthenticationServices
 
-class LoginVC: UIViewController {
+class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextProviding {
     
+    
+   
     // MARK: - Properties
     let logoLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 64)
@@ -37,6 +40,10 @@ class LoginVC: UIViewController {
         $0.setImage(UIImage(named: "login-kakao-button"), for: .normal)
         $0.imageView?.contentMode = .scaleAspectFit
         $0.addTarget(self, action: #selector(kakaoLoginButtonTapped), for: .touchUpInside)
+    }
+    
+    private lazy var authorizationAppleIDButton = ASAuthorizationAppleIDButton().then {
+        $0.addTarget(self, action: #selector(appleLoginButtonTapped), for: .touchUpInside)
     }
     
     let versionLabel = UILabel().then {
@@ -73,10 +80,12 @@ class LoginVC: UIViewController {
         view.layer.insertSublayer(gradientLayer, at: 0)
         
         labelsStack.addArrangedSubviews(logoLabel, subtitleLabel)
-        buttonsStack.addArrangedSubviews(appleLoginButton, kakaoLoginButton)
+//        buttonsStack.addArrangedSubviews(appleLoginButton, kakaoLoginButton)
+        buttonsStack.addArrangedSubviews(authorizationAppleIDButton, kakaoLoginButton)
+
         view.addSubviews(labelsStack, buttonsStack, versionLabel)
         
-        appleLoginButton.snp.makeConstraints {
+        authorizationAppleIDButton.snp.makeConstraints {
             $0.width.equalTo(345)
             $0.height.equalTo(54)
         }
@@ -108,10 +117,19 @@ class LoginVC: UIViewController {
         return gradientLayer
     }
     
+    
+    
     // MARK: - Action
     @objc func appleLoginButtonTapped() {
         print("appleLoginButtonTapped()")
         /// 애플 로그인 로직
+        let provider = ASAuthorizationAppleIDProvider()
+        let request = provider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.performRequests()
+        controller.delegate = self
+        controller.presentationContextProvider = self
     }
     
     @objc func kakaoLoginButtonTapped() {
@@ -120,4 +138,64 @@ class LoginVC: UIViewController {
         
         /// 비동기라 여기 작성하기가 힘들듯. Combine Publisher 사용..?
     }
+}
+
+//MARK: - ASAuthorizationControllerDelegate
+extension LoginVC: ASAuthorizationControllerDelegate {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            // Create an account in your system.
+            let userIdentifier = appleIDCredential.user
+            let userFirstName = appleIDCredential.fullName?.givenName
+            let userLastName = appleIDCredential.fullName?.familyName
+            let userEmail = appleIDCredential.email
+            let appleIDProvider = ASAuthorizationAppleIDProvider()
+            appleIDProvider.getCredentialState(forUserID: userIdentifier) { (credentialState, error) in
+                switch credentialState {
+                case .authorized:
+                    // The Apple ID credential is valid. Show Home UI Here
+                    // authorized - 사용자의 identifier 가 정상적으로 인식되었을 경우
+
+                    break
+                case .revoked:
+                    // The Apple ID credential is revoked. Show SignIn UI Here.
+                    // revoked- 사용자의 identifier 가 유효하지 않은 경우
+
+                    
+                    break
+                case .notFound:
+                    // No credential was found. Show SignIn UI Here.
+                    // notFoun - 사용자의 identifier 를 찾지 못한 경우
+                    
+
+                    break
+                default:
+                    break
+                }
+            }
+        }
+        
+        
+    }
+    
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print(error.localizedDescription)
+    }
+    
+    
+}
+
+//MARK: - ASWebAuthenticationPresentationContextProviding
+extension LoginVC: ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return view.window!
+    }
+
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return ASPresentationAnchor()
+        //얘는 뭔지 모르겠음!
+    }
+    
 }
