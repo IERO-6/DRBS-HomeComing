@@ -11,6 +11,10 @@ final class HomeVC: UIViewController {
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var allHouseModels: [House]?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
