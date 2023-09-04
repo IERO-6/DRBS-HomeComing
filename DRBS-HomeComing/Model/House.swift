@@ -25,10 +25,9 @@ class House: NSObject, Codable, MKAnnotation {
     var 기록: String?
     var 사진: [String]?                   //imageUrl
     var 별점: Double?
-    var noneMaintenanceList: [String] = []
     
     // 외부에서 입력값을 받아 초기화하는 이니셜라이저
-    init(uid: String? = nil, houseId: String? = nil, title: String? = nil, isBookMarked: Bool? = nil, livingType: String? = nil, tradingType: String? = nil, address: String? = nil, latitude: Double? = nil, longitude: Double? = nil, 보증금: String? = nil, 월세: String? = nil, 관리비: String? = nil, 관리비미포함목록: [String]? = nil, 면적: String? = nil, 입주가능일: String? = nil, 계약기간: String? = nil, 체크리스트: CheckList? = nil, 기록: String? = nil, 사진: [String]? = nil, 별점: Double? = nil, noneMaintenanceList: [String]) {
+    init(uid: String? = nil, houseId: String? = nil, title: String? = nil, isBookMarked: Bool? = nil, livingType: String? = nil, tradingType: String? = nil, address: String? = nil, latitude: Double? = nil, longitude: Double? = nil, 보증금: String? = nil, 월세: String? = nil, 관리비: String? = nil, 관리비미포함목록: [String]? = nil, 면적: String? = nil, 입주가능일: String? = nil, 계약기간: String? = nil, 체크리스트: CheckList? = nil, 기록: String? = nil, 사진: [String]? = nil, 별점: Double? = nil) {
         
         // 입력값으로 받은 위도와 경도를 사용하여 coordinate 초기화
         if let latitude = latitude, let longitude = longitude {

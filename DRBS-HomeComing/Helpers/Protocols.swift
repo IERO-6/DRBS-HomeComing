@@ -9,5 +9,4 @@ protocol searchViewDelegate: AnyObject {
 }
 protocol CellSelectedDelegate: AnyObject {
     func cellselected(indexPath: IndexPath)
-    func cellselected(selectedHouseId: String)
 }

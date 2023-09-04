@@ -139,9 +139,9 @@ extension HouseTVCell: UICollectionViewDelegate {
             break
         }
         
-        if let selectedHouseId = selectedHouse?.houseId {
-            self.houseId = selectedHouseId
-            self.cellselectedDelegate?.cellselected(selectedHouseId: selectedHouseId)
-        }
+//        if let selectedHouseId = selectedHouse?.houseId {
+//            self.houseId = selectedHouseId
+//            self.cellselectedDelegate?.cellselected(selectedHouseId: selectedHouseId)
+//        }
     }
 }

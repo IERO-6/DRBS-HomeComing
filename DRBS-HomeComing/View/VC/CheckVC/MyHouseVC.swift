@@ -69,7 +69,8 @@ final class MyHouseVC: UIViewController {
     private lazy var noneMaintenanceImagesStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 10
-        $0.distribution = .fillEqually}
+        $0.distribution = .equalSpacing
+        $0.layer.borderColor = UIColor.black.cgColor}
     private lazy var mapLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
@@ -126,7 +127,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"}
     private lazy var CheckListView = CheckListUIView()
-    var selectedHouseId: String?
+    var selectedHouse: House?
    
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -186,7 +187,7 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(mainImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).offset(10)
             $0.trailing.equalTo(contentView).offset(-10)
-            $0.height.equalTo(180)
+//            $0.height.equalTo(180)
         }
         
         firstContainView.snp.makeConstraints {
@@ -243,10 +244,11 @@ final class MyHouseVC: UIViewController {
         }
         
         noneMaintenanceImagesStackView.snp.makeConstraints {
-            $0.top.equalTo(noneMaintenanceLabel)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(60)
-            $0.trailing.equalToSuperview().offset(-50)
+            $0.top.equalTo(noneMaintenanceLabel).offset(13)
+            $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
+            $0.height.equalTo(36)
+            $0.width.equalTo(27*5 + 5*4)
+//            $0.trailing.equalToSuperview().offset(-100)
         }
         
         mapStackView.snp.makeConstraints {
@@ -419,47 +421,53 @@ final class MyHouseVC: UIViewController {
         }
     
     private func fetchSelectedHouseData() {
-        guard let houseId = selectedHouseId else { return }
+        guard let house = selectedHouse else { return }
 
-        NetworkingManager.shared.fetchSelectedHouseData(houseId: houseId) { [weak self] house in
-            print("잘 작동중")
-            print("관리비미포함목록: \(house?.관리비미포함목록)")
-            guard let self = self, let house = house else { return }
+        print("관리비미포함목록: \(house.관리비미포함목록)")
 
-            var selectedImages: [UIImage] = []
+        var selectedImages: [UIImage] = []
 
-            if let 관리비미포함목록 = house.관리비미포함목록 {
-                if 관리비미포함목록.contains("가스") {
-                    selectedImages.append(UIImage(named: "gassImage.png")!)
-                }
-                if 관리비미포함목록.contains("전기") {
-                    selectedImages.append(UIImage(named: "lightningImage.png")!)
-                }
-                if 관리비미포함목록.contains("수도") {
-                    selectedImages.append(UIImage(named: "waterImage.png")!)
-                }
-                if 관리비미포함목록.contains("TV") {
-                    selectedImages.append(UIImage(named: "tvImage.png")!)
-                }
-                if 관리비미포함목록.contains("인터넷") {
-                    selectedImages.append(UIImage(named: "internetImage.png")!)
+        let imageMapping: [String: String] = [
+            "가스": "gassImage.png",
+            "전기": "lightningImage.png",
+            "수도": "waterImage.png",
+            "TV": "tvImage.png",
+            "인터넷": "internetImage.png"
+        ]
+        
+        for (key, imageName) in imageMapping {
+            if let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(key) {
+                if let image = UIImage(named: imageName) {
+                    selectedImages.append(image)
                 }
             }
-
-            DispatchQueue.main.async {
-                for image in selectedImages {
-                    let imageView = UIImageView(image: image)
-                    imageView.contentMode = .scaleAspectFit
-
-                    // 이미지뷰의 크기 제약 설정
-                    let desiredWidth: CGFloat = 10.0
-                    let desiredHeight: CGFloat = 10.0
-                    imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
-                    imageView.heightAnchor.constraint(equalToConstant: desiredHeight).isActive = true
-
-                    self.noneMaintenanceImagesStackView.addArrangedSubview(imageView)
-                }
+        }
+        
+        // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 합니다.
+        while selectedImages.count < 5 {
+            if let placeholder = UIImage(named: "emptyImage.png") {
+                selectedImages.append(placeholder)
             }
+        }
+
+        DispatchQueue.main.async {
+            for image in selectedImages {
+                let imageView = UIImageView()
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                imageView.image = image
+                imageView.contentMode = .scaleAspectFit
+                
+                // 이미지뷰의 크기 제약 설정
+                let desiredWidth: CGFloat = 27.0
+                let desiredHeight: CGFloat = 36.0
+                imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
+                imageView.heightAnchor.constraint(equalToConstant: desiredHeight).isActive = true
+                
+                self.noneMaintenanceImagesStackView.addArrangedSubview(imageView)
+            }
+
+            // 이미지 간의 간격 설정
+            self.noneMaintenanceImagesStackView.spacing = 5.0
         }
     }
     

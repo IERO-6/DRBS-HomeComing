@@ -10,8 +10,8 @@ final class HomeVC: UIViewController {
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var allHouseModels: [House]?
-    var selectedHouseId: String?
-    
+    var selectedHouse: House?
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .default
     }
@@ -149,13 +149,11 @@ extension HomeVC: UITableViewDataSource {
 
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
-        let myHouseVC = MyHouseVC()
-        myHouseVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(myHouseVC, animated: true)
-    }
-    func cellselected(selectedHouseId: String) {
-        let myHouseVC = MyHouseVC()
-        myHouseVC.selectedHouseId = selectedHouseId
-        navigationController?.pushViewController(myHouseVC, animated: true)
+        if let selectedHouse = self.allHouseModels?[indexPath.row] {
+            let myHouseVC = MyHouseVC()
+            myHouseVC.selectedHouse = selectedHouse // House 객체 전달
+            myHouseVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(myHouseVC, animated: true)
+        }
     }
 }
