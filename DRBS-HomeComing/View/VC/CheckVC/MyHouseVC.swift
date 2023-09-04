@@ -60,6 +60,16 @@ final class MyHouseVC: UIViewController {
         $0.text = "관리비 7만원"
         $0.textAlignment = .left}
     // 아직 관리비 미포함 목록 안함
+    private lazy var noneMaintenanceLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard", size: 14)
+        $0.textColor = .black
+        $0.text = "관리비\n미포함"
+        $0.numberOfLines = 2
+        $0.textAlignment = .left}
+    private lazy var noneMaintenanceImagesStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = 10
+        $0.distribution = .fillEqually}
     private lazy var mapLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
@@ -74,6 +84,32 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderColor = UIColor.lightGray.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3}
+    private lazy var detailView = UIView()
+    private lazy var detailTextView = UIView().then {
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 3}
+    private lazy var 면적 = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
+        $0.text = "면적 :"}
+    private lazy var 입주가능일 = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
+        $0.text = "입주가능일 :"}
+    private lazy var 계약기간 = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
+        $0.text = "계약기간 :"}
+    private lazy var 면적ValueLabel = UILabel().then {
+        $0.textColor = .black
+        $0.text = "50㎡"}
+    private lazy var 입주가능일ValueLabel = UILabel().then {
+        $0.textColor = .black
+        $0.text = "2023-09-04"}
+    private lazy var 계약기간ValueLabel = UILabel().then {
+        $0.textColor = .black
+        $0.text = "5년"}
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
@@ -97,12 +133,14 @@ final class MyHouseVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingNav()
+        fetchSelectedHouseData()
     }
     
     override func viewDidLayoutSubviews() {
         mainView.layer.addBottomLayer()
         mapStackView.layer.addBottomLayer()
         memoView.layer.addBottomLayer()
+        detailView.layer.addBottomLayer()
     }
     
     //MARK: - Helpers
@@ -113,7 +151,9 @@ final class MyHouseVC: UIViewController {
         mainView.addSubviews(firstContainView,
                                       addressLabel,
                                       secondContainView,
-                                      maintenanceLabel)
+                                      maintenanceLabel,
+                                      noneMaintenanceLabel,
+                                      noneMaintenanceImagesStackView)
         firstContainView.addSubviews(nameLabel,
                                     livingMethodLabel,
                                     starImage,
@@ -121,12 +161,17 @@ final class MyHouseVC: UIViewController {
         secondContainView.addSubviews(tradeMethodLabel, costLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
+        detailView.addSubviews(면적, 면적ValueLabel,
+                               입주가능일, 입주가능일ValueLabel,
+                               계약기간, 계약기간ValueLabel,
+                               detailTextView)
         checkView.addSubviews(checkLabel, CheckListView)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
                                 mainView,
                                 mapStackView,
                                 memoView,
+                                detailView,
                                 checkView,
                                 button)
 
@@ -187,7 +232,21 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(secondContainView.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
             $0.height.equalTo(30)
-            $0.bottom.equalToSuperview().offset(-30)
+            $0.bottom.equalToSuperview().offset(-60)
+        }
+        
+        noneMaintenanceLabel.snp.makeConstraints {
+            $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(60)
+//            $0.bottom.equalToSuperview().offset(60)
+        }
+        
+        noneMaintenanceImagesStackView.snp.makeConstraints {
+            $0.top.equalTo(noneMaintenanceLabel)
+            $0.leading.equalToSuperview()
+            $0.height.equalTo(60)
+            $0.trailing.equalToSuperview().offset(-50)
         }
         
         mapStackView.snp.makeConstraints {
@@ -231,8 +290,51 @@ final class MyHouseVC: UIViewController {
             $0.bottom.equalTo(textCountLabel.snp.top).offset(-5)
         }
         
-        checkView.snp.makeConstraints {
+        detailView.snp.makeConstraints {
             $0.top.equalTo(memoView.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(mainView)
+            $0.height.equalTo(180)
+        }
+        
+        면적.snp.makeConstraints {
+            $0.top.equalTo(detailView).offset(20)
+            $0.leading.equalTo(detailView).offset(15)
+        }
+        
+        면적ValueLabel.snp.makeConstraints {
+            $0.centerY.equalTo(면적)
+            $0.leading.equalTo(면적.snp.trailing).offset(15)
+        }
+        
+        입주가능일.snp.makeConstraints {
+            $0.top.equalTo(면적).offset(50)
+            $0.leading.equalTo(detailView).offset(15)
+        }
+        
+        입주가능일ValueLabel.snp.makeConstraints {
+            $0.centerY.equalTo(입주가능일)
+            $0.leading.equalTo(입주가능일.snp.trailing).offset(15)
+        }
+        
+        계약기간.snp.makeConstraints {
+            $0.top.equalTo(입주가능일).offset(50)
+            $0.leading.equalTo(detailView).offset(15)
+        }
+        
+        계약기간ValueLabel.snp.makeConstraints {
+            $0.centerY.equalTo(계약기간)
+            $0.leading.equalTo(계약기간.snp.trailing).offset(15)
+        }
+        
+        detailTextView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(3)
+            $0.trailing.equalToSuperview().offset(-3)
+            $0.top.equalToSuperview().offset(10)
+            $0.bottom.equalTo(계약기간ValueLabel.snp.bottom).offset(10)
+        }
+        
+        checkView.snp.makeConstraints {
+            $0.top.equalTo(detailView.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(12)
             $0.trailing.equalToSuperview().offset(-12)
             $0.height.equalTo(550)
@@ -287,19 +389,19 @@ final class MyHouseVC: UIViewController {
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
             // 데이터 가져오기
             let rateVC = RateVC()
-            let uid = Auth.auth().currentUser?.uid
-            NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: uid) { [weak self] houses in
-                // 메인화면에서 선택했던 셀의 housId를 가져온다
-                guard let self = self, let selectedHouseId = self.selectedHouseId else { return }
-                let house = houses.first { $0.houseId == selectedHouseId }
-                
-                // 데이터 전달
-                let checkVC1 = CheckVC1()
-                checkVC1.house = house
-                
-                // 화면 전환
-                self.navigationController?.pushViewController(checkVC1, animated: true)
-            }
+            //            let uid = Auth.auth().currentUser?.uid
+            //            NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: uid) { [weak self] houses in
+            //                // 메인화면에서 선택했던 셀의 housId를 가져온다
+            //                guard let self = self, let selectedHouseId = self.selectedHouseId else { return }
+            //                let house = houses.first { $0.houseId == selectedHouseId }
+            //
+            //                // 데이터 전달
+            //                let checkVC1 = CheckVC1()
+            //                checkVC1.house = house
+            //
+            //                // 화면 전환
+            //                self.navigationController?.pushViewController(checkVC1, animated: true)
+            //            }
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
@@ -309,11 +411,56 @@ final class MyHouseVC: UIViewController {
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
-                             image: nil,
-                             identifier: nil,
-                             options: .displayInline,
-                             children: [edit, delete])
+                               image: nil,
+                               identifier: nil,
+                               options: .displayInline,
+                               children: [edit, delete])
         navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
+        }
+    
+    private func fetchSelectedHouseData() {
+        guard let houseId = selectedHouseId else { return }
+
+        NetworkingManager.shared.fetchSelectedHouseData(houseId: houseId) { [weak self] house in
+            print("잘 작동중")
+            print("관리비미포함목록: \(house?.관리비미포함목록)")
+            guard let self = self, let house = house else { return }
+
+            var selectedImages: [UIImage] = []
+
+            if let 관리비미포함목록 = house.관리비미포함목록 {
+                if 관리비미포함목록.contains("가스") {
+                    selectedImages.append(UIImage(named: "gassImage.png")!)
+                }
+                if 관리비미포함목록.contains("전기") {
+                    selectedImages.append(UIImage(named: "lightningImage.png")!)
+                }
+                if 관리비미포함목록.contains("수도") {
+                    selectedImages.append(UIImage(named: "waterImage.png")!)
+                }
+                if 관리비미포함목록.contains("TV") {
+                    selectedImages.append(UIImage(named: "tvImage.png")!)
+                }
+                if 관리비미포함목록.contains("인터넷") {
+                    selectedImages.append(UIImage(named: "internetImage.png")!)
+                }
+            }
+
+            DispatchQueue.main.async {
+                for image in selectedImages {
+                    let imageView = UIImageView(image: image)
+                    imageView.contentMode = .scaleAspectFit
+
+                    // 이미지뷰의 크기 제약 설정
+                    let desiredWidth: CGFloat = 10.0
+                    let desiredHeight: CGFloat = 10.0
+                    imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
+                    imageView.heightAnchor.constraint(equalToConstant: desiredHeight).isActive = true
+
+                    self.noneMaintenanceImagesStackView.addArrangedSubview(imageView)
+                }
+            }
+        }
     }
     
     //MARK: - Actions
