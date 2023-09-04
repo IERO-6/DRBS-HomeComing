@@ -10,6 +10,7 @@ final class HomeVC: UIViewController {
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var allHouseModels: [House]?
+    var selectedHouseId: String?
     
     //MARK: - LifeCycle
     
@@ -132,6 +133,11 @@ extension HomeVC: UITableViewDataSource {
 extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
+        navigationController?.pushViewController(myHouseVC, animated: true)
+    }
+    func cellselected(selectedHouseId: String) {
+        let myHouseVC = MyHouseVC()
+        myHouseVC.selectedHouseId = selectedHouseId
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }

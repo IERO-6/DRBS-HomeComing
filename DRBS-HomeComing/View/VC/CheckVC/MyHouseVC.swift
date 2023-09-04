@@ -1,4 +1,5 @@
 import UIKit
+import KakaoSDKAuth
 import Then
 import SnapKit
 import MapKit
@@ -89,6 +90,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"}
     private lazy var CheckListView = CheckListUIView()
+    var selectedHouseId: String?
    
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -285,17 +287,18 @@ final class MyHouseVC: UIViewController {
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
             // 데이터 가져오기
             let rateVC = RateVC()
-            let uid = rateVC.houseViewModel.house?.uid
-            NetworkingManager.shared.fetchHouses { [weak self] houses in
-                // 특정 집 데이터 가져오기
-                let house = houses.first { $0.uid == uid }
+            let uid = Auth.auth().currentUser?.uid
+            NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: uid) { [weak self] houses in
+                // 메인화면에서 선택했던 셀의 housId를 가져온다
+                guard let self = self, let selectedHouseId = self.selectedHouseId else { return }
+                let house = houses.first { $0.houseId == selectedHouseId }
                 
                 // 데이터 전달
                 let checkVC1 = CheckVC1()
                 checkVC1.house = house
                 
                 // 화면 전환
-                self?.navigationController?.pushViewController(checkVC1, animated: true)
+                self.navigationController?.pushViewController(checkVC1, animated: true)
             }
         })
         
