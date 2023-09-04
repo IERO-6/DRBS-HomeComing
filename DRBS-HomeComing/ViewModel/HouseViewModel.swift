@@ -49,7 +49,6 @@ class HouseViewModel {
     
     func makeHouseModel() {
         if let user = Auth.auth().currentUser {
-            
             self.house = House(uid: user.uid, houseId: "",title: self.name, isBookMarked: false, livingType: self.livingType, tradingType: self.tradingType, address: self.address, latitude: self.latitude, longitude: self.longitude, 보증금: self.보증금, 월세: self.월세or전세금, 관리비: self.관리비, 관리비미포함목록: self.관리비미포함목록, 면적: self.면적, 입주가능일: self.입주가능일, 계약기간: self.계약기간, 체크리스트: self.checkList, 기록: self.memo, 사진: stringImages, 별점: self.rate)
         }
     }

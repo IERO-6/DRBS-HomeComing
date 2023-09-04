@@ -60,7 +60,7 @@ final class HomeVC: UIViewController {
     private func settingTV() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 170
+        tableView.rowHeight = self.view.frame.height/4.5
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         tableView.separatorStyle = .none
     }
