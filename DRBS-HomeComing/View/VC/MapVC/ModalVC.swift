@@ -55,7 +55,6 @@ final class ModalVC: UIViewController {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
-        $0.sizeToFit()
         $0.layer.borderColor = Constant.appColor.cgColor
         $0.layer.borderWidth = 1
     }
@@ -174,7 +173,6 @@ final class ModalVC: UIViewController {
             $0.trailing.equalTo(tradingTypeLabel.snp.leading).offset(-8)
             $0.top.equalTo(tradingTypeLabel)
             $0.bottom.equalTo(tradingTypeLabel)
-            $0.width.equalTo(95)
         }
         addressLabel.snp.makeConstraints {
             $0.leading.equalToSuperview()
@@ -216,7 +214,7 @@ final class ModalVC: UIViewController {
         self.addressLabel.text = house.address!
         self.memoTextView.text = house.기록 ?? ""
         self.priceLabel.text = house.보증금! + "/" + house.월세!
-        self.livingTypeLabel.text = house.livingType!
+        self.livingTypeLabel.text = (house.livingType!) + " "
         self.tradingTypeLabel.text = house.tradingType!
         guard let isBookmarked = house.isBookMarked else { return }
         switch isBookmarked {
@@ -248,6 +246,22 @@ final class ModalVC: UIViewController {
             self.secondImageView.image = images[1]
             self.thirdImageView.image = images[2]
             self.fourthImageView.image = images[3]
+            let filterView = UIView().then {
+                $0.backgroundColor = .darkGray.withAlphaComponent(0.5)
+            }
+            let plusText = UILabel().then {
+                $0.font = UIFont(name: "Pretendard-Bold", size: 18)
+                $0.text = "+ 1"
+                $0.textColor = .white
+            }
+            filterView.addSubview(plusText)
+            plusText.snp.makeConstraints {
+                $0.centerX.centerY.equalToSuperview()
+            }
+            fourthImageView.addSubview(filterView)
+            filterView.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
         default:
             return
         }

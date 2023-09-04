@@ -6,6 +6,10 @@ final class NoticeListVC: UIViewController {
 
     // MARK: - Properties
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     private let noticeTableView = UITableView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.estimatedRowHeight = 110

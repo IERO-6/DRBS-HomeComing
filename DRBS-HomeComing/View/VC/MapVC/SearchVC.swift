@@ -9,8 +9,6 @@ final class SearchVC: UIViewController {
     private lazy var filtered: [String] = []
     private lazy var searchBar = UISearchBar()
     private lazy var tableView = UITableView(frame: self.view.frame)
-    
-    //오늘 추가한 부분
     private lazy var searchCompleter = MKLocalSearchCompleter()
     private lazy var searchResults: [MKLocalSearchCompletion] = []
     weak var searchViewDelegate: searchViewDelegate?

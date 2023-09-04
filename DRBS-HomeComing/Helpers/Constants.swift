@@ -109,3 +109,8 @@ struct Constant {
 class KeyedButton: UIButton {
     var key: String?
 }
+open class DynamicStatusBarNavigation: UINavigationController {
+    override open var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
+}

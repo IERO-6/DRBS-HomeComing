@@ -25,6 +25,10 @@ final class SettingVC: UIViewController {
     
     // MARK: - View Lifecycle
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +47,7 @@ final class SettingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
         configureNav()
         bannerView.load(GADRequest())
     }
