@@ -97,6 +97,7 @@ final class HomeVC: UIViewController {
         default:
             break
         }
+        detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
@@ -119,6 +120,10 @@ extension HomeVC: UITableViewDelegate {
             titleButton.tag = section
             return headerView
         }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("tableView\(indexPath)")
+        print("tableView\(indexPath.row)")
+    }
 }
 
 //MARK: - UITableViewDataSource
@@ -150,6 +155,7 @@ extension HomeVC: CellSelectedDelegate {
     func cellselected(indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
         myHouseVC.hidesBottomBarWhenPushed = true
+        print(indexPath.row)
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }
