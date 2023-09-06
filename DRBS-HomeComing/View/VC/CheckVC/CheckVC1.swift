@@ -7,6 +7,7 @@ final class CheckVC1: UIViewController {
     //MARK: - Properties
     
     var nameIndex: Int?
+    var house: House?
     private let houseViewModel = HouseViewModel()
     
     private let nameLabel = UILabel().then {
@@ -69,7 +70,7 @@ final class CheckVC1: UIViewController {
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
-    private lazy var 투룸버튼 = UIButton().then {
+    private lazy var 빌라버튼 = UIButton().then {
         $0.setTitle("빌라/주택", for: .normal)
         $0.setTitleColor(UIColor.darkGray, for: .normal)
         $0.layer.borderWidth = 1
@@ -96,7 +97,7 @@ final class CheckVC1: UIViewController {
         $0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
     }
     
-    private lazy var livingButtons = [아파트버튼, 투룸버튼, 오피스텔버튼, 원룸버튼]
+    private lazy var livingButtons = [아파트버튼, 빌라버튼, 오피스텔버튼, 원룸버튼]
     private let addressLabel = UILabel().then { $0.text = "주소*" }
     
     private lazy var addressTextField = UITextField().then {
@@ -119,6 +120,7 @@ final class CheckVC1: UIViewController {
         
         configureUI()
         setUpLabel()
+        updateUI()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
@@ -146,7 +148,7 @@ final class CheckVC1: UIViewController {
         view.backgroundColor = .white
         view.addSubviews(nameLabel, nameTextField, tradeLabel,
                          월세버튼, 전세버튼, 매매버튼, livingLabel,
-                         아파트버튼, 투룸버튼,  원룸버튼,
+                         아파트버튼, 빌라버튼,  원룸버튼,
                         addressLabel, addressTextField, nextButton)
         
         nameLabel.snp.makeConstraints {
@@ -199,7 +201,7 @@ final class CheckVC1: UIViewController {
             $0.height.equalTo(45)
         }
         
-        투룸버튼.snp.makeConstraints {
+        빌라버튼.snp.makeConstraints {
             $0.top.equalTo(아파트버튼)
             $0.leading.equalTo(아파트버튼.snp.trailing).offset(20)
             $0.width.equalTo(120)
@@ -266,6 +268,27 @@ final class CheckVC1: UIViewController {
             let range = (fullText as NSString).range(of: "*")
             attribtuedString.addAttribute(.foregroundColor, value: UIColor.systemRed, range: range)
             texts.attributedText = attribtuedString}
+    }
+    
+    private func updateUI() {
+        // UI 업데이트
+        if let house = house {
+            nameTextField.text = house.title
+            addressTextField.text = house.address
+            
+            // 거래방식 버튼 상태 업데이트
+            let tradingTypeButtons = [월세버튼, 전세버튼, 매매버튼]
+            for button in tradingTypeButtons {
+                button.isSelected = button.title(for: .normal) == house.tradingType
+            }
+            
+            // 주거형태 버튼 상태 업데이트
+            let livingTypeButtons = [아파트버튼, 오피스텔버튼, 빌라버튼, 원룸버튼]
+            for button in tradingTypeButtons {
+                button.isSelected = button.title(for: .normal) == house.tradingType
+            }
+        }
+        
     }
     
     //MARK: - Actions

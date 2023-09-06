@@ -81,7 +81,7 @@ class HouseViewModel {
                     completion(nil, NSError(domain: "GeocodingErrorDomain", code: 1, userInfo: nil))
                 }
             }
-        } 
+        }
     }
     
     //uiSlider값에 따라 평점 구분하는 로직
