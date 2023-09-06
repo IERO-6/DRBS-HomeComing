@@ -59,7 +59,6 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "관리비 7만원"
         $0.textAlignment = .left}
-    // 아직 관리비 미포함 목록 안함
     private lazy var noneMaintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
@@ -86,31 +85,18 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3}
     private lazy var detailView = UIView()
-    private lazy var detailTextView = UIView().then {
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3}
-    private lazy var 면적 = UILabel().then {
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black
-        $0.text = "면적 :"}
-    private lazy var 입주가능일 = UILabel().then {
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black
-        $0.text = "입주가능일 :"}
-    private lazy var 계약기간 = UILabel().then {
-        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black
-        $0.text = "계약기간 :"}
+    private lazy var 면적ImageView = UIImageView().then {$0.image = UIImage(named: "areaImage.png")}
+    private lazy var 입주가능일ImageView = UIImageView().then {$0.image = UIImage(named: "calendarImage.png")}
+    private lazy var 계약기간ImageView = UIImageView().then {$0.image = UIImage(named: "homeImage.png")}
     private lazy var 면적ValueLabel = UILabel().then {
-        $0.textColor = .black
-        $0.text = "50㎡"}
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black}
     private lazy var 입주가능일ValueLabel = UILabel().then {
-        $0.textColor = .black
-        $0.text = "2023-09-04"}
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black}
     private lazy var 계약기간ValueLabel = UILabel().then {
-        $0.textColor = .black
-        $0.text = "5년"}
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black}
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
@@ -162,10 +148,12 @@ final class MyHouseVC: UIViewController {
         secondContainView.addSubviews(tradeMethodLabel, costLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
-        detailView.addSubviews(면적, 면적ValueLabel,
-                               입주가능일, 입주가능일ValueLabel,
-                               계약기간, 계약기간ValueLabel,
-                               detailTextView)
+        detailView.addSubviews(면적ImageView,
+                               면적ValueLabel,
+                               입주가능일ImageView,
+                               입주가능일ValueLabel,
+                               계약기간ImageView,
+                               계약기간ValueLabel)
         checkView.addSubviews(checkLabel, CheckListView)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
@@ -187,7 +175,6 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(mainImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).offset(10)
             $0.trailing.equalTo(contentView).offset(-10)
-//            $0.height.equalTo(180)
         }
         
         firstContainView.snp.makeConstraints {
@@ -240,7 +227,6 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
             $0.height.equalTo(60)
-//            $0.bottom.equalToSuperview().offset(60)
         }
         
         noneMaintenanceImagesStackView.snp.makeConstraints {
@@ -248,7 +234,6 @@ final class MyHouseVC: UIViewController {
             $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
             $0.height.equalTo(36)
             $0.width.equalTo(27*5 + 5*4)
-//            $0.trailing.equalToSuperview().offset(-100)
         }
         
         mapStackView.snp.makeConstraints {
@@ -298,41 +283,37 @@ final class MyHouseVC: UIViewController {
             $0.height.equalTo(180)
         }
         
-        면적.snp.makeConstraints {
-            $0.top.equalTo(detailView).offset(20)
+        면적ImageView.snp.makeConstraints {
+            $0.top.equalTo(detailView).offset(15)
             $0.leading.equalTo(detailView).offset(15)
+            $0.width.height.equalTo(24)
         }
         
         면적ValueLabel.snp.makeConstraints {
-            $0.centerY.equalTo(면적)
-            $0.leading.equalTo(면적.snp.trailing).offset(15)
+            $0.centerY.equalTo(면적ImageView)
+            $0.leading.equalTo(면적ImageView.snp.trailing).offset(15)
         }
         
-        입주가능일.snp.makeConstraints {
-            $0.top.equalTo(면적).offset(50)
+        입주가능일ImageView.snp.makeConstraints {
+            $0.top.equalTo(면적ImageView).offset(53)
             $0.leading.equalTo(detailView).offset(15)
+            $0.width.height.equalTo(24)
         }
         
         입주가능일ValueLabel.snp.makeConstraints {
-            $0.centerY.equalTo(입주가능일)
-            $0.leading.equalTo(입주가능일.snp.trailing).offset(15)
+            $0.centerY.equalTo(입주가능일ImageView)
+            $0.leading.equalTo(입주가능일ImageView.snp.trailing).offset(15)
         }
         
-        계약기간.snp.makeConstraints {
-            $0.top.equalTo(입주가능일).offset(50)
-            $0.leading.equalTo(detailView).offset(15)
+        계약기간ImageView.snp.makeConstraints {
+            $0.top.equalTo(입주가능일ImageView).offset(47)
+            $0.leading.equalTo(detailView).offset(12)
+            $0.width.height.equalTo(30)
         }
         
         계약기간ValueLabel.snp.makeConstraints {
-            $0.centerY.equalTo(계약기간)
-            $0.leading.equalTo(계약기간.snp.trailing).offset(15)
-        }
-        
-        detailTextView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(3)
-            $0.trailing.equalToSuperview().offset(-3)
-            $0.top.equalToSuperview().offset(10)
-            $0.bottom.equalTo(계약기간ValueLabel.snp.bottom).offset(10)
+            $0.centerY.equalTo(계약기간ImageView)
+            $0.leading.equalTo(계약기간ImageView.snp.trailing).offset(12)
         }
         
         checkView.snp.makeConstraints {
@@ -352,8 +333,6 @@ final class MyHouseVC: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        
-        
         button.snp.makeConstraints {
             $0.top.equalTo(checkView.snp.bottom).offset(200)   //바꿔야함
             $0.leading.equalToSuperview().offset(15)
@@ -365,11 +344,8 @@ final class MyHouseVC: UIViewController {
             $0.bottom.equalTo(button.snp.bottom).offset(20)
             $0.height.greaterThanOrEqualTo(scrollView)
             $0.width.equalToSuperview()
-
         }
     }
-        
-    
     
     private func settingNav() {
         let appearance = UINavigationBarAppearance().then {
@@ -389,25 +365,10 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            // 데이터 가져오기
-            let rateVC = RateVC()
-            //            let uid = Auth.auth().currentUser?.uid
-            //            NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: uid) { [weak self] houses in
-            //                // 메인화면에서 선택했던 셀의 housId를 가져온다
-            //                guard let self = self, let selectedHouseId = self.selectedHouseId else { return }
-            //                let house = houses.first { $0.houseId == selectedHouseId }
-            //
-            //                // 데이터 전달
-            //                let checkVC1 = CheckVC1()
-            //                checkVC1.house = house
-            //
-            //                // 화면 전환
-            //                self.navigationController?.pushViewController(checkVC1, animated: true)
-            //            }
+//            let rateVC = RateVC()
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            //삭제하면 홈화면으로 돌아가면서 해당 부동산Id를 completionHandler를 통해 넘겨서 서버에서 삭제
             print("삭제하기")
             
         })
@@ -422,11 +383,7 @@ final class MyHouseVC: UIViewController {
     
     private func fetchSelectedHouseData() {
         guard let house = selectedHouse else { return }
-
-        print("관리비미포함목록: \(house.관리비미포함목록)")
-
         var selectedImages: [UIImage] = []
-
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightningImage.png",
@@ -434,7 +391,6 @@ final class MyHouseVC: UIViewController {
             "TV": "tvImage.png",
             "인터넷": "internetImage.png"
         ]
-        
         for (key, imageName) in imageMapping {
             if let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(key) {
                 if let image = UIImage(named: imageName) {
@@ -442,14 +398,12 @@ final class MyHouseVC: UIViewController {
                 }
             }
         }
-        
-        // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 합니다.
+        // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
         while selectedImages.count < 5 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
         }
-
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
@@ -457,17 +411,35 @@ final class MyHouseVC: UIViewController {
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
                 
-                // 이미지뷰의 크기 제약 설정
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
                 imageView.heightAnchor.constraint(equalToConstant: desiredHeight).isActive = true
-                
                 self.noneMaintenanceImagesStackView.addArrangedSubview(imageView)
             }
-
-            // 이미지 간의 간격 설정
             self.noneMaintenanceImagesStackView.spacing = 5.0
+        }
+        
+        if let 면적 = house.면적 {
+            self.면적ValueLabel.text = "\(면적) ㎡"
+        }
+
+        if let 입주가능일 = house.입주가능일 {
+            let baseFont = UIFont.systemFont(ofSize: 10)
+            let boldFont = UIFont(name: "Pretendard-Bold", size: 16) ?? baseFont
+            let 입주가능일Text = NSMutableAttributedString(string: "\(입주가능일)", attributes: [NSAttributedString.Key.font: boldFont])
+            let prefix = NSAttributedString(string: " (입주가능일)", attributes: [NSAttributedString.Key.font: baseFont])
+            입주가능일Text.append(prefix)
+            self.입주가능일ValueLabel.attributedText = 입주가능일Text
+        }
+
+        if let 계약기간 = house.계약기간 {
+            let baseFont = UIFont.systemFont(ofSize: 10)
+            let boldFont = UIFont(name: "Pretendard-Bold", size: 16) ?? baseFont
+            let 계약기간Text = NSMutableAttributedString(string: "\(계약기간)년", attributes: [NSAttributedString.Key.font: boldFont])
+            let prefix = NSAttributedString(string: " (계약기간)", attributes: [NSAttributedString.Key.font: baseFont])
+            계약기간Text.append(prefix)
+            self.계약기간ValueLabel.attributedText = 계약기간Text
         }
     }
     
