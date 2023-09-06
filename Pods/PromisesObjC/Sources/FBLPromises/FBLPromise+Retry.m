@@ -126,6 +126,3 @@ static void FBLPromiseRetryAttempt(FBLPromise *promise, dispatch_queue_t queue, 
 }
 
 @end
-
-/** Stub used to force the linker to include the categories in this file. */
-void FBLIncludeRetryCategory(void) {}

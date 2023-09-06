@@ -8,5 +8,5 @@ protocol searchViewDelegate: AnyObject {
     func setRegion(cood: CLLocationCoordinate2D)
 }
 protocol CellSelectedDelegate: AnyObject {
-    func cellselected(houseTVCell: HouseTVCell, model: House)
+    func cellselected(houseTVCell: HouseTVCell, house: House)
 }

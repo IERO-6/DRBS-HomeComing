@@ -122,6 +122,9 @@ class NetworkingManager {
             completion(houses)
         }
     }
+    
+   
+    
     //MARK: - Update
     //MARK: - Delete
     

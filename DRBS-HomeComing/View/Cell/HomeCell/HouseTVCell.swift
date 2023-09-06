@@ -11,7 +11,7 @@ final class HouseTVCell: UITableViewCell {
     var oneRoomCellCount: Int?
     var villaCellCount: Int?
     var bookmarkCellCount: Int?
-
+    
     var houses: [House] = [] {
         didSet {
             self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸/투룸+"}.count
@@ -123,15 +123,15 @@ extension HouseTVCell: UICollectionViewDelegate {
         //셀 선택 됐을 때 해당 셀의 Id를 통해 파이어베이스에서 받아온 데이터로 디테일VC를 띄움
         switch self.indexPath {
         case 0:
-            self.cellselectedDelegate?.cellselected(houseTVCell: self, model: houses.filter{$0.livingType! == "아파트/오피스텔"}[indexPath.row] )
+            self.cellselectedDelegate?.cellselected(houseTVCell: self, house: self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row])
         case 1:
-            self.cellselectedDelegate?.cellselected(houseTVCell: self, model: houses.filter{$0.livingType! == "빌라/주택"}[indexPath.row] )
+            self.cellselectedDelegate?.cellselected(houseTVCell: self, house: self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row])
         case 2:
-            self.cellselectedDelegate?.cellselected(houseTVCell: self, model: houses.filter{$0.livingType! == "원룸/투룸+"}[indexPath.row] )
+            self.cellselectedDelegate?.cellselected(houseTVCell: self, house: self.houses.filter{ $0.livingType! == "원룸/투룸+" }[indexPath.row])
         case 3:
-            self.cellselectedDelegate?.cellselected(houseTVCell: self, model: houses.filter{$0.livingType! == "북마크"}[indexPath.row] )
+            self.cellselectedDelegate?.cellselected(houseTVCell: self, house: self.houses.filter{ $0.isBookMarked! == true }[indexPath.row])
         default:
-            return
+            break
         }
     }
 }
