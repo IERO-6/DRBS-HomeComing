@@ -152,10 +152,10 @@ extension HomeVC: UITableViewDataSource {
 //MARK: - CellSelectedDelegate
 
 extension HomeVC: CellSelectedDelegate {
-    func cellselected(indexPath: IndexPath) {
+    func cellselected(houseTVCell: HouseTVCell, model: House) {
         let myHouseVC = MyHouseVC()
         myHouseVC.hidesBottomBarWhenPushed = true
-        print(indexPath.row)
+        myHouseVC.house = model
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }

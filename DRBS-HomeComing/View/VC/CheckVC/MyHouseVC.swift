@@ -89,6 +89,12 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"}
     private lazy var CheckListView = CheckListUIView()
+    
+    lazy var house: House? = nil {
+        didSet {
+            configureUIWithData()
+        }
+    }
    
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -299,6 +305,14 @@ final class MyHouseVC: UIViewController {
                              options: .displayInline,
                              children: [edit, delete])
         navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
+    }
+    
+    private func configureUIWithData() {
+        guard let house = self.house else { return }
+        guard let houseImages = house.사진 else { return }
+        let images = houseImages.map{$0.toImage()}
+        self.mainImageView.image = images[0]
+        
     }
     
     //MARK: - Actions
