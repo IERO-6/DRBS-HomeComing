@@ -90,6 +90,7 @@ final class CheckListUIView: UIView {
         self.backgroundColor = .white
         setupSubviews()
         configureUI()
+        configureUIWithData()
     }
 
     required init?(coder: NSCoder) {
@@ -250,6 +251,12 @@ final class CheckListUIView: UIView {
             $0.centerY.equalTo(label)
             $0.trailing.equalTo(label.snp.leading).offset(-10)
             $0.width.height.equalTo(22)}
+    }
+    
+    func configureUIWithData() {
+//        self.checkViewModel.onCompleted = { [weak self] _ in
+//            
+//        }
     }
 
     //MARK: - Actions

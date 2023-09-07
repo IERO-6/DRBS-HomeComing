@@ -123,28 +123,7 @@ class NetworkingManager {
         }
     }
     
-    // 선택한 집에대한 데이터를 받아오는 코드
-    func fetchSelectedHouseData(houseId: String, completion: @escaping (House?) -> Void) {
-        let houseRef = db.collection("Homes").document(houseId)
-        
-        houseRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                let data = document.data()
-                do {
-                    let decoder = JSONDecoder()
-                    let jsonData = try JSONSerialization.data(withJSONObject: data)
-                    let house = try decoder.decode(House.self, from: jsonData)
-                    completion(house)
-                } catch {
-                    print("Error decoding house: \(error.localizedDescription)")
-                    completion(nil)
-                }
-            } else {
-                print("Document does not exist")
-                completion(nil)
-            }
-        }
-    }
+   
     
     //MARK: - Update
     //MARK: - Delete

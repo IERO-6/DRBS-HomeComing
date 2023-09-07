@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "gasImage.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "gassImage.png",
+      "filename" : "gasImage2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "gasImage3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
