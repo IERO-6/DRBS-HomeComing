@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "internetImage.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "internetImage.png",
+      "filename" : "internetImage2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "internetImage3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

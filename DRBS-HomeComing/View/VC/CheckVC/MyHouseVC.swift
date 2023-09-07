@@ -11,110 +11,158 @@ final class MyHouseVC: UIViewController {
     private lazy var mainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.image = UIImage(named: "roomImage.png")}
+    }
+    
+    private lazy var imageBackView = UIView().then {
+        $0.backgroundColor = .black.withAlphaComponent(0.8)
+        $0.layer.cornerRadius = 10
+    }
+    
+    private lazy var photoImage = UIImageView().then {
+        $0.image = UIImage(systemName: "photo.on.rectangle")
+        $0.tintColor = .white
+    }
+    
+    private lazy var imageCount = UILabel().then {
+        $0.textColor = .white
+        $0.font = UIFont(name: "Pretendard-Bold", size: 12)
+    }
+    
     private lazy var nameLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 18)
-        $0.text = "개포 3동 2층 원룸"
         $0.textColor = .black
-        $0.textAlignment = .left}
-    private lazy var livingMethodLabel = UILabel().then {
+        $0.textAlignment = .left
+    }
+    private lazy var livingTypeLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
-        $0.text = "원룸"
         $0.textColor = Constant.appColor
         $0.textAlignment = .center
-        $0.layer.cornerRadius = 3
+        $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
-        $0.layer.borderWidth = 1}
-    private lazy var starImage = UIImageView().then {$0.image = UIImage(named: "star.png")}
+        $0.layer.borderWidth = 1
+//        $0.sizeToFit()
+    }
+    private lazy var starImage = UIImageView().then {
+        $0.image = UIImage(named: "star.png")
+    }
     private lazy var rateLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .darkGray
-        $0.text = "4.0"
-        $0.textAlignment = .center}
+        $0.textAlignment = .center
+    }
     private lazy var firstContainView = UIView()
+    
     private lazy var addressLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .black
-        $0.text = "서울특별시 강남구 개포동 153"
-        $0.textAlignment = .left}
-    private lazy var tradeMethodLabel = UILabel().then {
+        $0.textAlignment = .left
+    }
+    private lazy var tradingTypeLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
-        $0.text = "월세"
         $0.textColor = Constant.appColor
         $0.textAlignment = .center
-        $0.layer.cornerRadius = 3
+        $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
-        $0.layer.borderWidth = 1}
-    private lazy var costLabel = UILabel().then {
+        $0.layer.borderWidth = 1
+        $0.sizeToFit()
+    }
+    private lazy var priceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 22)
-        $0.text = "1000/60"
         $0.textColor = .black
-        $0.textAlignment = .left}
+        $0.textAlignment = .left
+    }
     private lazy var secondContainView = UIView()
+    
     private lazy var mainView = UIView()
+    
     private lazy var maintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
-        $0.text = "관리비 7만원"
-        $0.textAlignment = .left}
+        $0.textAlignment = .left
+        $0.text = "관리비"
+    }
+    
+    private lazy var maintenanceCostLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
+        $0.textAlignment = .left
+    }
     private lazy var noneMaintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
         $0.text = "관리비\n미포함"
         $0.numberOfLines = 2
-        $0.textAlignment = .left}
+        $0.textAlignment = .left
+    }
     private lazy var noneMaintenanceImagesStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 10
         $0.distribution = .equalSpacing
-        $0.layer.borderColor = UIColor.black.cgColor}
+        $0.layer.borderColor = UIColor.black.cgColor
+    }
     private lazy var mapLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
-        $0.text = "지도"}
-    private lazy var mapView = MKMapView()
+        $0.text = "지도"
+    }
+    private lazy var mapView = MKMapView().then {
+        $0.isUserInteractionEnabled = false
+    }
     private lazy var mapStackView = UIView()
     private lazy var memoLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
-        $0.text = "메모"}
+        $0.text = "메모"
+    }
     private lazy var memoTextView = UITextView().then {
         $0.layer.borderColor = UIColor.lightGray.cgColor
         $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3}
+        $0.layer.cornerRadius = 3
+        $0.isUserInteractionEnabled = false
+    }
     private lazy var detailView = UIView()
     private lazy var 면적ImageView = UIImageView().then {$0.image = UIImage(named: "areaImage.png")}
     private lazy var 입주가능일ImageView = UIImageView().then {$0.image = UIImage(named: "calendarImage.png")}
     private lazy var 계약기간ImageView = UIImageView().then {$0.image = UIImage(named: "homeImage.png")}
     private lazy var 면적ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black}
+        $0.textColor = .black
+    }
     private lazy var 입주가능일ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black}
+        $0.textColor = .black
+    }
     private lazy var 계약기간ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
-        $0.textColor = .black}
+        $0.textColor = .black
+    }
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
-        $0.text = "(242/500)"}
+    }
     private lazy var memoView = UIView()
     private lazy var button = UIButton().then {
         $0.backgroundColor = Constant.appColor
         $0.setTitle("확인", for: .normal)
         $0.layer.cornerRadius = 5
-        $0.clipsToBounds = true}
+        $0.clipsToBounds = true
+    }
     private lazy var checkView = UIView()
     private lazy var checkLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
-        $0.text = "체크 리스트"}
+        $0.text = "체크 리스트"
+    }
     private lazy var CheckListView = CheckListUIView()
-    var selectedHouse: House?
-   
+    
+    var selectedHouse: House? {
+        didSet {
+            configureUIWithData()
+        }
+    }
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,17 +183,20 @@ final class MyHouseVC: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        mainImageView.addSubview(imageBackView)
+        imageBackView.addSubviews(photoImage, imageCount)
         mainView.addSubviews(firstContainView,
-                                      addressLabel,
-                                      secondContainView,
-                                      maintenanceLabel,
-                                      noneMaintenanceLabel,
-                                      noneMaintenanceImagesStackView)
+                             addressLabel,
+                             secondContainView,
+                             maintenanceLabel,
+                             maintenanceCostLabel,
+                             noneMaintenanceLabel,
+                             noneMaintenanceImagesStackView)
         firstContainView.addSubviews(nameLabel,
-                                    livingMethodLabel,
-                                    starImage,
-                                    rateLabel)
-        secondContainView.addSubviews(tradeMethodLabel, costLabel)
+                                     livingTypeLabel,
+                                     starImage,
+                                     rateLabel)
+        secondContainView.addSubviews(tradingTypeLabel, priceLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
         detailView.addSubviews(면적ImageView,
@@ -161,16 +212,34 @@ final class MyHouseVC: UIViewController {
                                 mapStackView,
                                 memoView,
                                 detailView,
-                                checkView,
-                                button)
-
+                                checkView)
+        
         contentView.snp.makeConstraints {$0.edges.width.equalTo(scrollView)}
         
         mainImageView.snp.makeConstraints {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
         }
-
+        
+        imageBackView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.width.equalTo(70)
+            $0.height.equalTo(30)
+        }
+        
+        photoImage.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(10)
+            $0.width.height.equalTo(20)
+        }
+        
+        imageCount.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.width.height.equalTo(20)
+        }
+        
         mainView.snp.makeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).offset(10)
@@ -181,9 +250,6 @@ final class MyHouseVC: UIViewController {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(30)
         }
-        nameLabel.snp.makeConstraints {
-            $0.bottom.top.leading.equalToSuperview()
-        }
         rateLabel.snp.makeConstraints {
             $0.trailing.bottom.top.equalToSuperview()
             $0.width.equalTo(30)
@@ -193,11 +259,16 @@ final class MyHouseVC: UIViewController {
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
             $0.width.equalTo(30)
         }
-        livingMethodLabel.snp.makeConstraints {
+        livingTypeLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalTo(starImage.snp.leading).offset(-5)
-            $0.width.equalTo(35)
+//            $0.width.equalTo(35)
         }
+        nameLabel.snp.makeConstraints {
+            $0.bottom.top.leading.equalToSuperview()
+            $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(-10)
+        }
+       
         addressLabel.snp.makeConstraints {
             $0.top.equalTo(firstContainView.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
@@ -208,19 +279,27 @@ final class MyHouseVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(30)
         }
-        tradeMethodLabel.snp.makeConstraints {
+        tradingTypeLabel.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
             $0.width.equalTo(35)
         }
-        costLabel.snp.makeConstraints {
+        priceLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
-            $0.leading.equalTo(tradeMethodLabel.snp.trailing).offset(10)
+            $0.leading.equalTo(tradingTypeLabel.snp.trailing).offset(10)
         }
         maintenanceLabel.snp.makeConstraints {
             $0.top.equalTo(secondContainView.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
             $0.height.equalTo(30)
             $0.bottom.equalToSuperview().offset(-60)
+        }
+        
+        maintenanceCostLabel.snp.makeConstraints {
+            $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+            $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
+            $0.height.equalTo(30)
+            $0.trailing.equalToSuperview()
+
         }
         
         noneMaintenanceLabel.snp.makeConstraints {
@@ -307,13 +386,13 @@ final class MyHouseVC: UIViewController {
         
         계약기간ImageView.snp.makeConstraints {
             $0.top.equalTo(입주가능일ImageView).offset(47)
-            $0.leading.equalTo(detailView).offset(12)
-            $0.width.height.equalTo(30)
+            $0.leading.equalTo(detailView).offset(15)
+            $0.width.height.equalTo(24)
         }
         
         계약기간ValueLabel.snp.makeConstraints {
             $0.centerY.equalTo(계약기간ImageView)
-            $0.leading.equalTo(계약기간ImageView.snp.trailing).offset(12)
+            $0.leading.equalTo(계약기간ImageView.snp.trailing).offset(15)
         }
         
         checkView.snp.makeConstraints {
@@ -333,15 +412,8 @@ final class MyHouseVC: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        button.snp.makeConstraints {
-            $0.top.equalTo(checkView.snp.bottom).offset(200)   //바꿔야함
-            $0.leading.equalToSuperview().offset(15)
-            $0.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(50)
-        }
-        
         contentView.snp.makeConstraints {
-            $0.bottom.equalTo(button.snp.bottom).offset(20)
+            $0.bottom.equalTo(CheckListView.snp.bottom).offset(20)
             $0.height.greaterThanOrEqualTo(scrollView)
             $0.width.equalToSuperview()
         }
@@ -381,14 +453,35 @@ final class MyHouseVC: UIViewController {
                                options: .displayInline,
                                children: [edit, delete])
         navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
-        }
+    }
     
-    private func fetchSelectedHouseData() {
+    private func configureUIWithData() {
+        
         guard let house = selectedHouse else { return }
+        DispatchQueue.main.async {
+            switch house.livingType ?? "" {
+            case "아파트/오피스텔":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
+            case "빌라/주택":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(80)}
+            case "원룸/투룸+":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            default:
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            }
+        }
+        
+        
+        self.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        
+        guard let houseImages = house.사진 else { return }
+        
+        let images = houseImages.map{$0.toImage()}
         var selectedImages: [UIImage] = []
+
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
-            "전기": "lightningImage.png",
+            "전기": "lightImage.png",
             "수도": "waterImage.png",
             "TV": "tvImage.png",
             "인터넷": "internetImage.png"
@@ -401,18 +494,21 @@ final class MyHouseVC: UIViewController {
             }
         }
         // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
+        // 왜 이미지가 5개여야하는지..?
         while selectedImages.count < 5 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
         }
+
+        let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-                
+
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -421,29 +517,47 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
+        self.mainImageView.image = images[0]
         
-        if let 면적 = house.면적 {
-            self.면적ValueLabel.text = "\(면적) ㎡"
-        }
+        self.imageCount.text = "+" + String(images.count)
+        
+        self.nameLabel.text = house.title ?? ""
+        
+        self.rateLabel.text = String(house.별점 ?? 0.0)
+        
+        self.priceLabel.text = house.보증금! + "/" + house.월세!
 
-        if let 입주가능일 = house.입주가능일 {
-            let baseFont = UIFont.systemFont(ofSize: 10)
-            let boldFont = UIFont(name: "Pretendard-Bold", size: 16) ?? baseFont
-            let 입주가능일Text = NSMutableAttributedString(string: "\(입주가능일)", attributes: [NSAttributedString.Key.font: boldFont])
-            let prefix = NSAttributedString(string: " (입주가능일)", attributes: [NSAttributedString.Key.font: baseFont])
-            입주가능일Text.append(prefix)
-            self.입주가능일ValueLabel.attributedText = 입주가능일Text
-        }
+        
+        self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
+        
+        self.addressLabel.text = house.address ?? ""
+        
+        self.livingTypeLabel.text = (house.livingType ?? "") + " "
+        
+        self.tradingTypeLabel.text = house.tradingType ?? ""
+        
+        self.mapView.setRegion(MKCoordinateRegion(center: house.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: false)
+        self.mapView.addAnnotation(house)
+        //span의 델타값이 작을수록 확대레벨 올라감
+       
+        self.memoTextView.text = house.기록 ?? ""
+        
+        self.textCountLabel.text = "(\((house.기록 ?? "").count)/500)"
+        
+        self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
+  
+        self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? "")
 
-        if let 계약기간 = house.계약기간 {
-            let baseFont = UIFont.systemFont(ofSize: 10)
-            let boldFont = UIFont(name: "Pretendard-Bold", size: 16) ?? baseFont
-            let 계약기간Text = NSMutableAttributedString(string: "\(계약기간)년", attributes: [NSAttributedString.Key.font: boldFont])
-            let prefix = NSAttributedString(string: " (계약기간)", attributes: [NSAttributedString.Key.font: baseFont])
-            계약기간Text.append(prefix)
-            self.계약기간ValueLabel.attributedText = 계약기간Text
-        }
+        self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
+
+        
     }
+    
+    private func fetchSelectedHouseData() {
+        guard let house = selectedHouse else { return }
+        
+    }
+    
     
     //MARK: - Actions
     
@@ -456,5 +570,5 @@ final class MyHouseVC: UIViewController {
         print("e")
         
     }
-
+    
 }

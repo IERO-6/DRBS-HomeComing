@@ -3,7 +3,11 @@ import UIKit
 
 class CheckViewModel {
     //MARK: - Model
-    var checkListModel = CheckList()
+    var checkListModel = CheckList() {
+        didSet {
+            onCompleted(self.checkListModel)
+        }
+    }
     var 방향: [String] = []
     var 방음: [String] = []
     var 수압: [String] = []
@@ -14,7 +18,8 @@ class CheckViewModel {
     
     //MARK: - Output
         
-    
+    var onCompleted: (CheckList?) -> Void = { _ in }
+
     
     //MARK: - Input
     

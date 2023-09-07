@@ -115,7 +115,6 @@ extension UIImage {
         let data = self.pngData()
 //        let encodedString = data?.base64EncodedString(options: .endLineWithLineFeed)
         let encodedString = data?.base64EncodedString()
-
         return encodedString
     }
 }
