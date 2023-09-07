@@ -9,6 +9,7 @@ final class CheckVC2: UIViewController {
     
     var houseViewModel = HouseViewModel()
     private let checkListUIView = CheckListUIView()
+    var house: House?
     
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
@@ -62,6 +63,8 @@ final class CheckVC2: UIViewController {
     }
     
     private let 관리비미포함 = UILabel().then { $0.text = "관리비 미포함 목록" }
+    
+    private lazy var 관리비미포함Buttons = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     
     private lazy var 전기버튼 = UIButton().then {
         $0.setTitle("전기", for: .normal)
@@ -562,6 +565,28 @@ final class CheckVC2: UIViewController {
         configuration.filter = .images // 이미지만 선택할 수 있게 설정
         picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
+    }
+    
+    private func updateUI() {
+        // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
+        if let house = house {
+            보증금TextField.text = house.보증금
+            월세TextField.text = house.월세
+            관리비TextField.text = house.관리비
+            houseViewModel.보증금 = house.보증금
+            houseViewModel.월세or전세금 = house.월세
+            houseViewModel.관리비 = house.관리비
+            
+            // 거래방식 버튼 상태 업데이트
+            for button in 관리비미포함Buttons {
+                if let title = button.currentTitle, let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(title) {
+                    button.setSelectedState(isSelected: true)
+                    houseViewModel.관리비미포함목록.append(title)
+                } else {
+                    button.setSelectedState(isSelected: false)
+                }
+            }
+        }
     }
     
     //MARK: - Actions

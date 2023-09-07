@@ -365,7 +365,9 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-//            let rateVC = RateVC()
+            let checkVC1 = CheckVC1()
+            checkVC1.house = self.selectedHouse
+            self.navigationController?.pushViewController(checkVC1, animated: true)
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in

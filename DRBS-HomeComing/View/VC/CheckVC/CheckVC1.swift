@@ -271,24 +271,31 @@ final class CheckVC1: UIViewController {
     }
     
     private func updateUI() {
-        // UI 업데이트
+        // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
         if let house = house {
             nameTextField.text = house.title
             addressTextField.text = house.address
+            houseViewModel.name = house.title
+            houseViewModel.address = house.address
             
-            // 거래방식 버튼 상태 업데이트
-            let tradingTypeButtons = [월세버튼, 전세버튼, 매매버튼]
-            for button in tradingTypeButtons {
-                button.isSelected = button.title(for: .normal) == house.tradingType
+            // 거래방식 버튼 상태 업데이트 - buttonTapped 함수처럼 구현해야 색깔이 바뀐다
+            for button in tradeButtons {
+                let isSelected = button.currentTitle == house.tradingType
+                button.setSelectedState(isSelected: isSelected)
+                if isSelected {
+                    houseViewModel.tradingType = house.tradingType
+                }
             }
-            
+
             // 주거형태 버튼 상태 업데이트
-            let livingTypeButtons = [아파트버튼, 오피스텔버튼, 빌라버튼, 원룸버튼]
-            for button in tradingTypeButtons {
-                button.isSelected = button.title(for: .normal) == house.tradingType
+            for button in livingButtons {
+                let isSelected = button.currentTitle == house.livingType
+                button.setSelectedState(isSelected: isSelected)
+                if isSelected {
+                    houseViewModel.livingType = house.livingType
+                }
             }
         }
-        
     }
     
     //MARK: - Actions
@@ -357,7 +364,6 @@ final class CheckVC1: UIViewController {
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }
         }
-        
     }
     
     @objc func textFieldEditingChanged(_ textField: UITextField) {
@@ -420,3 +426,13 @@ extension CheckVC1: UITextFieldDelegate {
         return true
     }
 }
+
+//extension UIButton {
+//    func setSelectedState(isSelected: Bool, selectedColor: UIColor = Constant.appColor, defaultColor: UIColor = .darkGray) {
+//        self.isSelected = isSelected
+//        let color = isSelected ? .white : defaultColor
+//        let bgColor = isSelected ? selectedColor : .white
+//        self.setTitleColor(color, for: .normal)
+//        self.backgroundColor = bgColor
+//    }
+//}
