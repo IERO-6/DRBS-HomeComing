@@ -11,7 +11,6 @@ final class MyHouseVC: UIViewController {
     private lazy var mainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-//        $0.image = UIImage(named: "roomImage.png")
     }
     
     private lazy var imageBackView = UIView().then {
@@ -27,25 +26,22 @@ final class MyHouseVC: UIViewController {
     private lazy var imageCount = UILabel().then {
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Bold", size: 12)
-//        $0.text = "+2"
     }
     
     private lazy var nameLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 18)
-//        $0.text = "개포 3동 2층 원룸"
         $0.textColor = .black
         $0.textAlignment = .left
     }
     private lazy var livingTypeLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
-//        $0.text = "원룸"
         $0.textColor = Constant.appColor
         $0.textAlignment = .center
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
         $0.layer.borderWidth = 1
-        $0.sizeToFit()
+//        $0.sizeToFit()
     }
     private lazy var starImage = UIImageView().then {
         $0.image = UIImage(named: "star.png")
@@ -53,19 +49,17 @@ final class MyHouseVC: UIViewController {
     private lazy var rateLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .darkGray
-//        $0.text = "4.0"
         $0.textAlignment = .center
     }
     private lazy var firstContainView = UIView()
+    
     private lazy var addressLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .black
-//        $0.text = "서울특별시 강남구 개포동 153"
         $0.textAlignment = .left
     }
     private lazy var tradingTypeLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
-//        $0.text = "월세"
         $0.textColor = Constant.appColor
         $0.textAlignment = .center
         $0.layer.cornerRadius = 5
@@ -74,9 +68,8 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderWidth = 1
         $0.sizeToFit()
     }
-    private lazy var costLabel = UILabel().then {
+    private lazy var priceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 22)
-        $0.text = "1000/60"
         $0.textColor = .black
         $0.textAlignment = .left
     }
@@ -87,7 +80,13 @@ final class MyHouseVC: UIViewController {
     private lazy var maintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
-//        $0.text = "관리비 7만원"
+        $0.textAlignment = .left
+        $0.text = "관리비"
+    }
+    
+    private lazy var maintenanceCostLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 16)
+        $0.textColor = .black
         $0.textAlignment = .left
     }
     private lazy var noneMaintenanceLabel = UILabel().then {
@@ -142,7 +141,6 @@ final class MyHouseVC: UIViewController {
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
-//        $0.text = "(242/500)"
     }
     private lazy var memoView = UIView()
     private lazy var button = UIButton().then {
@@ -191,13 +189,14 @@ final class MyHouseVC: UIViewController {
                              addressLabel,
                              secondContainView,
                              maintenanceLabel,
+                             maintenanceCostLabel,
                              noneMaintenanceLabel,
                              noneMaintenanceImagesStackView)
         firstContainView.addSubviews(nameLabel,
                                      livingTypeLabel,
                                      starImage,
                                      rateLabel)
-        secondContainView.addSubviews(tradingTypeLabel, costLabel)
+        secondContainView.addSubviews(tradingTypeLabel, priceLabel)
         mapStackView.addSubviews(mapLabel, mapView)
         memoView.addSubviews(memoLabel, memoTextView, textCountLabel)
         detailView.addSubviews(면적ImageView,
@@ -213,8 +212,7 @@ final class MyHouseVC: UIViewController {
                                 mapStackView,
                                 memoView,
                                 detailView,
-                                checkView,
-                                button)
+                                checkView)
         
         contentView.snp.makeConstraints {$0.edges.width.equalTo(scrollView)}
         
@@ -283,9 +281,9 @@ final class MyHouseVC: UIViewController {
         }
         tradingTypeLabel.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
-//            $0.width.equalTo(35)
+            $0.width.equalTo(35)
         }
-        costLabel.snp.makeConstraints {
+        priceLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalTo(tradingTypeLabel.snp.trailing).offset(10)
         }
@@ -294,6 +292,14 @@ final class MyHouseVC: UIViewController {
             $0.leading.equalToSuperview()
             $0.height.equalTo(30)
             $0.bottom.equalToSuperview().offset(-60)
+        }
+        
+        maintenanceCostLabel.snp.makeConstraints {
+            $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+            $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
+            $0.height.equalTo(30)
+            $0.trailing.equalToSuperview()
+
         }
         
         noneMaintenanceLabel.snp.makeConstraints {
@@ -406,15 +412,8 @@ final class MyHouseVC: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        button.snp.makeConstraints {
-            $0.top.equalTo(checkView.snp.bottom).offset(200)   //바꿔야함
-            $0.leading.equalToSuperview().offset(15)
-            $0.trailing.equalToSuperview().inset(15)
-            $0.height.equalTo(50)
-        }
-        
         contentView.snp.makeConstraints {
-            $0.bottom.equalTo(button.snp.bottom).offset(20)
+            $0.bottom.equalTo(CheckListView.snp.bottom).offset(20)
             $0.height.greaterThanOrEqualTo(scrollView)
             $0.width.equalToSuperview()
         }
@@ -455,8 +454,29 @@ final class MyHouseVC: UIViewController {
     }
     
     private func configureUIWithData() {
+        
         guard let house = selectedHouse else { return }
+        DispatchQueue.main.async {
+            switch house.livingType ?? "" {
+            case "아파트/오피스텔":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
+            case "빌라/주택":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(80)}
+            case "원룸/투룸+":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            default:
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            }
+        }
+        
+        
+        self.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        
+        guard let houseImages = house.사진 else { return }
+        
+        let images = houseImages.map{$0.toImage()}
         var selectedImages: [UIImage] = []
+
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightImage.png",
@@ -478,7 +498,7 @@ final class MyHouseVC: UIViewController {
                 selectedImages.append(placeholder)
             }
         }
-        
+
         let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
@@ -486,7 +506,7 @@ final class MyHouseVC: UIViewController {
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-                
+
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -495,10 +515,18 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
+        self.mainImageView.image = images[0]
+        
+        self.imageCount.text = "+" + String(images.count)
         
         self.nameLabel.text = house.title ?? ""
         
         self.rateLabel.text = String(house.별점 ?? 0.0)
+        
+        self.priceLabel.text = house.보증금! + "/" + house.월세!
+
+        
+        self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
         
         self.addressLabel.text = house.address ?? ""
         
