@@ -3,7 +3,7 @@ import UIKit
 
 class CheckViewModel {
     //MARK: - Model
-    var checkListModel = CheckList() {
+    var checkListModel: CheckList? {
         didSet {
             onCompleted(self.checkListModel)
         }

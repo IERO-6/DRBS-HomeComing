@@ -155,7 +155,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"
     }
-    private lazy var CheckListView = CheckListUIView()
+    lazy var CheckListView = CheckListUIView()
     
     var selectedHouse: House? {
         didSet {
