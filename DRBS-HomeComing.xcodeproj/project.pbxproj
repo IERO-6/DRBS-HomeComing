@@ -66,6 +66,8 @@
 		B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0932A8F140500E68A2D /* Pretendard-Light.otf */; };
 		B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0942A8F140500E68A2D /* Pretendard-Black.otf */; };
 		B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */; };
+		B38C34D32AAB8C8D00F8E3EF /* Raleway-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */; };
+		B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */; };
 		B3CEE3932AA111D9006A0D79 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
 		EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* AdMobCell.swift */; };
@@ -73,7 +75,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18048F072AA350D2002B7FF0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		186335592A8A0D0B00E283D5 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckViewModel.swift; sourceTree = "<group>"; };
@@ -140,6 +141,8 @@
 		B386B0932A8F140500E68A2D /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		B386B0942A8F140500E68A2D /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Bold.ttf"; sourceTree = "<group>"; };
+		B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraBold.ttf"; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		EB2338CD2AA244AA00DE6450 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
@@ -399,6 +402,8 @@
 				B386B08F2A8F140500E68A2D /* Pretendard-Regular.otf */,
 				B386B08D2A8F140500E68A2D /* Pretendard-SemiBold.otf */,
 				B386B08E2A8F140500E68A2D /* Pretendard-Thin.otf */,
+				B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */,
+				B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */,
 			);
 			path = Font;
 			sourceTree = "<group>";
@@ -479,7 +484,9 @@
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
+				B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */,
 				B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */,
+				B38C34D32AAB8C8D00F8E3EF /* Raleway-Bold.ttf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
 				218ACDEF2A75262500687EE6 /* LaunchScreen.storyboard in Resources */,
