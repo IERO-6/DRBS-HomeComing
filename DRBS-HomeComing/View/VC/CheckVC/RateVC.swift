@@ -7,6 +7,8 @@ final class RateVC: UIViewController {
     
     lazy var houseViewModel = HouseViewModel()
     
+    var house: House?
+    
     private let mainTitleLabel = UILabel().then {
         $0.text = "체크리스트 평가"
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
@@ -75,6 +77,7 @@ final class RateVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingModal()
+        print("houseID = \(house?.houseId)")
         
     }
     //MARK: - Helpers
@@ -148,8 +151,14 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
-        self.houseViewModel.makeHouseModel()
-        NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
+        // houseID를 확인하고, 만약 있다면 해당 house를 업데이트한다
+        if let house = self.house {
+            NetworkingManager.shared.updateHouseInFirebase(houseModel: house)
+        } else {
+            self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
+            self.houseViewModel.makeHouseModel()
+            NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
+            print("houseID가 맞지 않습니다")
+        }
     }
 }

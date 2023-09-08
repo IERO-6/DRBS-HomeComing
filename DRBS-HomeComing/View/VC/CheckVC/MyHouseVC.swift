@@ -3,6 +3,7 @@ import KakaoSDKAuth
 import Then
 import SnapKit
 import MapKit
+import FirebaseFirestore
 
 final class MyHouseVC: UIViewController {
     //MARK: - Properties
@@ -444,7 +445,16 @@ final class MyHouseVC: UIViewController {
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
             print("삭제하기")
-            
+            func deleteButtonTapped() {
+                if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
+                    print("Deleting house with ID: \(houseId)")  // houseId를 출력
+                    NetworkingManager.shared.deleteHouse(houseId: houseId)
+                    // HouseTVCell에서 해당 데이터를 지우는 코드를 만들어야 할 것 같다 - 삭제는 잘 됨
+                } else {
+                    print("houseId not found!")
+                }
+            }
+            deleteButtonTapped()
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
@@ -517,7 +527,11 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
-        self.mainImageView.image = images[0]
+        if !images.isEmpty {
+            self.mainImageView.image = images[0]
+        } else {
+            self.mainImageView.image = UIImage(named: "emptyImage")
+        }
         
         self.imageCount.text = "+" + String(images.count)
         
@@ -562,8 +576,33 @@ final class MyHouseVC: UIViewController {
     //MARK: - Actions
     
     @objc func bookmarkButtonTapped() {
-        print("b")
+        guard let selectedHouse = self.selectedHouse else { return }
         
+        selectedHouse.isBookMarked = !(selectedHouse.isBookMarked ?? false)
+        
+        // Firestore에 이 변경된 값을 업데이트한다 - 그러면 북마크 버튼을 여러번 누르면 데이터가 너무 쌓이지 않을까?
+        if let houseId = selectedHouse.houseId {
+            let houseRef = Firestore.firestore().collection("Homes").document(houseId)
+            
+            houseRef.updateData(["isBookMarked": selectedHouse.isBookMarked!]) { (error) in
+                if let error = error {
+                    print("Failed to update bookmark: \(error.localizedDescription)")
+                    return
+                }
+                
+                // reloadData를 사용해 갱신시켜야 하는데 어떻게 해야할지 모르겠다
+//                self.tableView.reloadData()
+            }
+        }
+        
+//        if house.isBookMarked == true {
+//            // 북마크가 활성화된 경우
+//            bookmark.tintColor = .default
+//        } else {
+//            // 북마크가 비활성화된 경우
+//            bookmark.tintColor = .white
+//        }
+
     }
     
     @objc func ellipsisButtonTapped() {

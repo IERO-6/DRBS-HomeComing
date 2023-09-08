@@ -271,7 +271,7 @@ final class CheckVC1: UIViewController {
     }
     
     private func updateUI() {
-        // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
+        // UI 업데이트
         if let house = house {
             nameTextField.text = house.title
             addressTextField.text = house.address
@@ -286,7 +286,7 @@ final class CheckVC1: UIViewController {
                     houseViewModel.tradingType = house.tradingType
                 }
             }
-
+            
             // 주거형태 버튼 상태 업데이트
             for button in livingButtons {
                 let isSelected = button.currentTitle == house.livingType
@@ -360,6 +360,7 @@ final class CheckVC1: UIViewController {
                 self.houseViewModel.longitude = coordinate.longitude
                 self.houseViewModel.name = self.nameTextField.text
                 let checkVC2 = CheckVC2()
+                checkVC2.house = self.house
                 checkVC2.houseViewModel = self.houseViewModel
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }
@@ -426,13 +427,3 @@ extension CheckVC1: UITextFieldDelegate {
         return true
     }
 }
-
-//extension UIButton {
-//    func setSelectedState(isSelected: Bool, selectedColor: UIColor = Constant.appColor, defaultColor: UIColor = .darkGray) {
-//        self.isSelected = isSelected
-//        let color = isSelected ? .white : defaultColor
-//        let bgColor = isSelected ? selectedColor : .white
-//        self.setTitleColor(color, for: .normal)
-//        self.backgroundColor = bgColor
-//    }
-//}

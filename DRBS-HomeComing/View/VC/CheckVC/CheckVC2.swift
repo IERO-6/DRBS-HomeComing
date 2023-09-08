@@ -10,7 +10,6 @@ final class CheckVC2: UIViewController {
     var houseViewModel = HouseViewModel()
     private let checkListUIView = CheckListUIView()
     var house: House?
-    
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false
@@ -262,6 +261,7 @@ final class CheckVC2: UIViewController {
         configureUI2()
         configureUI3()
         setUpLabel()
+        updateUI()
         configureNav()
         initPicker()
         setUpKeyBoard()
@@ -569,13 +569,23 @@ final class CheckVC2: UIViewController {
     
     private func updateUI() {
         // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
-        if let house = house {
+        if let house = self.house {
             보증금TextField.text = house.보증금
             월세TextField.text = house.월세
             관리비TextField.text = house.관리비
+            면적TextField.text = house.면적
+            계약기간TextField.text = house.계약기간
+            if let 입주가능일 = house.입주가능일 {
+                입주가능일button.setTitle(입주가능일, for: .normal)
+                입주가능일button.setTitleColor(UIColor.black, for: .normal)
+            }
+            memoTextView.text = house.기록
             houseViewModel.보증금 = house.보증금
             houseViewModel.월세or전세금 = house.월세
             houseViewModel.관리비 = house.관리비
+            houseViewModel.계약기간 = house.계약기간
+            houseViewModel.입주가능일 = house.입주가능일
+            houseViewModel.memo = house.기록
             
             // 거래방식 버튼 상태 업데이트
             for button in 관리비미포함Buttons {
@@ -584,6 +594,18 @@ final class CheckVC2: UIViewController {
                     houseViewModel.관리비미포함목록.append(title)
                 } else {
                     button.setSelectedState(isSelected: false)
+                }
+            }
+            
+            //이미지를 띄우는 코드
+            guard let houseImages = house.사진 else { return }
+            let images = houseImages.compactMap { $0.toImage() }
+
+            let buttons = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
+
+            for (index, button) in buttons.enumerated() {
+                if images.indices.contains(index) {
+                    button.setImage(images[index], for: .normal)
                 }
             }
         }
@@ -621,6 +643,7 @@ final class CheckVC2: UIViewController {
         
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
+        rateVC.house = self.house
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
         self.houseViewModel.관리비 = self.관리비TextField.text
