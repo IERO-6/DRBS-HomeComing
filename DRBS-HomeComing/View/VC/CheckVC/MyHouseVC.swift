@@ -155,7 +155,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"
     }
-    lazy var CheckListView = CheckListUIView()
+    lazy var checkListView = CheckListUIView()
     
     var selectedHouse: House? {
         didSet {
@@ -205,7 +205,7 @@ final class MyHouseVC: UIViewController {
                                입주가능일ValueLabel,
                                계약기간ImageView,
                                계약기간ValueLabel)
-        checkView.addSubviews(checkLabel, CheckListView)
+        checkView.addSubviews(checkLabel, checkListView)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
                                 mainView,
@@ -407,13 +407,13 @@ final class MyHouseVC: UIViewController {
             $0.leading.equalToSuperview().offset(5)
         }
         
-        CheckListView.snp.makeConstraints {
+        checkListView.snp.makeConstraints {
             $0.top.equalTo(checkLabel.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
         contentView.snp.makeConstraints {
-            $0.bottom.equalTo(CheckListView.snp.bottom).offset(20)
+            $0.bottom.equalTo(checkListView.snp.bottom).offset(20)
             $0.height.greaterThanOrEqualTo(scrollView)
             $0.width.equalToSuperview()
         }
@@ -456,6 +456,7 @@ final class MyHouseVC: UIViewController {
     private func configureUIWithData() {
         
         guard let house = selectedHouse else { return }
+        self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             switch house.livingType ?? "" {
             case "아파트/오피스텔":
@@ -470,11 +471,12 @@ final class MyHouseVC: UIViewController {
         }
         
         
-        self.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         
         guard let houseImages = house.사진 else { return }
         
         let images = houseImages.map{$0.toImage()}
+        
         var selectedImages: [UIImage] = []
 
         let imageMapping: [String: String] = [
@@ -517,7 +519,7 @@ final class MyHouseVC: UIViewController {
         }
         self.mainImageView.image = images[0]
         
-        self.imageCount.text = "+" + String(images.count)
+        self.imageCount.text = "+" + String(images.count - 1)
         
         self.nameLabel.text = house.title ?? ""
         
@@ -525,7 +527,6 @@ final class MyHouseVC: UIViewController {
         
         self.priceLabel.text = house.보증금! + "/" + house.월세!
 
-        
         self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
         
         self.addressLabel.text = house.address ?? ""
