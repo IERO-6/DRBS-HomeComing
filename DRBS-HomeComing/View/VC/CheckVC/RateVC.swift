@@ -1,6 +1,7 @@
 import UIKit
 import Then
 import SnapKit
+import FirebaseFirestore
 
 final class RateVC: UIViewController {
     //MARK: - Properties
@@ -151,14 +152,36 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        // houseID를 확인하고, 만약 있다면 해당 house를 업데이트한다
-        if let house = self.house {
-            NetworkingManager.shared.updateHouseInFirebase(houseModel: house)
-        } else {
+        guard let houseId = house?.houseId else {
             self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
             self.houseViewModel.makeHouseModel()
             NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
-            print("houseID가 맞지 않습니다")
+            return
+        }
+        let houseRef = Firestore.firestore().collection("Homes").document(houseId)
+        
+        var dataToUpdate: [String: Any] = [:]
+        if let name = houseViewModel.name { dataToUpdate["title"] = name }
+        if let address = houseViewModel.address { dataToUpdate["address"] = address }
+        
+        if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }
+        if let livingType = houseViewModel.livingType { dataToUpdate["livingType"] = livingType }
+        
+        if let 보증금 = houseViewModel.보증금 { dataToUpdate["deposit"] = 보증금 }
+        if let 월세 = houseViewModel.월세or전세금 { dataToUpdate["rent_payment"] = 월세 }
+        if let 관리비 = houseViewModel.관리비 { dataToUpdate["maintenance_fee"] = 관리비 }
+        dataToUpdate["maintenance_non_list"] = houseViewModel.관리비미포함목록
+        if let 면적 = houseViewModel.면적 { dataToUpdate["area"] = 면적 }
+        if let 입주가능일 = houseViewModel.입주가능일 { dataToUpdate["movingDay"] = 입주가능일 }
+        if let 계약기간 = houseViewModel.계약기간 { dataToUpdate["contractTerm"] = 계약기간 }
+        if let 메모 = houseViewModel.memo { dataToUpdate["memo"] = 메모 }
+        
+        houseRef.updateData(dataToUpdate) { (error) in
+            if let error = error {
+                print("Failed to update house: \(error.localizedDescription)")
+                return
+            }
+            print("Successfully updated house!")
         }
     }
 }

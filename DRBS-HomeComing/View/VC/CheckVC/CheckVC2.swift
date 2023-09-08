@@ -579,19 +579,13 @@ final class CheckVC2: UIViewController {
                 입주가능일button.setTitle(입주가능일, for: .normal)
                 입주가능일button.setTitleColor(UIColor.black, for: .normal)
             }
-            memoTextView.text = house.기록
-            houseViewModel.보증금 = house.보증금
-            houseViewModel.월세or전세금 = house.월세
-            houseViewModel.관리비 = house.관리비
-            houseViewModel.계약기간 = house.계약기간
-            houseViewModel.입주가능일 = house.입주가능일
-            houseViewModel.memo = house.기록
             
             // 거래방식 버튼 상태 업데이트
             for button in 관리비미포함Buttons {
                 if let title = button.currentTitle, let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(title) {
                     button.setSelectedState(isSelected: true)
                     houseViewModel.관리비미포함목록.append(title)
+                    houseViewModel.관리비미포함목록 = house.관리비미포함목록 ?? []
                 } else {
                     button.setSelectedState(isSelected: false)
                 }
@@ -644,6 +638,15 @@ final class CheckVC2: UIViewController {
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
         rateVC.house = self.house
+        rateVC.houseViewModel = self.houseViewModel
+        houseViewModel.memo = memoTextView.text
+        houseViewModel.보증금 = 보증금TextField.text
+        houseViewModel.월세or전세금 = 월세TextField.text
+        houseViewModel.관리비 = 관리비TextField.text
+        houseViewModel.계약기간 = 계약기간TextField.text
+        houseViewModel.입주가능일 = 입주가능일button.currentTitle
+        print(houseViewModel.입주가능일)
+        
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
         self.houseViewModel.관리비 = self.관리비TextField.text

@@ -273,10 +273,8 @@ final class CheckVC1: UIViewController {
     private func updateUI() {
         // UI 업데이트
         if let house = house {
-            nameTextField.text = house.title
-            addressTextField.text = house.address
-            houseViewModel.name = house.title
-            houseViewModel.address = house.address
+            nameTextField.text = houseViewModel.name ?? house.title
+            addressTextField.text = houseViewModel.address ?? house.address
             
             // 거래방식 버튼 상태 업데이트 - buttonTapped 함수처럼 구현해야 색깔이 바뀐다
             for button in tradeButtons {
@@ -342,6 +340,11 @@ final class CheckVC1: UIViewController {
             }
             return
         }
+        
+        houseViewModel.name = nameTextField.text
+        print("Setting houseViewModel.name with: \(String(describing: nameTextField.text))")
+        houseViewModel.address = addressTextField.text
+        print("Updated address: \(String(describing: houseViewModel.address))")
         
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
