@@ -34,6 +34,8 @@
 		<string>Pretendard-Regular.otf</string>
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Thin.otf</string>
+		<string>Raleway-Bold.otf</string>
+		<string>Raleway-ExtraBold.otf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

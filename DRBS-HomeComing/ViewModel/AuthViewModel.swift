@@ -93,7 +93,14 @@ final class AuthViewModel {
                         print("kakao logout() success.")
                     }
                 }
-//            case "APPLE":
+            case "APPLE":
+                UserApi.shared.logout {(error) in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        print("apple logout() success.")
+                    }
+                }
             default:
                 break
             }
@@ -129,7 +136,15 @@ final class AuthViewModel {
                         print("kakao unlink() success.")
                     }
                 }
-//            case "APPLE":
+            case "APPLE":
+                UserApi.shared.unlink {(error) in
+                    if let error = error {
+                        print(error)
+                    }
+                    else {
+                        print("apple unlink() success.")
+                    }
+                }
             default:
                 break
             }
