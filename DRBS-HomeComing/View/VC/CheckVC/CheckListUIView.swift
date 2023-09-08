@@ -13,76 +13,106 @@ final class CheckListUIView: UIView {
         $0.layer.borderColor = UIColor.systemGray4.cgColor}
     private let directionLabel = UILabel().then {$0.text = "방향"}
     private let checkBoxImg = UIImage(named: "unCheckedBox")
-    private let eastWindLabel = UILabel().then {
-        $0.text = "동향"
-        $0.textColor = UIColor.lightGray}
-    private let westWindLabel = UILabel().then {
-        $0.text = "서향"
-        $0.textColor = UIColor.lightGray}
-    private let southWindLabel = UILabel().then {
-        $0.text = "남향"
-        $0.textColor = UIColor.lightGray}
-    private let northWindLabel = UILabel().then {
-        $0.text = "북향"
-        $0.textColor = UIColor.lightGray}
+    
+    private lazy var 동향button = KeyedButton().then {
+        $0.key = "동향"
+        $0.setTitle("동향", for: .normal)
+      
+    }
+    private lazy var 서향button = KeyedButton().then {
+        $0.key = "서향"
+        $0.setTitle("서향", for: .normal)
+    }
+    
+    private lazy var 남향button = KeyedButton().then {
+        $0.key = "남향"
+        $0.setTitle("남향", for: .normal)
+    }
+    
+    private lazy var 북향button = KeyedButton().then {
+        $0.key = "북향"
+        $0.setTitle("북향", for: .normal)
+        
+    }
     private let underlineView = UIView().then {$0.backgroundColor = UIColor.systemGray4}
     private let soundproofingLabel = UILabel().then {$0.text = "방음"}
-    private let excellentLabel = UILabel().then {
-        $0.text = "우수"
-        $0.textColor = UIColor.lightGray}
-    private let moderateLabel = UILabel().then {
-        $0.text = "보통"
-        $0.textColor = UIColor.lightGray}
-    private let insufficientLabel = UILabel().then {
-        $0.text = "미흡"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 방음우수button = KeyedButton().then {
+        $0.key = "방음우수"
+        $0.setTitle("우수", for: .normal)
+    }
+    private lazy var 방음보통button = KeyedButton().then {
+        $0.key = "방음보통"
+        $0.setTitle("보통", for: .normal)
+    }
+    private lazy var 방음미흡button = KeyedButton().then {
+        $0.key = "방음미흡"
+        $0.setTitle("미흡", for: .normal)
+        
+    }
+    
     private let waterLabel = UILabel().then {$0.text = "수압"}
-    private let excellentwaterLabel = UILabel().then {
-        $0.text = "우수"
-        $0.textColor = UIColor.lightGray}
-    private let moderatewaterLabel = UILabel().then {
-        $0.text = "보통"
-        $0.textColor = UIColor.lightGray}
-    private let insufficientwaterLabel = UILabel().then {
-        $0.text = "미흡"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 수압우수button = KeyedButton().then {
+        $0.key = "수압우수"
+        $0.setTitle("우수", for: .normal)
+    }
+    private lazy var 수압보통button = KeyedButton().then {
+        $0.key = "수압보통"
+        $0.setTitle("보통", for: .normal)
+
+    }
+    private lazy var 수압미흡button = KeyedButton().then {
+        $0.key = "수압미흡"
+        $0.setTitle("미흡", for: .normal)
+    }
     private let bugLabel = UILabel().then {$0.text = "벌레"}
-    private let yesLabel = UILabel().then {
-        $0.text = "있음"
-        $0.textColor = UIColor.lightGray}
-    private let mysteryLabel = UILabel().then {
-        $0.text = "모름"
-        $0.textColor = UIColor.lightGray}
-    private let noLabel = UILabel().then {
-        $0.text = "없음"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 벌레있음button = KeyedButton().then {
+        $0.key = "벌레있음"
+        $0.setTitle("있음", for: .normal)
+    }
+    private lazy var 벌레모름button = KeyedButton().then {
+        $0.key = "벌레모름"
+        $0.setTitle("모름", for: .normal)
+    }
+    private lazy var 벌레없음button = KeyedButton().then {
+        $0.key = "벌레없음"
+        $0.setTitle("없음", for: .normal)
+    }
     private let 통풍 = UILabel().then {$0.text = "통풍"}
-    private let 쾌적 = UILabel().then {
-        $0.text = "쾌적"
-        $0.textColor = UIColor.lightGray}
-    private let moderateWindLabel = UILabel().then {
-        $0.text = "보통"
-        $0.textColor = UIColor.lightGray}
-    private let 불쾌 = UILabel().then {
-        $0.text = "불쾌"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 통풍쾌적button = KeyedButton().then {
+        $0.key = "통풍쾌적"
+        $0.setTitle("쾌적", for: .normal)
+    }
+    private lazy var 통풍보통button = KeyedButton().then {
+        $0.key = "통풍보통"
+        $0.setTitle("보통", for: .normal)
+    }
+    private lazy var 통풍불쾌button = KeyedButton().then {
+        $0.key = "통풍불쾌"
+        $0.setTitle("불쾌", for: .normal)
+    }
     private let securityLabel = UILabel().then {$0.text = "보안"}
-    private let 철저 = UILabel().then {
-        $0.text = "철저"
-        $0.textColor = UIColor.lightGray}
-    private let moderateSecurityLabel = UILabel().then {
-        $0.text = "보통"
-        $0.textColor = UIColor.lightGray}
-    private let 미흡 = UILabel().then {
-        $0.text = "미흡"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 보안철저button = KeyedButton().then {
+        $0.key = "보안철저"
+        $0.setTitle("철저", for: .normal)
+    }
+    private lazy var 보안보통button = KeyedButton().then {
+        $0.key = "보안보통"
+        $0.setTitle("보통", for: .normal)
+    }
+    private lazy var 보안미흡button = KeyedButton().then {
+        $0.key = "보안미흡"
+        $0.setTitle("미흡", for: .normal)
+    }
     private let moldLabel = UILabel().then {$0.text = "곰팡이"}
-    private let yesMoldLabel = UILabel().then {
-        $0.text = "있음"
-        $0.textColor = UIColor.lightGray}
-    private let noMoldLabel = UILabel().then {
-        $0.text = "없음"
-        $0.textColor = UIColor.lightGray}
+    private lazy var 곰팡이있음button = KeyedButton().then {
+        $0.key = "곰팡이있음"
+        $0.setTitle("있음", for: .normal)
+    }
+    private lazy var 곰팡이없음button = KeyedButton().then {
+        $0.key = "곰팡이없음"
+        $0.setTitle("없음", for: .normal)
+    }
+
 
     //MARK: - Initializers
     override init(frame: CGRect) {
@@ -100,7 +130,8 @@ final class CheckListUIView: UIView {
     //MARK: - Helpers
     private func setupSubviews() {
         self.addSubview(checkListUIView)
-        checkListUIView.addSubviews(directionLabel, eastWindLabel, westWindLabel, southWindLabel, northWindLabel, underlineView, soundproofingLabel, excellentLabel, moderateLabel, insufficientLabel, waterLabel, excellentwaterLabel, moderatewaterLabel, insufficientwaterLabel, bugLabel, yesLabel, mysteryLabel, noLabel, 통풍, 쾌적, moderateWindLabel, 불쾌, securityLabel, 철저, moderateSecurityLabel, 미흡, moldLabel, yesMoldLabel, noMoldLabel)}
+        checkListUIView.addSubviews(directionLabel, 동향button
+                                    , 서향button, 남향button, 북향button, underlineView, soundproofingLabel, 방음우수button, 방음보통button, 방음미흡button, waterLabel, 수압우수button, 수압보통button, 수압미흡button, bugLabel, 벌레있음button, 벌레모름button, 벌레없음button, 통풍, 통풍쾌적button, 통풍보통button, 통풍불쾌button, securityLabel, 보안철저button, 보안보통button, 보안미흡button, moldLabel, 곰팡이있음button, 곰팡이없음button)}
 
     func configureUI() {
         checkListUIView.snp.makeConstraints {
@@ -111,121 +142,131 @@ final class CheckListUIView: UIView {
 
         directionLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(30)
-            $0.leading.equalToSuperview().offset(18)}
-        eastWindLabel.snp.makeConstraints {
-            $0.top.equalTo(directionLabel)
-            $0.leading.equalTo(directionLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: eastWindLabel, key: "동향", tag: 1)}
-        westWindLabel.snp.makeConstraints {
-            $0.top.equalTo(directionLabel)
-            $0.leading.equalTo(eastWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: westWindLabel, key: "서향", tag: 1)}
-        southWindLabel.snp.makeConstraints {
-            $0.top.equalTo(directionLabel)
-            $0.leading.equalTo(westWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: southWindLabel, key: "남향", tag: 1)}
-        northWindLabel.snp.makeConstraints {
-            $0.top.equalTo(directionLabel)
-            $0.leading.equalTo(southWindLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: northWindLabel, key: "북향", tag: 1)}
+            $0.leading.equalToSuperview().offset(18)
+        }
+        동향button.snp.makeConstraints {
+            $0.centerY.equalTo(directionLabel.snp.centerY)
+            $0.leading.equalTo(directionLabel.snp.trailing).offset(12)
+        }
+        서향button.snp.makeConstraints {
+            $0.centerY.equalTo(directionLabel.snp.centerY)
+            $0.leading.equalTo(동향button.snp.trailing).offset(12)
+        }
+        남향button.snp.makeConstraints {
+            $0.centerY.equalTo(directionLabel.snp.centerY)
+            $0.leading.equalTo(서향button.snp.trailing).offset(12)
+        }
+        북향button.snp.makeConstraints {
+            $0.centerY.equalTo(directionLabel.snp.centerY)
+            $0.leading.equalTo(남향button.snp.trailing).offset(12)
+        }
         addUnderlineView(below: directionLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         soundproofingLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel.snp.bottom).offset(50)
             $0.leading.equalToSuperview().offset(18)}
-        excellentLabel.snp.makeConstraints {
-            $0.top.equalTo(soundproofingLabel)
-            $0.leading.equalTo(directionLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: excellentLabel, key: "우수", tag: 2)}
-        moderateLabel.snp.makeConstraints {
-            $0.top.equalTo(soundproofingLabel)
-            $0.leading.equalTo(excellentLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateLabel, key: "보통", tag: 2)}
-        insufficientLabel.snp.makeConstraints {
-            $0.top.equalTo(soundproofingLabel)
-            $0.leading.equalTo(moderateLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: insufficientLabel, key: "미흡", tag: 2)}
+        방음우수button.snp.makeConstraints {
+            $0.centerY.equalTo(soundproofingLabel.snp.centerY)
+            $0.leading.equalTo(directionLabel.snp.trailing).offset(12)
+        }
+        방음보통button.snp.makeConstraints {
+            $0.centerY.equalTo(soundproofingLabel.snp.centerY)
+            $0.leading.equalTo(방음우수button.snp.trailing).offset(48)
+        }
+        방음미흡button.snp.makeConstraints {
+            $0.centerY.equalTo(soundproofingLabel.snp.centerY)
+            $0.leading.equalTo(방음보통button.snp.trailing).offset(48)
+        }
         addUnderlineView(below: soundproofingLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         waterLabel.snp.makeConstraints {
             $0.top.equalTo(soundproofingLabel.snp.bottom).offset(50)
             $0.leading.equalToSuperview().offset(18)}
-        excellentwaterLabel.snp.makeConstraints {
-            $0.top.equalTo(waterLabel)
-            $0.leading.equalTo(waterLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: excellentwaterLabel, key: "우수", tag: 3)}
-        moderatewaterLabel.snp.makeConstraints {
-            $0.top.equalTo(waterLabel)
-            $0.leading.equalTo(excellentwaterLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderatewaterLabel, key: "보통", tag: 3)}
-        insufficientwaterLabel.snp.makeConstraints {
-            $0.top.equalTo(waterLabel)
-            $0.leading.equalTo(moderatewaterLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: insufficientwaterLabel, key: "미흡", tag: 3)}
+        수압우수button.snp.makeConstraints {
+            $0.centerY.equalTo(waterLabel.snp.centerY)
+            $0.leading.equalTo(waterLabel.snp.trailing).offset(12)
+        }
+        수압보통button.snp.makeConstraints {
+            $0.centerY.equalTo(waterLabel.snp.centerY)
+            $0.leading.equalTo(수압우수button.snp.trailing).offset(48)
+        }
+        수압미흡button.snp.makeConstraints {
+            $0.centerY.equalTo(waterLabel.snp.centerY)
+            $0.leading.equalTo(수압보통button.snp.trailing).offset(48)
+        }
         addUnderlineView(below: waterLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         bugLabel.snp.makeConstraints {
             $0.top.equalTo(waterLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)}
-        yesLabel.snp.makeConstraints {
-            $0.top.equalTo(bugLabel)
-            $0.leading.equalTo(bugLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: yesLabel, key: "있음", tag: 4)}
-        mysteryLabel.snp.makeConstraints {
-            $0.top.equalTo(bugLabel)
-            $0.leading.equalTo(yesLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: mysteryLabel, key: "모름", tag: 4)}
-        noLabel.snp.makeConstraints {
-            $0.top.equalTo(bugLabel)
-            $0.leading.equalTo(mysteryLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: noLabel, key: "없음", tag: 4)}
+            $0.leading.equalToSuperview().offset(18)
+        }
+        벌레있음button.snp.makeConstraints {
+            $0.centerY.equalTo(bugLabel.snp.centerY)
+            $0.leading.equalTo(bugLabel.snp.trailing).offset(12)
+        }
+        벌레모름button.snp.makeConstraints {
+            $0.centerY.equalTo(bugLabel.snp.centerY)
+            $0.leading.equalTo(벌레있음button.snp.trailing).offset(48)
+        }
+        벌레없음button.snp.makeConstraints {
+            $0.centerY.equalTo(bugLabel.snp.centerY)
+            $0.leading.equalTo(벌레모름button.snp.trailing).offset(48)
+        }
         addUnderlineView(below: bugLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         통풍.snp.makeConstraints {
             $0.top.equalTo(bugLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)}
-        쾌적.snp.makeConstraints {
-            $0.top.equalTo(통풍)
-            $0.leading.equalTo(통풍.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: 쾌적, key: "쾌적", tag: 5)}
-        moderateWindLabel.snp.makeConstraints {
-            $0.top.equalTo(통풍)
-            $0.leading.equalTo(쾌적.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateWindLabel, key: "보통", tag: 5)}
-        불쾌.snp.makeConstraints {
-            $0.top.equalTo(통풍)
-            $0.leading.equalTo(moderateWindLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: 불쾌, key: "모름", tag: 5)}
+            $0.leading.equalToSuperview().offset(18)
+        }
+        통풍쾌적button.snp.makeConstraints {
+            $0.centerY.equalTo(통풍.snp.centerY)
+            $0.leading.equalTo(통풍.snp.trailing).offset(12)
+        }
+        통풍보통button.snp.makeConstraints {
+            $0.centerY.equalTo(통풍.snp.centerY)
+            $0.leading.equalTo(통풍쾌적button.snp.trailing).offset(48)
+        }
+        통풍불쾌button.snp.makeConstraints {
+            $0.centerY.equalTo(통풍.snp.centerY)
+            $0.leading.equalTo(통풍보통button.snp.trailing).offset(48)
+        }
         addUnderlineView(below: 통풍, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         securityLabel.snp.makeConstraints {
             $0.top.equalTo(통풍.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)}
-        철저.snp.makeConstraints {
-            $0.top.equalTo(securityLabel)
-            $0.leading.equalTo(securityLabel.snp.trailing).offset(42)
-            addCheckBox(toLeftOf: 철저, key: "철저", tag: 6)}
-        moderateSecurityLabel.snp.makeConstraints {
-            $0.top.equalTo(securityLabel)
-            $0.leading.equalTo(철저.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: moderateSecurityLabel, key: "보통", tag: 6)}
-        미흡.snp.makeConstraints {
-            $0.top.equalTo(securityLabel)
-            $0.leading.equalTo(moderateSecurityLabel.snp.trailing).offset(78)
-            addCheckBox(toLeftOf: 미흡, key: "미흡", tag: 6)}
+            $0.leading.equalToSuperview().offset(18)
+        }
+        보안철저button.snp.makeConstraints {
+            $0.centerY.equalTo(securityLabel.snp.centerY)
+            $0.leading.equalTo(securityLabel.snp.trailing).offset(12)
+        }
+        보안보통button.snp.makeConstraints {
+            $0.centerY.equalTo(securityLabel.snp.centerY)
+            $0.leading.equalTo(보안철저button.snp.trailing).offset(48)
+        }
+        보안미흡button.snp.makeConstraints {
+            $0.centerY.equalTo(securityLabel.snp.centerY)
+            $0.leading.equalTo(보안보통button.snp.trailing).offset(48)
+        }
         addUnderlineView(below: securityLabel, to: checkListUIView, withOffset: 5, width: 260, height: 1)
 
         moldLabel.snp.makeConstraints {
             $0.top.equalTo(securityLabel.snp.bottom).offset(50)
             $0.leading.equalToSuperview().offset(18)}
-        yesMoldLabel.snp.makeConstraints {
-            $0.top.equalTo(moldLabel)
-            $0.leading.equalTo(moldLabel.snp.trailing).offset(85)
-            addCheckBox(toLeftOf: yesMoldLabel, key: "있음", tag: 7)}
-        noMoldLabel.snp.makeConstraints {
-            $0.top.equalTo(moldLabel)
-            $0.leading.equalTo(yesMoldLabel.snp.trailing).offset(85)
-            addCheckBox(toLeftOf: noMoldLabel, key: "없음", tag: 7)}
+        곰팡이있음button.snp.makeConstraints {
+            $0.centerY.equalTo(moldLabel.snp.centerY)
+            $0.leading.equalTo(moldLabel.snp.trailing).offset(45)
+        }
+        곰팡이없음button.snp.makeConstraints {
+            $0.centerY.equalTo(moldLabel.snp.centerY)
+            $0.leading.equalTo(곰팡이있음button.snp.trailing).offset(75)
+        }
+        
+        [동향button, 북향button, 서향button, 남향button, 방음미흡button, 방음보통button, 방음우수button,
+         수압미흡button, 수압보통button, 수압우수button, 통풍보통button, 통풍쾌적button, 통풍불쾌button, 곰팡이없음button, 곰팡이있음button, 보안철저button, 보안보통button, 보안미흡button, 벌레모름button, 벌레있음button, 벌레없음button].forEach { button in
+            settingButtons(button: button)
+        }
+        
     }
 
     func addUnderlineView(below startView: UIView, to parentView: UIView, withOffset offset: CGFloat, width: CGFloat, height: CGFloat) {
@@ -254,11 +295,18 @@ final class CheckListUIView: UIView {
     }
     
     func configureUIWithData() {
-//        self.checkViewModel.onCompleted = { [weak self] _ in
-//            
-//        }
+
     }
 
+    private func settingButtons(button: UIButton) {
+        button.setImage(UIImage(named: "checkBox-off"), for: .normal)// 이미지 넣기
+        button.setTitleColor(UIColor.lightGray, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.titleLabel?.font = UIFont(name: "Pretendard", size: 18)
+        button.contentHorizontalAlignment = .center
+        button.semanticContentAttribute = .forceLeftToRight //<- 중요
+//        $0.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15) //<- 중요
+    }
     //MARK: - Actions
     @objc func toggleCheckBox(_ sender: KeyedButton) {
             sender.isSelected.toggle()
