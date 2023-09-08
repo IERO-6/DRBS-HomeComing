@@ -31,7 +31,6 @@ final class SettingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         
         settingViewModel.logoutAction = { [weak self] in
@@ -75,9 +74,9 @@ final class SettingVC: UIViewController {
 
         settingTableView.dataSource = self
         settingTableView.delegate = self
+        bannerView.delegate = self
         
-        view.addSubview(settingTableView)
-        view.addSubview(bannerView)
+        view.addSubviews(settingTableView, bannerView)
         
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // TestID
         bannerView.rootViewController = self
@@ -275,5 +274,20 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
 extension SettingVC: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - GADBannerViewDelegate
+
+extension SettingVC: GADBannerViewDelegate {
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 1) {
+            bannerView.alpha = 1
+        }
+    }
+    
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        bannerView.isHidden = true
     }
 }

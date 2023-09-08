@@ -1,32 +1,53 @@
 import UIKit
-import SnapKit
 import Then
+import SnapKit
+import GoogleMobileAds
 
 final class DetailVC: UIViewController {
+    
     //MARK: - Properties
+    
     private lazy var tableView = UITableView()
     var houseViewModel = HouseViewModel()
+    private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
     
-    //MARK: - LifeCycle
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         settingTV()
-        settingNav()
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+        configureNav()
+        bannerView.load(GADRequest())
+    }
     
     //MARK: - Helpers
+    
     private func configureUI() {
         view.backgroundColor = .white
-        view.addSubview(tableView)
+        view.addSubviews(tableView, bannerView)
+        
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // TestID
+        bannerView.rootViewController = self
+        bannerView.backgroundColor = tableView.backgroundColor
+
+        bannerView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-30)
+        }
+        
         tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.left.right.equalToSuperview()
+            $0.bottom.equalTo(bannerView.snp.top)
         }
     }
     
-    private func settingNav() {
+    private func configureNav() {
         self.navigationController?.navigationBar.backItem?.title = ""
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
@@ -66,5 +87,21 @@ extension DetailVC : UITableViewDataSource {
 extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select \(indexPath.row)")
+    }
+}
+
+
+// MARK: - GADBannerViewDelegate
+
+extension DetailVC: GADBannerViewDelegate {
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 1) {
+            bannerView.alpha = 1
+        }
+    }
+    
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        bannerView.isHidden = true
     }
 }
