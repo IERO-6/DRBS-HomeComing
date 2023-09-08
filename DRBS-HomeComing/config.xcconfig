@@ -1,1 +1,11 @@
+//
+//  Config.xcconfig
+//  DRBS-HomeComing
+//
+//  Created by 김성호 on 2023/09/01.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
 KAKAO_APP_KEY = 1b3bcd4e4e3469b2c7084daf08ffaf06
