@@ -115,16 +115,16 @@ class HouseViewModel {
         }
     }
     
-    func makeUIImageToString() {
-        for image in uiImages {
-            guard let convertedImage = image.toPngString() else {
-                print("HouseViewModel 107Line Error: toPng실패")
-                return
-            }
-            self.stringImages.append(convertedImage)
-        }
-        print(self.stringImages)
-    }
+//    func makeUIImageToString() {
+//        for image in uiImages {
+//            guard let convertedImage = image.toPngString() else {
+//                print("HouseViewModel 107Line Error: toPng실패")
+//                return
+//            }
+//            self.stringImages.append(convertedImage)
+//        }
+//        print(self.stringImages)
+//    }
     
     func getAnnotations() -> [House] { return self.visibleHouses }
     

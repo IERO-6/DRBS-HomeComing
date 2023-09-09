@@ -225,8 +225,7 @@ final class ModalVC: UIViewController {
             self.bookMarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         }
         guard let houseImages = house.사진 else { return }
-        let images = houseImages.map{$0.toImage()}
-        switch images.count {
+        switch houseImages.count {
         case 1:
             self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
         case 2:
