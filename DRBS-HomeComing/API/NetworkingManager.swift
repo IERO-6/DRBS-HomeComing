@@ -4,7 +4,7 @@ import KakaoSDKUser
 import KakaoSDKAuth
 import FirebaseAuth
 import CoreLocation
-
+import FirebaseStorage
 
 // ⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️공식문서⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️
 // https://firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
@@ -79,13 +79,40 @@ class NetworkingManager {
     
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
-    func addHouses(houseModel: House) {
+    func addHouses(houseModel: House, images: [UIImage]) {
         let documentRef = db.collection("Homes").document()
         let houseId = documentRef.documentID
         guard let data = houseModel.asDictionary else { return }
             documentRef.setData(data)
         documentRef.updateData(["houseId":houseId])
-        
+        var stringImages: [String] = []
+        DispatchQueue.global().async {
+            for image in images {
+                self.uploadImage(image: image) { imageUrl in
+                    stringImages.append(imageUrl)
+                    documentRef.updateData(["photos":stringImages])
+                }
+            }
+        }
+    }
+    
+    func uploadImage(image: UIImage, completion: @escaping(String) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        let filename = NSUUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/house_images/\(filename)")
+        ref.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                return
+            }
+            ref.downloadURL { url, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                guard let imageUrl = url?.absoluteString else { return }
+                completion(imageUrl)
+            }
+        }
     }
     
     //MARK: - Read

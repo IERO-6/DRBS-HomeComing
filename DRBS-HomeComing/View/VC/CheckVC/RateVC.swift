@@ -155,7 +155,7 @@ final class RateVC: UIViewController {
         guard let houseId = house?.houseId else {
             self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
             self.houseViewModel.makeHouseModel()
-            NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
+            NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
             return
         }
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)

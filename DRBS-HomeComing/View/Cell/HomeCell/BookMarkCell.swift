@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 import Then
-
+import SDWebImage
 
 final class BookMarkCell: UICollectionViewCell {
     
@@ -12,7 +12,7 @@ final class BookMarkCell: UICollectionViewCell {
             guard let house = self.bookmarkHouse else { return }
             if let 사진 = house.사진 {
                 if !사진.isEmpty {
-                    self.cellImage.image = 사진[0].toImage()
+                    self.cellImage.sd_setImage(with: URL(string: 사진[0]))
                     self.cellImage.contentMode = .scaleAspectFill
                 } else {
                     let emptyImageView = UIImageView().then {

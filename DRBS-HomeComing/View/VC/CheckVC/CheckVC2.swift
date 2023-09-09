@@ -653,10 +653,8 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.면적 = self.면적TextField.text
         self.houseViewModel.계약기간 = self.계약기간TextField.text
         self.houseViewModel.memo = self.memoTextView.text
-        self.houseViewModel.makeUIImageToString()
+//        self.houseViewModel.makeUIImageToString()
         rateVC.houseViewModel = self.houseViewModel
-        print("UIImage는 지금 이만큼입니다\(rateVC.houseViewModel.uiImages)")
-        print(rateVC.houseViewModel.stringImages.count)
         self.present(rateVC, animated: true)
     }
     

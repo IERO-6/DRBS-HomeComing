@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import Then
+import SDWebImage
 
 final class ModalVC: UIViewController {
     //MARK: - Properties
@@ -227,25 +228,24 @@ final class ModalVC: UIViewController {
         let images = houseImages.map{$0.toImage()}
         switch images.count {
         case 1:
-            self.firstImageView.image = images[0]
+            self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
         case 2:
-            self.firstImageView.image = images[0]
-            self.secondImageView.image = images[1]
+            self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
+            self.secondImageView.sd_setImage(with: URL(string: houseImages[1]))
         case 3:
-            self.firstImageView.image = images[0]
-            self.secondImageView.image = images[1]
-            self.thirdImageView.image = images[2]
+            self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
+            self.secondImageView.sd_setImage(with: URL(string: houseImages[1]))
+            self.thirdImageView.sd_setImage(with: URL(string: houseImages[2]))
         case 4:
-            self.firstImageView.image = images[0]
-            self.secondImageView.image = images[1]
-            self.thirdImageView.image = images[2]
-            self.fourthImageView.image = images[3]
+            self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
+            self.secondImageView.sd_setImage(with: URL(string: houseImages[1]))
+            self.thirdImageView.sd_setImage(with: URL(string: houseImages[2]))
+            self.fourthImageView.sd_setImage(with: URL(string: houseImages[3]))
         case 5:
-            print("한개 더 있음")
-            self.firstImageView.image = images[0]
-            self.secondImageView.image = images[1]
-            self.thirdImageView.image = images[2]
-            self.fourthImageView.image = images[3]
+            self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
+            self.secondImageView.sd_setImage(with: URL(string: houseImages[1]))
+            self.thirdImageView.sd_setImage(with: URL(string: houseImages[2]))
+            self.fourthImageView.sd_setImage(with: URL(string: houseImages[3]))
             let filterView = UIView().then {
                 $0.backgroundColor = .darkGray.withAlphaComponent(0.5)
             }

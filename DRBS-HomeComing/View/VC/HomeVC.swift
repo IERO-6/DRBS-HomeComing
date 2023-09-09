@@ -174,7 +174,7 @@ extension HomeVC: CellSelectedDelegate {
     func cellselected(houseTVCell: HouseTVCell, house: House) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = house // House 객체 전달
-        myHouseVC.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        myHouseVC.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         myHouseVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseVC, animated: true)
     }
