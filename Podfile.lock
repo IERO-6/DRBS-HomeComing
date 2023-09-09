@@ -818,6 +818,9 @@ PODS:
   - nanopb/encode (2.30909.0)
   - PromisesObjC (2.2.0)
   - RecaptchaInterop (100.0.0)
+  - SDWebImage (5.17.0):
+    - SDWebImage/Core (= 5.17.0)
+  - SDWebImage/Core (5.17.0)
   - SnapKit (5.6.0)
   - SwiftLint (0.52.4)
   - Then (3.0.0)
@@ -832,6 +835,7 @@ DEPENDENCIES:
   - KakaoSDKAuth
   - KakaoSDKCommon
   - KakaoSDKUser
+  - SDWebImage
   - SnapKit
   - SwiftLint
   - Then
@@ -865,6 +869,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - RecaptchaInterop
+    - SDWebImage
     - SnapKit
     - SwiftLint
     - Then
@@ -897,10 +902,11 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftLint: 1cc5cd61ba9bacb2194e340aeb47a2a37fda00b3
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 5361aa1beb92380eca89328cf27afeb2d4fb5a24
+PODFILE CHECKSUM: 0e775fd3dddb686d3232a01539554368d12f780a
 
 COCOAPODS: 1.12.1

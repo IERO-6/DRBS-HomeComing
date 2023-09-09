@@ -273,22 +273,27 @@ final class CheckVC1: UIViewController {
     private func updateUI() {
         // UI 업데이트
         if let house = house {
-            nameTextField.text = house.title
-            addressTextField.text = house.address
+            nameTextField.text = houseViewModel.name ?? house.title
+            addressTextField.text = houseViewModel.address ?? house.address
             
-            // 거래방식 버튼 상태 업데이트
-            let tradingTypeButtons = [월세버튼, 전세버튼, 매매버튼]
-            for button in tradingTypeButtons {
-                button.isSelected = button.title(for: .normal) == house.tradingType
+            // 거래방식 버튼 상태 업데이트 - buttonTapped 함수처럼 구현해야 색깔이 바뀐다
+            for button in tradeButtons {
+                let isSelected = button.currentTitle == house.tradingType
+                button.setSelectedState(isSelected: isSelected)
+                if isSelected {
+                    houseViewModel.tradingType = house.tradingType
+                }
             }
             
             // 주거형태 버튼 상태 업데이트
-            let livingTypeButtons = [아파트버튼, 오피스텔버튼, 빌라버튼, 원룸버튼]
-            for button in tradingTypeButtons {
-                button.isSelected = button.title(for: .normal) == house.tradingType
+            for button in livingButtons {
+                let isSelected = button.currentTitle == house.livingType
+                button.setSelectedState(isSelected: isSelected)
+                if isSelected {
+                    houseViewModel.livingType = house.livingType
+                }
             }
         }
-        
     }
     
     //MARK: - Actions
@@ -336,6 +341,11 @@ final class CheckVC1: UIViewController {
             return
         }
         
+        houseViewModel.name = nameTextField.text
+        print("Setting houseViewModel.name with: \(String(describing: nameTextField.text))")
+        houseViewModel.address = addressTextField.text
+        print("Updated address: \(String(describing: houseViewModel.address))")
+        
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -353,11 +363,11 @@ final class CheckVC1: UIViewController {
                 self.houseViewModel.longitude = coordinate.longitude
                 self.houseViewModel.name = self.nameTextField.text
                 let checkVC2 = CheckVC2()
+                checkVC2.house = self.house
                 checkVC2.houseViewModel = self.houseViewModel
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }
         }
-        
     }
     
     @objc func textFieldEditingChanged(_ textField: UITextField) {
