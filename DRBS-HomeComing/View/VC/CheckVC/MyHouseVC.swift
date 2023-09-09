@@ -3,6 +3,7 @@ import KakaoSDKAuth
 import Then
 import SnapKit
 import MapKit
+import FirebaseFirestore
 
 final class MyHouseVC: UIViewController {
     //MARK: - Properties
@@ -437,12 +438,30 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            //            let rateVC = RateVC()
+            let checkVC1 = CheckVC1()
+            checkVC1.house = self.selectedHouse
+            self.navigationController?.pushViewController(checkVC1, animated: true)
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
             print("삭제하기")
-            
+            func deleteButtonTapped() {
+                let homeVC = HomeVC()
+                if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
+                    print("Deleting house with ID: \(houseId)")  // houseId를 출력
+                    NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
+                        if success {
+                            NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
+                            self.navigationController?.popViewController(animated: true)
+                        } else {
+                            print("집을 지우지 못했습니다.")
+                        }
+                    }
+                } else {
+                    print("houseId is not founded")
+                }
+            }
+            deleteButtonTapped()
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
@@ -515,7 +534,11 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
-        self.mainImageView.image = images[0]
+        if !images.isEmpty {
+            self.mainImageView.image = images[0]
+        } else {
+            self.mainImageView.image = UIImage(named: "emptyImage")
+        }
         
         self.imageCount.text = "+" + String(images.count)
         
@@ -561,7 +584,6 @@ final class MyHouseVC: UIViewController {
     
     @objc func bookmarkButtonTapped() {
         print("b")
-        
     }
     
     @objc func ellipsisButtonTapped() {

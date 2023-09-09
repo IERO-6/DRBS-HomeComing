@@ -131,6 +131,17 @@ extension UIImage {
     }
 }
 
+//MARK: - UIButton
+extension UIButton {
+    func setSelectedState(isSelected: Bool, selectedColor: UIColor = Constant.appColor, defaultColor: UIColor = .darkGray) {
+        self.isSelected = isSelected
+        let color = isSelected ? .white : defaultColor
+        let bgColor = isSelected ? selectedColor : .white
+        self.setTitleColor(color, for: .normal)
+        self.backgroundColor = bgColor
+    }
+}
+
 //MARK: - 뷰컨
 extension UIViewController {
     func presentAlert(alertTitle: String, message: String, confirmMessage: String) {
