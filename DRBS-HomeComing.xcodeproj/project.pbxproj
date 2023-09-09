@@ -70,7 +70,6 @@
 		B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */; };
 		B3CEE3932AA111D9006A0D79 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
-		EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* AdMobCell.swift */; };
 		EBD8B7632A90A060005DCCFD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -145,7 +144,6 @@
 		B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraBold.ttf"; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		EB2338CD2AA244AA00DE6450 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -364,7 +362,6 @@
 		21B627532A814B1F00081D5E /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				EBB005622A94A1D2008E2A8C /* AdMobCell */,
 				2192EA962A8F0903006AB5B3 /* HomeCell */,
 				216FA0AA2A8BA632004D0279 /* SettingSectionCell */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
@@ -406,14 +403,6 @@
 				B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */,
 			);
 			path = Font;
-			sourceTree = "<group>";
-		};
-		EBB005622A94A1D2008E2A8C /* AdMobCell */ = {
-			isa = PBXGroup;
-			children = (
-				EB560BE62A9099870051E9E6 /* AdMobCell.swift */,
-			);
-			path = AdMobCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -575,7 +564,6 @@
 				218ACE092A76312400687EE6 /* MapVC.swift in Sources */,
 				2158BA5C2A9632C90064AFC4 /* CheckListUIView.swift in Sources */,
 				218ACDE32A75262400687EE6 /* AppDelegate.swift in Sources */,
-				EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */,
 				218ACDFD2A752A0C00687EE6 /* House.swift in Sources */,
 				216FA0C82A8BA7AF004D0279 /* NoticeListViewModel.swift in Sources */,
 				21B627682A8383FE00081D5E /* SearchVC.swift in Sources */,

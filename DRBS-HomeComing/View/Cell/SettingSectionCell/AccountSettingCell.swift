@@ -17,13 +17,13 @@ class AccountSettingCell: UITableViewCell {
 
     private let logoutButton = UIButton().then {
         $0.setTitle("로그아웃", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        $0.titleLabel?.font = UIFont(name: Constant.fontRegular, size: 12)
         $0.setTitleColor(.gray, for: .normal)
     }
 
     private let withdrawButton = UIButton().then {
         $0.setTitle("회원탈퇴", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        $0.titleLabel?.font = UIFont(name: Constant.fontRegular, size: 12)
         $0.setTitleColor(.gray, for: .normal)
     }
     
