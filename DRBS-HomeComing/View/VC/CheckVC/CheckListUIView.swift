@@ -22,87 +22,108 @@ final class CheckListUIView: UIView {
     private let 통풍 = UILabel().then {$0.text = "통풍"}
 
     private lazy var 동향button = KeyedButton().then {
+        $0.tag = 1
         $0.key = "동향"
         $0.setTitle("동향", for: .normal)
     }
     private lazy var 서향button = KeyedButton().then {
+        $0.tag = 1
         $0.key = "서향"
         $0.setTitle("서향", for: .normal)
     }
     private lazy var 남향button = KeyedButton().then {
+        $0.tag = 1
         $0.key = "남향"
         $0.setTitle("남향", for: .normal)
     }
     private lazy var 북향button = KeyedButton().then {
+        $0.tag = 1
         $0.key = "북향"
         $0.setTitle("북향", for: .normal)
     }
     private lazy var 방음우수button = KeyedButton().then {
-        $0.key = "방음우수"
+        $0.tag = 2
+        $0.key = "우수"
         $0.setTitle("우수", for: .normal)
     }
     private lazy var 방음보통button = KeyedButton().then {
-        $0.key = "방음보통"
+        $0.tag = 2
+        $0.key = "보통"
         $0.setTitle("보통", for: .normal)
     }
     private lazy var 방음미흡button = KeyedButton().then {
-        $0.key = "방음미흡"
+        $0.tag = 2
+        $0.key = "미흡"
         $0.setTitle("미흡", for: .normal)
     }
     private lazy var 수압우수button = KeyedButton().then {
-        $0.key = "수압우수"
+        $0.tag = 3
+        $0.key = "우수"
         $0.setTitle("우수", for: .normal)
     }
     private lazy var 수압보통button = KeyedButton().then {
-        $0.key = "수압보통"
+        $0.tag = 3
+        $0.key = "보통"
         $0.setTitle("보통", for: .normal)
     }
     private lazy var 수압미흡button = KeyedButton().then {
-        $0.key = "수압미흡"
+        $0.tag = 3
+        $0.key = "미흡"
         $0.setTitle("미흡", for: .normal)
     }
     private lazy var 벌레있음button = KeyedButton().then {
-        $0.key = "벌레있음"
+        $0.tag = 4
+        $0.key = "있음"
         $0.setTitle("있음", for: .normal)
     }
     private lazy var 벌레모름button = KeyedButton().then {
-        $0.key = "벌레모름"
+        $0.tag = 4
+        $0.key = "모름"
         $0.setTitle("모름", for: .normal)
     }
     private lazy var 벌레없음button = KeyedButton().then {
-        $0.key = "벌레없음"
+        $0.tag = 4
+        $0.key = "없음"
         $0.setTitle("없음", for: .normal)
     }
     private lazy var 통풍쾌적button = KeyedButton().then {
-        $0.key = "통풍쾌적"
+        $0.tag = 5
+        $0.key = "쾌적"
         $0.setTitle("쾌적", for: .normal)
     }
     private lazy var 통풍보통button = KeyedButton().then {
-        $0.key = "통풍보통"
+        $0.tag = 5
+        $0.key = "보통"
         $0.setTitle("보통", for: .normal)
     }
     private lazy var 통풍불쾌button = KeyedButton().then {
-        $0.key = "통풍불쾌"
+        $0.tag = 5
+        $0.key = "불쾌"
         $0.setTitle("불쾌", for: .normal)
     }
     private lazy var 보안철저button = KeyedButton().then {
-        $0.key = "보안철저"
+        $0.tag = 6
+        $0.key = "철저"
         $0.setTitle("철저", for: .normal)
     }
     private lazy var 보안보통button = KeyedButton().then {
-        $0.key = "보안보통"
+        $0.tag = 6
+        $0.key = "보통"
         $0.setTitle("보통", for: .normal)
     }
     private lazy var 보안미흡button = KeyedButton().then {
-        $0.key = "보안미흡"
+        $0.tag = 6
+        $0.key = "미흡"
         $0.setTitle("미흡", for: .normal)
     }
     private lazy var 곰팡이있음button = KeyedButton().then {
-        $0.key = "곰팡이있음"
+        $0.tag = 7
+        $0.key = "있음"
         $0.setTitle("있음", for: .normal)
     }
     private lazy var 곰팡이없음button = KeyedButton().then {
-        $0.key = "곰팡이없음"
+        $0.tag = 7
+        $0.key = "없음"
         $0.setTitle("없음", for: .normal)
     }
 

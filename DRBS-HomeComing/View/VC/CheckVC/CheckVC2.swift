@@ -593,13 +593,11 @@ final class CheckVC2: UIViewController {
             
             //이미지를 띄우는 코드
             guard let houseImages = house.사진 else { return }
-            let images = houseImages.compactMap { $0.toImage() }
 
             let buttons = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
-
             for (index, button) in buttons.enumerated() {
-                if images.indices.contains(index) {
-                    button.setImage(images[index], for: .normal)
+                if houseImages.indices.contains(index) {
+                    button.sd_setImage(with: URL(string:houseImages[index]), for: .normal)
                 }
             }
         }
@@ -653,7 +651,6 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.면적 = self.면적TextField.text
         self.houseViewModel.계약기간 = self.계약기간TextField.text
         self.houseViewModel.memo = self.memoTextView.text
-//        self.houseViewModel.makeUIImageToString()
         rateVC.houseViewModel = self.houseViewModel
         self.present(rateVC, animated: true)
     }

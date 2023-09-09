@@ -467,7 +467,7 @@ final class MyHouseVC: UIViewController {
         
         guard let houseImages = house.사진 else { return }
         
-        let images = houseImages.map{$0.toImage()}
+//        let images = houseImages.map{$0.toImage()}
         
         var selectedImages: [UIImage] = []
 
@@ -509,13 +509,13 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
-        if !images.isEmpty {
+        if !houseImages.isEmpty {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
             self.mainImageView.image = UIImage(named: "emptyImage")
         }
         
-        self.imageCount.text = "+" + String(images.count - 1)
+        self.imageCount.text = "+" + String(houseImages.count - 1)
         
         self.nameLabel.text = house.title ?? ""
         
