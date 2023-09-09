@@ -155,15 +155,20 @@ class NetworkingManager {
     }
     
     //MARK: - Delete
-    func deleteHouse(houseId: String) {
+    func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
         db.collection("Homes").document(houseId).delete() { err in
             if let err = err {
-                print("Error removing document: \(err)")
+                print("Error removing: \(err)")
+                completion(false)
             } else {
-                print("Document successfully removed!")
+                print("removing complete")
+                completion(true)
             }
         }
     }
+    
+    
+    
     //MARK: - 지도관련메서드
     //MARK: - Create
     

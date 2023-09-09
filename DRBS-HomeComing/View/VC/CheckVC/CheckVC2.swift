@@ -645,7 +645,6 @@ final class CheckVC2: UIViewController {
         houseViewModel.관리비 = 관리비TextField.text
         houseViewModel.계약기간 = 계약기간TextField.text
         houseViewModel.입주가능일 = 입주가능일button.currentTitle
-        print(houseViewModel.입주가능일)
         
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
