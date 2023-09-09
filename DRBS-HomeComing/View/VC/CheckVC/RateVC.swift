@@ -161,7 +161,7 @@ final class RateVC: UIViewController {
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)
         
         var dataToUpdate: [String: Any] = [:]
-        if let name = houseViewModel.name { dataToUpdate["title"] = name }
+        if let name = houseViewModel.name { dataToUpdate["title"] = name } // guard let 사용하면 nil일때 에러날 것 같아서
         if let address = houseViewModel.address { dataToUpdate["address"] = address }
         
         if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }
