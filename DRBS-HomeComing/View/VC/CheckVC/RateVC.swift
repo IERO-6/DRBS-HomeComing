@@ -100,7 +100,7 @@ final class RateVC: UIViewController {
             $0.leading.equalToSuperview().offset(23)
             $0.width.equalTo(self.view.frame.width - 46)
             $0.height.equalTo(30)}
-    
+        
         imageStackView.snp.makeConstraints {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
@@ -127,10 +127,10 @@ final class RateVC: UIViewController {
     private func removeNavStack() {
         //처음화면으로 돌아가는 메서드
         //쌓인 네비게이션 스택을 제거하고 돌아가기...?쉽지 않다.
-//        self.dismiss(animated: true, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
+        //        self.dismiss(animated: true, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
         //여기서 completion을 통해 뭔갈 할 수 있을 것 같기도 하고..?
     }
-
+    
     
     
     //MARK: - Actions
@@ -188,7 +188,8 @@ final class RateVC: UIViewController {
                 return
             }
             print("Successfully updated house!")
-            self.navigationController?.popToRootViewController(animated: true)
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
         }
     }
 }

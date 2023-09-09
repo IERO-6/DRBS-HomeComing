@@ -495,7 +495,7 @@ final class CheckVC2: UIViewController {
             $0.leading.equalTo(galleryImageView.snp.trailing).offset(10)
             $0.height.width.equalTo(140)
         }
-       
+        
         secondImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
             $0.leading.equalTo(firstImageButton.snp.trailing).offset(10)
@@ -558,7 +558,7 @@ final class CheckVC2: UIViewController {
     private func setUpKeyBoard() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
-}
+    }
     
     private func initPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -656,7 +656,7 @@ final class CheckVC2: UIViewController {
         houseViewModel.계약기간 = 계약기간TextField.text
         houseViewModel.입주가능일 = 입주가능일button.currentTitle
         checkListUIView.checkViewModel.checkListModel = checkListUIView.checkViewModel.makeCheckListModel()
-
+        
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
         self.houseViewModel.관리비 = self.관리비TextField.text
@@ -731,7 +731,7 @@ final class CheckVC2: UIViewController {
     }
     // 키보드가 나타날 때 memoTextView를 이동시키는 함수
     var originalContentOffset: CGPoint = .zero
-
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if memoTextView.isFirstResponder {
             originalContentOffset = scrollView.contentOffset
@@ -745,7 +745,7 @@ final class CheckVC2: UIViewController {
             }
         }
     }
-
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         if memoTextView.isFirstResponder {
             scrollView.contentOffset = originalContentOffset
