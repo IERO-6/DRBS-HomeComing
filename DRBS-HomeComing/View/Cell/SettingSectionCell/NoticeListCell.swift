@@ -10,7 +10,7 @@ class NoticeListCell: UITableViewCell {
 
     private lazy var titleLabel = UILabel().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.font = .systemFont(ofSize: 14)
+        $0.font = UIFont(name: Constant.fontRegular, size: 14)
         $0.numberOfLines = 0
         $0.lineBreakStrategy = .hangulWordPriority
         $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
@@ -19,7 +19,7 @@ class NoticeListCell: UITableViewCell {
 
     private lazy var dateLabel = UILabel().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.font = .systemFont(ofSize: 12)
+        $0.font = UIFont(name: Constant.fontRegular, size: 12)
         $0.textColor = .lightGray
     }
     
