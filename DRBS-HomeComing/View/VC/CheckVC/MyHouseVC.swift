@@ -157,7 +157,7 @@ final class MyHouseVC: UIViewController {
         $0.text = "체크 리스트"
     }
     lazy var checkListView = CheckListUIView()
-    
+    var houseViewModel: HouseViewModel?
     var selectedHouse: House? {
         didSet {
             configureUIWithData()
@@ -465,6 +465,8 @@ final class MyHouseVC: UIViewController {
         
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         
+        
+        
         guard let houseImages = house.사진 else { return }
         
 //        let images = houseImages.map{$0.toImage()}
@@ -556,8 +558,32 @@ final class MyHouseVC: UIViewController {
     
     //MARK: - Actions
     
-    @objc func bookmarkButtonTapped() {
-        print("b")
+    @objc func bookmarkButtonTapped(sender: UIButton) {
+        // 해당 House 객체의 인덱스를 가져옵니다.
+        print("bookmark tapped")
+        guard let houseViewModel = houseViewModel,
+              sender.tag < houseViewModel.houses.count else { return }
+        
+        let houseIndex = sender.tag
+        var selectedHouse = houseViewModel.houses[houseIndex]
+        print(selectedHouse)
+
+        // 북마크 상태를 토글합니다.
+        selectedHouse.isBookMarked = !(selectedHouse.isBookMarked ?? false)
+
+        // Firestore에 변경 사항을 업데이트합니다.
+        if let houseId = selectedHouse.houseId {
+            let houseRef = Firestore.firestore().collection("Homes").document(houseId)
+            houseRef.updateData(["isBookMarked": selectedHouse.isBookMarked]) { error in
+                if let error = error {
+                    print("Failed to update bookmark status: \(error.localizedDescription)")
+                    return
+                }
+                // 성공적으로 업데이트되었을 경우, 북마크 버튼의 이미지를 업데이트합니다.
+                let imageName = selectedHouse.isBookMarked! ? "bookmark.fill" : "bookmark"
+                sender.setImage(UIImage(systemName: imageName), for: .normal)
+            }
+        }
     }
     
     @objc func ellipsisButtonTapped() {

@@ -176,14 +176,19 @@ final class RateVC: UIViewController {
         if let 계약기간 = houseViewModel.계약기간 { dataToUpdate["contractTerm"] = 계약기간 }
         if let 메모 = houseViewModel.memo { dataToUpdate["memo"] = 메모 }
         
+        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         if let rate = houseViewModel.rate { dataToUpdate["rate"] = rate }
-        
+        if let checkList = houseViewModel.checkList {
+            let checkListDict = try? checkList.asDictionary
+            dataToUpdate["checkList"] = checkListDict
+        }
         houseRef.updateData(dataToUpdate) { (error) in
             if let error = error {
                 print("Failed to update house: \(error.localizedDescription)")
                 return
             }
             print("Successfully updated house!")
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
 }
