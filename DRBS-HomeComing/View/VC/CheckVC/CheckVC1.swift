@@ -357,7 +357,6 @@ final class CheckVC1: UIViewController {
                 }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
-//                self.houseViewModel.address = coordinate
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude

@@ -78,7 +78,6 @@ final class RateVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingModal()
-        print("houseID = \(house?.houseId)")
         
     }
     //MARK: - Helpers
@@ -125,10 +124,7 @@ final class RateVC: UIViewController {
     }
     
     private func removeNavStack() {
-        //처음화면으로 돌아가는 메서드
-        //쌓인 네비게이션 스택을 제거하고 돌아가기...?쉽지 않다.
-//        self.dismiss(animated: true, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
-        //여기서 completion을 통해 뭔갈 할 수 있을 것 같기도 하고..?
+    
     }
 
     

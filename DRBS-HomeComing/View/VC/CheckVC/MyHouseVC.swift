@@ -4,6 +4,8 @@ import Then
 import SnapKit
 import MapKit
 import FirebaseFirestore
+import FirebaseStorage
+import FirebaseAuth
 
 final class MyHouseVC: UIViewController {
     //MARK: - Properties
@@ -169,7 +171,6 @@ final class MyHouseVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingNav()
-        fetchSelectedHouseData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -417,24 +418,20 @@ final class MyHouseVC: UIViewController {
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            print("삭제하기")
-            func deleteButtonTapped() {
-                let homeVC = HomeVC()
-                if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
-                    print("Deleting house with ID: \(houseId)")  // houseId를 출력
-                    NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
-                        if success {
-                            NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
-                            self.navigationController?.popViewController(animated: true)
-                        } else {
-                            print("집을 지우지 못했습니다.")
-                        }
+//            let homeVC = HomeVC()
+            if let selectedHouse = self.selectedHouse,
+               let houseId = selectedHouse.houseId {
+                NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
+                    if success {
+                        NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
+                        self.navigationController?.popViewController(animated: true)
+                    } else {
+                        print("집을 지우지 못했습니다.")
                     }
-                } else {
-                    print("houseId is not founded")
                 }
+            } else {
+                print("houseId is not founded")
             }
-            deleteButtonTapped()
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
@@ -446,7 +443,6 @@ final class MyHouseVC: UIViewController {
     }
     
     private func configureUIWithData() {
-        
         guard let house = selectedHouse else { return }
         self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
@@ -547,12 +543,7 @@ final class MyHouseVC: UIViewController {
 
         
     }
-    
-    private func fetchSelectedHouseData() {
-        guard let house = selectedHouse else { return }
-        
-    }
-    
+
     
     //MARK: - Actions
     

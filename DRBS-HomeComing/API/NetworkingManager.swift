@@ -13,6 +13,7 @@ class NetworkingManager {
     //MARK: - Singleton Pattern
     static let shared = NetworkingManager()
     let db = Firestore.firestore()
+    let storage = Storage.storage().reference()
     var housesRef: CollectionReference!
     private init() {}
     
@@ -81,14 +82,17 @@ class NetworkingManager {
     //MARK: - Create
     func addHouses(houseModel: House, images: [UIImage]) {
         let documentRef = db.collection("Homes").document()
+        //저장하기 이전에 먼저 저장될 주소를 생성
         let houseId = documentRef.documentID
-        guard let data = houseModel.asDictionary else { return }
-            documentRef.setData(data)
-        documentRef.updateData(["houseId":houseId])
+        //해당 주소를 houseId로 명명
+        var house = houseModel
+        house.houseId = houseId
+        guard let data = house.asDictionary else { return }
+        documentRef.setData(data)
         var stringImages: [String] = []
         DispatchQueue.global().async {
-            for image in images {
-                self.uploadImage(image: image) { imageUrl in
+            images.forEach {
+                self.uploadImage(houseId: houseId, image: $0) { imageUrl in
                     stringImages.append(imageUrl)
                     documentRef.updateData(["photos":stringImages])
                 }
@@ -96,10 +100,11 @@ class NetworkingManager {
         }
     }
     
-    func uploadImage(image: UIImage, completion: @escaping(String) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+    func uploadImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75),
+            let uid = Auth.auth().currentUser?.uid else { return }
         let filename = NSUUID().uuidString
-        let ref = Storage.storage().reference(withPath: "/house_images/\(filename)")
+        let ref = storage.child("/\(uid)/\(houseId)/\(filename)")
         ref.putData(imageData, metadata: nil) { metadata, error in
             if let error = error {
                 print("DEBUG: Failed to upload image \(error.localizedDescription)")
@@ -107,7 +112,7 @@ class NetworkingManager {
             }
             ref.downloadURL { url, error in
                 if let error = error {
-                    print(error.localizedDescription)
+                    print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
                 }
                 guard let imageUrl = url?.absoluteString else { return }
                 completion(imageUrl)
@@ -159,18 +164,12 @@ class NetworkingManager {
             print("Error: House does not have an ID!")
             return
         }
-
-        // Firestore 인스턴스 가져오기 Firestore 데이터베이스의 데이터를 읽거나 쓰기위해
-        let db = Firestore.firestore()
-
         // 해당 ID를 가진 문서에 접근
         let documentRef = db.collection("houses").document(id)
-
         guard let data = houseModel.asDictionary else {
             print("Error: Could not convert houseModel to dictionary!")
             return
         }
-        
         // 값을 업데이트
         documentRef.setData(data, merge: true) { error in
             if let error = error {
@@ -183,14 +182,20 @@ class NetworkingManager {
     
     //MARK: - Delete
     func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
-        db.collection("Homes").document(houseId).delete() { err in
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = storage.child("/\(uid)/\(houseId)")
+        ref.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        
+        db.collection("Homes").document(houseId).delete { err in
             if let err = err {
                 print("Error removing: \(err)")
                 completion(false)
-            } else {
-                print("removing complete")
-                completion(true)
             }
+            completion(true)
         }
     }
     

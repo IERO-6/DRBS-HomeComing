@@ -25,6 +25,7 @@ disabled_rules:
     - comma
     - type_body_length
     - file_length
+    - unused_closure_parameter          #클로저 파라미터 사용되지 않았을 때 제한
     
 # 선택적으로 추가할 규칙
 opt_in_rules:
