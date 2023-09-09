@@ -83,7 +83,7 @@ class NetworkingManager {
         let documentRef = db.collection("Homes").document()
         let houseId = documentRef.documentID
         guard let data = houseModel.asDictionary else { return }
-            documentRef.setData(data)
+        documentRef.setData(data)
         documentRef.updateData(["houseId":houseId])
         var stringImages: [String] = []
         DispatchQueue.global().async {
@@ -150,7 +150,7 @@ class NetworkingManager {
         }
     }
     
-   
+    
     
     //MARK: - Update
     func updateHouseInFirebase(houseModel: House) {
@@ -159,13 +159,13 @@ class NetworkingManager {
             print("Error: House does not have an ID!")
             return
         }
-
+        
         // Firestore 인스턴스 가져오기 Firestore 데이터베이스의 데이터를 읽거나 쓰기위해
         let db = Firestore.firestore()
-
+        
         // 해당 ID를 가진 문서에 접근
         let documentRef = db.collection("houses").document(id)
-
+        
         guard let data = houseModel.asDictionary else {
             print("Error: Could not convert houseModel to dictionary!")
             return
@@ -200,31 +200,31 @@ class NetworkingManager {
     //MARK: - Create
     
     //MARK: - Read
-//    func fetchAnnotations(completion: @escaping([Location]) -> Void) {
-//        //파이어 베이스에서 location 배열을 받아와서 completion을 통해 얻는다.
-//        DispatchQueue.global().async {
-//            self.db.collection("Homes").getDocuments { querySnapshot, error in
-//                if error == nil && querySnapshot != nil {
-//                    guard let snapshot = querySnapshot else { return }
-//                    var locations: [Location] = []
-//                    for document in snapshot.documents {
-//                        let data = document.data()
-//                        let latitude = data["latitude"] as! Double
-//                        let longitude = data["longitude"] as! Double
-//                        let isBookMarked = data["isBookMarked"] as! Bool
-//                        let id = data["houseId"] as! String
-//                        let location = Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookMarked, id: id)
-//                        locations.append(location)
-//                    }
-//                    completion(locations)
-//                } else if let error = error {
-//                    print(error.localizedDescription)
-//                }
-//            }
-//            
-//        }
-//        
-//    }
+    //    func fetchAnnotations(completion: @escaping([Location]) -> Void) {
+    //        //파이어 베이스에서 location 배열을 받아와서 completion을 통해 얻는다.
+    //        DispatchQueue.global().async {
+    //            self.db.collection("Homes").getDocuments { querySnapshot, error in
+    //                if error == nil && querySnapshot != nil {
+    //                    guard let snapshot = querySnapshot else { return }
+    //                    var locations: [Location] = []
+    //                    for document in snapshot.documents {
+    //                        let data = document.data()
+    //                        let latitude = data["latitude"] as! Double
+    //                        let longitude = data["longitude"] as! Double
+    //                        let isBookMarked = data["isBookMarked"] as! Bool
+    //                        let id = data["houseId"] as! String
+    //                        let location = Location(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), isBookMarked: isBookMarked, id: id)
+    //                        locations.append(location)
+    //                    }
+    //                    completion(locations)
+    //                } else if let error = error {
+    //                    print(error.localizedDescription)
+    //                }
+    //            }
+    //
+    //        }
+    //
+    //    }
     //MARK: - Update
     
     //MARK: - Delete

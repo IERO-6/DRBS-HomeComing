@@ -77,10 +77,10 @@ class CheckViewModel {
         default:
             return
         }
+//        self.checkListModel = makeCheckListModel()
+        
+//        print("checkListModel is now:", self.checkListModel)
     }
-    
-    
-  
 
 }
 
