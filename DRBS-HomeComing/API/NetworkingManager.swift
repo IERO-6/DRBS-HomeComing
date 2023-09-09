@@ -86,12 +86,15 @@ class NetworkingManager {
             documentRef.setData(data)
         documentRef.updateData(["houseId":houseId])
         var stringImages: [String] = []
-        for image in images {
-            uploadImage(image: image) { imageUrl in
-                stringImages.append(imageUrl)
+        DispatchQueue.global().async {
+            for image in images {
+                self.uploadImage(image: image) { imageUrl in
+                    stringImages.append(imageUrl)
+                    documentRef.updateData(["photos":stringImages])
+                }
             }
         }
-        documentRef.updateData(["photos":stringImages])
+       
         print(stringImages)
         
     }
