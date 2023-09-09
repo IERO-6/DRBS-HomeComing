@@ -68,6 +68,9 @@
 		B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */; };
 		B38C34D32AAB8C8D00F8E3EF /* Raleway-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */; };
 		B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */; };
+		B38C34D72AAB8EB800F8E3EF /* HomeImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38C34D62AAB8EB800F8E3EF /* HomeImagesCell.swift */; };
+		B38C34D92AAB8F1700F8E3EF /* HomeImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38C34D82AAB8F1700F8E3EF /* HomeImageVC.swift */; };
+		B38C34DB2AAB8F3100F8E3EF /* HomeImageDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38C34DA2AAB8F3100F8E3EF /* HomeImageDetailVC.swift */; };
 		B3CEE3932AA111D9006A0D79 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */; };
 		D8B67EB6F5DD119EE9F00F3D /* Pods_DRBS_HomeComing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */; };
 		EB560BE72A9099870051E9E6 /* AdMobCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB560BE62A9099870051E9E6 /* AdMobCell.swift */; };
@@ -143,6 +146,9 @@
 		B386B0952A8F140500E68A2D /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Bold.ttf"; sourceTree = "<group>"; };
 		B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraBold.ttf"; sourceTree = "<group>"; };
+		B38C34D62AAB8EB800F8E3EF /* HomeImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImagesCell.swift; sourceTree = "<group>"; };
+		B38C34D82AAB8F1700F8E3EF /* HomeImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageVC.swift; sourceTree = "<group>"; };
+		B38C34DA2AAB8F3100F8E3EF /* HomeImageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeImageDetailVC.swift; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		EB2338CD2AA244AA00DE6450 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		EB560BE62A9099870051E9E6 /* AdMobCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobCell.swift; sourceTree = "<group>"; };
@@ -357,6 +363,8 @@
 			isa = PBXGroup;
 			children = (
 				186335592A8A0D0B00E283D5 /* DetailVC.swift */,
+				B38C34D82AAB8F1700F8E3EF /* HomeImageVC.swift */,
+				B38C34DA2AAB8F3100F8E3EF /* HomeImageDetailVC.swift */,
 			);
 			path = "TV&CV";
 			sourceTree = "<group>";
@@ -369,6 +377,7 @@
 				216FA0AA2A8BA632004D0279 /* SettingSectionCell */,
 				21B627692A83841200081D5E /* SearchCell.swift */,
 				1863355D2A8A0D1D00E283D5 /* DetailCell.swift */,
+				B38C34D62AAB8EB800F8E3EF /* HomeImagesCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -564,11 +573,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B38C34D92AAB8F1700F8E3EF /* HomeImageVC.swift in Sources */,
 				2192EAA32A947740006AB5B3 /* RateVC.swift in Sources */,
 				216FA0B82A8BA684004D0279 /* OptionCell.swift in Sources */,
 				1863355E2A8A0D1D00E283D5 /* DetailCell.swift in Sources */,
 				2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */,
 				2192EAA12A90A4BD006AB5B3 /* CheckVC1.swift in Sources */,
+				B38C34DB2AAB8F3100F8E3EF /* HomeImageDetailVC.swift in Sources */,
 				218111AA2A9F50E0009A82C4 /* Protocols.swift in Sources */,
 				21B6276A2A83841200081D5E /* SearchCell.swift in Sources */,
 				218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */,
@@ -586,6 +597,7 @@
 				218ACE0D2A763C9000687EE6 /* NetworkingManager.swift in Sources */,
 				2143CE382A79051400A5DB36 /* VillaCell.swift in Sources */,
 				216FA0B42A8BA672004D0279 /* NoticeCell.swift in Sources */,
+				B38C34D72AAB8EB800F8E3EF /* HomeImagesCell.swift in Sources */,
 				B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */,
 				216FA0AC2A8BA641004D0279 /* AccountSettingCell.swift in Sources */,
 				21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */,
