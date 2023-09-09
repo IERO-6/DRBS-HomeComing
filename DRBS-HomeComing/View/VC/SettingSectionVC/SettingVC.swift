@@ -2,7 +2,6 @@ import UIKit
 import Then
 import SnapKit
 import MessageUI
-import SafariServices
 import GoogleMobileAds
 
 final class SettingVC: UIViewController {
@@ -98,7 +97,6 @@ final class SettingVC: UIViewController {
     private func showLogoutAlert() {
         let alertController = UIAlertController(title: nil, message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "예", style: .default, handler: { [self] _ in
-            // 로그아웃 처리 로직
             authVM.authLogout()
             //화면 전환
         }))
@@ -218,10 +216,8 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                             mailComposerVC.mailComposeDelegate = self
                             mailComposerVC.setToRecipients(["iero.drbs@gmail.com"])
                             mailComposerVC.setSubject("문의하기")
-                            
                             self.present(mailComposerVC, animated: true, completion: nil)
                         } else {
-                            // 메일 앱을 사용할 수 없는 경우 처리
                             let alertController = UIAlertController(title: "메일을 보낼 수 없습니다.", message: "기기에서 이메일을 보낼 수 없습니다. 메일 설정을 확인 해주세요.", preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
                             self.present(alertController, animated: true, completion: nil)
@@ -239,21 +235,18 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 let license = models[indexPath.row]
                 switch license.title {
                     case "개인정보처리방침":
-                        if let privacyPolicyNotionUrl = URL(string: "https://ryuwon-project.notion.site/85489d7d5167465dbe7552a219ece420?pvs=4") {
-                            let ppNotionSafariView = SFSafariViewController(url: privacyPolicyNotionUrl)
-                            present(ppNotionSafariView, animated: true, completion: nil)
+                        if let privacyPolicyNotionUrl = URL(string: "https://iero-drbs.notion.site/9ee322c4343a4a2380570f4452190105?pvs=4") {
+                            UIApplication.shared.open(privacyPolicyNotionUrl)
                         }
                         break
                     case "서비스 이용약관":
-                        if let termsOfUseNotionUrl = URL(string: "https://ryuwon-project.notion.site/d47f7ee67b974d7da381d24a4ffa8bc2?pvs=4") {
-                            let touNotionSafariView = SFSafariViewController(url: termsOfUseNotionUrl)
-                            present(touNotionSafariView, animated: true, completion: nil)
+                        if let termsOfUseNotionUrl = URL(string: "https://iero-drbs.notion.site/452e33f0341945efb952d72658904e1e?pvs=4") {
+                            UIApplication.shared.open(termsOfUseNotionUrl)
                         }
                         break
                     case "오픈소스 라이선스":
-                        if let openSourceNotionUrl = URL(string: "https://ryuwon-project.notion.site/d8a03bad5af24fecbeb01c558fd9912b?pvs=4") {
-                            let opNotionSafariView = SFSafariViewController(url: openSourceNotionUrl)
-                            present(opNotionSafariView, animated: true, completion: nil)
+                        if let openSourceNotionUrl = URL(string: "https://iero-drbs.notion.site/5871edcf252647b3b0913a50881bcc6e?pvs=4") {
+                            UIApplication.shared.open(openSourceNotionUrl)
                         }
                         break
                     default:
