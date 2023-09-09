@@ -22,6 +22,8 @@ final class HomeVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingTV()
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: Notification.Name("houseDeleted"), object: nil)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,7 +103,22 @@ final class HomeVC: UIViewController {
         detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
+    
+    @objc func refreshData(notification: Notification) {
+        if let userInfo = notification.userInfo, let deletedHouseId = userInfo["deletedHouseId"] as? String {
+            if let index = self.allHouseModels?.firstIndex(where: { $0.houseId == deletedHouseId }) {
+                self.allHouseModels?.remove(at: index)
+            }
+        }
+
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        print("호출")
+    }
 }
+
+
 
 //MARK: - UITableViewDelegate
 
@@ -157,7 +174,7 @@ extension HomeVC: CellSelectedDelegate {
     func cellselected(houseTVCell: HouseTVCell, house: House) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = house // House 객체 전달
-        myHouseVC.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        myHouseVC.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         myHouseVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseVC, animated: true)
     }

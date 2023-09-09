@@ -17,14 +17,14 @@ class AppVersionCell: UITableViewCell {
 
     private let leftTitleLabel = UILabel().then {
         $0.textColor = .label
-        $0.font = .systemFont(ofSize: 16)
+        $0.font = UIFont(name: Constant.fontRegular, size: 16)
         $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
     private let rightTitleLabel = UILabel().then {
         $0.textColor = Constant.appColor
-        $0.font = .systemFont(ofSize: 14)
+        $0.font = UIFont(name: Constant.fontRegular, size: 14)
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }

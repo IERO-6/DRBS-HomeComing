@@ -16,7 +16,7 @@ class NoticeCell: UITableViewCell {
     
     private let leftTitleLabel = UILabel().then {
         $0.textColor = .label
-        $0.font = .systemFont(ofSize: 16)
+        $0.font = UIFont(name: Constant.fontRegular, size: 16)
     }
     
     private let rightButton = UIButton().then {

@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 import MapKit
+import FirebaseStorage
 
 class HouseViewModel {
     //MARK: - Model
@@ -114,16 +115,16 @@ class HouseViewModel {
         }
     }
     
-    func makeUIImageToString() {
-        for image in uiImages {
-            guard let convertedImage = image.toPngString() else {
-                print("HouseViewModel 107Line Error: toPng실패")
-                return
-            }
-            self.stringImages.append(convertedImage)
-        }
-        print(self.stringImages)
-    }
+//    func makeUIImageToString() {
+//        for image in uiImages {
+//            guard let convertedImage = image.toPngString() else {
+//                print("HouseViewModel 107Line Error: toPng실패")
+//                return
+//            }
+//            self.stringImages.append(convertedImage)
+//        }
+//        print(self.stringImages)
+//    }
     
     func getAnnotations() -> [House] { return self.visibleHouses }
     
@@ -145,4 +146,23 @@ class HouseViewModel {
         self.willDeleteHouses = self.visibleHouses.filter {!houses.contains($0)}
         self.visibleHouses = houses.filter {!self.visibleHouses.contains($0)}
     }
+
+    func uploadImage(image: UIImage, completion: @escaping(String) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        let filename = NSUUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/house_images/\(filename)")
+        ref.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                return
+            }
+            
+            ref.downloadURL { url
+                , error in
+                guard let imageUrl = url?.absoluteString else { return }
+                completion(imageUrl)
+            }
+        }
+    }
+
 }

@@ -14,7 +14,7 @@ final class WithdrawVC: UIViewController {
     
     private let titleLabel = UILabel().then {
         $0.text = "정말 떠나시는 건가요?"
-        $0.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        $0.font = UIFont(name: Constant.fontSemiBold, size: 22)
     }
     
     private lazy var infoViews: [UIStackView] = {
@@ -28,7 +28,7 @@ final class WithdrawVC: UIViewController {
                 $0.text = text
                 $0.numberOfLines = 0
                 $0.lineBreakMode = .byWordWrapping
-                $0.font = UIFont.systemFont(ofSize: 12)
+                $0.font = UIFont(name: Constant.fontRegular, size: 14)
             }
             
             let stackView = UIStackView(arrangedSubviews: [icon, label]).then {
@@ -53,25 +53,26 @@ final class WithdrawVC: UIViewController {
 
     private let checkBoxLabel = UILabel().then {
         $0.text = "회원 탈퇴 유의사항을 확인하였으며 동의합니다."
-        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.font = UIFont(name: Constant.fontRegular, size: 14)
         $0.textColor = .lightGray
     }
 
     private let reasonLabel = UILabel().then {
         $0.text = "DRBS를 떠나는 이유를 알려주세요."
-        $0.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        $0.font = UIFont(name: Constant.fontSemiBold, size: 20)
     }
 
     private let reasonTextView = UITextView().then {
         $0.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.96, alpha: 1.00)
         $0.layer.cornerRadius = 10
         $0.text = "떠나는 이유를 50자 이내로 입력해주세요."
-        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.font = UIFont(name: Constant.fontRegular, size: 14)
         $0.textColor = .lightGray
     }
 
     private lazy var withdrawButton = UIButton().then {
         $0.setTitle("탈퇴 하기", for: .normal)
+        $0.titleLabel?.font = UIFont(name: Constant.fontSemiBold, size: 18)
         $0.backgroundColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 1.00)
         $0.layer.cornerRadius = 5
         $0.addTarget(self, action: #selector(withdrawButtonTapped), for: .touchUpInside)
@@ -214,9 +215,7 @@ final class WithdrawVC: UIViewController {
     }
     
     @objc func withdrawButtonTapped() {
-        // 회원탈퇴 로직
         print("withdrawButtonTapped()")
-        
         authVM.authDelete()
     }
     

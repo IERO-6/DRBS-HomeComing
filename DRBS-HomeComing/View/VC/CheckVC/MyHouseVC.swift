@@ -3,6 +3,7 @@ import KakaoSDKAuth
 import Then
 import SnapKit
 import MapKit
+import FirebaseFirestore
 
 final class MyHouseVC: UIViewController {
     //MARK: - Properties
@@ -155,7 +156,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"
     }
-    lazy var CheckListView = CheckListUIView()
+    lazy var checkListView = CheckListUIView()
     
     var selectedHouse: House? {
         didSet {
@@ -205,7 +206,7 @@ final class MyHouseVC: UIViewController {
                                입주가능일ValueLabel,
                                계약기간ImageView,
                                계약기간ValueLabel)
-        checkView.addSubviews(checkLabel, CheckListView)
+        checkView.addSubviews(checkLabel, checkListView)
         scrollView.snp.makeConstraints {$0.edges.equalToSuperview()}
         contentView.addSubviews(mainImageView,
                                 mainView,
@@ -220,32 +221,27 @@ final class MyHouseVC: UIViewController {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
         }
-        
         imageBackView.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-10)
             $0.bottom.equalToSuperview().offset(-10)
             $0.width.equalTo(70)
             $0.height.equalTo(30)
         }
-        
         photoImage.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(10)
             $0.width.height.equalTo(20)
         }
-        
         imageCount.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-10)
             $0.width.height.equalTo(20)
         }
-        
         mainView.snp.makeConstraints {
             $0.top.equalTo(mainImageView.snp.bottom).offset(30)
             $0.leading.equalTo(contentView).offset(10)
             $0.trailing.equalTo(contentView).offset(-10)
         }
-        
         firstContainView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(30)
@@ -262,13 +258,11 @@ final class MyHouseVC: UIViewController {
         livingTypeLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalTo(starImage.snp.leading).offset(-5)
-//            $0.width.equalTo(35)
         }
         nameLabel.snp.makeConstraints {
             $0.bottom.top.leading.equalToSuperview()
             $0.trailing.equalTo(livingTypeLabel.snp.leading).offset(-10)
         }
-       
         addressLabel.snp.makeConstraints {
             $0.top.equalTo(firstContainView.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
@@ -293,34 +287,28 @@ final class MyHouseVC: UIViewController {
             $0.height.equalTo(30)
             $0.bottom.equalToSuperview().offset(-60)
         }
-        
         maintenanceCostLabel.snp.makeConstraints {
             $0.top.equalTo(secondContainView.snp.bottom).offset(5)
             $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
             $0.height.equalTo(30)
             $0.trailing.equalToSuperview()
-
         }
-        
         noneMaintenanceLabel.snp.makeConstraints {
             $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
             $0.leading.equalToSuperview()
-            $0.height.equalTo(60)
+            $0.bottom.equalToSuperview().offset(-15)
         }
-        
         noneMaintenanceImagesStackView.snp.makeConstraints {
-            $0.top.equalTo(noneMaintenanceLabel).offset(13)
+            $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
             $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
             $0.height.equalTo(36)
             $0.width.equalTo(27*5 + 5*4)
         }
-        
         mapStackView.snp.makeConstraints {
             $0.top.equalTo(mainView.snp.bottom).offset(30)
             $0.leading.trailing.equalTo(mainView)
             $0.height.equalTo(210)
         }
-        
         mapLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(5)
@@ -331,18 +319,15 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(mapLabel.snp.bottom).offset(5)
             $0.bottom.equalTo(mapStackView.snp.bottom).offset(-20)
         }
-        
         memoView.snp.makeConstraints {
             $0.top.equalTo(mapStackView.snp.bottom).offset(30)
             $0.leading.trailing.equalTo(mainView)
             $0.height.equalTo(234)
         }
-        
         memoLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(5)
         }
-        
         textCountLabel.snp.makeConstraints {
             $0.bottom.equalTo(memoView.snp.bottom).offset(-20)
             $0.trailing.equalToSuperview().offset(-3)
@@ -355,65 +340,54 @@ final class MyHouseVC: UIViewController {
             $0.top.equalTo(memoLabel.snp.bottom).offset(5)
             $0.bottom.equalTo(textCountLabel.snp.top).offset(-5)
         }
-        
         detailView.snp.makeConstraints {
             $0.top.equalTo(memoView.snp.bottom).offset(30)
             $0.leading.trailing.equalTo(mainView)
             $0.height.equalTo(180)
         }
-        
         면적ImageView.snp.makeConstraints {
             $0.top.equalTo(detailView).offset(15)
             $0.leading.equalTo(detailView).offset(15)
             $0.width.height.equalTo(24)
         }
-        
         면적ValueLabel.snp.makeConstraints {
             $0.centerY.equalTo(면적ImageView)
             $0.leading.equalTo(면적ImageView.snp.trailing).offset(15)
         }
-        
         입주가능일ImageView.snp.makeConstraints {
             $0.top.equalTo(면적ImageView).offset(53)
             $0.leading.equalTo(detailView).offset(15)
             $0.width.height.equalTo(24)
         }
-        
         입주가능일ValueLabel.snp.makeConstraints {
             $0.centerY.equalTo(입주가능일ImageView)
             $0.leading.equalTo(입주가능일ImageView.snp.trailing).offset(15)
         }
-        
         계약기간ImageView.snp.makeConstraints {
             $0.top.equalTo(입주가능일ImageView).offset(47)
             $0.leading.equalTo(detailView).offset(15)
             $0.width.height.equalTo(24)
         }
-        
         계약기간ValueLabel.snp.makeConstraints {
             $0.centerY.equalTo(계약기간ImageView)
             $0.leading.equalTo(계약기간ImageView.snp.trailing).offset(15)
         }
-        
         checkView.snp.makeConstraints {
             $0.top.equalTo(detailView.snp.bottom).offset(30)
             $0.leading.equalToSuperview().offset(12)
             $0.trailing.equalToSuperview().offset(-12)
             $0.height.equalTo(550)
         }
-        
         checkLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(5)
         }
-        
-        CheckListView.snp.makeConstraints {
+        checkListView.snp.makeConstraints {
             $0.top.equalTo(checkLabel.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        
         contentView.snp.makeConstraints {
-            $0.bottom.equalTo(CheckListView.snp.bottom).offset(20)
+            $0.bottom.equalTo(checkListView.snp.bottom).offset(20)
             $0.height.greaterThanOrEqualTo(scrollView)
             $0.width.equalToSuperview()
         }
@@ -437,12 +411,30 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            //            let rateVC = RateVC()
+            let checkVC1 = CheckVC1()
+            checkVC1.house = self.selectedHouse
+            self.navigationController?.pushViewController(checkVC1, animated: true)
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
             print("삭제하기")
-            
+            func deleteButtonTapped() {
+                let homeVC = HomeVC()
+                if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
+                    print("Deleting house with ID: \(houseId)")  // houseId를 출력
+                    NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
+                        if success {
+                            NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
+                            self.navigationController?.popViewController(animated: true)
+                        } else {
+                            print("집을 지우지 못했습니다.")
+                        }
+                    }
+                } else {
+                    print("houseId is not founded")
+                }
+            }
+            deleteButtonTapped()
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
@@ -456,6 +448,7 @@ final class MyHouseVC: UIViewController {
     private func configureUIWithData() {
         
         guard let house = selectedHouse else { return }
+        self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             switch house.livingType ?? "" {
             case "아파트/오피스텔":
@@ -470,11 +463,12 @@ final class MyHouseVC: UIViewController {
         }
         
         
-        self.CheckListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         
         guard let houseImages = house.사진 else { return }
         
-        let images = houseImages.map{$0.toImage()}
+//        let images = houseImages.map{$0.toImage()}
+        
         var selectedImages: [UIImage] = []
 
         let imageMapping: [String: String] = [
@@ -515,9 +509,13 @@ final class MyHouseVC: UIViewController {
             }
             self.noneMaintenanceImagesStackView.spacing = 5.0
         }
-        self.mainImageView.image = images[0]
+        if !houseImages.isEmpty {
+            self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
+        } else {
+            self.mainImageView.image = UIImage(named: "emptyImage")
+        }
         
-        self.imageCount.text = "+" + String(images.count)
+        self.imageCount.text = "+" + String(houseImages.count - 1)
         
         self.nameLabel.text = house.title ?? ""
         
@@ -525,7 +523,6 @@ final class MyHouseVC: UIViewController {
         
         self.priceLabel.text = house.보증금! + "/" + house.월세!
 
-        
         self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
         
         self.addressLabel.text = house.address ?? ""
@@ -561,7 +558,6 @@ final class MyHouseVC: UIViewController {
     
     @objc func bookmarkButtonTapped() {
         print("b")
-        
     }
     
     @objc func ellipsisButtonTapped() {

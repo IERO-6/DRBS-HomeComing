@@ -4,7 +4,7 @@ import KakaoSDKUser
 import KakaoSDKAuth
 import FirebaseAuth
 import CoreLocation
-
+import FirebaseStorage
 
 // ⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️공식문서⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️
 // https://firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
@@ -79,13 +79,40 @@ class NetworkingManager {
     
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
-    func addHouses(houseModel: House) {
+    func addHouses(houseModel: House, images: [UIImage]) {
         let documentRef = db.collection("Homes").document()
         let houseId = documentRef.documentID
         guard let data = houseModel.asDictionary else { return }
             documentRef.setData(data)
         documentRef.updateData(["houseId":houseId])
-        
+        var stringImages: [String] = []
+        DispatchQueue.global().async {
+            for image in images {
+                self.uploadImage(image: image) { imageUrl in
+                    stringImages.append(imageUrl)
+                    documentRef.updateData(["photos":stringImages])
+                }
+            }
+        }
+    }
+    
+    func uploadImage(image: UIImage, completion: @escaping(String) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        let filename = NSUUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/house_images/\(filename)")
+        ref.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                return
+            }
+            ref.downloadURL { url, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                guard let imageUrl = url?.absoluteString else { return }
+                completion(imageUrl)
+            }
+        }
     }
     
     //MARK: - Read
@@ -126,11 +153,46 @@ class NetworkingManager {
    
     
     //MARK: - Update
+    func updateHouseInFirebase(houseModel: House) {
+        // 선택한 집의 houseId가 houseModel.housId가 맞나?, 기존에 있던 데이터를 houseViewModel에 넣어줬는데 값을 바꿀때도 action이 실행되면서 그 값을 houseViewModel에 넣어주는데 그래도 되나?
+        guard let id = houseModel.houseId else {
+            print("Error: House does not have an ID!")
+            return
+        }
+
+        // Firestore 인스턴스 가져오기 Firestore 데이터베이스의 데이터를 읽거나 쓰기위해
+        let db = Firestore.firestore()
+
+        // 해당 ID를 가진 문서에 접근
+        let documentRef = db.collection("houses").document(id)
+
+        guard let data = houseModel.asDictionary else {
+            print("Error: Could not convert houseModel to dictionary!")
+            return
+        }
+        
+        // 값을 업데이트
+        documentRef.setData(data, merge: true) { error in
+            if let error = error {
+                print("Error updating data: \(error)")
+            } else {
+                print("Data successfully updated!")
+            }
+        }
+    }
+    
     //MARK: - Delete
-    
-    
-    
-    
+    func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
+        db.collection("Homes").document(houseId).delete() { err in
+            if let err = err {
+                print("Error removing: \(err)")
+                completion(false)
+            } else {
+                print("removing complete")
+                completion(true)
+            }
+        }
+    }
     
     
     

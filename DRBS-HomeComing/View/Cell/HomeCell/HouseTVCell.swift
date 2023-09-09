@@ -18,6 +18,9 @@ final class HouseTVCell: UITableViewCell {
             self.villaCellCount = houses.filter{$0.livingType! == "빌라/주택"}.count
             self.apartCellCount = houses.filter{$0.livingType! == "아파트/오피스텔"}.count
             self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -55,6 +58,9 @@ final class HouseTVCell: UITableViewCell {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.contentView.addSubview(self.collectionView)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleHouseDeleted), name: Notification.Name("houseDeleted"), object: nil)
+
         NSLayoutConstraint.activate([
             self.collectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
             self.collectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
@@ -65,8 +71,12 @@ final class HouseTVCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
+    deinit {
+        // NotificationCenter에서 관찰자 제거
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("houseDeleted"), object: nil)
+    }
+    
     //MARK: - Helpers
-   
 }
 
 
@@ -112,6 +122,14 @@ extension HouseTVCell: UICollectionViewDataSource {
             return cell
         default:
             return UICollectionViewCell()
+        }
+    }
+    
+    @objc func handleHouseDeleted(notification: Notification) {
+        if let userInfo = notification.userInfo, let deletedHouseId = userInfo["deletedHouseId"] as? String {
+            if let index = self.houses.firstIndex(where: { $0.houseId == deletedHouseId }) {
+                self.houses.remove(at: index)
+            }
         }
     }
 }

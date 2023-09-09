@@ -9,7 +9,7 @@ final class CheckVC2: UIViewController {
     
     var houseViewModel = HouseViewModel()
     private let checkListUIView = CheckListUIView()
-    
+    var house: House?
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false
@@ -62,6 +62,8 @@ final class CheckVC2: UIViewController {
     }
     
     private let 관리비미포함 = UILabel().then { $0.text = "관리비 미포함 목록" }
+    
+    private lazy var 관리비미포함Buttons = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     
     private lazy var 전기버튼 = UIButton().then {
         $0.setTitle("전기", for: .normal)
@@ -259,6 +261,7 @@ final class CheckVC2: UIViewController {
         configureUI2()
         configureUI3()
         setUpLabel()
+        updateUI()
         configureNav()
         initPicker()
         setUpKeyBoard()
@@ -564,6 +567,42 @@ final class CheckVC2: UIViewController {
         picker.delegate = self
     }
     
+    private func updateUI() {
+        // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
+        if let house = self.house {
+            보증금TextField.text = house.보증금
+            월세TextField.text = house.월세
+            관리비TextField.text = house.관리비
+            면적TextField.text = house.면적
+            계약기간TextField.text = house.계약기간
+            if let 입주가능일 = house.입주가능일 {
+                입주가능일button.setTitle(입주가능일, for: .normal)
+                입주가능일button.setTitleColor(UIColor.black, for: .normal)
+            }
+            
+            // 거래방식 버튼 상태 업데이트
+            for button in 관리비미포함Buttons {
+                if let title = button.currentTitle, let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(title) {
+                    button.setSelectedState(isSelected: true)
+                    houseViewModel.관리비미포함목록.append(title)
+                    houseViewModel.관리비미포함목록 = house.관리비미포함목록 ?? []
+                } else {
+                    button.setSelectedState(isSelected: false)
+                }
+            }
+            
+            //이미지를 띄우는 코드
+            guard let houseImages = house.사진 else { return }
+
+            let buttons = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
+            for (index, button) in buttons.enumerated() {
+                if houseImages.indices.contains(index) {
+                    button.sd_setImage(with: URL(string:houseImages[index]), for: .normal)
+                }
+            }
+        }
+    }
+    
     //MARK: - Actions
     
     @objc func vc2buttonTapped(_ sender: UIButton) {
@@ -596,6 +635,15 @@ final class CheckVC2: UIViewController {
         
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
+        rateVC.house = self.house
+        rateVC.houseViewModel = self.houseViewModel
+        houseViewModel.memo = memoTextView.text
+        houseViewModel.보증금 = 보증금TextField.text
+        houseViewModel.월세or전세금 = 월세TextField.text
+        houseViewModel.관리비 = 관리비TextField.text
+        houseViewModel.계약기간 = 계약기간TextField.text
+        houseViewModel.입주가능일 = 입주가능일button.currentTitle
+        
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
         self.houseViewModel.관리비 = self.관리비TextField.text
@@ -603,10 +651,7 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.면적 = self.면적TextField.text
         self.houseViewModel.계약기간 = self.계약기간TextField.text
         self.houseViewModel.memo = self.memoTextView.text
-        self.houseViewModel.makeUIImageToString()
         rateVC.houseViewModel = self.houseViewModel
-        print("UIImage는 지금 이만큼입니다\(rateVC.houseViewModel.uiImages)")
-        print(rateVC.houseViewModel.stringImages.count)
         self.present(rateVC, animated: true)
     }
     
