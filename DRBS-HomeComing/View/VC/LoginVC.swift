@@ -10,11 +10,12 @@ import SnapKit
 import Then
 import FirebaseAuth
 import AuthenticationServices
+import CryptoKit             /// 해시 값 추가
 
 class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextProviding {
     
     
-   
+    
     // MARK: - Properties
     let logoLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 64)
@@ -64,6 +65,7 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     }
     
     private lazy var authVM: AuthViewModel = AuthViewModel()
+    private var currentNonce: String? /// 현재 Nonce
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -80,9 +82,9 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
         view.layer.insertSublayer(gradientLayer, at: 0)
         
         labelsStack.addArrangedSubviews(logoLabel, subtitleLabel)
-//        buttonsStack.addArrangedSubviews(appleLoginButton, kakaoLoginButton)
+        //        buttonsStack.addArrangedSubviews(appleLoginButton, kakaoLoginButton)
         buttonsStack.addArrangedSubviews(authorizationAppleIDButton, kakaoLoginButton)
-
+        
         view.addSubviews(labelsStack, buttonsStack, versionLabel)
         
         authorizationAppleIDButton.snp.makeConstraints {
@@ -122,14 +124,7 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     // MARK: - Action
     @objc func appleLoginButtonTapped() {
         print("appleLoginButtonTapped()")
-        /// 애플 로그인 로직
-        let provider = ASAuthorizationAppleIDProvider()
-        let request = provider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.performRequests()
-        controller.delegate = self
-        controller.presentationContextProvider = self
+        startSignInWithAppleFlow()
     }
     
     @objc func kakaoLoginButtonTapped() {
@@ -140,51 +135,134 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     }
 }
 
+extension LoginVC {
+    /// - note : 애플 로그인
+    func startSignInWithAppleFlow() {
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        
+        /// request 요청을 했을 때 nonce가 포함되어서 릴레이 공격을 방지
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = sha256(nonce)
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+    
+    /// - note : 난수 생성
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            return String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
+    }
+    
+    /// - note : 난수 문자열 조합
+    private func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        let charset: Array<Character> =
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+        
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0 ..< 16).map { _ in
+                var random: UInt8 = 0
+                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                if errorCode != errSecSuccess {
+                    fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
+                }
+                return random
+            }
+            
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+                
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
+        }
+        
+        return result
+    }
+}
+
 //MARK: - ASAuthorizationControllerDelegate
 extension LoginVC: ASAuthorizationControllerDelegate {
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            // Create an account in your system.
+            
             let userIdentifier = appleIDCredential.user
-            let userFirstName = appleIDCredential.fullName?.givenName
-            let userLastName = appleIDCredential.fullName?.familyName
-            let userEmail = appleIDCredential.email
+//            let userFirstName = appleIDCredential.fullName?.givenName
+//            let userLastName = appleIDCredential.fullName?.familyName
+//            let userEmail = appleIDCredential.email
             let appleIDProvider = ASAuthorizationAppleIDProvider()
+            
+            guard let nonce = currentNonce else {
+                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+            }
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+            
+            
             appleIDProvider.getCredentialState(forUserID: userIdentifier) { (credentialState, error) in
                 switch credentialState {
                 case .authorized:
                     // The Apple ID credential is valid. Show Home UI Here
                     // authorized - 사용자의 identifier 가 정상적으로 인식되었을 경우
-
+                    
+                    let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
+                    
+                    Auth.auth().signIn(with: credential) { authResult, error in
+                        if let error = error {
+                            print ("Error Apple sign in: %@", error)
+                            return
+                        }
+                        /// Main 화면으로 보내기
+                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                        sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                        UserDefaults.standard.set("APPLE", forKey: "social") /// userDefault에 기록
+                    }
+                    
                     break
                 case .revoked:
                     // The Apple ID credential is revoked. Show SignIn UI Here.
                     // revoked- 사용자의 identifier 가 유효하지 않은 경우
-
                     
                     break
                 case .notFound:
                     // No credential was found. Show SignIn UI Here.
                     // notFoun - 사용자의 identifier 를 찾지 못한 경우
                     
-
                     break
                 default:
                     break
                 }
             }
         }
-        
-        
     }
-    
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         print(error.localizedDescription)
     }
-    
-    
 }
 
 //MARK: - ASWebAuthenticationPresentationContextProviding
@@ -192,10 +270,9 @@ extension LoginVC: ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return view.window!
     }
-
+    
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return ASPresentationAnchor()
         //얘는 뭔지 모르겠음!
     }
-    
 }
