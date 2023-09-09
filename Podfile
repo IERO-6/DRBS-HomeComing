@@ -17,4 +17,5 @@ target 'DRBS-HomeComing' do
   pod 'KakaoSDKCommon'
   pod 'KakaoSDKAuth'
   pod 'KakaoSDKUser'
+  pod 'FirebaseStorage'
 end

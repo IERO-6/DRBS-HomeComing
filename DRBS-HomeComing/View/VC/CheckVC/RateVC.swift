@@ -150,6 +150,7 @@ final class RateVC: UIViewController {
     @objc func saveButtonTapped() {
         self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         self.houseViewModel.makeHouseModel()
-        NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!)
+        NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+        
     }
 }
