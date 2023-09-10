@@ -258,9 +258,29 @@ final class DetailCell: UITableViewCell {
             return
         }
     }
-    
-    
-    
-    
+}
 
+//MARK: - Extension
+extension DetailCell {
+    func updateUIForImages() {
+        guard let houseImages = house?.사진 else { return }
+        
+        // 이미지가 없을 때
+        if houseImages.isEmpty {
+            self.imageStackView.isHidden = true
+            self.memoTextView.snp.remakeConstraints {
+                $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+                $0.leading.trailing.equalTo(backView)
+                $0.height.equalTo(62)
+            }
+        } else {
+            self.imageStackView.isHidden = false
+            // 기존의 위치로 복구
+            self.memoTextView.snp.remakeConstraints {
+                $0.top.equalTo(imageStackView.snp.bottom).offset(12)
+                $0.leading.trailing.equalTo(backView)
+                $0.height.equalTo(62)
+            }
+        }
+    }
 }

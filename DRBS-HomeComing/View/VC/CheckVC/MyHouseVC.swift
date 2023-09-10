@@ -469,18 +469,18 @@ final class MyHouseVC: UIViewController {
             }
         }
         
+        guard let selectedHouse = selectedHouse else { return }
+        maintenanceLabel.isHidden = selectedHouse.관리비?.isEmpty ?? true
+        maintenanceCostLabel.isHidden = selectedHouse.관리비?.isEmpty ?? true
+        noneMaintenanceLabel.isHidden = selectedHouse.관리비미포함목록?.isEmpty ?? true
+        noneMaintenanceImagesStackView.isHidden = selectedHouse.관리비미포함목록?.isEmpty ?? true
         
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         
-        
-        
         guard let houseImages = house.사진 else { return }
-        
         sendHouseImages = houseImages
 //        let images = houseImages.map{$0.toImage()}
-        
         var selectedImages: [UIImage] = []
-        
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightImage.png",

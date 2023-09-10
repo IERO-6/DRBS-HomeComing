@@ -156,12 +156,14 @@ final class RateVC: UIViewController {
             self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
             self.houseViewModel.makeHouseModel()
             NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
             return
         }
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)
         
         var dataToUpdate: [String: Any] = [:]
-        if let name = houseViewModel.name { dataToUpdate["title"] = name } // guard let 사용하면 nil일때 에러날 것 같아서
+        if let name = houseViewModel.name { dataToUpdate["title"] = name }
         if let address = houseViewModel.address { dataToUpdate["address"] = address }
         
         if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }

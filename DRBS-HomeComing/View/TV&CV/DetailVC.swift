@@ -93,6 +93,7 @@ extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.detailCell.rawValue, for: indexPath) as! DetailCell
         cell.house = self.houseViewModel.houses[indexPath.row]
+        cell.updateUIForImages() // 이미지가 없을때, 메모를 위오 올리는 함수실행
         return cell
     }
     
