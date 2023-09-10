@@ -159,19 +159,19 @@ final class CheckListUIView: UIView {
         }
         동향button.snp.makeConstraints {
             $0.centerY.equalTo(directionLabel.snp.centerY)
-            $0.leading.equalTo(directionLabel.snp.trailing).offset(12)
+            $0.leading.equalTo(directionLabel.snp.trailing).offset(10)
         }
         서향button.snp.makeConstraints {
             $0.centerY.equalTo(directionLabel.snp.centerY)
-            $0.leading.equalTo(동향button.snp.trailing).offset(12)
+            $0.leading.equalTo(동향button.snp.trailing).offset(10)
         }
         남향button.snp.makeConstraints {
             $0.centerY.equalTo(directionLabel.snp.centerY)
-            $0.leading.equalTo(서향button.snp.trailing).offset(12)
+            $0.leading.equalTo(서향button.snp.trailing).offset(10)
         }
         북향button.snp.makeConstraints {
             $0.centerY.equalTo(directionLabel.snp.centerY)
-            $0.leading.equalTo(남향button.snp.trailing).offset(12)
+            $0.leading.equalTo(남향button.snp.trailing).offset(10)
         }
         addUnderlineView(below: directionLabel, to: backView, withOffset: 5, width: 260, height: 1)
         
