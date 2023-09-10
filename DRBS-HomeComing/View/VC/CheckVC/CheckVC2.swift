@@ -134,7 +134,7 @@ final class CheckVC2: UIViewController {
         $0.placeholder = "면적을 입력해주세요"
         $0.textAlignment = .right
         let label = UILabel()
-        label.text = "㎡"
+        label.text = " ㎡"
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
