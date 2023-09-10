@@ -12,11 +12,13 @@ final class MyHouseVC: UIViewController {
     private lazy var mainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = true
     }
     
-    private lazy var imageBackView = UIView().then {
-        $0.backgroundColor = .black.withAlphaComponent(0.8)
+    private lazy var imageBackButton = UIButton(type: .custom).then {
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0.8)
         $0.layer.cornerRadius = 10
+        $0.addTarget(self, action: #selector(ImageButtonTapped), for: .touchUpInside)
     }
     
     private lazy var photoImage = UIImageView().then {
@@ -164,6 +166,8 @@ final class MyHouseVC: UIViewController {
         }
     }
     
+    var sendHouseImages: [String] = []
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -189,8 +193,8 @@ final class MyHouseVC: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        mainImageView.addSubview(imageBackView)
-        imageBackView.addSubviews(photoImage, imageCount)
+        mainImageView.addSubview(imageBackButton)
+        imageBackButton.addSubviews(photoImage, imageCount)
         mainView.addSubviews(firstContainView,
                              addressLabel,
                              secondContainView,
@@ -226,7 +230,7 @@ final class MyHouseVC: UIViewController {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
         }
-        imageBackView.snp.makeConstraints {
+        imageBackButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-10)
             $0.bottom.equalToSuperview().offset(-10)
             $0.width.equalTo(70)
@@ -472,7 +476,8 @@ final class MyHouseVC: UIViewController {
         
         guard let houseImages = house.사진 else { return }
         
-        //        let images = houseImages.map{$0.toImage()}
+        sendHouseImages = houseImages
+//        let images = houseImages.map{$0.toImage()}
         
         var selectedImages: [UIImage] = []
         
@@ -593,5 +598,15 @@ final class MyHouseVC: UIViewController {
         print("e")
         
     }
+    @objc func ImageButtonTapped() {
+        let myHouseImageVC = MyHouseImageVC()
+        
+        myHouseImageVC.houseImages = sendHouseImages
+//        myHouseImageVC.selectedHouse = house // House 객체 전달
+//        myHouseImageVC.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        myHouseImageVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(myHouseImageVC, animated: true)
+    }
+
     
 }
