@@ -112,7 +112,7 @@ final class CheckVC1: UIViewController {
         $0.layer.cornerRadius = 10
         $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
-        
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -149,7 +149,7 @@ final class CheckVC1: UIViewController {
         view.addSubviews(nameLabel, nameTextField, tradeLabel,
                          월세버튼, 전세버튼, 매매버튼, livingLabel,
                          아파트버튼, 빌라버튼,  원룸버튼,
-                        addressLabel, addressTextField, nextButton)
+                         addressLabel, addressTextField, nextButton)
         
         nameLabel.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -208,12 +208,12 @@ final class CheckVC1: UIViewController {
             $0.height.equalTo(45)
         }
         
-//        오피스텔버튼.snp.makeConstraints {
-//            $0.top.equalTo(아파트버튼)
-//            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
-//            $0.width.equalTo(100)
-//            $0.height.equalTo(45)
-//        }
+        //        오피스텔버튼.snp.makeConstraints {
+        //            $0.top.equalTo(아파트버튼)
+        //            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
+        //            $0.width.equalTo(100)
+        //            $0.height.equalTo(45)
+        //        }
         
         원룸버튼.snp.makeConstraints {
             $0.top.equalTo(아파트버튼.snp.bottom).offset(10)
@@ -326,11 +326,11 @@ final class CheckVC1: UIViewController {
             print("디버깅: 디폴트")
         }
     }
-
+    
     @objc public func nextButtonTapped() {
         guard let name = self.nameTextField.text,
               let address = self.addressTextField.text,
-            !name.isEmpty && !address.isEmpty && self.houseViewModel.tradingType != nil && self.houseViewModel.livingType != nil else {
+              !name.isEmpty && !address.isEmpty && self.houseViewModel.tradingType != nil && self.houseViewModel.livingType != nil else {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: "항목 입력을 완료해주세요.", message: "모든 항목이 입력되지 않았습니다.", preferredStyle: .alert)
                 let confirm = UIAlertAction(title: "확인", style: .default) { _ in
@@ -357,7 +357,7 @@ final class CheckVC1: UIViewController {
                 }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
-//                self.houseViewModel.address = coordinate
+                //                self.houseViewModel.address = coordinate
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
@@ -395,13 +395,13 @@ final class CheckVC1: UIViewController {
             }
         }
     }
-
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)

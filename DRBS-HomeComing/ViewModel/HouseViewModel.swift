@@ -115,21 +115,21 @@ class HouseViewModel {
         }
     }
     
-//    func makeUIImageToString() {
-//        for image in uiImages {
-//            guard let convertedImage = image.toPngString() else {
-//                print("HouseViewModel 107Line Error: toPng실패")
-//                return
-//            }
-//            self.stringImages.append(convertedImage)
-//        }
-//        print(self.stringImages)
-//    }
+    //    func makeUIImageToString() {
+    //        for image in uiImages {
+    //            guard let convertedImage = image.toPngString() else {
+    //                print("HouseViewModel 107Line Error: toPng실패")
+    //                return
+    //            }
+    //            self.stringImages.append(convertedImage)
+    //        }
+    //        print(self.stringImages)
+    //    }
     
     func getAnnotations() -> [House] { return self.visibleHouses }
     
     func currentVisible(region: MKCoordinateRegion) { self.visibleRegion = region }
-
+    
     
     func locationsWhenRegionChanged() {
         guard let visibleRegion = self.visibleRegion else { return }
@@ -141,12 +141,12 @@ class HouseViewModel {
         }
         makeAnnotationsWithFiltered(houses: housesInvisibleRegion)
     }
- 
+    
     func makeAnnotationsWithFiltered(houses: [House]) {
         self.willDeleteHouses = self.visibleHouses.filter {!houses.contains($0)}
         self.visibleHouses = houses.filter {!self.visibleHouses.contains($0)}
     }
-
+    
     func uploadImage(image: UIImage, completion: @escaping(String) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
         let filename = NSUUID().uuidString
@@ -164,5 +164,5 @@ class HouseViewModel {
             }
         }
     }
-
+    
 }

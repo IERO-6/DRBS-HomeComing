@@ -42,7 +42,7 @@ final class MyHouseVC: UIViewController {
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
         $0.layer.borderWidth = 1
-//        $0.sizeToFit()
+        //        $0.sizeToFit()
     }
     private lazy var starImage = UIImageView().then {
         $0.image = UIImage(named: "star.png")
@@ -157,7 +157,7 @@ final class MyHouseVC: UIViewController {
         $0.text = "체크 리스트"
     }
     lazy var checkListView = CheckListUIView()
-    
+    var houseViewModel: HouseViewModel?
     var selectedHouse: House? {
         didSet {
             configureUIWithData()
@@ -170,6 +170,11 @@ final class MyHouseVC: UIViewController {
         configureUI()
         settingNav()
         fetchSelectedHouseData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateBookmarkButtonState()
     }
     
     override func viewDidLayoutSubviews() {
@@ -417,11 +422,9 @@ final class MyHouseVC: UIViewController {
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            print("삭제하기")
             func deleteButtonTapped() {
-                let homeVC = HomeVC()
                 if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
-                    print("Deleting house with ID: \(houseId)")  // houseId를 출력
+                    print("Deleting house ID: \(houseId)")
                     NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
                         if success {
                             NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
@@ -465,12 +468,14 @@ final class MyHouseVC: UIViewController {
         
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         
+        
+        
         guard let houseImages = house.사진 else { return }
         
-//        let images = houseImages.map{$0.toImage()}
+        //        let images = houseImages.map{$0.toImage()}
         
         var selectedImages: [UIImage] = []
-
+        
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightImage.png",
@@ -492,7 +497,7 @@ final class MyHouseVC: UIViewController {
                 selectedImages.append(placeholder)
             }
         }
-
+        
         let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
@@ -500,7 +505,7 @@ final class MyHouseVC: UIViewController {
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-
+                
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -522,7 +527,7 @@ final class MyHouseVC: UIViewController {
         self.rateLabel.text = String(house.별점 ?? 0.0)
         
         self.priceLabel.text = house.보증금! + "/" + house.월세!
-
+        
         self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
         
         self.addressLabel.text = house.address ?? ""
@@ -534,17 +539,17 @@ final class MyHouseVC: UIViewController {
         self.mapView.setRegion(MKCoordinateRegion(center: house.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: false)
         self.mapView.addAnnotation(house)
         //span의 델타값이 작을수록 확대레벨 올라감
-       
+        
         self.memoTextView.text = house.기록 ?? ""
         
         self.textCountLabel.text = "(\((house.기록 ?? "").count)/500)"
         
         self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
-  
+        
         self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? "")
-
+        
         self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
-
+        
         
     }
     
@@ -553,11 +558,35 @@ final class MyHouseVC: UIViewController {
         
     }
     
+    private func updateBookmarkButtonState() {
+        guard let house = selectedHouse else { return }
+        let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
+        
+        guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
+              rightBarButtonItems.count > 1,
+              let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
+        
+        bookmarkButton.setImage(UIImage(named: imageName), for: .normal)
+    }
+    
     
     //MARK: - Actions
     
-    @objc func bookmarkButtonTapped() {
-        print("b")
+    @objc func bookmarkButtonTapped(sender: UIButton) {
+        guard let house = selectedHouse else { return }
+        house.isBookMarked = !(house.isBookMarked ?? false)
+        let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
+        sender.setImage(UIImage(named: imageName), for: .normal)
+        
+        guard let houseId = house.houseId else { return }
+        let houseRef = Firestore.firestore().collection("Homes").document(houseId)
+        houseRef.updateData(["isBookMarked": house.isBookMarked!]) { error in
+            if let error = error {
+                print("Failed to update bookmark : \(error.localizedDescription)")
+                return
+            }
+            print(" bookmark update success")
+        }
     }
     
     @objc func ellipsisButtonTapped() {
