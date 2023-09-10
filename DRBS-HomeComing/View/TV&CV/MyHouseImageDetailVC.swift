@@ -14,12 +14,18 @@ class MyHouseImageDetailVC : UIViewController {
         $0.contentMode = .scaleAspectFit
     }
     
+    lazy var closeButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "xmark"), for: .normal)
+        $0.tintColor = .white
+        $0.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+    }
+    
     // MARK: - LifeCycle
     init(totalImages:Int ,selectedIndex:Int ,imageName:String ,imageNames:[String]) {
-        self.totalImages=totalImages
-        self.currentIndex=selectedIndex
-        self.imageName=imageName
-        self.imageNames=imageNames
+        self.totalImages = totalImages
+        self.currentIndex = selectedIndex
+        self.imageName = imageName
+        self.imageNames = imageNames
         
         super.init(nibName:nil,bundle:nil)
     }
@@ -36,9 +42,15 @@ class MyHouseImageDetailVC : UIViewController {
     //MARK: - Helpers
     private func configureUI() {
         view.addSubview(imageView)
+        view.addSubview(closeButton)
         
         imageView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        closeButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(10)
+            make.width.height.equalTo(50)
         }
         
         let swipeLeft = UISwipeGestureRecognizer(target:self, action:#selector(swiped)).then{
@@ -52,6 +64,9 @@ class MyHouseImageDetailVC : UIViewController {
     }
     
     // MARK: - Action
+    @objc func handleDismiss() {
+        dismiss(animated: true, completion: nil)
+    }
     
     @objc func swiped(gesture:UIGestureRecognizer){
         
