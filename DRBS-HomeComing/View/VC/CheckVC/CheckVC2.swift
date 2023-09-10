@@ -468,8 +468,8 @@ final class CheckVC2: UIViewController {
         
         checkListUIView.snp.makeConstraints {
             $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
             $0.height.equalTo(500)
         }
         

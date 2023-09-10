@@ -155,7 +155,7 @@ final class CheckListUIView: UIView {
         
         directionLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(30)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(12)
         }
         동향button.snp.makeConstraints {
             $0.centerY.equalTo(directionLabel.snp.centerY)
@@ -177,7 +177,7 @@ final class CheckListUIView: UIView {
         
         soundproofingLabel.snp.makeConstraints {
             $0.top.equalTo(directionLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)}
+            $0.leading.equalToSuperview().offset(12)}
         방음우수button.snp.makeConstraints {
             $0.centerY.equalTo(soundproofingLabel.snp.centerY)
             $0.leading.equalTo(directionLabel.snp.trailing).offset(12)
@@ -194,7 +194,7 @@ final class CheckListUIView: UIView {
         
         waterLabel.snp.makeConstraints {
             $0.top.equalTo(soundproofingLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(12)
         }
         수압우수button.snp.makeConstraints {
             $0.centerY.equalTo(waterLabel.snp.centerY)
@@ -212,7 +212,7 @@ final class CheckListUIView: UIView {
         
         bugLabel.snp.makeConstraints {
             $0.top.equalTo(waterLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(12)
         }
         벌레있음button.snp.makeConstraints {
             $0.centerY.equalTo(bugLabel.snp.centerY)
@@ -230,7 +230,7 @@ final class CheckListUIView: UIView {
         
         통풍.snp.makeConstraints {
             $0.top.equalTo(bugLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(12)
         }
         통풍쾌적button.snp.makeConstraints {
             $0.centerY.equalTo(통풍.snp.centerY)
@@ -248,7 +248,7 @@ final class CheckListUIView: UIView {
         
         securityLabel.snp.makeConstraints {
             $0.top.equalTo(통풍.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)
+            $0.leading.equalToSuperview().offset(12)
         }
         보안철저button.snp.makeConstraints {
             $0.centerY.equalTo(securityLabel.snp.centerY)
@@ -266,7 +266,7 @@ final class CheckListUIView: UIView {
         
         moldLabel.snp.makeConstraints {
             $0.top.equalTo(securityLabel.snp.bottom).offset(50)
-            $0.leading.equalToSuperview().offset(18)}
+            $0.leading.equalToSuperview().offset(12)}
         곰팡이있음button.snp.makeConstraints {
             $0.centerY.equalTo(moldLabel.snp.centerY)
             $0.leading.equalTo(moldLabel.snp.trailing).offset(45)
