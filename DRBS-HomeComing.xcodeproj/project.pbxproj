@@ -144,7 +144,7 @@
 		B38C34D22AAB8C8D00F8E3EF /* Raleway-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Bold.ttf"; sourceTree = "<group>"; };
 		B38C34D42AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraBold.ttf"; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		EB2338CD2AA244AA00DE6450 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		EB2338CD2AA244AA00DE6450 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		EBD42DAE2AAC704A00568ED0 /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
@@ -256,7 +256,7 @@
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				EB2338CD2AA244AA00DE6450 /* Config.xcconfig */,
+				EB2338CD2AA244AA00DE6450 /* config.xcconfig */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -625,7 +625,7 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* Config.xcconfig */;
+			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -687,7 +687,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* Config.xcconfig */;
+			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
