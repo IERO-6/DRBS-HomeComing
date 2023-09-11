@@ -10,6 +10,7 @@ final class CheckVC2: UIViewController {
     var houseViewModel = HouseViewModel()
     private let checkListUIView = CheckListUIView()
     var house: House?
+    lazy var checkListView = CheckListUIView()
     private lazy var scrollView = UIScrollView(frame: self.view.frame).then {
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false
@@ -133,7 +134,7 @@ final class CheckVC2: UIViewController {
         $0.placeholder = "면적을 입력해주세요"
         $0.textAlignment = .right
         let label = UILabel()
-        label.text = "㎡"
+        label.text = " ㎡"
         label.sizeToFit()
         $0.rightView = label
         $0.rightViewMode = .always
@@ -467,8 +468,8 @@ final class CheckVC2: UIViewController {
         
         checkListUIView.snp.makeConstraints {
             $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
             $0.height.equalTo(500)
         }
         
@@ -494,7 +495,7 @@ final class CheckVC2: UIViewController {
             $0.leading.equalTo(galleryImageView.snp.trailing).offset(10)
             $0.height.width.equalTo(140)
         }
-       
+        
         secondImageButton.snp.makeConstraints {
             $0.top.equalTo(imageScrollView.snp.bottom).offset(0)
             $0.leading.equalTo(firstImageButton.snp.trailing).offset(10)
@@ -557,7 +558,7 @@ final class CheckVC2: UIViewController {
     private func setUpKeyBoard() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
-}
+    }
     
     private func initPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -575,6 +576,7 @@ final class CheckVC2: UIViewController {
             관리비TextField.text = house.관리비
             면적TextField.text = house.면적
             계약기간TextField.text = house.계약기간
+            memoTextView.text = house.기록
             if let 입주가능일 = house.입주가능일 {
                 입주가능일button.setTitle(입주가능일, for: .normal)
                 입주가능일button.setTitleColor(UIColor.black, for: .normal)
@@ -593,13 +595,23 @@ final class CheckVC2: UIViewController {
             
             //이미지를 띄우는 코드
             guard let houseImages = house.사진 else { return }
-
+            
             let buttons = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
             for (index, button) in buttons.enumerated() {
                 if houseImages.indices.contains(index) {
                     button.sd_setImage(with: URL(string:houseImages[index]), for: .normal)
                 }
             }
+            self.checkListUIView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
+        }
+        if let checklist = house?.체크리스트 {
+            self.checkListUIView.checkViewModel.방향 = checklist.방향 ?? []
+            self.checkListUIView.checkViewModel.방음 = checklist.방음 ?? []
+            self.checkListUIView.checkViewModel.수압 = checklist.수압 ?? []
+            self.checkListUIView.checkViewModel.벌레 = checklist.벌레 ?? []
+            self.checkListUIView.checkViewModel.통풍 = checklist.통풍 ?? []
+            self.checkListUIView.checkViewModel.보안 = checklist.보안 ?? []
+            self.checkListUIView.checkViewModel.곰팡이 = checklist.곰팡이 ?? []
         }
     }
     
@@ -643,6 +655,7 @@ final class CheckVC2: UIViewController {
         houseViewModel.관리비 = 관리비TextField.text
         houseViewModel.계약기간 = 계약기간TextField.text
         houseViewModel.입주가능일 = 입주가능일button.currentTitle
+        checkListUIView.checkViewModel.checkListModel = checkListUIView.checkViewModel.makeCheckListModel()
         
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
@@ -718,7 +731,7 @@ final class CheckVC2: UIViewController {
     }
     // 키보드가 나타날 때 memoTextView를 이동시키는 함수
     var originalContentOffset: CGPoint = .zero
-
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if memoTextView.isFirstResponder {
             originalContentOffset = scrollView.contentOffset
@@ -732,7 +745,7 @@ final class CheckVC2: UIViewController {
             }
         }
     }
-
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         if memoTextView.isFirstResponder {
             scrollView.contentOffset = originalContentOffset

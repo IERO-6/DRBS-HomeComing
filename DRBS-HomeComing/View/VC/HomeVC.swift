@@ -11,7 +11,7 @@ final class HomeVC: UIViewController {
     private lazy var tableView = UITableView(frame: .zero, style: .grouped)
     var allHouseModels: [House]?
     var selectedHouse: House?
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .default
     }
@@ -23,13 +23,13 @@ final class HomeVC: UIViewController {
         configureUI()
         settingTV()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: Notification.Name("houseDeleted"), object: nil)
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.configureNav()
-//        tableView.reloadData()
+        tableView.reloadData()
     }
     
     //MARK: - Helpers
@@ -46,7 +46,7 @@ final class HomeVC: UIViewController {
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-
+    
     private func configureUI() {
         view.backgroundColor = .white
         tableView.backgroundColor = .white
@@ -73,32 +73,36 @@ final class HomeVC: UIViewController {
     }
     
     //MARK: - Actions
-
+    
     @objc public func plusButtonTapped() {
-           let checkVC = CheckVC1()
-           checkVC.hidesBottomBarWhenPushed = true
-           self.navigationController?.pushViewController(checkVC, animated: true)
-       }
+        let checkVC = CheckVC1()
+        checkVC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(checkVC, animated: true)
+    }
     
     @objc func settingButtonTapped() {
-           let settingVC = SettingVC()
-           settingVC.hidesBottomBarWhenPushed = true
-           self.navigationController?.pushViewController(settingVC, animated: true)
+        let settingVC = SettingVC()
+        settingVC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(settingVC, animated: true)
     }
     
     @objc func headButtonTapped(_ sender: KeyedButton) {
         let detailVC = DetailVC()
         switch sender.tag {
-        case 0:
-            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "아파트/오피스텔"}
-        case 1:
-            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "빌라/주택"}
-        case 2:
-            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "원룸/투룸+"}
-        case 3:
-            detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.isBookMarked! == true}
-        default:
-            break
+            case 0:
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "아파트/오피스텔"}
+                detailVC.title = "아파트/오피스텔"
+            case 1:
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "빌라/주택"}
+                detailVC.title = "빌라/주택"
+            case 2:
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "원룸/투룸+"}
+                detailVC.title = "원룸/투룸+"
+            case 3:
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.isBookMarked! == true}
+                detailVC.title = "북마크"
+            default:
+                break
         }
         detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
@@ -110,7 +114,7 @@ final class HomeVC: UIViewController {
                 self.allHouseModels?.remove(at: index)
             }
         }
-
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -124,20 +128,20 @@ final class HomeVC: UIViewController {
 
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-            let headerView = UIView()
-            headerView.backgroundColor = .white
-            let titleButton = KeyedButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
-            headerView.addSubview(titleButton)
-            titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
-            titleButton.setTitleColor(.darkGray, for: .normal)
+        let headerView = UIView()
+        headerView.backgroundColor = .white
+        let titleButton = KeyedButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
+        headerView.addSubview(titleButton)
+        titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
+        titleButton.setTitleColor(.darkGray, for: .normal)
         titleButton.backgroundColor = .white
         titleButton.tag = section
-            titleButton.contentHorizontalAlignment = .left
-            titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
+        titleButton.contentHorizontalAlignment = .left
+        titleButton.titleLabel?.font = UIFont(name: "Pretendard-Bold", size: 18)
         titleButton.addTarget(self, action: #selector(headButtonTapped(_:)), for: .touchUpInside)
-            titleButton.tag = section
-            return headerView
-        }
+        titleButton.tag = section
+        return headerView
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("tableView\(indexPath)")
         print("tableView\(indexPath.row)")
@@ -170,7 +174,7 @@ extension HomeVC: UITableViewDataSource {
 //MARK: - CellSelectedDelegate
 
 extension HomeVC: CellSelectedDelegate {
-
+    
     func cellselected(houseTVCell: HouseTVCell, house: House) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = house // House 객체 전달

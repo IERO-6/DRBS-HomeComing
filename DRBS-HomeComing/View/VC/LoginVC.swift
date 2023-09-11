@@ -14,27 +14,23 @@ import CryptoKit             /// 해시 값 추가
 
 class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextProviding {
     
-    
-    
     // MARK: - Properties
     let logoLabel = UILabel().then {
-        $0.font = UIFont(name: "Pretendard-Bold", size: 64)
-        $0.text = "DRBS:"
-        $0.textAlignment = .center
+        $0.font = UIFont(name: "Pretendard-SemiBold", size: 32)
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.1
+        $0.attributedText = NSMutableAttributedString(string: "작은 것도\n하나하나 꼼꼼한\n부동산 체크리스트", attributes: [NSAttributedString.Key.kern: -0.3, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        $0.textAlignment = .left
         $0.textColor = .white
+        $0.numberOfLines = 0
+        $0.lineBreakMode = .byWordWrapping
     }
     
     let subtitleLabel = UILabel().then {
-        $0.font = UIFont(name: "Pretendard-Bold", size: 18)
-        $0.text = "HomeComing"
-        $0.textAlignment = .center
+        $0.font = UIFont(name: "Pretendard-Medium", size: 16)
+        $0.text = "도라방스와 함께 해보세요."
+        $0.textAlignment = .left
         $0.textColor = .white
-    }
-    
-    private lazy var appleLoginButton = UIButton(type: .custom).then {
-        $0.setImage(UIImage(named: "login-apple-button"), for: .normal)
-        $0.imageView?.contentMode = .scaleAspectFit
-        $0.addTarget(self, action: #selector(appleLoginButtonTapped), for: .touchUpInside)
     }
     
     private lazy var kakaoLoginButton = UIButton(type: .custom).then {
@@ -56,12 +52,12 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     
     let labelsStack = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 0
+        $0.spacing = 8
     }
     
     let buttonsStack = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 10
+        $0.spacing = 12
     }
     
     private lazy var authVM: AuthViewModel = AuthViewModel()
@@ -82,7 +78,6 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
         view.layer.insertSublayer(gradientLayer, at: 0)
         
         labelsStack.addArrangedSubviews(logoLabel, subtitleLabel)
-        //        buttonsStack.addArrangedSubviews(appleLoginButton, kakaoLoginButton)
         buttonsStack.addArrangedSubviews(authorizationAppleIDButton, kakaoLoginButton)
         
         view.addSubviews(labelsStack, buttonsStack, versionLabel)
@@ -96,15 +91,15 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
             $0.height.equalTo(54)
         }
         labelsStack.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(200)
-            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(170)
+            $0.leading.equalToSuperview().offset(28)
         }
         buttonsStack.snp.makeConstraints {
-            $0.bottom.equalTo(versionLabel.snp.top).offset(-120)
+            $0.bottom.equalTo(versionLabel.snp.top).offset(-56)
             $0.centerX.equalToSuperview()
         }
         versionLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-47)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(0)
             $0.centerX.equalToSuperview()
         }
     }

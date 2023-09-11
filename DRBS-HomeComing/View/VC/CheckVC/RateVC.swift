@@ -99,7 +99,7 @@ final class RateVC: UIViewController {
             $0.leading.equalToSuperview().offset(23)
             $0.width.equalTo(self.view.frame.width - 46)
             $0.height.equalTo(30)}
-    
+        
         imageStackView.snp.makeConstraints {
             $0.centerX.equalTo(mainTitleLabel)
             $0.width.equalTo(subTitleLabel)
@@ -126,7 +126,7 @@ final class RateVC: UIViewController {
     private func removeNavStack() {
     
     }
-
+    
     
     
     //MARK: - Actions
@@ -152,12 +152,14 @@ final class RateVC: UIViewController {
             self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
             self.houseViewModel.makeHouseModel()
             NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
             return
         }
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)
         
         var dataToUpdate: [String: Any] = [:]
-        if let name = houseViewModel.name { dataToUpdate["title"] = name } // guard let 사용하면 nil일때 에러날 것 같아서
+        if let name = houseViewModel.name { dataToUpdate["title"] = name }
         if let address = houseViewModel.address { dataToUpdate["address"] = address }
         
         if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }
@@ -172,14 +174,20 @@ final class RateVC: UIViewController {
         if let 계약기간 = houseViewModel.계약기간 { dataToUpdate["contractTerm"] = 계약기간 }
         if let 메모 = houseViewModel.memo { dataToUpdate["memo"] = 메모 }
         
+        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
         if let rate = houseViewModel.rate { dataToUpdate["rate"] = rate }
-        
+        if let checkList = houseViewModel.checkList {
+            let checkListDict = try? checkList.asDictionary
+            dataToUpdate["checkList"] = checkListDict
+        }
         houseRef.updateData(dataToUpdate) { (error) in
             if let error = error {
                 print("Failed to update house: \(error.localizedDescription)")
                 return
             }
             print("Successfully updated house!")
+            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
         }
     }
 }

@@ -2,13 +2,17 @@ import UIKit
 import Then
 import SnapKit
 
-class NoDataView: UIView {
+final class NoDataView: UIView {
+    
+    // MARK: - Properties
     
     private let messageLabel = UILabel().then {
         $0.textColor = .darkGray
         $0.textAlignment = .center
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    // MARK: - Initialization
     
     init(message: String) {
         super.init(frame: .zero)
@@ -18,6 +22,8 @@ class NoDataView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Helpers
     
     private func configureUI(message: String) {
         self.translatesAutoresizingMaskIntoConstraints = false

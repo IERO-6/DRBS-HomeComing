@@ -7,6 +7,7 @@ final class DetailVC: UIViewController {
     
     //MARK: - Properties
     
+    private let noDataView = CategoryNoDataView()
     private lazy var tableView = UITableView()
     var houseViewModel = HouseViewModel()
     private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
@@ -24,13 +25,21 @@ final class DetailVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         configureNav()
         bannerView.load(GADRequest())
+        
+        if houseViewModel.houses.isEmpty {
+            tableView.isHidden = true
+            noDataView.isHidden = false
+        } else {
+            tableView.isHidden = false
+            noDataView.isHidden = true
+        }
     }
     
     //MARK: - Helpers
     
     private func configureUI() {
         view.backgroundColor = .white
-        view.addSubviews(tableView, bannerView)
+        view.addSubviews(tableView, bannerView, noDataView)
         
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // TestID
         bannerView.rootViewController = self
@@ -44,6 +53,12 @@ final class DetailVC: UIViewController {
         tableView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
             $0.bottom.equalTo(bannerView.snp.top)
+        }
+        
+        noDataView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(bannerView.snp.top)
+            $0.leading.trailing.equalToSuperview()
         }
     }
     
@@ -78,6 +93,7 @@ extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.detailCell.rawValue, for: indexPath) as! DetailCell
         cell.house = self.houseViewModel.houses[indexPath.row]
+        cell.updateUIForImages() // 이미지가 없을때, 메모를 위오 올리는 함수실행
         return cell
     }
     
