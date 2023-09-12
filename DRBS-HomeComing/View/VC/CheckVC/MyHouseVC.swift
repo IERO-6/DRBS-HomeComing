@@ -480,8 +480,8 @@ final class MyHouseVC: UIViewController {
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightImage.png",
-            "수도": "waterImage.png",
-            "TV": "tvImage.png",
+            "수도": "WaterImage.png",
+            "TV": "TVImage.png",
             "인터넷": "internetImage.png"
         ]
         for (key, imageName) in imageMapping {
@@ -518,11 +518,9 @@ final class MyHouseVC: UIViewController {
         if !houseImages.isEmpty {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
-            self.mainImageView.image = UIImage(named: "emptyImage")
+            self.mainImageView.image = UIImage(named: "default-empty-Image")
         }
-
-        self.imageCount.text = "+" + String(houseImages.count - 1)
-
+        self.imageCount.text = houseImages.isEmpty ? "0" : "+" + String(houseImages.count - 1)
         self.nameLabel.text = house.title ?? ""
 
         self.rateLabel.text = String(house.별점 ?? 0.0)
@@ -602,7 +600,5 @@ final class MyHouseVC: UIViewController {
         myHouseImageVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseImageVC, animated: true)
     }
-    
-    
 }
 
