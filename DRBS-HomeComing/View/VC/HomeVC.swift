@@ -67,7 +67,7 @@ final class HomeVC: UIViewController {
     private func settingTV() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = self.view.frame.height/4.5
+        tableView.rowHeight = self.view.frame.height/3.8
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         tableView.separatorStyle = .none
     }
@@ -114,11 +114,9 @@ final class HomeVC: UIViewController {
                 self.allHouseModels?.remove(at: index)
             }
         }
-        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-        print("호출")
     }
 }
 

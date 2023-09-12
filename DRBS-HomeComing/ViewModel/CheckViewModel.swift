@@ -17,13 +17,9 @@ class CheckViewModel {
     var 곰팡이: [String] = []
     
     //MARK: - Output
-        
     var onCompleted: (CheckList?) -> Void = { _ in }
 
-    
     //MARK: - Input
-    
-   
     
     //MARK: - Logics
     func makeCheckListModel() -> CheckList {

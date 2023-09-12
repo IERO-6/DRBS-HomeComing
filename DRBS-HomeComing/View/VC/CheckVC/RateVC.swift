@@ -10,6 +10,9 @@ final class RateVC: UIViewController {
     
     var house: House?
     
+    var from: String = ""
+
+    
     private let mainTitleLabel = UILabel().then {
         $0.text = "체크리스트 평가"
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
@@ -78,7 +81,6 @@ final class RateVC: UIViewController {
         super.viewDidLoad()
         configureUI()
         settingModal()
-        print("houseID = \(house?.houseId)")
         
     }
     //MARK: - Helpers
@@ -125,10 +127,7 @@ final class RateVC: UIViewController {
     }
     
     private func removeNavStack() {
-        //처음화면으로 돌아가는 메서드
-        //쌓인 네비게이션 스택을 제거하고 돌아가기...?쉽지 않다.
-        //        self.dismiss(animated: true, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
-        //여기서 completion을 통해 뭔갈 할 수 있을 것 같기도 하고..?
+    
     }
     
     
@@ -153,12 +152,29 @@ final class RateVC: UIViewController {
     
     @objc func saveButtonTapped() {
         guard let houseId = house?.houseId else {
-            self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
-            self.houseViewModel.makeHouseModel()
-            NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
-            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
-            return
+            self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
+            if self.from == "map" {
+                DispatchQueue.global().async {
+                    self.houseViewModel.makeHouseModel()
+                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                    DispatchQueue.main.async {
+                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                        sceneDelegate?.changeRootViewControllerToMap(Tabbar(), animated: true)
+                    }
+                }
+                return
+            } else {
+                DispatchQueue.global().async {
+                    self.houseViewModel.makeHouseModel()
+                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                    DispatchQueue.main.async {
+                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                        sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                    }
+                }
+                return
+            }
+
         }
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)
         
