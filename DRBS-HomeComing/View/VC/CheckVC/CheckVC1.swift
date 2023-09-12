@@ -113,6 +113,8 @@ final class CheckVC1: UIViewController {
         $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
+    var from: String = ""
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -364,6 +366,7 @@ final class CheckVC1: UIViewController {
                 let checkVC2 = CheckVC2()
                 checkVC2.house = self.house
                 checkVC2.houseViewModel = self.houseViewModel
+                checkVC2.from = self.from
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }
         }

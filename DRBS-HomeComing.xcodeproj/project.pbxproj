@@ -55,6 +55,7 @@
 		21B6276A2A83841200081D5E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627692A83841200081D5E /* SearchCell.swift */; };
 		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
 		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
+		21EDC5002AAEF6DD005575AA /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 21EDC4FF2AAEF6DD005575AA /* config.xcconfig */; };
 		21F954152A9F78DD00F395B0 /* BookMarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F954142A9F78DD00F395B0 /* BookMarkCell.swift */; };
 		B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B386B08A2A8EAA8200E68A2D /* LoginVC.swift */; };
 		B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B08D2A8F140500E68A2D /* Pretendard-SemiBold.otf */; };
@@ -132,6 +133,7 @@
 		21B6276B2A83844400081D5E /* ModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalVC.swift; sourceTree = "<group>"; };
 		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
 		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		21EDC4FF2AAEF6DD005575AA /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		21F954142A9F78DD00F395B0 /* BookMarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCell.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,7 +153,6 @@
 		B38C34D82AAB8F1700F8E3EF /* MyHouseImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageVC.swift; sourceTree = "<group>"; };
 		B38C34DA2AAB8F3100F8E3EF /* MyHouseImageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageDetailVC.swift; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		EB2338CD2AA244AA00DE6450 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		EBD42DAE2AAC704A00568ED0 /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		EBD42DB22AACBE3400568ED0 /* CategoryNoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryNoDataView.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -264,7 +265,7 @@
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				EB2338CD2AA244AA00DE6450 /* config.xcconfig */,
+				21EDC4FF2AAEF6DD005575AA /* config.xcconfig */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -486,6 +487,7 @@
 				B386B0982A8F140500E68A2D /* Pretendard-Regular.otf in Resources */,
 				B386B09B2A8F140500E68A2D /* Pretendard-ExtraBold.otf in Resources */,
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
+				21EDC5002AAEF6DD005575AA /* config.xcconfig in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
 				B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */,
@@ -641,7 +643,7 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* config.xcconfig */;
+			baseConfigurationReference = 21EDC4FF2AAEF6DD005575AA /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -703,7 +705,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2338CD2AA244AA00DE6450 /* config.xcconfig */;
+			baseConfigurationReference = 21EDC4FF2AAEF6DD005575AA /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -768,7 +770,7 @@
 				CODE_SIGN_ENTITLEMENTS = "DRBS-HomeComing/DRBS-HomeComing.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5L4BQJJ3H8;
 				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;

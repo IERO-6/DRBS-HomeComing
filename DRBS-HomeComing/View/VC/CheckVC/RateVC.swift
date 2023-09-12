@@ -10,6 +10,9 @@ final class RateVC: UIViewController {
     
     var house: House?
     
+    var from: String = ""
+
+    
     private let mainTitleLabel = UILabel().then {
         $0.text = "체크리스트 평가"
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
@@ -149,12 +152,29 @@ final class RateVC: UIViewController {
     
     @objc func saveButtonTapped() {
         guard let houseId = house?.houseId else {
-            self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
-            self.houseViewModel.makeHouseModel()
-            NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
-            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
-            return
+            self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
+            if self.from == "map" {
+                DispatchQueue.global().async {
+                    self.houseViewModel.makeHouseModel()
+                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                    DispatchQueue.main.async {
+                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                        sceneDelegate?.changeRootViewControllerToMap(Tabbar(), animated: true)
+                    }
+                }
+                return
+            } else {
+                DispatchQueue.global().async {
+                    self.houseViewModel.makeHouseModel()
+                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                    DispatchQueue.main.async {
+                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                        sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                    }
+                }
+                return
+            }
+
         }
         let houseRef = Firestore.firestore().collection("Homes").document(houseId)
         

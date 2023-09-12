@@ -253,6 +253,9 @@ final class CheckVC2: UIViewController {
     
     private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     
+    var from: String = ""
+
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -665,6 +668,7 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.계약기간 = self.계약기간TextField.text
         self.houseViewModel.memo = self.memoTextView.text
         rateVC.houseViewModel = self.houseViewModel
+        rateVC.from = self.from
         self.present(rateVC, animated: true)
     }
     
