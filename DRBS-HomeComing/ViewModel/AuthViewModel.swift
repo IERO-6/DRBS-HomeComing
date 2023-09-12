@@ -9,6 +9,8 @@ import UIKit
 import KakaoSDKAuth
 import KakaoSDKUser
 import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
 
 final class AuthViewModel {
     //MARK: - Model
@@ -152,6 +154,48 @@ final class AuthViewModel {
         
         /// 관련 UserDefault 제거
         UserDefaults.standard.removeObject(forKey: "social")
+        
+        /// 관련 데이터 제거
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let pathToDelete = "\(uid)"
+        let storage = Storage.storage().reference()
+        let listRef = storage.child("\(uid)")
+        listRef.listAll { (result, error) in
+            if let error = error {
+                print("Error listing files: \(error.localizedDescription)")
+                return
+            }
+            guard let result = result else { return }
+            for item in result.items {
+                item.delete { error in
+                    if let error = error { print("Error deleting file: \(error.localizedDescription)")
+                    } else { print("File deleted successfully: \(item.name)") }
+                }
+            }
+            listRef.delete { error in
+                if let error = error {
+                    print("Error deleting path: \(error.localizedDescription)")
+                } else { print("Path deleted successfully: \(pathToDelete)") }
+            }
+        }
+        
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("Homes")
+        collectionRef.whereField("uid", isEqualTo: uid).getDocuments { snapshot, error in
+            if let error = error {
+                    print("Error getting documents: \(error.localizedDescription)")
+                } else {
+                    for document in snapshot!.documents {
+                        document.reference.delete { error in
+                            if let error = error {
+                                print("Error deleting document: \(error.localizedDescription)")
+                            } else {
+                                print("Document deleted successfully.")
+                            }
+                        }
+                    }
+                }
+        }
         
         /// Firebase Auth 회원탈퇴
         NetworkingManager.shared.authDelete()
