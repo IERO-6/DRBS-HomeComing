@@ -615,9 +615,9 @@ extension MyHouseVC {
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
-                $0.leading.equalTo(mainView.snp.bottom)
+                $0.leading.equalToSuperview()
                 $0.height.equalTo(30)
-                $0.bottom.equalToSuperview().offset(-60)
+                $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
             maintenanceCostLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)

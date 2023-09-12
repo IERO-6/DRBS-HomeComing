@@ -79,7 +79,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18467D9F2AB08E07002C21CE /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		18467DA02AB09220002C21CE /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		186335592A8A0D0B00E283D5 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckViewModel.swift; sourceTree = "<group>"; };
@@ -264,7 +264,7 @@
 				218ACDF82A75264500687EE6 /* View */,
 				218ACDFA2A75266A00687EE6 /* ViewModel */,
 				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
-				18467D9F2AB08E07002C21CE /* config.xcconfig */,
+				18467DA02AB09220002C21CE /* config.xcconfig */,
 				EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
 			);
