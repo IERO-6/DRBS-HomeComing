@@ -4,6 +4,8 @@ import Then
 import SnapKit
 import MapKit
 import FirebaseFirestore
+import FirebaseStorage
+import FirebaseAuth
 
 final class MyHouseVC: UIViewController {
     //MARK: - Properties
@@ -158,22 +160,22 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.text = "체크 리스트"
     }
-    lazy var checkListView = CheckListUIView()
-    var houseViewModel: HouseViewModel?
-    var selectedHouse: House? {
-        didSet {
-            configureUIWithData()
-        }
-    }
     
+    lazy var checkListView = CheckListUIView()
+    
+    var houseViewModel: HouseViewModel?
+    
+    var selectedHouse: House? {
+        didSet { self.configureUIWithData() }
+    }
     var sendHouseImages: [String] = []
+    var from: String = ""
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         settingNav()
-        fetchSelectedHouseData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -190,6 +192,9 @@ final class MyHouseVC: UIViewController {
     
     //MARK: - Helpers
     private func configureUI() {
+        // 뷰에는 스크롤뷰
+        // 스크롤뷰에는 메인 이미지뷰, 메인뷰(이름주소별점관리비등등),지도뷰(지도 이름, 지도),
+        // 메모뷰(메모 이름, 메모, 메모글자수), 디테일뷰(면적, 입주가능일, 계약기간), 체크리스트
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -223,9 +228,9 @@ final class MyHouseVC: UIViewController {
                                 memoView,
                                 detailView,
                                 checkView)
-        
+
         contentView.snp.makeConstraints {$0.edges.width.equalTo(scrollView)}
-        
+
         mainImageView.snp.makeConstraints {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
@@ -342,7 +347,7 @@ final class MyHouseVC: UIViewController {
             $0.trailing.equalToSuperview().offset(-3)
             $0.height.equalTo(24)
         }
-        
+
         memoTextView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(3)
             $0.trailing.equalToSuperview().offset(-3)
@@ -401,6 +406,7 @@ final class MyHouseVC: UIViewController {
             $0.width.equalToSuperview()
         }
     }
+
     
     private func settingNav() {
         let appearance = UINavigationBarAppearance().then {
@@ -426,22 +432,19 @@ final class MyHouseVC: UIViewController {
         })
         
         let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            func deleteButtonTapped() {
-                if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
-                    print("Deleting house ID: \(houseId)")
-                    NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
-                        if success {
-                            NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
-                            self.navigationController?.popViewController(animated: true)
-                        } else {
-                            print("집을 지우지 못했습니다.")
-                        }
+            if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
+                print("Deleting house ID: \(houseId)")
+                NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
+                    if success {
+                        NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
+                        self.navigationController?.popViewController(animated: true)
+                    } else {
+                        print("집을 지우지 못했습니다.")
                     }
-                } else {
-                    print("houseId is not founded")
                 }
+            } else {
+                print("houseId is not founded")
             }
-            deleteButtonTapped()
         })
         
         ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
@@ -452,9 +455,10 @@ final class MyHouseVC: UIViewController {
         navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
     }
     
-    private func configureUIWithData() {
-        
-        guard let house = selectedHouse else { return }
+    
+    //MARK: - UI
+    func configureUIWithData() {
+        guard let house = self.selectedHouse else { return }
         self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             switch house.livingType ?? "" {
@@ -468,18 +472,10 @@ final class MyHouseVC: UIViewController {
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
             }
         }
-        
-        guard let selectedHouse = selectedHouse else { return }
-        maintenanceLabel.isHidden = selectedHouse.관리비?.isEmpty ?? true
-        maintenanceCostLabel.isHidden = selectedHouse.관리비?.isEmpty ?? true
-        noneMaintenanceLabel.isHidden = selectedHouse.관리비미포함목록?.isEmpty ?? true
-        noneMaintenanceImagesStackView.isHidden = selectedHouse.관리비미포함목록?.isEmpty ?? true
-        
+
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
-        
         guard let houseImages = house.사진 else { return }
         sendHouseImages = houseImages
-//        let images = houseImages.map{$0.toImage()}
         var selectedImages: [UIImage] = []
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
@@ -502,15 +498,15 @@ final class MyHouseVC: UIViewController {
                 selectedImages.append(placeholder)
             }
         }
-        
-        let image = UIImage(systemName: "photo.on.rectangle")
+
+//        let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-                
+
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -524,43 +520,46 @@ final class MyHouseVC: UIViewController {
         } else {
             self.mainImageView.image = UIImage(named: "emptyImage")
         }
-        
+
         self.imageCount.text = "+" + String(houseImages.count - 1)
-        
+
         self.nameLabel.text = house.title ?? ""
-        
+
         self.rateLabel.text = String(house.별점 ?? 0.0)
-        
+
         self.priceLabel.text = house.보증금! + "/" + house.월세!
-        
+
         self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
-        
+
         self.addressLabel.text = house.address ?? ""
-        
+
         self.livingTypeLabel.text = (house.livingType ?? "") + " "
-        
+
         self.tradingTypeLabel.text = house.tradingType ?? ""
-        
+
         self.mapView.setRegion(MKCoordinateRegion(center: house.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: false)
         self.mapView.addAnnotation(house)
         //span의 델타값이 작을수록 확대레벨 올라감
-        
+
         self.memoTextView.text = house.기록 ?? ""
-        
+
         self.textCountLabel.text = "(\((house.기록 ?? "").count)/500)"
-        
+
+        if (house.면적 ?? "0") == "0" {
+            self.면적ValueLabel.text = "정보가 없습니다"
+        }
+        if (house.입주가능일 ?? "").isEmpty {
+            self.입주가능일ValueLabel.text = "정보가 없습니다"
+        }
+        if (house.계약기간 ?? "").isEmpty {
+            self.계약기간ValueLabel.text = "정보가 없습니다"
+        }
         self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
-        
+
         self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? "")
-        
+
         self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
-        
-        
-    }
-    
-    private func fetchSelectedHouseData() {
-        guard let house = selectedHouse else { return }
-        
+
     }
     
     private func updateBookmarkButtonState() {
@@ -576,7 +575,6 @@ final class MyHouseVC: UIViewController {
     
     
     //MARK: - Actions
-    
     @objc func bookmarkButtonTapped(sender: UIButton) {
         guard let house = selectedHouse else { return }
         house.isBookMarked = !(house.isBookMarked ?? false)
@@ -600,13 +598,11 @@ final class MyHouseVC: UIViewController {
     }
     @objc func ImageButtonTapped() {
         let myHouseImageVC = MyHouseImageVC()
-        
         myHouseImageVC.houseImages = sendHouseImages
-//        myHouseImageVC.selectedHouse = house // House 객체 전달
-//        myHouseImageVC.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         myHouseImageVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseImageVC, animated: true)
     }
-
+    
     
 }
+

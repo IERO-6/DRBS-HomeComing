@@ -303,7 +303,6 @@ final class CheckListUIView: UIView {
                   let 보안array = checkList.보안,
                   let 곰팡이array = checkList.곰팡이 else { return }
             for 방음 in 방음array {
-                print(방음)
                 [self.방음우수button, self.방음보통button, self.방음미흡button].forEach { 버튼 in
                     if 방음 == 버튼.currentTitle ?? "" {
                         버튼.isSelected = true

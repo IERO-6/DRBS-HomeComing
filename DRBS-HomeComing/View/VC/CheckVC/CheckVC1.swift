@@ -113,6 +113,8 @@ final class CheckVC1: UIViewController {
         $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
+    var from: String = ""
+    
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -357,7 +359,6 @@ final class CheckVC1: UIViewController {
                 }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
-                //                self.houseViewModel.address = coordinate
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
@@ -365,6 +366,7 @@ final class CheckVC1: UIViewController {
                 let checkVC2 = CheckVC2()
                 checkVC2.house = self.house
                 checkVC2.houseViewModel = self.houseViewModel
+                checkVC2.from = self.from
                 self.navigationController?.pushViewController(checkVC2, animated: true)
             }
         }

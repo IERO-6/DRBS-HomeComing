@@ -66,6 +66,8 @@ class HouseViewModel {
     
     
     //MARK: - Logics
+   
+    
     func switchAddressToCLCoordinate2D(address: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
         // 도로명 주소를 위도와 경도로 변환하는 함수
         let geocoder = CLGeocoder()

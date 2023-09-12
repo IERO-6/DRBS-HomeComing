@@ -110,6 +110,7 @@ final class ModalVC: UIViewController {
         $0.setTitle("바로가기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.layer.cornerRadius = 8
+        $0.addTarget(self, action: #selector(goButtonTapped), for: .touchUpInside)
     }
     
     //MARK: - LifeCycle
@@ -268,7 +269,14 @@ final class ModalVC: UIViewController {
     
   
     //MARK: - Actions
-
+    @objc func goButtonTapped() {
+        dismiss(animated: true) {
+            let myHouseVC = MyHouseVC()
+            myHouseVC.selectedHouse = self.houseViewModel.house
+            myHouseVC.from = "map"
+            self.navigationController?.pushViewController(myHouseVC, animated: true)
+        }
+    }
 
 }
 

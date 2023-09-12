@@ -103,6 +103,9 @@ extension DetailVC : UITableViewDataSource {
 extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select \(indexPath.row)")
+        let myHouseVC = MyHouseVC()
+        myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
+        self.navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }
 
