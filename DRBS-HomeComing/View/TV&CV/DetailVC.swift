@@ -71,12 +71,11 @@ final class DetailVC: UIViewController {
     private func settingTV() {
         tableView.register(DetailCell.self, forCellReuseIdentifier: Constant.Identifier.detailCell.rawValue)
         tableView.dataSource = self
-        tableView.rowHeight = 290
+        tableView.rowHeight = 200 
         tableView.delegate = self
     }
     
     //MARK: - Actions
-    
     @objc public func plusButtonTapped() {
         let additionalVC = CheckVC1()
         additionalVC.hidesBottomBarWhenPushed = true
@@ -102,8 +101,9 @@ extension DetailVC : UITableViewDataSource {
 //MARK: - UITableViewDelegate
 extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select \(indexPath.row)")
         let myHouseVC = MyHouseVC()
+        self.navigationController?.pushViewController(myHouseVC, animated: true)
+        print("select \(indexPath.row)")
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
         self.navigationController?.pushViewController(myHouseVC, animated: true)
     }
