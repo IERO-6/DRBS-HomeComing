@@ -104,7 +104,6 @@ extension DetailVC : UITableViewDelegate {
         let myHouseVC = MyHouseVC()
         self.navigationController?.pushViewController(myHouseVC, animated: true)
         print("select \(indexPath.row)")
-        let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
         self.navigationController?.pushViewController(myHouseVC, animated: true)
     }
