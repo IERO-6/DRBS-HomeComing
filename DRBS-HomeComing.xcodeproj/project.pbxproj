@@ -152,6 +152,7 @@
 		B38C34D82AAB8F1700F8E3EF /* MyHouseImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageVC.swift; sourceTree = "<group>"; };
 		B38C34DA2AAB8F3100F8E3EF /* MyHouseImageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageDetailVC.swift; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		EBC426042AB08E00001B3FA5 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		EBD42DAE2AAC704A00568ED0 /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		EBD42DB22AACBE3400568ED0 /* CategoryNoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryNoDataView.swift; sourceTree = "<group>"; };
 		EBD8B7622A90A060005DCCFD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -234,6 +235,7 @@
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
+				EBC426042AB08E00001B3FA5 /* config.xcconfig */,
 				21B6276D2A8384D700081D5E /* MyLocation.gpx */,
 				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
@@ -776,10 +778,11 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -816,10 +819,11 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

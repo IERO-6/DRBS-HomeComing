@@ -17,17 +17,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="VZ8-ge-Q95">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="zzH-O9-izu">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="VZ8-ge-Q95" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="3ha-RB-UCY"/>
-                            <constraint firstAttribute="trailing" secondItem="VZ8-ge-Q95" secondAttribute="trailing" id="9EA-ir-ebJ"/>
-                            <constraint firstItem="VZ8-ge-Q95" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="NKw-iR-R5l"/>
-                            <constraint firstAttribute="bottom" secondItem="VZ8-ge-Q95" secondAttribute="bottom" id="vbF-Ro-kZL"/>
+                            <constraint firstAttribute="trailing" secondItem="zzH-O9-izu" secondAttribute="trailing" id="D3H-yl-VQf"/>
+                            <constraint firstAttribute="bottom" secondItem="zzH-O9-izu" secondAttribute="bottom" id="QsS-E7-b2h"/>
+                            <constraint firstItem="zzH-O9-izu" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="keD-nj-fEG"/>
+                            <constraint firstItem="zzH-O9-izu" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="x7j-Gs-K8Z"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,7 +37,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="1572" height="3408"/>
+        <image name="splash" width="524" height="1136"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

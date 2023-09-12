@@ -46,7 +46,6 @@ final class MyHouseVC: UIViewController {
         $0.clipsToBounds = true
         $0.layer.borderColor = Constant.appColor.cgColor
         $0.layer.borderWidth = 1
-        //        $0.sizeToFit()
     }
     private lazy var starImage = UIImageView().then {
         $0.image = UIImage(named: "star.png")
@@ -387,7 +386,9 @@ final class MyHouseVC: UIViewController {
             $0.configureWithOpaqueBackground()
             $0.backgroundColor = .white
             $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+            $0.shadowColor = nil
         }
+        
         navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.standardAppearance = appearance

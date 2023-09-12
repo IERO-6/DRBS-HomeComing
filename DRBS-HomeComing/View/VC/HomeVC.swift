@@ -39,7 +39,9 @@ final class HomeVC: UIViewController {
             $0.configureWithOpaqueBackground()
             $0.backgroundColor = .white
             $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+            $0.shadowColor = nil
         }
+        
         navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.standardAppearance = appearance
