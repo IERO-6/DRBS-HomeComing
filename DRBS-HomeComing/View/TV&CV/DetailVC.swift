@@ -71,7 +71,7 @@ final class DetailVC: UIViewController {
     private func settingTV() {
         tableView.register(DetailCell.self, forCellReuseIdentifier: Constant.Identifier.detailCell.rawValue)
         tableView.dataSource = self
-        tableView.rowHeight = 200 
+        tableView.rowHeight = 200
         tableView.delegate = self
     }
     
@@ -102,10 +102,9 @@ extension DetailVC : UITableViewDataSource {
 extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
-        self.navigationController?.pushViewController(myHouseVC, animated: true)
         print("select \(indexPath.row)")
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
-        self.navigationController?.pushViewController(myHouseVC, animated: true)
+//        self.navigationController?.pushViewController(myHouseVC, animated: true)
     }
 }
 
