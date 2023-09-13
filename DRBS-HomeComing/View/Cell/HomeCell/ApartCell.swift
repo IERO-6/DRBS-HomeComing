@@ -17,14 +17,15 @@ final class ApartCell: UICollectionViewCell {
                     self.cellImage.contentMode = .scaleAspectFill
                 } else {
                     let emptyImageView = UIImageView().then {
-                        $0.image = UIImage(systemName: "eye.slash")
+                        $0.image = UIImage(named: "default-empty-Image")
                         $0.tintColor = .darkGray
-                        $0.contentMode = .scaleAspectFill
+                        $0.contentMode = .scaleAspectFit
                     }
                     self.cellImage.addSubview(emptyImageView)
                     emptyImageView.snp.makeConstraints {
+//                        $0.edges.equalToSuperview()
                         $0.centerX.centerY.equalToSuperview()
-                        $0.width.height.equalTo(30)
+//                        $0.width.height.equalTo(30)
                     }
                 }
             }

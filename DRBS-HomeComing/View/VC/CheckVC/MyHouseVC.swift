@@ -494,11 +494,9 @@ final class MyHouseVC: UIViewController {
         if !houseImages.isEmpty {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
-            self.mainImageView.image = UIImage(named: "emptyImage")
+            self.mainImageView.image = UIImage(named: "default-empty-Image")
         }
-
-        self.imageCount.text = "+" + String(houseImages.count - 1)
-
+        self.imageCount.text = houseImages.isEmpty ? "0" : String(houseImages.count)
         self.nameLabel.text = house.title ?? ""
 
         self.rateLabel.text = String(house.별점 ?? 0.0)
@@ -647,4 +645,3 @@ extension MyHouseVC {
         }
     }
 }
-
