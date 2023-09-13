@@ -198,21 +198,27 @@ final class CheckListUIView: UIView {
         moldStack.spacing = 12
         moldStack.distribution = .fillEqually
         
+        let emptySpace = UIView()
         let checkListVstack = UIStackView(arrangedSubviews: [directionStack,
                                                              soundproofingStack,
                                                              waterPressureStack,
                                                              bugStack,
                                                              ventilationStack,
                                                              securityStack,
-                                                             moldStack])
+                                                             moldStack,
+                                                             emptySpace])
         checkListVstack.axis = .vertical
-        checkListVstack.spacing = 12
+        checkListVstack.spacing = 24
         
         backView.addSubview(checkListVstack)
         
         backView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(checkListVstack)
+        }
+        
+        emptySpace.snp.makeConstraints { make in
+                    make.height.equalTo(6)
         }
         
         checkListVstack.snp.makeConstraints {
@@ -248,7 +254,7 @@ final class CheckListUIView: UIView {
         parent.addSubview(underline)
         
         underline.snp.makeConstraints { make in
-            make.top.equalTo(stack.snp.bottom).offset(10)
+            make.top.equalTo(stack.snp.bottom).offset(12)
             make.centerX.equalTo(parent)
             make.width.equalTo(parent).multipliedBy(3.8 / 5.0)
             make.height.equalTo(1)

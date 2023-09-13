@@ -496,7 +496,7 @@ final class MyHouseVC: UIViewController {
         } else {
             self.mainImageView.image = UIImage(named: "default-empty-Image")
         }
-        self.imageCount.text = houseImages.isEmpty ? "0" : "+" + String(houseImages.count - 1)
+        self.imageCount.text = houseImages.isEmpty ? "0" : String(houseImages.count)
         self.nameLabel.text = house.title ?? ""
 
         self.rateLabel.text = String(house.별점 ?? 0.0)
