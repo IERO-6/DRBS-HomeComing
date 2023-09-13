@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "waterImage.png",
+      "filename" : "water.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "waterImage2.png",
+      "filename" : "water@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "waterImage3.png",
+      "filename" : "water@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
