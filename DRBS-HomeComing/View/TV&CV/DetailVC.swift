@@ -71,7 +71,7 @@ final class DetailVC: UIViewController {
     private func settingTV() {
         tableView.register(DetailCell.self, forCellReuseIdentifier: Constant.Identifier.detailCell.rawValue)
         tableView.dataSource = self
-        tableView.rowHeight = 200
+//        tableView.rowHeight =
         tableView.delegate = self
     }
     
@@ -92,7 +92,7 @@ extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.Identifier.detailCell.rawValue, for: indexPath) as! DetailCell
         cell.house = self.houseViewModel.houses[indexPath.row]
-        cell.updateUIForImages() // 이미지가 없을때, 메모를 위오 올리는 함수실행
+//        cell.updateUIForImages() // 이미지가 없을때, 메모를 위오 올리는 함수실행
         return cell
     }
     
@@ -102,9 +102,16 @@ extension DetailVC : UITableViewDataSource {
 extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
-        print("select \(indexPath.row)")
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
 //        self.navigationController?.pushViewController(myHouseVC, animated: true)
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (self.houseViewModel.houses[indexPath.row].사진 ?? []).count {
+        case 0:
+            return 220
+        default:
+            return 280
+        }
     }
 }
 

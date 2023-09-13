@@ -117,7 +117,9 @@ final class DetailCell: UITableViewCell {
         self.addSubview(contentView)
         contentView.addSubviews(backView)
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
-                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel , memoTextView)
+                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel ,
+                             imageStackView ,memoTextView)
+        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
         contentView.snp.makeConstraints {$0.edges.equalToSuperview()}
         backView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
@@ -173,11 +175,47 @@ final class DetailCell: UITableViewCell {
             $0.height.equalTo(30)
             $0.width.equalTo(backView)
         }
-       
+        imageStackView.snp.makeConstraints {
+            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo((self.contentView.frame.width-60)/4)
+        }
+        memoTextView.snp.makeConstraints {
+            $0.top.equalTo(imageStackView.snp.bottom).offset(12)
+            $0.leading.trailing.equalTo(backView)
+            $0.height.equalTo(62)
+        }
         
     }
     private func configureUIWithData() {
-        guard let house = house else { return }
+        guard let house = self.house else { return }
+        guard let houseImages = house.사진 else { return }
+        if houseImages.isEmpty {
+            print("emptymethod")
+            memoTextView.snp.makeConstraints {
+                $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+                $0.leading.trailing.equalTo(backView)
+                $0.height.equalTo(62)
+            }
+            backView.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(10)
+                $0.leading.equalToSuperview().offset(15)
+                $0.trailing.equalToSuperview().offset(-15)
+                $0.bottom.equalTo(memoTextView.snp.bottom).offset(10)
+            }
+        }
+        DispatchQueue.main.async {
+            switch house.livingType ?? "" {
+            case "아파트/오피스텔":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
+            case "빌라/주택":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(80)}
+            case "원룸/투룸+":
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            default:
+                self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
+            }
+        }
         self.nameLabel.text = house.title!
         self.rateLabel.text = String(house.별점!)
         self.addressLabel.text = house.address!
@@ -193,7 +231,9 @@ final class DetailCell: UITableViewCell {
             self.bookMarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         }
 
+        
         guard let houseImages = house.사진 else { return }
+
         switch houseImages.count {
         case 1:
             self.firstImageView.sd_setImage(with: URL(string: houseImages[0]))
