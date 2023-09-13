@@ -77,7 +77,7 @@ final class SettingVC: UIViewController {
         
         view.addSubviews(settingTableView, bannerView)
         
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716" // TestID
+        bannerView.adUnitID = "ca-app-pub-5665531154477823/9914288196"
         bannerView.rootViewController = self
         bannerView.backgroundColor = settingTableView.backgroundColor
 
