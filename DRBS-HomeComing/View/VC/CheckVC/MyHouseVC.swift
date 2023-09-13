@@ -539,7 +539,7 @@ final class MyHouseVC: UIViewController {
     private func updateBookmarkButtonState() {
         guard let house = selectedHouse else { return }
         let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
-        
+
         guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
               rightBarButtonItems.count > 1,
               let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
@@ -567,7 +567,6 @@ final class MyHouseVC: UIViewController {
     }
     
     @objc func ellipsisButtonTapped() {
-        print("e")
         
     }
     @objc func ImageButtonTapped() {

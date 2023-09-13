@@ -144,7 +144,7 @@ final class CheckVC2: UIViewController {
     private let 입주가능일 = UILabel().then { $0.text = "입주 가능일" }
     
     private lazy var 입주가능일button = UIButton().then {
-        $0.setTitle("e) 23.08.28", for: .normal)
+        $0.setTitle("ex) 23.08.28", for: .normal)
         $0.setTitleColor(UIColor.systemGray4, for: .normal)
         $0.contentHorizontalAlignment = .right
         $0.addTarget(self, action: #selector(textFieldTapped), for: .touchUpInside)}

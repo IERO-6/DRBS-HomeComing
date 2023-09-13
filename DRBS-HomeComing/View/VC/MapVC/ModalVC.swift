@@ -105,13 +105,13 @@ final class ModalVC: UIViewController {
         $0.textContainer.lineBreakMode = .byTruncatingTail
     }
     
-    private lazy var goButton = UIButton().then {
-        $0.backgroundColor = Constant.appColor
-        $0.setTitle("바로가기", for: .normal)
-        $0.setTitleColor(UIColor.white, for: .normal)
-        $0.layer.cornerRadius = 8
-        $0.addTarget(self, action: #selector(goButtonTapped), for: .touchUpInside)
-    }
+//    private lazy var goButton = UIButton().then {
+//        $0.backgroundColor = Constant.appColor
+//        $0.setTitle("바로가기", for: .normal)
+//        $0.setTitleColor(UIColor.white, for: .normal)
+//        $0.layer.cornerRadius = 8
+//        $0.addTarget(self, action: #selector(goButtonTapped), for: .touchUpInside)
+//    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -129,9 +129,7 @@ final class ModalVC: UIViewController {
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
                             addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel,
                              imageContainView,
-//                             firstImageView,
-//                             secondImageView, thirdImageView, fourthImageView,
-                                memoTextView, goButton)
+                                memoTextView)
         backView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(50)
             $0.leading.equalToSuperview().offset(20)
@@ -201,11 +199,11 @@ final class ModalVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
-        goButton.snp.makeConstraints {
-            $0.top.equalTo(memoTextView.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(50)
-        }
+//        goButton.snp.makeConstraints {
+//            $0.top.equalTo(memoTextView.snp.bottom).offset(20)
+//            $0.leading.trailing.equalToSuperview()
+//            $0.height.equalTo(50)
+//        }
         
     }
     
@@ -269,14 +267,14 @@ final class ModalVC: UIViewController {
     
   
     //MARK: - Actions
-    @objc func goButtonTapped() {
-        dismiss(animated: true) {
-            let myHouseVC = MyHouseVC()
-            myHouseVC.selectedHouse = self.houseViewModel.house
-            myHouseVC.from = "map"
-            self.navigationController?.pushViewController(myHouseVC, animated: true)
-        }
-    }
+//    @objc func goButtonTapped() {
+//        dismiss(animated: true) {
+//            let myHouseVC = MyHouseVC()
+//            myHouseVC.selectedHouse = self.houseViewModel.house
+//            myHouseVC.from = "map"
+//            self.navigationController?.pushViewController(myHouseVC, animated: true)
+//        }
+//    }
 
 }
 
