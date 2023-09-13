@@ -124,24 +124,24 @@ extension HouseTVCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch self.indexPath {
-            case 0:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.apartCell.rawValue, for: indexPath) as! ApartCell
-                cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
-                return cell
-            case 1:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.villaCell.rawValue, for: indexPath) as! VillaCell
-                cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
-                return cell
-            case 2:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
-                cell.oneRoomHouse = self.houses.filter{ $0.livingType! == "원룸/투룸+" }[indexPath.row]
-                return cell
-            case 3:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell
-                cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
-                return cell
-            default:
-                return UICollectionViewCell()
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.apartCell.rawValue, for: indexPath) as! ApartCell
+            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
+            return cell
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.villaCell.rawValue, for: indexPath) as! VillaCell
+            cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
+            return cell
+        case 2:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
+            cell.oneRoomHouse = self.houses.filter { $0.livingType! == "원룸/투룸+" }[indexPath.row]
+            return cell
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell
+            cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
+            return cell
+        default:
+            return UICollectionViewCell()
         }
     }
     
@@ -158,7 +158,6 @@ extension HouseTVCell: UICollectionViewDataSource {
 
 extension HouseTVCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //셀 선택 됐을 때 해당 셀의 Id를 통해 파이어베이스에서 받아온 데이터로 디테일VC를 띄움
         switch self.indexPath {
             case 0:
                 self.cellselectedDelegate?.cellselected(houseTVCell: self, house: self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row])

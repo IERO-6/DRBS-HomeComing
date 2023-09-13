@@ -179,6 +179,7 @@ final class MyHouseVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        updateUIForImages()
         updateBookmarkButtonState()
     }
     
@@ -201,11 +202,7 @@ final class MyHouseVC: UIViewController {
         imageBackButton.addSubviews(photoImage, imageCount)
         mainView.addSubviews(firstContainView,
                              addressLabel,
-                             secondContainView,
-                             maintenanceLabel,
-                             maintenanceCostLabel,
-                             noneMaintenanceLabel,
-                             noneMaintenanceImagesStackView)
+                             secondContainView)
         firstContainView.addSubviews(nameLabel,
                                      livingTypeLabel,
                                      starImage,
@@ -293,29 +290,6 @@ final class MyHouseVC: UIViewController {
         priceLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalTo(tradingTypeLabel.snp.trailing).offset(10)
-        }
-        maintenanceLabel.snp.makeConstraints {
-            $0.top.equalTo(secondContainView.snp.bottom).offset(5)
-            $0.leading.equalToSuperview()
-            $0.height.equalTo(30)
-            $0.bottom.equalToSuperview().offset(-60)
-        }
-        maintenanceCostLabel.snp.makeConstraints {
-            $0.top.equalTo(secondContainView.snp.bottom).offset(5)
-            $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
-            $0.height.equalTo(30)
-            $0.trailing.equalToSuperview()
-        }
-        noneMaintenanceLabel.snp.makeConstraints {
-            $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
-            $0.leading.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-15)
-        }
-        noneMaintenanceImagesStackView.snp.makeConstraints {
-            $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
-            $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
-            $0.height.equalTo(36)
-            $0.width.equalTo(27*5 + 5*4)
         }
         mapStackView.snp.makeConstraints {
             $0.top.equalTo(mainView.snp.bottom).offset(30)
@@ -473,7 +447,8 @@ final class MyHouseVC: UIViewController {
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
             }
         }
-
+        
+        guard let selectedHouse = selectedHouse else { return }
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         guard let houseImages = house.사진 else { return }
         sendHouseImages = houseImages
@@ -602,7 +577,73 @@ final class MyHouseVC: UIViewController {
         myHouseImageVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(myHouseImageVC, animated: true)
     }
-    
-    
+}
+
+//MARK: - Extension
+extension MyHouseVC {
+    func updateUIForImages() {
+        guard let house = selectedHouse else { return }
+        if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) {
+            print("관리비, 미포함 have data")
+            mainView.addSubviews(maintenanceLabel, maintenanceCostLabel, noneMaintenanceLabel, noneMaintenanceImagesStackView)
+            maintenanceLabel.snp.makeConstraints {
+                $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+                $0.leading.equalToSuperview()
+                $0.height.equalTo(30)
+                $0.bottom.equalTo(mainView.snp.bottom).offset(-60)
+            }
+            maintenanceCostLabel.snp.makeConstraints {
+                $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+                $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
+                $0.height.equalTo(30)
+                $0.trailing.equalToSuperview()
+            }
+            noneMaintenanceLabel.snp.makeConstraints {
+                $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
+                $0.leading.equalToSuperview()
+                $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
+            }
+            noneMaintenanceImagesStackView.snp.makeConstraints {
+                $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
+                $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
+                $0.height.equalTo(36)
+                $0.width.equalTo(27*5 + 5*4)
+            }
+        } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
+            print("관리비미포함 is empty")
+            mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
+            maintenanceLabel.snp.makeConstraints {
+                $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+                $0.leading.equalToSuperview()
+                $0.height.equalTo(30)
+                $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
+            }
+            maintenanceCostLabel.snp.makeConstraints {
+                $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+                $0.leading.equalTo(maintenanceLabel.snp.trailing).offset(10)
+                $0.height.equalTo(30)
+                $0.trailing.equalToSuperview()
+            }
+        } else if (selectedHouse?.관리비?.isEmpty ?? true) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) { //관리비는 없고 미포함은 있는
+            print("관리비 is empty")
+            mainView.addSubviews(noneMaintenanceLabel, noneMaintenanceImagesStackView)
+            noneMaintenanceLabel.snp.makeConstraints {
+                $0.top.equalTo(secondContainView.snp.bottom).offset(5)
+                $0.leading.equalToSuperview()
+                $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
+            }
+            noneMaintenanceImagesStackView.snp.makeConstraints {
+                $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
+                $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
+                $0.height.equalTo(36)
+                $0.width.equalTo(27*5 + 5*4)
+            }
+        } else if selectedHouse?.관리비?.isEmpty ?? true && selectedHouse?.관리비미포함목록?.isEmpty ?? true {
+            print("all empty")
+            mainView.snp.makeConstraints {
+                $0.bottom.equalTo(priceLabel.snp.bottom).offset(20)
+            }
+        }
+    }
 }
 
