@@ -456,8 +456,8 @@ final class MyHouseVC: UIViewController {
         let imageMapping: [String: String] = [
             "가스": "gassImage.png",
             "전기": "lightImage.png",
-            "수도": "WaterImage.png",
-            "TV": "TVImage.png",
+            "수도": "waterImage.png",
+            "TV": "tvImage.png",
             "인터넷": "internetImage.png"
         ]
         for (key, imageName) in imageMapping {
