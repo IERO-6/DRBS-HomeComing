@@ -1,10 +1,3 @@
-//
-//  DetailTVCell.swift
-//  DRBS-HomeComing
-//
-//  Created by 김성호 on 2023/08/14.
-//
-
 import UIKit
 import Then
 import SnapKit
@@ -123,16 +116,14 @@ final class DetailCell: UITableViewCell {
         contentView.backgroundColor = .white
         self.addSubview(contentView)
         contentView.addSubviews(backView)
-        imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
         backView.addSubviews(nameLabel, starImageView, rateLabel, bookMarkButton,
-                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel,
-                             imageStackView, memoTextView)
+                            addressLabel, livingTypeLabel, tradingTypeLabel, priceLabel , memoTextView)
         contentView.snp.makeConstraints {$0.edges.equalToSuperview()}
         backView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.leading.equalToSuperview().offset(15)
             $0.trailing.equalToSuperview().offset(-15)
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(memoTextView.snp.bottom).offset(10)
         }
         bookMarkButton.snp.makeConstraints {
             $0.top.equalTo(backView)
@@ -159,16 +150,12 @@ final class DetailCell: UITableViewCell {
             $0.height.equalTo(30)
             $0.trailing.equalTo(starImageView.snp.leading).offset(-10)
         }
-        
-        
-        
         tradingTypeLabel.snp.makeConstraints {
             $0.trailing.equalTo(backView)
             $0.top.equalTo(nameLabel.snp.bottom).offset(10)
             $0.height.equalTo(30)
             $0.width.equalTo(40)
         }
-        
         livingTypeLabel.snp.makeConstraints {
             $0.trailing.equalTo(tradingTypeLabel.snp.leading).offset(-8)
             $0.top.equalTo(tradingTypeLabel)
@@ -185,18 +172,6 @@ final class DetailCell: UITableViewCell {
             $0.leading.equalTo(backView)
             $0.height.equalTo(30)
             $0.width.equalTo(backView)
-        }
-        
-        imageStackView.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo((self.contentView.frame.width-60)/4)
-        }
-
-        memoTextView.snp.makeConstraints {
-            $0.top.equalTo(imageStackView.snp.bottom).offset(12)
-            $0.leading.trailing.equalTo(backView)
-            $0.height.equalTo(62)
         }
        
         
@@ -217,6 +192,7 @@ final class DetailCell: UITableViewCell {
         case false:
             self.bookMarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         }
+
         guard let houseImages = house.사진 else { return }
         switch houseImages.count {
         case 1:
@@ -264,19 +240,24 @@ final class DetailCell: UITableViewCell {
 extension DetailCell {
     func updateUIForImages() {
         guard let houseImages = house?.사진 else { return }
-        
         // 이미지가 없을 때
         if houseImages.isEmpty {
-            self.imageStackView.isHidden = true
-            self.memoTextView.snp.remakeConstraints {
+            print("emptymethod")
+            memoTextView.snp.makeConstraints {
                 $0.top.equalTo(priceLabel.snp.bottom).offset(12)
                 $0.leading.trailing.equalTo(backView)
                 $0.height.equalTo(62)
             }
         } else {
-            self.imageStackView.isHidden = false
-            // 기존의 위치로 복구
-            self.memoTextView.snp.remakeConstraints {
+            print("notEmptyMethod")
+            imageStackView.addArrangedSubviews(firstImageView, secondImageView, thirdImageView, fourthImageView)
+            backView.addSubview(imageStackView) // 이미지가 있을 때, 이미지뷰와 스택뷰를 백뷰에 올림
+            imageStackView.snp.makeConstraints {
+                $0.top.equalTo(priceLabel.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo((self.contentView.frame.width-60)/4)
+            }
+            memoTextView.snp.makeConstraints {
                 $0.top.equalTo(imageStackView.snp.bottom).offset(12)
                 $0.leading.trailing.equalTo(backView)
                 $0.height.equalTo(62)
