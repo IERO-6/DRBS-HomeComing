@@ -16,7 +16,7 @@ final class OneroomCell: UICollectionViewCell {
                     self.cellImage.contentMode = .scaleAspectFill
                 } else {
                     let emptyImageView = UIImageView().then {
-                        $0.image = UIImage(systemName: "eye.slash")
+                        $0.image = UIImage(named: "default-empty-Image")
                         $0.tintColor = .darkGray
                         $0.contentMode = .scaleAspectFill
                     }
