@@ -101,7 +101,7 @@ final class CheckVC1: UIViewController {
     private let addressLabel = UILabel().then { $0.text = "주소*" }
     
     private lazy var addressTextField = UITextField().then {
-        $0.placeholder = "경기도 수원시 권선구 매실로 70"
+        $0.placeholder = "경기도 수원시 팔달구 덕영대로 924"
         $0.addTarget(self, action: #selector(textFieldEditingChanged(_:)), for: .editingChanged)
     }
     

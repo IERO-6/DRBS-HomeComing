@@ -103,7 +103,7 @@ extension DetailVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]
-        self.navigationController?.pushViewController(myHouseVC, animated: true)
+//        self.navigationController?.pushViewController(myHouseVC, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch (self.houseViewModel.houses[indexPath.row].사진 ?? []).count {
