@@ -7,19 +7,31 @@ final class HouseTVCell: UITableViewCell {
     var indexPath: Int?
     weak var cellselectedDelegate: CellSelectedDelegate?
     
-    var apartCellCount: Int?
-    var oneRoomCellCount: Int?
-    var villaCellCount: Int?
-    var bookmarkCellCount: Int?
+//    var apartCellCount: Int?
+//    var oneRoomCellCount: Int?
+//    var villaCellCount: Int?
+//    var bookmarkCellCount: Int?
+    
+    lazy var apartCell: [House] = []
+    lazy var oneRoomCell: [House] = []
+    lazy var villaCell: [House] = []
+    lazy var bookmarkCell: [House] = []
+    
     
     private let noDataView = NoDataView(message: "+ 버튼으로 체크리스트를 추가해보세요!")
     
     var houses: [House] = [] {
         didSet {
-            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸/투룸+"}.count
-            self.villaCellCount = houses.filter{$0.livingType! == "빌라/주택"}.count
-            self.apartCellCount = houses.filter{$0.livingType! == "아파트/오피스텔"}.count
-            self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
+//            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸/투룸+"}.count
+//            self.villaCellCount = houses.filter{$0.livingType! == "빌라/주택"}.count
+//            self.apartCellCount = houses.filter{$0.livingType! == "아파트/오피스텔"}.count
+//            self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
+            
+            self.oneRoomCell = houses.filter{$0.livingType! == "원룸/투룸+"}
+            self.villaCell = houses.filter{$0.livingType! == "빌라/주택"}
+            self.apartCell = houses.filter{$0.livingType! == "아파트/오피스텔"}
+            self.bookmarkCell = houses.filter{$0.isBookMarked! == true}
+            
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
                 self.updatePlaceholderView()
@@ -86,13 +98,13 @@ final class HouseTVCell: UITableViewCell {
     private func updatePlaceholderView() {
         switch self.indexPath {
             case 0:
-                self.noDataView.isHidden = (self.apartCellCount ?? 0) > 0
+            self.noDataView.isHidden = (self.apartCell.count) > 0
             case 1:
-                self.noDataView.isHidden = (self.villaCellCount ?? 0) > 0
+            self.noDataView.isHidden = (self.villaCell.count) > 0
             case 2:
-                self.noDataView.isHidden = (self.oneRoomCellCount ?? 0) > 0
+            self.noDataView.isHidden = (self.oneRoomCell.count) > 0
             case 3:
-                self.noDataView.isHidden = (self.bookmarkCellCount ?? 0) > 0
+            self.noDataView.isHidden = (self.bookmarkCell.count) > 0
             default:
                 self.noDataView.isHidden = true
         }
@@ -106,17 +118,22 @@ extension HouseTVCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch self.indexPath {
             case 0:
-                guard let count = apartCellCount else { return 0 }
-                return count
+//                guard let count = apartCellCount else { return 0 }
+//                return count
+            return self.apartCell.count
             case 1:
-                guard let count = villaCellCount else { return 0 }
-                return count
+//                guard let count = villaCellCount else { return 0 }
+//                return count
+            return self.villaCell.count
+
             case 2:
-                guard let count = oneRoomCellCount else { return 0 }
-                return count
+//                guard let count = oneRoomCellCount else { return 0 }
+//                return count
+            return self.oneRoomCell.count
             case 3:
-                guard let count = bookmarkCellCount else { return 0 }
-                return count
+//                guard let count = bookmarkCellCount else { return 0 }
+//                return count
+            return self.bookmarkCell.count
             default:
                 return 10
         }
@@ -126,19 +143,23 @@ extension HouseTVCell: UICollectionViewDataSource {
         switch self.indexPath {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.apartCell.rawValue, for: indexPath) as! ApartCell
-            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
+//            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
+            cell.apartHouse = self.apartCell[indexPath.row]
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.villaCell.rawValue, for: indexPath) as! VillaCell
-            cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
+//            cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
+            cell.villaHouse = self.villaCell[indexPath.row]
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
-            cell.oneRoomHouse = self.houses.filter { $0.livingType! == "원룸/투룸+" }[indexPath.row]
+//            cell.oneRoomHouse = self.houses.filter { $0.livingType! == "원룸/투룸+" }[indexPath.row]
+            cell.oneRoomHouse = self.oneRoomCell[indexPath.row]
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell
-            cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
+//            cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
+            cell.bookmarkHouse = self.bookmarkCell[indexPath.row]
             return cell
         default:
             return UICollectionViewCell()

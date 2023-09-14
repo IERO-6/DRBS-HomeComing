@@ -48,7 +48,8 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderWidth = 1
     }
     private lazy var starImage = UIImageView().then {
-        $0.image = UIImage(named: "star.png")
+        $0.image = UIImage(named: "star_fill.png")
+        $0.contentMode = .scaleAspectFill
     }
     private lazy var rateLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
@@ -263,7 +264,7 @@ final class MyHouseVC: UIViewController {
         starImage.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
-            $0.width.equalTo(30)
+            $0.width.height.equalTo(20)
         }
         livingTypeLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
@@ -495,6 +496,16 @@ final class MyHouseVC: UIViewController {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
             self.mainImageView.image = UIImage(named: "default-empty-Image")
+            let emptyImageView = UIImageView().then {
+                $0.image = UIImage(named: "default-empty-Image")
+                $0.tintColor = .darkGray
+                $0.contentMode = .scaleAspectFit
+            }
+            self.mainImageView.addSubview(emptyImageView)
+            emptyImageView.snp.makeConstraints {
+                $0.centerX.centerY.equalToSuperview()
+                $0.width.height.equalTo(50)
+            }
         }
         self.imageCount.text = houseImages.isEmpty ? "0" : String(houseImages.count)
         self.nameLabel.text = house.title ?? ""
@@ -588,6 +599,7 @@ extension MyHouseVC {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
                 $0.height.equalTo(30)
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-60)
             }
             maintenanceCostLabel.snp.makeConstraints {
@@ -599,6 +611,7 @@ extension MyHouseVC {
             noneMaintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
             noneMaintenanceImagesStackView.snp.makeConstraints {
@@ -613,6 +626,7 @@ extension MyHouseVC {
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.height.equalTo(30)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
@@ -628,6 +642,7 @@ extension MyHouseVC {
             noneMaintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
             noneMaintenanceImagesStackView.snp.makeConstraints {
