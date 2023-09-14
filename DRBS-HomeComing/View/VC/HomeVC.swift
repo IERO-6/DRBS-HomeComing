@@ -23,7 +23,6 @@ final class HomeVC: UIViewController {
         configureUI()
         settingTV()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: Notification.Name("houseDeleted"), object: nil)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,8 +121,6 @@ final class HomeVC: UIViewController {
     }
 }
 
-
-
 //MARK: - UITableViewDelegate
 
 extension HomeVC: UITableViewDelegate {
@@ -132,7 +129,12 @@ extension HomeVC: UITableViewDelegate {
         headerView.backgroundColor = .white
         let titleButton = KeyedButton(frame: CGRect(x: 0, y: -10, width: 200, height: 20))
         headerView.addSubview(titleButton)
-        titleButton.setTitle("\(self.categories[section]) > ", for: .normal)
+
+        let image = UIImage(systemName: "chevron.right")?.withTintColor(.darkGray, renderingMode: .alwaysOriginal)
+        titleButton.setImage(image, for: .normal)
+        titleButton.setTitle(self.categories[section], for: .normal)
+        titleButton.semanticContentAttribute = .forceRightToLeft
+
         titleButton.setTitleColor(.darkGray, for: .normal)
         titleButton.backgroundColor = .white
         titleButton.tag = section
@@ -142,6 +144,7 @@ extension HomeVC: UITableViewDelegate {
         titleButton.tag = section
         return headerView
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("tableView\(indexPath)")
         print("tableView\(indexPath.row)")
@@ -174,7 +177,6 @@ extension HomeVC: UITableViewDataSource {
 //MARK: - CellSelectedDelegate
 
 extension HomeVC: CellSelectedDelegate {
-    
     func cellselected(houseTVCell: HouseTVCell, house: House) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = house // House 객체 전달
