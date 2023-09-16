@@ -149,14 +149,17 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        guard let house = self.houseViewModel.house else {
+        self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
+        guard self.houseViewModel.house != nil else {
             //데이터가 없었으면
             print("새로운 데이터 저장합니다")
-            self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
             DispatchQueue.global().async {
                 self.houseViewModel.makeHouseModel()
+                //houseViewModel의 house모델이 지금까지 저장한 내용들을 토대로 생성됨
                 NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
+                    
                     if isCompleted {
+                        print("isCompleted에 true 전달")
                         DispatchQueue.main.async {
                             let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
                             sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
@@ -171,7 +174,6 @@ final class RateVC: UIViewController {
         
         //데이터가 있으면
         print("데이터 업데이트 합니다")
-        self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
         print("houseViewModel에 rate값 업데이트")
         DispatchQueue.global().async {
             self.houseViewModel.houseId = self.houseViewModel.house?.houseId

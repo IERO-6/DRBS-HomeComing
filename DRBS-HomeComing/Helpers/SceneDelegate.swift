@@ -17,17 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if Auth.auth().currentUser != nil {
             DispatchQueue.global().async {
                 let cuid = Auth.auth().currentUser?.uid
-                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses, isCompleted in
-                    if isCompleted {
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
                         DispatchQueue.main.async {
                             let tabbarController = self.setupTabBarController(with: houses)
                             
                             self.window?.rootViewController = tabbarController
                             self.window?.makeKeyAndVisible()
-                            
-                            
-                            
-                        }
+                         
                     }
                 }
             }
@@ -66,24 +62,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabbarController.tabBar.tintColor = Constant.appColor
         tabbarController.tabBar.backgroundColor = .white
         tabbarController.viewControllers=[nav1 ,nav2]
+        print("데이터로 탭바 구성 완료!")
         return tabbarController
 
     }
     
     //MARK: changeRootViewController - 화면 전환 함수
     func changeRootViewController (_ vc: UIViewController, animated: Bool) {
+        print("changeRootViewController실행")
         guard let window = self.window else { return }
         if vc is Tabbar {
             DispatchQueue.global().async {
                 guard let cuid = Auth.auth().currentUser?.uid else { return }
-                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses, isCompleted in
-                    if isCompleted {
-                        DispatchQueue.main.async {
-                            let tabbarController = self.setupTabBarController(with: houses)
-                            self.window?.rootViewController = tabbarController
-                            self.window?.makeKeyAndVisible()
-                        }
-                    }
+                print("changeRootViewController 내부에서 fetchHousesWithCurrentUser 실행할 것")
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
+                    print("fetchHousesWithCurrentUser에서 houses 받아옴")
+                    print("houses = \(houses)")
+                    print("setupTabBarController 실행할 것")
+                    let tabbarController = self.setupTabBarController(with: houses)
+                    print("이제 루트뷰컨트롤러 바꾸고 홈화면으로 가보자고~")
+                    self.window?.rootViewController = tabbarController
+                    self.window?.makeKeyAndVisible()
                 }
             }
         } else {

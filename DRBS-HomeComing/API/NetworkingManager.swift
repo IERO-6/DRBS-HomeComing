@@ -15,7 +15,10 @@ class NetworkingManager {
     let db = Firestore.firestore()
     let storage = Storage.storage().reference()
     var housesRef: CollectionReference!
-    private init() {}
+    private init() {
+        
+        
+    }
     
     //MARK: - Auth
     /// - note: kakao Auth Create - 소셜 로그인 계정 생성
@@ -81,26 +84,34 @@ class NetworkingManager {
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
     func addHouses(houseModel: House, images: [UIImage], completion: @escaping (Bool) -> Void) {
+        print("새로운 데이터 저장 시작")
         let documentRef = db.collection("Homes").document()
         let houseId = documentRef.documentID
-        var stringImages: [String] = []
+        var imageUrls: [String] = []
         images.forEach {
             self.uploadImage(houseId: houseId, image: $0) { imageUrl in
-                stringImages.append(imageUrl)
-            }
-        }
-        let house = houseModel
-        house.houseId = houseId
-        house.사진 = stringImages
-        guard let data = house.asDictionary else { return }
-        DispatchQueue.global().async {
-            documentRef.setData(data) { error in
-                if let error {
-                    print(error.localizedDescription)
-                    print("데이터를 올리는데 실패했습니다.")
-                } else {
-                    print("데이터를 올리는데 성공했습니다.")
-                    completion(true)
+                imageUrls.append(imageUrl)
+                if imageUrls.count == images.count {
+                    print("Storage에 사진이 다 저장되고 다운로드 URL반환완료")
+                    print("다운로드 URL은 \(imageUrls)")
+                    //Storage에 다 올라갔으면, 반환되어 imageUrls에 저장된 값의 갯수가 같을 것
+                    let house = houseModel
+                    house.houseId = houseId
+                    house.사진 = imageUrls
+                    guard let data = house.asDictionary else { return }
+                    print("데이터 생성(딕셔너리형태로)완료")
+                    //올린 값들을 넣어 house모델 완성 후 Dictionary 형태로 변환(서버에 올리기 위함)
+                    DispatchQueue.global().async {
+                        documentRef.setData(data) { error in
+                            if let error {
+                                print(error.localizedDescription)
+                            } else {
+                                print("데이터를 올리는데 성공했습니다.")
+                                completion(true)
+                                //올리는 데 성공하면 true를 반환
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -109,21 +120,21 @@ class NetworkingManager {
     
     
     //MARK: - Read
-    func fetchHousesWithCurrentUser(currentUser: String? ,completion: @escaping ((_: [House], _: Bool) -> Void)) {
+    func fetchHousesWithCurrentUser(currentUser: String? ,completion: @escaping ([House]) -> Void) {
         guard let currentUserUID = currentUser else {
             // 현재 사용자 UID를 가져올 수 없으면 종료
-            completion([], false)
+            completion([])
             return
         }
         db.collection("Homes").whereField("uid", isEqualTo: currentUserUID).getDocuments { querySnapshot, error in
             //현재 유저와 같은 document만 가져옴
             if let error = error {
                 print("Error fetching houses: \(error.localizedDescription)")
-                completion([], false)
+                completion([])
                 return
             }
             guard let documents = querySnapshot?.documents else {
-                completion([], false)
+                completion([])
                 return
             }
             let houses = documents.compactMap { document -> House? in
@@ -138,7 +149,7 @@ class NetworkingManager {
                     return nil
                 }
             }
-            completion(houses, true)
+            completion(houses)
         }
     }
     
@@ -158,30 +169,27 @@ class NetworkingManager {
                 print("Error listing files: \(error.localizedDescription)")
                 return
             }
-            print("리스트 읽는 중")
             var stringImages: [String] = []
             guard let result = result else { return }
-            print("리스트 결과는 \(result)")
             for item in result.items {
                 item.delete { error in
                     if let error = error {
                         print("Error deleting file: \(error.localizedDescription)")
                     } else {
-                        images.forEach {
-                            self.uploadImage(houseId: houseId, image: $0) { imageUrl in
-                                stringImages.append(imageUrl)
-                                print("사진 올리는중")
+                        DispatchQueue.global().async {
+                            images.forEach {
+                                self.uploadImage(houseId: houseId, image: $0) { imageUrl in
+                                    stringImages.append(imageUrl)
+                                }
                             }
-                        }
-                        print("사진 다 올림")
-                        house.사진 = stringImages
-                        guard let data = house.asDictionary else { return }
-                        self.db.collection("Homes").document(houseId).setData(data, merge: true) { error in
-                            if let error = error {
-                                print("Error updating document: \(error.localizedDescription)")
-                            } else {
-                                print("db에 업데이트 완료")
-                                completion(true)
+                            house.사진 = stringImages
+                            guard let data = house.asDictionary else { return }
+                            self.db.collection("Homes").document(houseId).setData(data, merge: true) { error in
+                                if let error = error {
+                                    print("Error updating document: \(error.localizedDescription)")
+                                } else {
+                                    completion(true)
+                                }
                             }
                         }
                     }
@@ -190,21 +198,7 @@ class NetworkingManager {
         }
     }
 
-//        deleteOldFiles(houseId: houseId) {
-//            DispatchQueue.global().async {
-//                var stringImages: [String] = []
-//                images.forEach {
-//                    self.uploadImage(houseId: houseId, image: $0) { imageUrl in
-//                        stringImages.append(imageUrl)
-////                        if stringImages.count == images.count {
-////                            documentRef.updateData(["photos":stringImages])
-////                        }
-//                    }
-//                }
-//                documentRef.updateData(["photos":stringImages])
-//                completion(true)
-//            }
-//        }
+
         
     
 
@@ -228,15 +222,6 @@ class NetworkingManager {
             }
         }
         completion()
-
-//        deleteRef.delete { error in
-//            if let error = error {
-//                print("Error deleting files: \(error.localizedDescription)")
-//            } else {
-//                    print("Files deleted successfully.")
-//                completion()
-//            }
-//        }
     }
   
     
@@ -257,11 +242,6 @@ class NetworkingManager {
                     } else { print("File deleted successfully: \(item.name)") }
                 }
             }
-//            listRef.delete { error in
-//                if let error = error {
-//                    print("Error deleting path: \(error.localizedDescription)")
-//                } else { print("Path deleted successfully: \(pathToDelete)") }
-//            }
         }
         db.collection("Homes").document(houseId).delete { err in
             if let err = err {
@@ -277,23 +257,29 @@ class NetworkingManager {
 //MARK: - Extensions
 extension NetworkingManager {
     func uploadImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
+        //FireStore Storage의 uid->houseId 내부에 파일 저장
+        //파일을 저장한 뒤 해당 파일의 DownloadURL을 Completion을 통해 반환
         guard let imageData = image.jpegData(compressionQuality: 0.75),
-            let uid = Auth.auth().currentUser?.uid else { return }
+              let uid = Auth.auth().currentUser?.uid else { return }
         let filename = NSUUID().uuidString
         let ref = storage.child("/\(uid)/\(houseId)/\(filename)")
-        ref.putData(imageData, metadata: nil) { metadata, error in
-            if let error = error {
-                print("DEBUG: Failed to upload image \(error.localizedDescription)")
-                return
-            }
-            ref.downloadURL { url, error in
+        DispatchQueue.global().async {
+            ref.putData(imageData) { _, error in
                 if let error = error {
-                    print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
+                    print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                    return
+                } else {
+                    ref.downloadURL { url, error in
+                        if let error = error {
+                            print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
+                        }
+                        guard let imageUrl = url?.absoluteString else { return }
+                        completion(imageUrl)
+                    }
                 }
-                guard let imageUrl = url?.absoluteString else { return }
-                completion(imageUrl)
             }
         }
+        
     }
     
     func updateImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
@@ -316,5 +302,8 @@ extension NetworkingManager {
             }
         }
     }
- 
+    func observeData() {
+        //서버에 값이 변했는지 안변했는지 감시하는 관리자!
+        
+    }
 }
