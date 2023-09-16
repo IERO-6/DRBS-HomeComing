@@ -231,7 +231,7 @@ final class DetailCell: UITableViewCell {
         case false:
             self.bookMarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         }
-
+        
         
         guard let houseImages = house.사진 else { return }
 

@@ -799,6 +799,7 @@ PODS:
     - gRPC-Core/Interface (= 1.50.1)
   - gRPC-Core/Interface (1.50.1)
   - GTMSessionFetcher/Core (3.1.1)
+  - JGProgressHUD (2.2)
   - KakaoSDKAuth (2.16.0):
     - KakaoSDKCommon (= 2.16.0)
   - KakaoSDKCommon (2.16.0):
@@ -832,6 +833,7 @@ DEPENDENCIES:
   - FirebaseFirestore
   - FirebaseStorage
   - Google-Mobile-Ads-SDK
+  - JGProgressHUD
   - KakaoSDKAuth
   - KakaoSDKCommon
   - KakaoSDKUser
@@ -862,6 +864,7 @@ SPEC REPOS:
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
+    - JGProgressHUD
     - KakaoSDKAuth
     - KakaoSDKCommon
     - KakaoSDKUser
@@ -895,6 +898,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": 0968bace703459fd3e5dcb0b2bed4c573dbff046
   gRPC-Core: 17108291d84332196d3c8466b48f016fc17d816d
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
   KakaoSDKAuth: 1b85ed7c41b0517bfd1fc9dc46c292c75b8cb610
   KakaoSDKCommon: d6579aa2e9d963d74e13d741cbf1cce48b8b0c17
   KakaoSDKUser: 427e5b3884abd19ee6d9a7bd6e3f3029eb2968b8
@@ -907,6 +911,6 @@ SPEC CHECKSUMS:
   SwiftLint: 1cc5cd61ba9bacb2194e340aeb47a2a37fda00b3
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 0e775fd3dddb686d3232a01539554368d12f780a
+PODFILE CHECKSUM: acaea30af684356627835aedfefeb08733805550
 
 COCOAPODS: 1.12.1
