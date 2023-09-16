@@ -8,9 +8,12 @@ import FirebaseStorage
 import FirebaseAuth
 
 final class MyHouseVC: UIViewController {
+    
     //MARK: - Properties
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    
     private lazy var mainImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -31,6 +34,7 @@ final class MyHouseVC: UIViewController {
     private lazy var imageCount = UILabel().then {
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Bold", size: 12)
+        $0.textAlignment = .center
     }
     
     private lazy var nameLabel = UILabel().then {
@@ -47,15 +51,18 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderColor = Constant.appColor.cgColor
         $0.layer.borderWidth = 1
     }
+    
     private lazy var starImage = UIImageView().then {
         $0.image = UIImage(named: "star_fill.png")
         $0.contentMode = .scaleAspectFill
     }
+    
     private lazy var rateLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = .darkGray
         $0.textAlignment = .center
     }
+    
     private lazy var firstContainView = UIView()
     
     private lazy var addressLabel = UILabel().then {
@@ -63,6 +70,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.textAlignment = .left
     }
+    
     private lazy var tradingTypeLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 16)
         $0.textColor = Constant.appColor
@@ -73,11 +81,13 @@ final class MyHouseVC: UIViewController {
         $0.layer.borderWidth = 1
         $0.sizeToFit()
     }
+    
     private lazy var priceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 22)
         $0.textColor = .black
         $0.textAlignment = .left
     }
+    
     private lazy var secondContainView = UIView()
     
     private lazy var mainView = UIView()
@@ -94,6 +104,7 @@ final class MyHouseVC: UIViewController {
         $0.textColor = .black
         $0.textAlignment = .left
     }
+    
     private lazy var noneMaintenanceLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 14)
         $0.textColor = .black
@@ -101,52 +112,63 @@ final class MyHouseVC: UIViewController {
         $0.numberOfLines = 2
         $0.textAlignment = .left
     }
+    
     private lazy var noneMaintenanceImagesStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 10
         $0.distribution = .equalSpacing
         $0.layer.borderColor = UIColor.black.cgColor
     }
+    
     private lazy var mapLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
         $0.text = "지도"
     }
+    
     private lazy var mapView = MKMapView().then {
         $0.isUserInteractionEnabled = false
     }
+    
     private lazy var mapStackView = UIView()
     private lazy var memoLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
         $0.text = "메모"
     }
+    
     private lazy var memoTextView = UITextView().then {
         $0.layer.borderColor = UIColor.lightGray.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.isUserInteractionEnabled = false
     }
+    
     private lazy var detailView = UIView()
     private lazy var 면적ImageView = UIImageView().then {$0.image = UIImage(named: "areaImage.png")}
     private lazy var 입주가능일ImageView = UIImageView().then {$0.image = UIImage(named: "calendarImage.png")}
     private lazy var 계약기간ImageView = UIImageView().then {$0.image = UIImage(named: "homeImage.png")}
+    
     private lazy var 면적ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
     }
+    
     private lazy var 입주가능일ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
     }
+    
     private lazy var 계약기간ValueLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
         $0.textColor = .black
     }
+    
     private lazy var textCountLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Regular", size: 14)
         $0.textColor = .lightGray
     }
+    
     private lazy var memoView = UIView()
     private lazy var button = UIButton().then {
         $0.backgroundColor = Constant.appColor
@@ -154,6 +176,7 @@ final class MyHouseVC: UIViewController {
         $0.layer.cornerRadius = 5
         $0.clipsToBounds = true
     }
+    
     private lazy var checkView = UIView()
     private lazy var checkLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 16)
@@ -172,10 +195,12 @@ final class MyHouseVC: UIViewController {
     var from: String = ""
     
     //MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         settingNav()
+        scrollView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -185,6 +210,7 @@ final class MyHouseVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         mainView.layer.addBottomLayer()
         mapStackView.layer.addBottomLayer()
         memoView.layer.addBottomLayer()
@@ -232,6 +258,7 @@ final class MyHouseVC: UIViewController {
             $0.top.trailing.leading.equalTo(contentView)
             $0.height.equalTo(250)
         }
+
         imageBackButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-10)
             $0.bottom.equalToSuperview().offset(-10)
@@ -380,50 +407,29 @@ final class MyHouseVC: UIViewController {
             $0.width.equalToSuperview()
         }
     }
-
     
     private func settingNav() {
         let appearance = UINavigationBarAppearance().then {
-            $0.configureWithOpaqueBackground()
-            $0.backgroundColor = .white
+            $0.configureWithTransparentBackground()
+            $0.backgroundColor = .clear
             $0.titleTextAttributes = [.foregroundColor: UIColor.black]
             $0.shadowColor = nil
         }
         
         navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
         let ellipsis = self.navigationItem.makeSFSymbolButtonWithMenu(self, action: #selector(ellipsisButtonTapped), symbolName: "ellipsis.circle")
         let bookmark = self.navigationItem.makeSFSymbolButton(self, action: #selector(bookmarkButtonTapped), symbolName: "bookmark")
         let barButtonItem = UIBarButtonItem(customView: ellipsis)
         barButtonItem.customView?.translatesAutoresizingMaskIntoConstraints = false
         barButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24).isActive = true
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
-            let checkVC1 = CheckVC1()
-            checkVC1.houseViewModel.house = self.selectedHouse
-            self.navigationController?.pushViewController(checkVC1, animated: true)
-        })
-        
-        let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
-            if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
-                print("Deleting house ID: \(houseId)")
-                NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
-                    if success {
-                        NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                }
-            }
-        })
-        
-        ellipsis.menu = UIMenu(title: "메뉴를 선택해주세요",
-                               image: nil,
-                               identifier: nil,
-                               options: .displayInline,
-                               children: [edit, delete])
         navigationItem.rightBarButtonItems = [barButtonItem,  bookmark]
     }
     
@@ -536,7 +542,7 @@ final class MyHouseVC: UIViewController {
         }
         self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
 
-        self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? "")
+        self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? " ")
 
         self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
 
@@ -571,9 +577,39 @@ final class MyHouseVC: UIViewController {
         }
     }
     
-    @objc func ellipsisButtonTapped() {
+    @objc func ellipsisButtonTapped(_ sender: UIButton) {
+        let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
+            let checkVC1 = CheckVC1()
+            checkVC1.house = self.selectedHouse
+            self.navigationController?.pushViewController(checkVC1, animated: true)
+        })
         
+        let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash.fill"), handler: { _ in
+            if let selectedHouse = self.selectedHouse, let houseId = selectedHouse.houseId {
+                print("Deleting house ID: \(houseId)")
+                NetworkingManager.shared.deleteHouse(houseId: houseId) { success in
+                    if success {
+                        NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
+                        self.navigationController?.popViewController(animated: true)
+                    } else {
+                        print("집을 지우지 못했습니다.")
+                    }
+                }
+            } else {
+                print("houseId is not founded")
+            }
+        })
+        
+        let menu = UIMenu(title: "메뉴를 선택해주세요",
+                          image: nil,
+                          identifier: nil,
+                          options: .displayInline,
+                          children: [edit, delete])
+        
+        sender.menu = menu
+        sender.showsMenuAsPrimaryAction = true
     }
+
     @objc func ImageButtonTapped() {
         let myHouseImageVC = MyHouseImageVC()
         myHouseImageVC.houseImages = sendHouseImages
@@ -647,6 +683,28 @@ extension MyHouseVC {
             mainView.snp.makeConstraints {
                 $0.bottom.equalTo(priceLabel.snp.bottom).offset(20)
             }
+        }
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension MyHouseVC: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+        
+        if offset <= 0 {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = .clear
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        } else {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithDefaultBackground()
+            appearance.backgroundColor = .white
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
         }
     }
 }
