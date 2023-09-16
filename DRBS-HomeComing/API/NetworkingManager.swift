@@ -84,7 +84,6 @@ class NetworkingManager {
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
     func addHouses(houseModel: House, images: [UIImage], completion: @escaping (Bool) -> Void) {
-        print("새로운 데이터 저장 시작")
         let documentRef = db.collection("Homes").document()
         let houseId = documentRef.documentID
         var imageUrls: [String] = []
@@ -92,21 +91,17 @@ class NetworkingManager {
             self.uploadImage(houseId: houseId, image: $0) { imageUrl in
                 imageUrls.append(imageUrl)
                 if imageUrls.count == images.count {
-                    print("Storage에 사진이 다 저장되고 다운로드 URL반환완료")
-                    print("다운로드 URL은 \(imageUrls)")
                     //Storage에 다 올라갔으면, 반환되어 imageUrls에 저장된 값의 갯수가 같을 것
                     let house = houseModel
                     house.houseId = houseId
                     house.사진 = imageUrls
                     guard let data = house.asDictionary else { return }
-                    print("데이터 생성(딕셔너리형태로)완료")
                     //올린 값들을 넣어 house모델 완성 후 Dictionary 형태로 변환(서버에 올리기 위함)
                     DispatchQueue.global().async {
                         documentRef.setData(data) { error in
                             if let error {
                                 print(error.localizedDescription)
                             } else {
-                                print("데이터를 올리는데 성공했습니다.")
                                 completion(true)
                                 //올리는 데 성공하면 true를 반환
                             }
@@ -157,7 +152,6 @@ class NetworkingManager {
     
     //MARK: - Update
     func updateHouseInFirebase(houseModel: House, images: [UIImage], completion: @escaping (Bool) -> Void) {
-        print("데이터 업데이트 시작")
         guard let houseId = houseModel.houseId else { return }
         let documentRef = db.collection("Homes").document(houseId)
         var imageUrls: [String] = []
@@ -165,20 +159,16 @@ class NetworkingManager {
             self.updateImage(houseId: houseId, image: $0) { imageUrl in
                 imageUrls.append(imageUrl)
                 if imageUrls.count == images.count {
-                    print("Storage에 사진이 다 저장되고 다운로드 URL반환완료")
-                    print("다운로드 URL은 \(imageUrls)")
                     //Storage에 다 올라갔으면, 반환되어 imageUrls에 저장된 값의 갯수가 같을 것
                     let house = houseModel
                     house.사진 = imageUrls
                     guard let data = house.asDictionary else { return }
-                    print("데이터 생성(딕셔너리형태로)완료")
                     //올린 값들을 넣어 house모델 완성 후 Dictionary 형태로 변환(서버에 올리기 위함)
                     DispatchQueue.global().async {
                         documentRef.setData(data) { error in
                             if let error {
                                 print(error.localizedDescription)
                             } else {
-                                print("데이터를 올리는데 성공했습니다.")
                                 completion(true)
                                 //올리는 데 성공하면 true를 반환
                             }
@@ -196,7 +186,6 @@ class NetworkingManager {
     func deleteOldFiles(houseId: String, completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         // 해당 경로의 파일 및 폴더를 삭제
-        let deleteRef = storage.child("\(uid)/\(houseId)")
         let listRef = storage.child("\(uid)/\(houseId)")
         listRef.listAll { (result, error) in
             if let error = error {
@@ -219,7 +208,6 @@ class NetworkingManager {
     //MARK: - Delete
     func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let pathToDelete = "\(uid)/\(houseId)"
         let listRef = Storage.storage().reference().child("\(uid)/\(houseId)")
         listRef.listAll { (result, error) in
             if let error = error {
@@ -229,8 +217,7 @@ class NetworkingManager {
             guard let result = result else { return }
             for item in result.items {
                 item.delete { error in
-                    if let error = error { print("Error deleting file: \(error.localizedDescription)")
-                    } else { print("File deleted successfully: \(item.name)") }
+                    if let error = error { print("Error deleting file: \(error.localizedDescription)") }
                 }
             }
         }
@@ -274,7 +261,6 @@ extension NetworkingManager {
     }
     
     func updateImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let imageData = image.jpegData(compressionQuality: 0.75),
               let uid = Auth.auth().currentUser?.uid else { return }
         let filename = NSUUID().uuidString
@@ -297,10 +283,5 @@ extension NetworkingManager {
         }
     }
     
-    
-    
-    func observeData() {
-        //서버에 값이 변했는지 안변했는지 감시하는 관리자!
-        
-    }
+ 
 }
