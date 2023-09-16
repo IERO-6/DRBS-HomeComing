@@ -2,16 +2,12 @@ import UIKit
 import Then
 import SnapKit
 import FirebaseFirestore
+import JGProgressHUD
 
 final class RateVC: UIViewController {
     //MARK: - Properties
     
     lazy var houseViewModel = HouseViewModel()
-    
-    var house: House?
-    
-    var from: String = ""
-
     
     private let mainTitleLabel = UILabel().then {
         $0.text = "체크리스트 평가"
@@ -74,6 +70,8 @@ final class RateVC: UIViewController {
         $0.spacing = 0
         $0.alignment = .fill
     }
+    
+    private lazy var hud = JGProgressHUD(style: .dark)
     
     
     //MARK: - LifeCycle
@@ -151,63 +149,41 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        guard let houseId = house?.houseId else {
-            self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
-            if self.from == "map" {
-                DispatchQueue.global().async {
-                    self.houseViewModel.makeHouseModel()
-                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
-                    DispatchQueue.main.async {
-                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                        sceneDelegate?.changeRootViewControllerToMap(Tabbar(), animated: true)
+        DispatchQueue.main.async { self.hud.show(in: self.view, animated: true) }
+        self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
+        guard self.houseViewModel.house != nil else {
+            DispatchQueue.global().async {
+                self.houseViewModel.makeHouseModel()
+                NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
+                    if isCompleted {
+                        DispatchQueue.main.async {
+                            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                            DispatchQueue.main.async {
+                                self.hud.dismiss()
+                            }
+                        }
                     }
                 }
-                return
-            } else {
-                DispatchQueue.global().async {
-                    self.houseViewModel.makeHouseModel()
-                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                
+            }
+            return
+        }
+        DispatchQueue.global().async {
+            self.houseViewModel.houseId = self.houseViewModel.house?.houseId
+            self.houseViewModel.makeHouseModel()
+            NetworkingManager.shared.updateHouseInFirebase(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
+                if isCompleted {
                     DispatchQueue.main.async {
                         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
                         sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                        DispatchQueue.main.async { self.hud.dismiss() }
                     }
                 }
-                return
             }
-
-        }
-        let houseRef = Firestore.firestore().collection("Homes").document(houseId)
-        
-        var dataToUpdate: [String: Any] = [:]
-        if let name = houseViewModel.name { dataToUpdate["title"] = name }
-        if let address = houseViewModel.address { dataToUpdate["address"] = address }
-        
-        if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }
-        if let livingType = houseViewModel.livingType { dataToUpdate["livingType"] = livingType }
-        
-        if let 보증금 = houseViewModel.보증금 { dataToUpdate["deposit"] = 보증금 }
-        if let 월세 = houseViewModel.월세or전세금 { dataToUpdate["rent_payment"] = 월세 }
-        if let 관리비 = houseViewModel.관리비 { dataToUpdate["maintenance_fee"] = 관리비 }
-        dataToUpdate["maintenance_non_list"] = houseViewModel.관리비미포함목록
-        if let 면적 = houseViewModel.면적 { dataToUpdate["area"] = 면적 }
-        if let 입주가능일 = houseViewModel.입주가능일 { dataToUpdate["movingDay"] = 입주가능일 }
-        if let 계약기간 = houseViewModel.계약기간 { dataToUpdate["contractTerm"] = 계약기간 }
-        if let 메모 = houseViewModel.memo { dataToUpdate["memo"] = 메모 }
-        
-        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
-        if let rate = houseViewModel.rate { dataToUpdate["rate"] = rate }
-        if let checkList = houseViewModel.checkList {
-            let checkListDict = try? checkList.asDictionary
-            dataToUpdate["checkList"] = checkListDict
-        }
-        houseRef.updateData(dataToUpdate) { (error) in
-            if let error = error {
-                print("Failed to update house: \(error.localizedDescription)")
-                return
-            }
-            print("Successfully updated house!")
-            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+            
         }
     }
 }
+
+

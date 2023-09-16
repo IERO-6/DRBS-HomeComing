@@ -128,6 +128,7 @@ final class CheckVC2: UIViewController {
     
     private let separatorLine = UIView.createSeparatorLine()
     private let separatorLine2 = UIView.createSeparatorLine()
+    private let separatorLine3 = UIView.createSeparatorLine()
     private let 면적 = UILabel().then { $0.text = "면적" }
     
     private let 면적TextField = UITextField().then {
@@ -177,7 +178,8 @@ final class CheckVC2: UIViewController {
     }
     
     private var picker: PHPickerViewController!
-    
+    private var selections: [String: PHPickerResult] = [:]
+    private var selectedAssetIdentifiers: [String] = []
     private lazy var galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
         $0.image = UIImage(systemName: "camera")
@@ -190,7 +192,6 @@ final class CheckVC2: UIViewController {
         $0.addGestureRecognizer(tapGesture)
         $0.isUserInteractionEnabled = true
     }
-    
     private lazy var firstImageButton = UIButton().then {
         $0.backgroundColor = .clear
         $0.layer.cornerRadius = 10
@@ -198,7 +199,6 @@ final class CheckVC2: UIViewController {
         $0.tag = 0
         $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
     }
-    
     private lazy var secondImageButton = UIButton().then {
         $0.backgroundColor = .clear
         $0.layer.cornerRadius = 10
@@ -206,7 +206,6 @@ final class CheckVC2: UIViewController {
         $0.tag = 1
         $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
     }
-    
     private lazy var thirdImageButton = UIButton().then {
         $0.backgroundColor = .clear
         $0.layer.cornerRadius = 10
@@ -214,7 +213,6 @@ final class CheckVC2: UIViewController {
         $0.tag = 2
         $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
     }
-    
     private lazy var fourthImageButton = UIButton().then {
         $0.backgroundColor = .clear
         $0.layer.cornerRadius = 10
@@ -222,7 +220,6 @@ final class CheckVC2: UIViewController {
         $0.tag = 3
         $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
     }
-    
     private lazy var fifthImageButton = UIButton().then {
         $0.backgroundColor = .clear
         $0.layer.cornerRadius = 10
@@ -230,9 +227,9 @@ final class CheckVC2: UIViewController {
         $0.tag = 4
         $0.addTarget(self, action: #selector(imageButtonTapped(_:)), for: .touchUpInside)
     }
-    
-    private lazy var imageButtonArray: [UIButton] = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
-    
+    private lazy var imageButtonArray: [UIButton] = [firstImageButton, secondImageButton,
+                                                     thirdImageButton, fourthImageButton,
+                                                     fifthImageButton]
     private let memoTextView = UITextView().then {
         $0.textContainerInset = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
         $0.font = UIFont.systemFont(ofSize: 13)
@@ -242,7 +239,6 @@ final class CheckVC2: UIViewController {
         $0.textColor = .black
         $0.layer.cornerRadius = 10
     }
-    
     private lazy var completionButton = UIButton().then {
         $0.setTitle("완료", for: .normal)
         $0.setTitleColor(.white, for: .normal)
@@ -250,10 +246,8 @@ final class CheckVC2: UIViewController {
         $0.backgroundColor = Constant.appColor
         $0.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
     }
-    
     private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
     
-    var from: String = ""
 
     
     //MARK: - LifeCycle
@@ -460,7 +454,7 @@ final class CheckVC2: UIViewController {
     
     private func configureUI3() {
         view.backgroundColor = .white
-        backView.addSubviews(checkListLabel, checkListUIView,  recodeLabel, completionButton)
+        backView.addSubviews(checkListLabel, checkListUIView, separatorLine3, recodeLabel, completionButton)
         memoTextView.delegate = self
         imageScrollView.addSubviews(galleryImageView, firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton)
         
@@ -473,11 +467,17 @@ final class CheckVC2: UIViewController {
             $0.top.equalTo(checkListLabel.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-10)
-            $0.height.equalTo(500)
+            $0.height.equalTo(400)
+        }
+        
+        separatorLine3.snp.makeConstraints {
+            $0.top.equalTo(checkListUIView.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(8)
         }
         
         recodeLabel.snp.makeConstraints {
-            $0.top.equalTo(checkListUIView.snp.bottom).offset(30)
+            $0.top.equalTo(separatorLine3.snp.bottom).offset(30)
             $0.leading.equalTo(checkListLabel)
         }
         
@@ -564,33 +564,43 @@ final class CheckVC2: UIViewController {
     }
     
     private func initPicker() {
+//        var configuration = PHPickerConfiguration(photoLibrary: .shared())
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        configuration.filter = PHPickerFilter.any(of: [.images])
+        configuration.selection = .ordered
+        configuration.preferredAssetRepresentationMode = .current
         configuration.selectionLimit = 5
-        configuration.filter = .images // 이미지만 선택할 수 있게 설정
+//        configuration.filter = .images // 이미지만 선택할 수 있게 설정
         picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
     }
     
     private func updateUI() {
         // UI 업데이트 - houseViewModel로 넘거야 데이터가 입력된걸로 인식된다
-        if let house = self.house {
+        if let house = self.houseViewModel.house {
             보증금TextField.text = house.보증금
             월세TextField.text = house.월세
             관리비TextField.text = house.관리비
             면적TextField.text = house.면적
             계약기간TextField.text = house.계약기간
             memoTextView.text = house.기록
-            if let 입주가능일 = house.입주가능일 {
-                입주가능일button.setTitle(입주가능일, for: .normal)
-                입주가능일button.setTitleColor(UIColor.black, for: .normal)
-            }
-            
+//            self.houseViewModel.보증금 = house.보증금
+//            self.houseViewModel.월세or전세금 = house.월세
+//            self.houseViewModel.관리비 = house.관리비
+//            self.houseViewModel.면적 = house.면적
+//            self.houseViewModel.계약기간 = house.계약기간
+//            self.houseViewModel.memo = house.기록
+//            self.houseViewModel.입주가능일 = house.입주가능일
+//            self.houseViewModel.관리비미포함목록 = house.관리비미포함목록 ?? []
+//            self.houseViewModel.uiImages = []
+            self.houseViewModel.stringImages = house.사진 ?? []
+            입주가능일button.setTitle(house.입주가능일 ?? "", for: .normal)
+            입주가능일button.setTitleColor(UIColor.black, for: .normal)
             // 거래방식 버튼 상태 업데이트
             for button in 관리비미포함Buttons {
-                if let title = button.currentTitle, let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(title) {
+                if let title = button.currentTitle,
+                   let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(title) {
                     button.setSelectedState(isSelected: true)
-                    houseViewModel.관리비미포함목록.append(title)
-                    houseViewModel.관리비미포함목록 = house.관리비미포함목록 ?? []
                 } else {
                     button.setSelectedState(isSelected: false)
                 }
@@ -599,8 +609,7 @@ final class CheckVC2: UIViewController {
             //이미지를 띄우는 코드
             guard let houseImages = house.사진 else { return }
             
-            let buttons = [firstImageButton, secondImageButton, thirdImageButton, fourthImageButton, fifthImageButton]
-            for (index, button) in buttons.enumerated() {
+            for (index, button) in imageButtonArray.enumerated() {
                 if houseImages.indices.contains(index) {
                     button.sd_setImage(with: URL(string:houseImages[index]), for: .normal)
                 }
@@ -615,6 +624,32 @@ final class CheckVC2: UIViewController {
             self.checkListUIView.checkViewModel.통풍 = checklist.통풍 ?? []
             self.checkListUIView.checkViewModel.보안 = checklist.보안 ?? []
             self.checkListUIView.checkViewModel.곰팡이 = checklist.곰팡이 ?? []
+        }
+        
+    }
+    private func displayImage() {
+        let dispatchGroup = DispatchGroup()
+        var imagesDict = [String: UIImage]()
+        for (identifier, result) in selections {
+            dispatchGroup.enter()
+            let itemProvider = result.itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    guard let image = image as? UIImage else { return }
+                    imagesDict[identifier] = image
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) { [weak self] in
+            guard let self = self else { return }
+            self.imageButtonArray.forEach { $0.setImage(.none, for: .normal)}
+            // 선택한 이미지의 순서대로 정렬하여 이미지 버튼에 이미지 설정
+            for (index, identifier) in self.selectedAssetIdentifiers.enumerated() {
+                guard let image = imagesDict[identifier] else { return }
+                self.imageButtonArray[index].setImage(image, for: .normal)
+            }
         }
     }
     
@@ -647,11 +682,10 @@ final class CheckVC2: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        
         let rateVC = RateVC()
         rateVC.modalPresentationStyle = .pageSheet
-        rateVC.house = self.house
         rateVC.houseViewModel = self.houseViewModel
+        rateVC.houseViewModel.house = self.houseViewModel.house
         houseViewModel.memo = memoTextView.text
         houseViewModel.보증금 = 보증금TextField.text
         houseViewModel.월세or전세금 = 월세TextField.text
@@ -659,7 +693,11 @@ final class CheckVC2: UIViewController {
         houseViewModel.계약기간 = 계약기간TextField.text
         houseViewModel.입주가능일 = 입주가능일button.currentTitle
         checkListUIView.checkViewModel.checkListModel = checkListUIView.checkViewModel.makeCheckListModel()
-        
+        self.imageButtonArray.forEach {
+            if let image = $0.currentImage {
+                self.houseViewModel.uiImages.append(image)
+            }
+        }
         self.houseViewModel.보증금 = self.보증금TextField.text
         self.houseViewModel.월세or전세금 = self.월세TextField.text
         self.houseViewModel.관리비 = self.관리비TextField.text
@@ -668,7 +706,6 @@ final class CheckVC2: UIViewController {
         self.houseViewModel.계약기간 = self.계약기간TextField.text
         self.houseViewModel.memo = self.memoTextView.text
         rateVC.houseViewModel = self.houseViewModel
-        rateVC.from = self.from
         self.present(rateVC, animated: true)
     }
     
@@ -810,30 +847,19 @@ extension CheckVC2: CalendarDelegate {
 extension CheckVC2: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        guard !results.isEmpty else { return }
-        DispatchQueue.main.async {
+        var newSelections: [String: PHPickerResult] = [:]
+        for result in results {
+            let identifier = result.assetIdentifier!
+            newSelections[identifier] = selections[identifier] ?? result
+        }
+        selections = newSelections
+        selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
+        if selections.isEmpty {
+            self.houseViewModel.uiImages = []
             self.imageButtonArray.forEach { $0.setImage(.none, for: .normal) }
-        }
-        for (index, result) in results.enumerated() {
-            result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
-                if error != nil {
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "에러", message: "사진의 확장자가 알맞지 않습니다.", preferredStyle: .alert)
-                        let goSetting = UIAlertAction(title: "확인", style: .default)
-                        alert.addAction(goSetting)
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-                if let image = object as? UIImage {
-                    self.houseViewModel.uiImages.append(image)
-                    DispatchQueue.main.async {
-                        if index < self.imageButtonArray.count {
-                            self.imageButtonArray[index].setImage(image, for: .normal)
-                            self.imageButtonArray[index].contentMode = .scaleAspectFill
-                        }
-                    }
-                }
-            }
-        }
+        } else { displayImage() }
     }
 }
+
+
+

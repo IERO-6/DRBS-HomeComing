@@ -53,7 +53,8 @@ final class MyHouseVC: UIViewController {
     }
     
     private lazy var starImage = UIImageView().then {
-        $0.image = UIImage(named: "star.png")
+        $0.image = UIImage(named: "star_fill.png")
+        $0.contentMode = .scaleAspectFill
     }
     
     private lazy var rateLabel = UILabel().then {
@@ -288,9 +289,9 @@ final class MyHouseVC: UIViewController {
             $0.width.equalTo(30)
         }
         starImage.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
-            $0.width.equalTo(30)
+            $0.width.height.equalTo(15)
         }
         livingTypeLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
@@ -450,7 +451,6 @@ final class MyHouseVC: UIViewController {
             }
         }
         
-        guard let selectedHouse = selectedHouse else { return }
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         guard let houseImages = house.사진 else { return }
         sendHouseImages = houseImages
@@ -496,7 +496,17 @@ final class MyHouseVC: UIViewController {
         if !houseImages.isEmpty {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
-            self.mainImageView.image = UIImage(named: "default-empty-Image")
+            self.mainImageView.image = .none
+            let emptyImageView = UIImageView().then {
+                $0.image = UIImage(named: "default-empty-Image")
+                $0.tintColor = .darkGray
+                $0.contentMode = .scaleAspectFit
+            }
+            self.mainImageView.addSubview(emptyImageView)
+            emptyImageView.snp.makeConstraints {
+                $0.centerX.centerY.equalToSuperview()
+                $0.width.height.equalTo(50)
+            }
         }
         self.imageCount.text = houseImages.isEmpty ? "0" : String(houseImages.count)
         self.nameLabel.text = house.title ?? ""
@@ -541,7 +551,6 @@ final class MyHouseVC: UIViewController {
     private func updateBookmarkButtonState() {
         guard let house = selectedHouse else { return }
         let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
-
         guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
               rightBarButtonItems.count > 1,
               let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
@@ -614,12 +623,12 @@ extension MyHouseVC {
     func updateUIForImages() {
         guard let house = selectedHouse else { return }
         if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) {
-            print("관리비, 미포함 have data")
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel, noneMaintenanceLabel, noneMaintenanceImagesStackView)
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
                 $0.height.equalTo(30)
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-60)
             }
             maintenanceCostLabel.snp.makeConstraints {
@@ -631,6 +640,7 @@ extension MyHouseVC {
             noneMaintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(maintenanceLabel.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
             noneMaintenanceImagesStackView.snp.makeConstraints {
@@ -640,11 +650,11 @@ extension MyHouseVC {
                 $0.width.equalTo(27*5 + 5*4)
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
-            print("관리비미포함 is empty")
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.height.equalTo(30)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
@@ -655,11 +665,11 @@ extension MyHouseVC {
                 $0.trailing.equalToSuperview()
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) { //관리비는 없고 미포함은 있는
-            print("관리비 is empty")
             mainView.addSubviews(noneMaintenanceLabel, noneMaintenanceImagesStackView)
             noneMaintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
                 $0.leading.equalToSuperview()
+                $0.width.equalTo(38)
                 $0.bottom.equalTo(mainView.snp.bottom).offset(-15)
             }
             noneMaintenanceImagesStackView.snp.makeConstraints {

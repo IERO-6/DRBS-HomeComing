@@ -15,7 +15,10 @@ class NetworkingManager {
     let db = Firestore.firestore()
     let storage = Storage.storage().reference()
     var housesRef: CollectionReference!
-    private init() {}
+    private init() {
+        
+        
+    }
     
     //MARK: - Auth
     /// - note: kakao Auth Create - 소셜 로그인 계정 생성
@@ -80,54 +83,44 @@ class NetworkingManager {
     
     //MARK: - 체크리스트관련메서드
     //MARK: - Create
-    func addHouses(houseModel: House, images: [UIImage]) {
+    func addHouses(houseModel: House, images: [UIImage], completion: @escaping (Bool) -> Void) {
         let documentRef = db.collection("Homes").document()
-        //저장하기 이전에 먼저 저장될 주소를 생성
         let houseId = documentRef.documentID
-        //해당 주소를 houseId로 명명
-        var house = houseModel
-        house.houseId = houseId
-        guard let data = house.asDictionary else { return }
-        documentRef.setData(data)
-        var stringImages: [String] = []
-        DispatchQueue.global().async {
-            images.forEach {
-                self.uploadImage(houseId: houseId, image: $0) { imageUrl in
-                    stringImages.append(imageUrl)
-                    documentRef.updateData(["photos":stringImages])
+        var imageUrls: [String] = []
+        images.forEach {
+            self.uploadImage(houseId: houseId, image: $0) { imageUrl in
+                imageUrls.append(imageUrl)
+                if imageUrls.count == images.count {
+                    //Storage에 다 올라갔으면, 반환되어 imageUrls에 저장된 값의 갯수가 같을 것
+                    let house = houseModel
+                    house.houseId = houseId
+                    house.사진 = imageUrls
+                    guard let data = house.asDictionary else { return }
+                    //올린 값들을 넣어 house모델 완성 후 Dictionary 형태로 변환(서버에 올리기 위함)
+                    DispatchQueue.global().async {
+                        documentRef.setData(data) { error in
+                            if let error {
+                                print(error.localizedDescription)
+                            } else {
+                                completion(true)
+                                //올리는 데 성공하면 true를 반환
+                            }
+                        }
+                    }
                 }
             }
         }
     }
     
-    func uploadImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.75),
-            let uid = Auth.auth().currentUser?.uid else { return }
-        let filename = NSUUID().uuidString
-        let ref = storage.child("/\(uid)/\(houseId)/\(filename)")
-        ref.putData(imageData, metadata: nil) { metadata, error in
-            if let error = error {
-                print("DEBUG: Failed to upload image \(error.localizedDescription)")
-                return
-            }
-            ref.downloadURL { url, error in
-                if let error = error {
-                    print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
-                }
-                guard let imageUrl = url?.absoluteString else { return }
-                completion(imageUrl)
-            }
-        }
-    }
+    
     
     //MARK: - Read
-    func fetchHousesWithCurrentUser(currentUser: String? ,completion: @escaping([House]) -> Void) {
+    func fetchHousesWithCurrentUser(currentUser: String? ,completion: @escaping ([House]) -> Void) {
         guard let currentUserUID = currentUser else {
             // 현재 사용자 UID를 가져올 수 없으면 종료
             completion([])
             return
         }
-        
         db.collection("Homes").whereField("uid", isEqualTo: currentUserUID).getDocuments { querySnapshot, error in
             //현재 유저와 같은 document만 가져옴
             if let error = error {
@@ -158,32 +151,41 @@ class NetworkingManager {
     
     
     //MARK: - Update
-    func updateHouseInFirebase(houseModel: House) {
-        // 선택한 집의 houseId가 houseModel.housId가 맞나?, 기존에 있던 데이터를 houseViewModel에 넣어줬는데 값을 바꿀때도 action이 실행되면서 그 값을 houseViewModel에 넣어주는데 그래도 되나?
-        guard let id = houseModel.houseId else {
-            print("Error: House does not have an ID!")
-            return
-        }
-        // 해당 ID를 가진 문서에 접근
-        let documentRef = db.collection("houses").document(id)
-        guard let data = houseModel.asDictionary else {
-            print("Error: Could not convert houseModel to dictionary!")
-            return
-        }
-        // 값을 업데이트
-        documentRef.setData(data, merge: true) { error in
-            if let error = error {
-                print("Error updating data: \(error)")
-            } else {
-                print("Data successfully updated!")
+    func updateHouseInFirebase(houseModel: House, images: [UIImage], completion: @escaping (Bool) -> Void) {
+        guard let houseId = houseModel.houseId else { return }
+        let documentRef = db.collection("Homes").document(houseId)
+        var imageUrls: [String] = []
+        images.forEach {
+            self.updateImage(houseId: houseId, image: $0) { imageUrl in
+                imageUrls.append(imageUrl)
+                if imageUrls.count == images.count {
+                    //Storage에 다 올라갔으면, 반환되어 imageUrls에 저장된 값의 갯수가 같을 것
+                    let house = houseModel
+                    house.사진 = imageUrls
+                    guard let data = house.asDictionary else { return }
+                    //올린 값들을 넣어 house모델 완성 후 Dictionary 형태로 변환(서버에 올리기 위함)
+                    DispatchQueue.global().async {
+                        documentRef.setData(data) { error in
+                            if let error {
+                                print(error.localizedDescription)
+                            } else {
+                                completion(true)
+                                //올리는 데 성공하면 true를 반환
+                            }
+                        }
+                    }
+                }
             }
         }
     }
     
-    //MARK: - Delete
-    func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
+    
+    
+    
+    
+    func deleteOldFiles(houseId: String, completion: @escaping () -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let pathToDelete = "\(uid)/\(houseId)"
+        // 해당 경로의 파일 및 폴더를 삭제
         let listRef = storage.child("\(uid)/\(houseId)")
         listRef.listAll { (result, error) in
             if let error = error {
@@ -193,14 +195,30 @@ class NetworkingManager {
             guard let result = result else { return }
             for item in result.items {
                 item.delete { error in
-                    if let error = error { print("Error deleting file: \(error.localizedDescription)")
-                    } else { print("File deleted successfully: \(item.name)") }
+                    if let error = error {
+                        print("Error deleting file: \(error.localizedDescription)")
+                    }
                 }
             }
-            listRef.delete { error in
-                if let error = error {
-                    print("Error deleting path: \(error.localizedDescription)")
-                } else { print("Path deleted successfully: \(pathToDelete)") }
+        }
+        completion()
+    }
+    
+    
+    //MARK: - Delete
+    func deleteHouse(houseId: String, completion: @escaping (Bool) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let listRef = Storage.storage().reference().child("\(uid)/\(houseId)")
+        listRef.listAll { (result, error) in
+            if let error = error {
+                print("Error listing files: \(error.localizedDescription)")
+                return
+            }
+            guard let result = result else { return }
+            for item in result.items {
+                item.delete { error in
+                    if let error = error { print("Error deleting file: \(error.localizedDescription)") }
+                }
             }
         }
         db.collection("Homes").document(houseId).delete { err in
@@ -213,3 +231,57 @@ class NetworkingManager {
     }
 }
 
+
+//MARK: - Extensions
+extension NetworkingManager {
+    func uploadImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
+        //FireStore Storage의 uid->houseId 내부에 파일 저장
+        //파일을 저장한 뒤 해당 파일의 DownloadURL을 Completion을 통해 반환
+        guard let imageData = image.jpegData(compressionQuality: 0.75),
+              let uid = Auth.auth().currentUser?.uid else { return }
+        let filename = NSUUID().uuidString
+        let ref = storage.child("/\(uid)/\(houseId)/\(filename)")
+        DispatchQueue.global().async {
+            ref.putData(imageData) { _, error in
+                if let error = error {
+                    print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                    return
+                } else {
+                    ref.downloadURL { url, error in
+                        if let error = error {
+                            print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
+                        }
+                        guard let imageUrl = url?.absoluteString else { return }
+                        completion(imageUrl)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func updateImage(houseId: String, image: UIImage, completion: @escaping(String) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.75),
+              let uid = Auth.auth().currentUser?.uid else { return }
+        let filename = NSUUID().uuidString
+        let ref = self.storage.child("/\(uid)/\(houseId)/\(filename)")
+        DispatchQueue.global().async {
+            ref.putData(imageData) { _, error in
+                if let error = error {
+                    print("DEBUG: Failed to upload image \(error.localizedDescription)")
+                    return
+                } else {
+                    ref.downloadURL { url, error in
+                        if let error = error {
+                            print("DEBUG: Failed to make downloadURL \(error.localizedDescription)")
+                        }
+                        guard let imageUrl = url?.absoluteString else { return }
+                        completion(imageUrl)
+                    }
+                }
+            }
+        }
+    }
+    
+ 
+}
