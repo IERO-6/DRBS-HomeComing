@@ -173,20 +173,16 @@ final class RateVC: UIViewController {
             
         
         //데이터가 있으면
-        print("데이터 업데이트 합니다")
-        print("houseViewModel에 rate값 업데이트")
         DispatchQueue.global().async {
             self.houseViewModel.houseId = self.houseViewModel.house?.houseId
             self.houseViewModel.makeHouseModel()
             print("업데이트될 하우스 아이디는 \(self.houseViewModel.house?.houseId)")
             NetworkingManager.shared.updateHouseInFirebase(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
                 if isCompleted {
-                    print("네트워킹 매니저에서 업데이트 메서드로 저장완료되고 이제 메인으로 돌아갈 준비")
+                    print("isCompleted에 true 전달")
                     DispatchQueue.main.async {
                         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
                         sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
-                        print("changeRootViewController 실행")
-
                     }
                 }
             }
