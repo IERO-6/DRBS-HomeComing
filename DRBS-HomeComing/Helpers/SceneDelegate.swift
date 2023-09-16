@@ -17,11 +17,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if Auth.auth().currentUser != nil {
             DispatchQueue.global().async {
                 let cuid = Auth.auth().currentUser?.uid
-                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
-                    DispatchQueue.main.async {
-                        let tabbarController = self.setupTabBarController(with: houses)
-                        self.window?.rootViewController = tabbarController
-                        self.window?.makeKeyAndVisible()
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses, isCompleted in
+                    if isCompleted {
+                        DispatchQueue.main.async {
+                            let tabbarController = self.setupTabBarController(with: houses)
+                            
+                            self.window?.rootViewController = tabbarController
+                            self.window?.makeKeyAndVisible()
+                            
+                            
+                            
+                        }
                     }
                 }
             }
@@ -60,45 +66,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabbarController.tabBar.tintColor = Constant.appColor
         tabbarController.tabBar.backgroundColor = .white
         tabbarController.viewControllers=[nav1 ,nav2]
-        
         return tabbarController
-    }
-    
-    func setupMapTabBarController(with houses: [House]) -> UITabBarController {
-        let vc1 = HomeVC()
-        let vc2 = MapVC()
-        
-        vc1.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
-        vc2.tabBarItem = UITabBarItem(title: "지도", image: UIImage(systemName:"map"), selectedImage:UIImage(systemName:"map.fill"))
-        let nav1 = DynamicStatusBarNavigation(rootViewController :vc1)
-        let nav2 = UINavigationController(rootViewController :vc2)
-        
-        nav1.setupHomeBarAppearance()
-        nav2.setupMapBarAppearance()
-        
-        vc1.allHouseModels = houses
-        vc2.houseViewModel.houses = houses
-        
-        let tabbarController = UITabBarController()
-        tabbarController.tabBar.tintColor = Constant.appColor
-        tabbarController.tabBar.backgroundColor = .white
-        tabbarController.viewControllers=[nav1 ,nav2]
-        tabbarController.selectedIndex = 1
-        return tabbarController
+
     }
     
     //MARK: changeRootViewController - 화면 전환 함수
     func changeRootViewController (_ vc: UIViewController, animated: Bool) {
         guard let window = self.window else { return }
-        
         if vc is Tabbar {
             DispatchQueue.global().async {
-                let cuid = Auth.auth().currentUser?.uid
-                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
-                    DispatchQueue.main.async {
-                        let tabbarController = self.setupTabBarController(with: houses)
-                        self.window?.rootViewController = tabbarController
-                        self.window?.makeKeyAndVisible()
+                guard let cuid = Auth.auth().currentUser?.uid else { return }
+                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses, isCompleted in
+                    if isCompleted {
+                        DispatchQueue.main.async {
+                            let tabbarController = self.setupTabBarController(with: houses)
+                            self.window?.rootViewController = tabbarController
+                            self.window?.makeKeyAndVisible()
+                        }
                     }
                 }
             }
@@ -108,25 +92,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UIView.transition(with: window, duration: 0.7, options: [.transitionCrossDissolve], animations: nil, completion: nil)/// 딜레이
     }
     
-    func changeRootViewControllerToMap (_ vc: UIViewController, animated: Bool) {
-        guard let window = self.window else { return }
-        
-        if vc is Tabbar {
-            DispatchQueue.global().async {
-                let cuid = Auth.auth().currentUser?.uid
-                NetworkingManager.shared.fetchHousesWithCurrentUser(currentUser: cuid) { houses in
-                    DispatchQueue.main.async {
-                        let tabbarController = self.setupMapTabBarController(with: houses)
-                        self.window?.rootViewController = tabbarController
-                        self.window?.makeKeyAndVisible()
-                    }
-                }
-            }
-        } else {
-            window.rootViewController = vc // 전환
-        }
-        UIView.transition(with: window, duration: 0.7, options: [.transitionCrossDissolve], animations: nil, completion: nil)/// 딜레이
-    }
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

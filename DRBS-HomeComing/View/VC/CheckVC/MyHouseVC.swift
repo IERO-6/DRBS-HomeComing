@@ -262,9 +262,9 @@ final class MyHouseVC: UIViewController {
             $0.width.equalTo(30)
         }
         starImage.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
+            $0.centerY.equalToSuperview()
             $0.trailing.equalTo(rateLabel.snp.leading).offset(-5)
-            $0.width.height.equalTo(20)
+            $0.width.height.equalTo(15)
         }
         livingTypeLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
@@ -403,7 +403,7 @@ final class MyHouseVC: UIViewController {
         barButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24).isActive = true
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
             let checkVC1 = CheckVC1()
-            checkVC1.house = self.selectedHouse
+            checkVC1.houseViewModel.house = self.selectedHouse
             self.navigationController?.pushViewController(checkVC1, animated: true)
         })
         
@@ -414,12 +414,8 @@ final class MyHouseVC: UIViewController {
                     if success {
                         NotificationCenter.default.post(name: Notification.Name("houseDeleted"), object: nil, userInfo: ["deletedHouseId": houseId])
                         self.navigationController?.popViewController(animated: true)
-                    } else {
-                        print("집을 지우지 못했습니다.")
                     }
                 }
-            } else {
-                print("houseId is not founded")
             }
         })
         
@@ -449,7 +445,6 @@ final class MyHouseVC: UIViewController {
             }
         }
         
-        guard let selectedHouse = selectedHouse else { return }
         self.checkListView.checkViewModel.checkListModel = house.체크리스트 ?? CheckList()
         guard let houseImages = house.사진 else { return }
         sendHouseImages = houseImages
@@ -495,7 +490,7 @@ final class MyHouseVC: UIViewController {
         if !houseImages.isEmpty {
             self.mainImageView.sd_setImage(with: URL(string: houseImages[0]))
         } else {
-            self.mainImageView.image = UIImage(named: "default-empty-Image")
+            self.mainImageView.image = .none
             let emptyImageView = UIImageView().then {
                 $0.image = UIImage(named: "default-empty-Image")
                 $0.tintColor = .darkGray
@@ -550,7 +545,6 @@ final class MyHouseVC: UIViewController {
     private func updateBookmarkButtonState() {
         guard let house = selectedHouse else { return }
         let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
-
         guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
               rightBarButtonItems.count > 1,
               let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
@@ -593,7 +587,6 @@ extension MyHouseVC {
     func updateUIForImages() {
         guard let house = selectedHouse else { return }
         if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) {
-            print("관리비, 미포함 have data")
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel, noneMaintenanceLabel, noneMaintenanceImagesStackView)
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
@@ -621,7 +614,6 @@ extension MyHouseVC {
                 $0.width.equalTo(27*5 + 5*4)
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
-            print("관리비미포함 is empty")
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
             maintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)
@@ -637,7 +629,6 @@ extension MyHouseVC {
                 $0.trailing.equalToSuperview()
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true == false) { //관리비는 없고 미포함은 있는
-            print("관리비 is empty")
             mainView.addSubviews(noneMaintenanceLabel, noneMaintenanceImagesStackView)
             noneMaintenanceLabel.snp.makeConstraints {
                 $0.top.equalTo(secondContainView.snp.bottom).offset(5)

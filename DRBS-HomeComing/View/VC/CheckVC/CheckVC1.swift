@@ -8,8 +8,7 @@ final class CheckVC1: UIViewController {
     
     var nameIndex: Int?
     var house: House?
-    private let houseViewModel = HouseViewModel()
-    
+    let houseViewModel = HouseViewModel()
     private let nameLabel = UILabel().then {
         $0.text = "이름*"
         $0.font = UIFont(name: Constant.font, size: 16)
@@ -113,20 +112,17 @@ final class CheckVC1: UIViewController {
         $0.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
     
-    var from: String = ""
     
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         setUpLabel()
         updateUI()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -210,13 +206,6 @@ final class CheckVC1: UIViewController {
             $0.height.equalTo(45)
         }
         
-        //        오피스텔버튼.snp.makeConstraints {
-        //            $0.top.equalTo(아파트버튼)
-        //            $0.leading.equalTo(투룸버튼.snp.trailing).offset(20)
-        //            $0.width.equalTo(100)
-        //            $0.height.equalTo(45)
-        //        }
-        
         원룸버튼.snp.makeConstraints {
             $0.top.equalTo(아파트버튼.snp.bottom).offset(10)
             $0.leading.equalTo(아파트버튼)
@@ -273,11 +262,11 @@ final class CheckVC1: UIViewController {
     }
     
     private func updateUI() {
-        // UI 업데이트
-        if let house = house {
-            nameTextField.text = houseViewModel.name ?? house.title
-            addressTextField.text = houseViewModel.address ?? house.address
-            
+        if let house = self.houseViewModel.house {
+            nameTextField.text = house.title ?? ""
+            addressTextField.text = house.address ?? ""
+            self.houseViewModel.name = house.title
+            self.houseViewModel.address = house.address
             // 거래방식 버튼 상태 업데이트 - buttonTapped 함수처럼 구현해야 색깔이 바뀐다
             for button in tradeButtons {
                 let isSelected = button.currentTitle == house.tradingType
@@ -286,7 +275,6 @@ final class CheckVC1: UIViewController {
                     houseViewModel.tradingType = house.tradingType
                 }
             }
-            
             // 주거형태 버튼 상태 업데이트
             for button in livingButtons {
                 let isSelected = button.currentTitle == house.livingType
@@ -342,12 +330,6 @@ final class CheckVC1: UIViewController {
             }
             return
         }
-        
-        houseViewModel.name = nameTextField.text
-        print("Setting houseViewModel.name with: \(String(describing: nameTextField.text))")
-        houseViewModel.address = addressTextField.text
-        print("Updated address: \(String(describing: houseViewModel.address))")
-        
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -362,13 +344,12 @@ final class CheckVC1: UIViewController {
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
-                self.houseViewModel.name = self.nameTextField.text
-                let checkVC2 = CheckVC2()
-                checkVC2.house = self.house
-                checkVC2.houseViewModel = self.houseViewModel
-                checkVC2.from = self.from
-                self.navigationController?.pushViewController(checkVC2, animated: true)
             }
+            self.houseViewModel.name = self.nameTextField.text
+            let checkVC2 = CheckVC2()
+            checkVC2.houseViewModel = self.houseViewModel
+            checkVC2.houseViewModel.house = self.houseViewModel.house
+            self.navigationController?.pushViewController(checkVC2, animated: true)
         }
     }
     

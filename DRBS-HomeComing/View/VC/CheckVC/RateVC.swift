@@ -7,9 +7,7 @@ final class RateVC: UIViewController {
     //MARK: - Properties
     
     lazy var houseViewModel = HouseViewModel()
-    
-    var house: House?
-    
+        
     var from: String = ""
 
     
@@ -151,63 +149,48 @@ final class RateVC: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        guard let houseId = house?.houseId else {
+        guard let house = self.houseViewModel.house else {
+            //데이터가 없었으면
+            print("새로운 데이터 저장합니다")
             self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
-            if self.from == "map" {
-                DispatchQueue.global().async {
-                    self.houseViewModel.makeHouseModel()
-                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
-                    DispatchQueue.main.async {
-                        let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-                        sceneDelegate?.changeRootViewControllerToMap(Tabbar(), animated: true)
+            DispatchQueue.global().async {
+                self.houseViewModel.makeHouseModel()
+                NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
+                    if isCompleted {
+                        DispatchQueue.main.async {
+                            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+                            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                        }
                     }
                 }
-                return
-            } else {
-                DispatchQueue.global().async {
-                    self.houseViewModel.makeHouseModel()
-                    NetworkingManager.shared.addHouses(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages)
+                
+            }
+            return
+        }
+            
+        
+        //데이터가 있으면
+        print("데이터 업데이트 합니다")
+        self.houseViewModel.rate = self.houseViewModel.calculateRates(value: Double(self.rateSlider.value))
+        print("houseViewModel에 rate값 업데이트")
+        DispatchQueue.global().async {
+            self.houseViewModel.houseId = self.houseViewModel.house?.houseId
+            self.houseViewModel.makeHouseModel()
+            print("업데이트될 하우스 아이디는 \(self.houseViewModel.house?.houseId)")
+            NetworkingManager.shared.updateHouseInFirebase(houseModel: self.houseViewModel.house!, images: self.houseViewModel.uiImages) { isCompleted in
+                if isCompleted {
+                    print("네트워킹 매니저에서 업데이트 메서드로 저장완료되고 이제 메인으로 돌아갈 준비")
                     DispatchQueue.main.async {
                         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
                         sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+                        print("changeRootViewController 실행")
+
                     }
                 }
-                return
             }
-
-        }
-        let houseRef = Firestore.firestore().collection("Homes").document(houseId)
-        
-        var dataToUpdate: [String: Any] = [:]
-        if let name = houseViewModel.name { dataToUpdate["title"] = name }
-        if let address = houseViewModel.address { dataToUpdate["address"] = address }
-        
-        if let tradingType = houseViewModel.tradingType { dataToUpdate["tradingType"] = tradingType }
-        if let livingType = houseViewModel.livingType { dataToUpdate["livingType"] = livingType }
-        
-        if let 보증금 = houseViewModel.보증금 { dataToUpdate["deposit"] = 보증금 }
-        if let 월세 = houseViewModel.월세or전세금 { dataToUpdate["rent_payment"] = 월세 }
-        if let 관리비 = houseViewModel.관리비 { dataToUpdate["maintenance_fee"] = 관리비 }
-        dataToUpdate["maintenance_non_list"] = houseViewModel.관리비미포함목록
-        if let 면적 = houseViewModel.면적 { dataToUpdate["area"] = 면적 }
-        if let 입주가능일 = houseViewModel.입주가능일 { dataToUpdate["movingDay"] = 입주가능일 }
-        if let 계약기간 = houseViewModel.계약기간 { dataToUpdate["contractTerm"] = 계약기간 }
-        if let 메모 = houseViewModel.memo { dataToUpdate["memo"] = 메모 }
-        
-        self.houseViewModel.rate = houseViewModel.calculateRates(value: Double(rateSlider.value))
-        if let rate = houseViewModel.rate { dataToUpdate["rate"] = rate }
-        if let checkList = houseViewModel.checkList {
-            let checkListDict = try? checkList.asDictionary
-            dataToUpdate["checkList"] = checkListDict
-        }
-        houseRef.updateData(dataToUpdate) { (error) in
-            if let error = error {
-                print("Failed to update house: \(error.localizedDescription)")
-                return
-            }
-            print("Successfully updated house!")
-            let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
-            sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
+            
         }
     }
 }
+
+

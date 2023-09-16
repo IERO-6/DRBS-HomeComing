@@ -6,32 +6,17 @@ final class HouseTVCell: UITableViewCell {
     
     var indexPath: Int?
     weak var cellselectedDelegate: CellSelectedDelegate?
-    
-//    var apartCellCount: Int?
-//    var oneRoomCellCount: Int?
-//    var villaCellCount: Int?
-//    var bookmarkCellCount: Int?
-    
-    lazy var apartCell: [House] = []
-    lazy var oneRoomCell: [House] = []
-    lazy var villaCell: [House] = []
-    lazy var bookmarkCell: [House] = []
-    
-    
+    private lazy var apartCell: [House] = []
+    private lazy var oneRoomCell: [House] = []
+    private lazy var villaCell: [House] = []
+    private lazy var bookmarkCell: [House] = []
     private let noDataView = NoDataView(message: "+ 버튼으로 체크리스트를 추가해보세요!")
-    
     var houses: [House] = [] {
         didSet {
-//            self.oneRoomCellCount = houses.filter{$0.livingType! == "원룸/투룸+"}.count
-//            self.villaCellCount = houses.filter{$0.livingType! == "빌라/주택"}.count
-//            self.apartCellCount = houses.filter{$0.livingType! == "아파트/오피스텔"}.count
-//            self.bookmarkCellCount = houses.filter{$0.isBookMarked! == true}.count
-            
             self.oneRoomCell = houses.filter{$0.livingType! == "원룸/투룸+"}
             self.villaCell = houses.filter{$0.livingType! == "빌라/주택"}
             self.apartCell = houses.filter{$0.livingType! == "아파트/오피스텔"}
             self.bookmarkCell = houses.filter{$0.isBookMarked! == true}
-            
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
                 self.updatePlaceholderView()
@@ -39,31 +24,25 @@ final class HouseTVCell: UITableViewCell {
         }
     }
     
-    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 8.0
-        layout.minimumInteritemSpacing = 0
-        layout.itemSize = .init(width: 160, height: 170)
-        
-        return layout
-    }()
+    private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
+        $0.scrollDirection = .horizontal
+        $0.minimumLineSpacing = 8.0
+        $0.minimumInteritemSpacing = 0
+        $0.itemSize = .init(width: 160, height: 170)
+    }
     
-    lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout)
-        view.isScrollEnabled = true
-        view.showsHorizontalScrollIndicator = false
-        view.showsVerticalScrollIndicator = true
-        view.contentInset = .zero
-        view.backgroundColor = .clear
-        view.clipsToBounds = true
-        view.register(ApartCell.self, forCellWithReuseIdentifier: Constant.Identifier.apartCell.rawValue)
-        view.register(OneroomCell.self, forCellWithReuseIdentifier: Constant.Identifier.oneroomCell.rawValue)
-        view.register(VillaCell.self, forCellWithReuseIdentifier: Constant.Identifier.villaCell.rawValue)
-        view.register(BookMarkCell.self, forCellWithReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout) .then {
+        $0.isScrollEnabled = true
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = true
+        $0.contentInset = .zero
+        $0.backgroundColor = .clear
+        $0.clipsToBounds = true
+        $0.register(ApartCell.self, forCellWithReuseIdentifier: Constant.Identifier.apartCell.rawValue)
+        $0.register(OneroomCell.self, forCellWithReuseIdentifier: Constant.Identifier.oneroomCell.rawValue)
+        $0.register(VillaCell.self, forCellWithReuseIdentifier: Constant.Identifier.villaCell.rawValue)
+        $0.register(BookMarkCell.self, forCellWithReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue)
+    }
     
     
     //MARK: - LifeCycle
@@ -73,17 +52,13 @@ final class HouseTVCell: UITableViewCell {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.contentView.addSubviews(self.collectionView, self.noDataView)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleHouseDeleted), name: Notification.Name("houseDeleted"), object: nil)
         
         NSLayoutConstraint.activate([
-            self.collectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
-            self.collectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
-            self.collectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-            self.collectionView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             self.noDataView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor, constant: -10),
             self.noDataView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
         ])
+        collectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -117,25 +92,16 @@ final class HouseTVCell: UITableViewCell {
 extension HouseTVCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch self.indexPath {
-            case 0:
-//                guard let count = apartCellCount else { return 0 }
-//                return count
+        case 0:
             return self.apartCell.count
-            case 1:
-//                guard let count = villaCellCount else { return 0 }
-//                return count
+        case 1:
             return self.villaCell.count
-
-            case 2:
-//                guard let count = oneRoomCellCount else { return 0 }
-//                return count
+        case 2:
             return self.oneRoomCell.count
-            case 3:
-//                guard let count = bookmarkCellCount else { return 0 }
-//                return count
+        case 3:
             return self.bookmarkCell.count
-            default:
-                return 10
+        default:
+            return 10
         }
     }
     
@@ -143,22 +109,18 @@ extension HouseTVCell: UICollectionViewDataSource {
         switch self.indexPath {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.apartCell.rawValue, for: indexPath) as! ApartCell
-//            cell.apartHouse = self.houses.filter{ $0.livingType! == "아파트/오피스텔" }[indexPath.row]
             cell.apartHouse = self.apartCell[indexPath.row]
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.villaCell.rawValue, for: indexPath) as! VillaCell
-//            cell.villaHouse = self.houses.filter{ $0.livingType! == "빌라/주택" }[indexPath.row]
             cell.villaHouse = self.villaCell[indexPath.row]
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.oneroomCell.rawValue, for: indexPath) as! OneroomCell
-//            cell.oneRoomHouse = self.houses.filter { $0.livingType! == "원룸/투룸+" }[indexPath.row]
             cell.oneRoomHouse = self.oneRoomCell[indexPath.row]
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constant.Identifier.bookmarkCell.rawValue, for: indexPath) as! BookMarkCell
-//            cell.bookmarkHouse = self.houses.filter{ $0.isBookMarked! == true }[indexPath.row]
             cell.bookmarkHouse = self.bookmarkCell[indexPath.row]
             return cell
         default:
