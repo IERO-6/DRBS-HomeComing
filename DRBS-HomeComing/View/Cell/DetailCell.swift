@@ -102,6 +102,7 @@ final class DetailCell: UITableViewCell {
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.textContainer.maximumNumberOfLines = 2
         $0.textContainer.lineBreakMode = .byTruncatingTail
+        $0.isUserInteractionEnabled = false
     }
     //MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
