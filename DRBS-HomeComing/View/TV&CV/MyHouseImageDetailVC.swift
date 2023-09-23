@@ -73,11 +73,9 @@ class MyHouseImageDetailVC : UIViewController {
         if let swipeGesture=gesture as? UISwipeGestureRecognizer{
             switch swipeGesture.direction{
             case UISwipeGestureRecognizer.Direction.right:
-                print("User Swiped Right")
                 currentIndex = (currentIndex - 1 + totalImages) % totalImages
                 
             case UISwipeGestureRecognizer.Direction.left:
-                print("User Swiped Left")
                 currentIndex = (currentIndex + 1 + totalImages) % totalImages
                 
             default:

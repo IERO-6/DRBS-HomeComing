@@ -38,7 +38,6 @@
 		218ACDE52A75262400687EE6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE42A75262400687EE6 /* SceneDelegate.swift */; };
 		218ACDE72A75262400687EE6 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDE62A75262400687EE6 /* HomeVC.swift */; };
 		218ACDEC2A75262500687EE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218ACDEB2A75262500687EE6 /* Assets.xcassets */; };
-		218ACDEF2A75262500687EE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */; };
 		218ACDFD2A752A0C00687EE6 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDFC2A752A0C00687EE6 /* House.swift */; };
 		218ACDFF2A752ABB00687EE6 /* Tabbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACDFE2A752ABB00687EE6 /* Tabbar.swift */; };
 		218ACE092A76312400687EE6 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218ACE082A76312400687EE6 /* MapVC.swift */; };
@@ -55,8 +54,7 @@
 		21B6276A2A83841200081D5E /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B627692A83841200081D5E /* SearchCell.swift */; };
 		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
 		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
-		21CD21E72AB6AF51009690DA /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 21CD21E62AB6AF51009690DA /* config.xcconfig */; };
-		21CD21E92AB6B4C1009690DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21CD21E82AB6B4C1009690DA /* GoogleService-Info.plist */; };
+		21CD21EB2AB6C598009690DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */; };
 		21F954152A9F78DD00F395B0 /* BookMarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F954142A9F78DD00F395B0 /* BookMarkCell.swift */; };
 		B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B386B08A2A8EAA8200E68A2D /* LoginVC.swift */; };
 		B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B08D2A8F140500E68A2D /* Pretendard-SemiBold.otf */; };
@@ -83,7 +81,6 @@
 		186335592A8A0D0B00E283D5 /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		1863355D2A8A0D1D00E283D5 /* DetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailCell.swift; sourceTree = "<group>"; };
 		1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckViewModel.swift; sourceTree = "<group>"; };
-		18731A542A9A3F2700BF62D6 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		211FA6BB2AA5C2890029E8D7 /* DRBS-HomeComing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DRBS-HomeComing.entitlements"; sourceTree = "<group>"; };
 		2143CE352A7904DD00A5DB36 /* OneroomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneroomCell.swift; sourceTree = "<group>"; };
 		2143CE372A79051400A5DB36 /* VillaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VillaCell.swift; sourceTree = "<group>"; };
@@ -114,7 +111,6 @@
 		218ACDE42A75262400687EE6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		218ACDE62A75262400687EE6 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		218ACDEB2A75262500687EE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		218ACDEE2A75262500687EE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		218ACDF02A75262500687EE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		218ACDFC2A752A0C00687EE6 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		218ACDFE2A752ABB00687EE6 /* Tabbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabbar.swift; sourceTree = "<group>"; };
@@ -131,10 +127,9 @@
 		21B627672A8383FE00081D5E /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		21B627692A83841200081D5E /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		21B6276B2A83844400081D5E /* ModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalVC.swift; sourceTree = "<group>"; };
-		21B6276D2A8384D700081D5E /* MyLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MyLocation.gpx; sourceTree = "<group>"; };
 		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
-		21CD21E62AB6AF51009690DA /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
-		21CD21E82AB6B4C1009690DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		21CD21EC2AB6D0C0009690DA /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		21F954142A9F78DD00F395B0 /* BookMarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCell.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,8 +230,7 @@
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
-				21CD21E62AB6AF51009690DA /* config.xcconfig */,
-				21B6276D2A8384D700081D5E /* MyLocation.gpx */,
+				21CD21EC2AB6D0C0009690DA /* config.xcconfig */,
 				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
 				218ACDE02A75262400687EE6 /* Products */,
@@ -263,9 +257,8 @@
 				218ACDF92A75266400687EE6 /* Model */,
 				218ACDF82A75264500687EE6 /* View */,
 				218ACDFA2A75266A00687EE6 /* ViewModel */,
-				218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
-				21CD21E82AB6B4C1009690DA /* GoogleService-Info.plist */,
+				21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -487,16 +480,14 @@
 				B386B0982A8F140500E68A2D /* Pretendard-Regular.otf in Resources */,
 				B386B09B2A8F140500E68A2D /* Pretendard-ExtraBold.otf in Resources */,
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
-				21CD21E72AB6AF51009690DA /* config.xcconfig in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
 				B38C34D52AAB8C9700F8E3EF /* Raleway-ExtraBold.ttf in Resources */,
 				B386B09E2A8F140500E68A2D /* Pretendard-ExtraLight.otf in Resources */,
-				21CD21E92AB6B4C1009690DA /* GoogleService-Info.plist in Resources */,
+				21CD21EB2AB6C598009690DA /* GoogleService-Info.plist in Resources */,
 				B38C34D32AAB8C8D00F8E3EF /* Raleway-Bold.ttf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
-				218ACDEF2A75262500687EE6 /* LaunchScreen.storyboard in Resources */,
 				218ACDEC2A75262500687EE6 /* Assets.xcassets in Resources */,
 				B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */,
 			);
@@ -628,22 +619,10 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-		218ACDED2A75262500687EE6 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				218ACDEE2A75262500687EE6 /* Base */,
-				18731A542A9A3F2700BF62D6 /* ko */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21CD21E62AB6AF51009690DA /* config.xcconfig */;
+			baseConfigurationReference = 21CD21EC2AB6D0C0009690DA /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -705,7 +684,7 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21CD21E62AB6AF51009690DA /* config.xcconfig */;
+			baseConfigurationReference = 21CD21EC2AB6D0C0009690DA /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -776,10 +755,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "This App requires you to access your location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This App requires you to access yout album.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사용자가 둘러본 부동산의 사진을 저장하기 위해 사용자의 앨범 접근 권한에 대한 설정이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -799,7 +779,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -820,10 +800,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This application requires location services to work";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 설정이 필요합니다.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근권한";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "This App requires you to access your location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This App requires you to access yout album.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사용자가 둘러본 부동산의 사진을 저장하기 위해 사용자의 앨범 접근 권한에 대한 설정이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -843,7 +824,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

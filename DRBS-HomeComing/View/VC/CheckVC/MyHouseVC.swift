@@ -573,7 +573,6 @@ final class MyHouseVC: UIViewController {
                 print("Failed to update bookmark : \(error.localizedDescription)")
                 return
             }
-            print(" bookmark update success")
         }
     }
     
