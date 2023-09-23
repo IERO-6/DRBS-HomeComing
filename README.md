@@ -10,7 +10,7 @@
 메모장에 따로따로 저장해두어 복잡한 부동산 정보들을 도라방스에서 한번에 정리해보세요.
 
 
-앱 스토어 : [App Store](여기에 URL 넣을껑)
+앱 스토어 : [App Store](https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709)
 
 <br>
 
