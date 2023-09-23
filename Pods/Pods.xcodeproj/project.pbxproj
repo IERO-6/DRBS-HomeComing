@@ -18731,7 +18731,7 @@
 		F26A2F14FD2024FBAD82615CAB8570FE /* common.upbdefs.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = common.upbdefs.h; path = "src/core/ext/upbdefs-generated/envoy/config/tap/v3/common.upbdefs.h"; sourceTree = "<group>"; };
 		F289BD76593B257BA9241D465E32C2EC /* byte_buffer_reader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = byte_buffer_reader.h; path = include/grpc/impl/codegen/byte_buffer_reader.h; sourceTree = "<group>"; };
 		F28D33B0CB563FA933B43284A4AF8298 /* time_util.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = time_util.h; path = src/core/lib/event_engine/time_util.h; sourceTree = "<group>"; };
-		F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods-DRBS-HomeComing */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-DRBS-HomeComing"; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A471D0A8FB607B4D71809F1E33F9AA /* FirebaseAnalytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseAnalytics.debug.xcconfig; sourceTree = "<group>"; };
 		F2A88AD74082A519E3A7B63ED234E568 /* route.upb.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = route.upb.c; path = "src/core/ext/upb-generated/envoy/config/route/v3/route.upb.c"; sourceTree = "<group>"; };
 		F2BB439B0AEC3D9E9F29F3F82C8EEB32 /* sensitive.upbdefs.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = sensitive.upbdefs.c; path = "src/core/ext/upbdefs-generated/xds/annotations/v3/sensitive.upbdefs.c"; sourceTree = "<group>"; };
@@ -19304,7 +19304,7 @@
 				1353D6A467F43A6A3EA21D310BD35A31 /* KakaoSDKUser */,
 				0A9F46A999C47653013D3AD854352507 /* leveldb-library */,
 				06FC5C9CF96D60C50FCD47D339C91951 /* nanopb */,
-				F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods-DRBS-HomeComing */,
+				F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods_DRBS_HomeComing.framework */,
 				3347A1AB6546F0A3977529B8F199DC41 /* PromisesObjC */,
 				33D34D2210961B1CBFEC1D194B0AAB9F /* RecaptchaInterop */,
 				B0B214D775196BA7CA8E17E53048A493 /* SDWebImage */,
@@ -29460,7 +29460,7 @@
 			);
 			name = "Pods-DRBS-HomeComing";
 			productName = Pods_DRBS_HomeComing;
-			productReference = F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods-DRBS-HomeComing */;
+			productReference = F29505E77EF3A7A9DDBC39BF617DBB2C /* Pods_DRBS_HomeComing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		6AE4A3D573DED275B034E20506596C62 /* FirebaseAuth */ = {
@@ -33162,6 +33162,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
+					/usr/lib/swift,
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -33978,6 +33983,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
+					/usr/lib/swift,
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

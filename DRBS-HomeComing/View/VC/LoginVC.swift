@@ -118,12 +118,10 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     
     // MARK: - Action
     @objc func appleLoginButtonTapped() {
-        print("appleLoginButtonTapped()")
         startSignInWithAppleFlow()
     }
     
     @objc func kakaoLoginButtonTapped() {
-        print("kakaoLoginButtonTapped()")
         authVM.kakaoLogin()
         
         /// 비동기라 여기 작성하기가 힘들듯. Combine Publisher 사용..?
