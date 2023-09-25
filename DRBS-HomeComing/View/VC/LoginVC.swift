@@ -44,8 +44,7 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     }
     
     let versionLabel = UILabel().then {
-        $0.font = UIFont(name: "Pretendard", size: 10)
-        $0.text = "App ver. 1.0.0"
+        $0.font = UIFont(name: "Pretendard", size: 12)
         $0.textAlignment = .center
         $0.textColor = UIColor(red: 0.64, green: 0.62, blue: 0.62, alpha: 1.0)
     }
@@ -67,6 +66,7 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        updateVersionLabel()
     }
     
     // MARK: - Helpers
@@ -114,6 +114,21 @@ class LoginVC: UIViewController, ASAuthorizationControllerPresentationContextPro
         return gradientLayer
     }
     
+    private func retrieveAppVersion() -> String? {
+        guard let dictionary = Bundle.main.infoDictionary,
+              let version = dictionary["CFBundleShortVersionString"] as? String,
+              let build = dictionary["CFBundleVersion"] as? String else {
+            return nil
+        }
+        return "\(version).\(build)"
+    }
+    
+    private func updateVersionLabel() {
+        guard let appVersion = retrieveAppVersion() else {
+            return
+        }
+        versionLabel.text = "App ver. \(appVersion)"
+    }
     
     
     // MARK: - Action
