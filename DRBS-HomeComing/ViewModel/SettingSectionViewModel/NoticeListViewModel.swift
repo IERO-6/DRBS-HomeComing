@@ -19,7 +19,7 @@ class NoticeListViewModel {
     //MARK: - Input
     
     func fetchNotices() {
-        self.notices.append(NoticeList(title: "도라방스가 새롭게 오픈 하였습니다!", date: "2023-09-14"))
+        self.notices.append(NoticeList(title: "도라방스가 새롭게 오픈 하였습니다!", date: "2023-09-22"))
     }
 
     

@@ -55,6 +55,7 @@
 		21B6276C2A83844400081D5E /* ModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276B2A83844400081D5E /* ModalVC.swift */; };
 		21B6276F2A83A95B00081D5E /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6276E2A83A95B00081D5E /* AnnotationView.swift */; };
 		21CD21EB2AB6C598009690DA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */; };
+		21D7E6F62AC16472001D9F22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D7E6F52AC16472001D9F22 /* LaunchScreen.storyboard */; };
 		21F954152A9F78DD00F395B0 /* BookMarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F954142A9F78DD00F395B0 /* BookMarkCell.swift */; };
 		B386B08B2A8EAA8200E68A2D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B386B08A2A8EAA8200E68A2D /* LoginVC.swift */; };
 		B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B386B08D2A8F140500E68A2D /* Pretendard-SemiBold.otf */; };
@@ -130,6 +131,7 @@
 		21B6276E2A83A95B00081D5E /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		21CD21EC2AB6D0C0009690DA /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		21D7E6F52AC16472001D9F22 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21F954142A9F78DD00F395B0 /* BookMarkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkCell.swift; sourceTree = "<group>"; };
 		6BB76A4B9218DD95A0E4D0C6 /* Pods-DRBS-HomeComing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.debug.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.debug.xcconfig"; sourceTree = "<group>"; };
 		ADEFB8A0A9B953872733D735 /* Pods_DRBS_HomeComing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DRBS_HomeComing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -259,6 +261,7 @@
 				218ACDFA2A75266A00687EE6 /* ViewModel */,
 				218ACDF02A75262500687EE6 /* Info.plist */,
 				21CD21EA2AB6C598009690DA /* GoogleService-Info.plist */,
+				21D7E6F52AC16472001D9F22 /* LaunchScreen.storyboard */,
 			);
 			path = "DRBS-HomeComing";
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				21B627602A83470A00081D5E /* .swiftlint.yml in Resources */,
 				B386B0982A8F140500E68A2D /* Pretendard-Regular.otf in Resources */,
 				B386B09B2A8F140500E68A2D /* Pretendard-ExtraBold.otf in Resources */,
+				21D7E6F62AC16472001D9F22 /* LaunchScreen.storyboard in Resources */,
 				B386B09C2A8F140500E68A2D /* Pretendard-Light.otf in Resources */,
 				B386B0992A8F140500E68A2D /* Pretendard-Bold.otf in Resources */,
 				B386B09A2A8F140500E68A2D /* Pretendard-Medium.otf in Resources */,
@@ -754,6 +758,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "도라방스";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
 				INFOPLIST_KEY_NSLocationUsageDescription = "This App requires you to access your location.";
@@ -799,6 +804,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DRBS-HomeComing/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "도라방스";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "다른 지역을 검색하고 다시 사용자의 위치로 돌아오기 힘든 경우를 대비하여, 사용자의 현재 위치를 사용하기 위해 권한 설정이 필요합니다.";
 				INFOPLIST_KEY_NSLocationUsageDescription = "This App requires you to access your location.";
