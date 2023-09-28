@@ -57,10 +57,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         vc1.allHouseModels = houses
         vc2.houseViewModel.houses = houses
-        
-        let tabbarController = UITabBarController()
-        tabbarController.tabBar.tintColor = Constant.appColor
-        tabbarController.tabBar.backgroundColor = .white
+    
+        let tabbarController = Tabbar()
         tabbarController.viewControllers=[nav1 ,nav2]
         return tabbarController
 
