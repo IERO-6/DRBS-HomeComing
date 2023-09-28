@@ -22,7 +22,6 @@ final class AuthViewModel {
     //MARK: - Logics
     /// - note: kakaoLogin - 카카오 로그인
     func kakaoLogin(){
-        print("LoginViewModel - handleKakaoLogin() called")
         
         /// 카카오톡 어플이 존재할 경우
         if UserApi.isKakaoTalkLoginAvailable() {
@@ -30,7 +29,6 @@ final class AuthViewModel {
                 if let error = error {
                     print(error)
                 } else {
-                    print("loginWithKakaoTalk() success.")
                     //_ = oauthToken
                     //let accessToken = oauthToken?.accessToken
                     
@@ -42,7 +40,6 @@ final class AuthViewModel {
                 if let error = error {
                     print(error)
                 } else {
-                    print("loginWithKakaoAccount() success.")
                     //                    _ = oauthToken
                     
                     self.kakaoInfo()
@@ -63,9 +60,7 @@ final class AuthViewModel {
                     /// 성공 시
                     case .success(let isSignedIn):
                         if isSignedIn { /// - 로그인 성공 시 처리
-                            print("notice: 계정 생성에 성공하였습니다.")
                         } else { /// - 이미 계정이 있는 경우 처리
-                            print("notice: 이미 계정이 존재합니다.")
                         }
                         UserDefaults.standard.set("KAKAO", forKey: "social") /// userDefault에 기록
                         
@@ -91,16 +86,12 @@ final class AuthViewModel {
                 UserApi.shared.logout {(error) in
                     if let error = error {
                         print(error)
-                    } else {
-                        print("kakao logout() success.")
                     }
                 }
             case "APPLE":
                 UserApi.shared.logout {(error) in
                     if let error = error {
                         print(error)
-                    } else {
-                        print("apple logout() success.")
                     }
                 }
             default:
@@ -134,18 +125,14 @@ final class AuthViewModel {
                     if let error = error {
                         print(error)
                     }
-                    else {
-                        print("kakao unlink() success.")
-                    }
+                   
                 }
             case "APPLE":
                 UserApi.shared.unlink {(error) in
                     if let error = error {
                         print(error)
                     }
-                    else {
-                        print("apple unlink() success.")
-                    }
+                    
                 }
             default:
                 break
@@ -169,13 +156,13 @@ final class AuthViewModel {
             for item in result.items {
                 item.delete { error in
                     if let error = error { print("Error deleting file: \(error.localizedDescription)")
-                    } else { print("File deleted successfully: \(item.name)") }
+                    }
                 }
             }
             listRef.delete { error in
                 if let error = error {
                     print("Error deleting path: \(error.localizedDescription)")
-                } else { print("Path deleted successfully: \(pathToDelete)") }
+                }
             }
         }
         
@@ -189,9 +176,7 @@ final class AuthViewModel {
                         document.reference.delete { error in
                             if let error = error {
                                 print("Error deleting document: \(error.localizedDescription)")
-                            } else {
-                                print("Document deleted successfully.")
-                            }
+                            } 
                         }
                     }
                 }

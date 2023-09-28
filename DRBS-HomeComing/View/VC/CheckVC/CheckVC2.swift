@@ -584,15 +584,6 @@ final class CheckVC2: UIViewController {
             면적TextField.text = house.면적
             계약기간TextField.text = house.계약기간
             memoTextView.text = house.기록
-//            self.houseViewModel.보증금 = house.보증금
-//            self.houseViewModel.월세or전세금 = house.월세
-//            self.houseViewModel.관리비 = house.관리비
-//            self.houseViewModel.면적 = house.면적
-//            self.houseViewModel.계약기간 = house.계약기간
-//            self.houseViewModel.memo = house.기록
-//            self.houseViewModel.입주가능일 = house.입주가능일
-//            self.houseViewModel.관리비미포함목록 = house.관리비미포함목록 ?? []
-//            self.houseViewModel.uiImages = []
             self.houseViewModel.stringImages = house.사진 ?? []
             입주가능일button.setTitle(house.입주가능일 ?? "", for: .normal)
             입주가능일button.setTitleColor(UIColor.black, for: .normal)

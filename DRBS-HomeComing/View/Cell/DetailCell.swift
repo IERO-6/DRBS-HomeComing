@@ -99,10 +99,10 @@ final class DetailCell: UITableViewCell {
     private let memoTextView = UITextView().then {
         $0.backgroundColor = .systemGray6
         $0.isScrollEnabled = false
-        $0.isSelectable = false
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.textContainer.maximumNumberOfLines = 2
         $0.textContainer.lineBreakMode = .byTruncatingTail
+        $0.isUserInteractionEnabled = false
     }
     //MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

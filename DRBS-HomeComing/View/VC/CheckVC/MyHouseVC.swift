@@ -573,14 +573,13 @@ final class MyHouseVC: UIViewController {
                 print("Failed to update bookmark : \(error.localizedDescription)")
                 return
             }
-            print(" bookmark update success")
         }
     }
     
     @objc func ellipsisButtonTapped(_ sender: UIButton) {
         let edit = UIAction(title: "편집", image: UIImage(systemName: "square.and.pencil"), handler: { _ in
             let checkVC1 = CheckVC1()
-            checkVC1.house = self.selectedHouse
+            checkVC1.houseViewModel.house = self.selectedHouse
             self.navigationController?.pushViewController(checkVC1, animated: true)
         })
         

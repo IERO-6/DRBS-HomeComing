@@ -1,15 +1,16 @@
 # DRBS
-![DRBS Banner](https://github.com/Insuuu24/DRBS-HomeComing/assets/117909631/e0e59744-8efe-4036-b76d-ae7284fe7cb8)
+![DRBS Banner](https://github.com/IERO-6/DRBS-HomeComing/assets/117909631/6e62720a-79ed-49d5-830f-307115467327)
+
 
  <br>
 
 ## 1️⃣ DRBS 소개
-복잡한 부동산 체크리스트를 한 번에! 손쉬운 체크리스트 서비스 도라방스
+복잡한 부동산 체크리스트를 한 번에. 손쉬운 체크리스트 서비스 도라방스
 
-blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblah
+메모장에 따로따로 저장해두어 복잡한 부동산 정보들을 도라방스에서 한번에 정리해보세요.
 
 
-[앱스토어에서 다운 받기](여기에 URL 넣을껑)
+앱 스토어 : [App Store](https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709)
 
 <br>
 
@@ -45,7 +46,7 @@ blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblah
 | ------------ | --------------------------------------------------------------------------------------------------------------------------- |
 |Code Convention|https://iero.site/Code-Convention-11ebd9e5b3dd411dbf912610e50e7e0c|
 |Commit Convention|https://iero.site/Git-Convention-4b46c76a8d5a477c976d54d269c0200d|
-|Trouble Shooting|
+|Trouble Shooting|https://iero.site/DRBS-af392606cb8c4c2dac5e704a33efd2bc|
 
 <br>
 
