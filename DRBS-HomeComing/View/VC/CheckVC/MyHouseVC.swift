@@ -437,8 +437,10 @@ final class MyHouseVC: UIViewController {
     //MARK: - UI
     func configureUIWithData() {
         guard let house = self.selectedHouse else { return }
+        //하우스 모델을 받아옴
         self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
+            //거주형태, 거래방식에 대한 값 조정
             switch house.livingType ?? "" {
             case "아파트/오피스텔":
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
@@ -470,14 +472,12 @@ final class MyHouseVC: UIViewController {
             }
         }
         // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
-        // 왜 이미지가 5개여야하는지..?
         while selectedImages.count < 5 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
         }
 
-//        let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
