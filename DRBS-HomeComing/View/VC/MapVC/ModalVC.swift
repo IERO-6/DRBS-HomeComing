@@ -8,12 +8,9 @@ final class ModalVC: UIViewController {
     
     var houseViewModel: HouseViewModel = HouseViewModel()
     
-    private let backView = UIView().then {
-        $0.backgroundColor = .white
-    }
+    private let backView = UIView().then { $0.backgroundColor = .white }
     
     private let nameLabel = UILabel().then {
-        $0.text = "신대방역 근처 원룸"
         $0.textColor = .black
         $0.font = UIFont(name: "Pretendard-Bold", size: 22)
         $0.textAlignment = .left
@@ -34,7 +31,6 @@ final class ModalVC: UIViewController {
     }
     
     private let addressLabel = UILabel().then {
-        $0.text = "서울특별시 관악구 신림동 617-14"
         $0.textColor = .darkGray
         $0.font = UIFont(name: "Pretendard-Regular", size: 16)
         $0.textAlignment = .left
@@ -95,23 +91,13 @@ final class ModalVC: UIViewController {
         $0.alignment = .fill
     }
     
-    
     private let memoTextView = UITextView().then {
         $0.backgroundColor = .systemGray6
         $0.isScrollEnabled = false
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.isUserInteractionEnabled = false
-//        $0.textContainer.maximumNumberOfLines = 2
         $0.textContainer.lineBreakMode = .byTruncatingTail
     }
-    
-//    private lazy var goButton = UIButton().then {
-//        $0.backgroundColor = Constant.appColor
-//        $0.setTitle("바로가기", for: .normal)
-//        $0.setTitleColor(UIColor.white, for: .normal)
-//        $0.layer.cornerRadius = 8
-//        $0.addTarget(self, action: #selector(goButtonTapped), for: .touchUpInside)
-//    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -199,11 +185,7 @@ final class ModalVC: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(150)
         }
-//        goButton.snp.makeConstraints {
-//            $0.top.equalTo(memoTextView.snp.bottom).offset(20)
-//            $0.leading.trailing.equalToSuperview()
-//            $0.height.equalTo(50)
-//        }
+
         
     }
     
@@ -264,19 +246,4 @@ final class ModalVC: UIViewController {
             return
         }
     }
-    
-  
-    //MARK: - Actions
-//    @objc func goButtonTapped() {
-//        dismiss(animated: true) {
-//            let myHouseVC = MyHouseVC()
-//            myHouseVC.selectedHouse = self.houseViewModel.house
-//            myHouseVC.from = "map"
-//            self.navigationController?.pushViewController(myHouseVC, animated: true)
-//        }
-//    }
-
 }
-
-//MARK: - Extensions
-

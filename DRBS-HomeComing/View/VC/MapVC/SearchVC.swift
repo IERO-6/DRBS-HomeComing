@@ -16,8 +16,8 @@ final class SearchVC: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        settingSearchBar()
         configureUI()
+        settingSearchBar()
         settingTableView()
         settingSearchCompleter()
         
