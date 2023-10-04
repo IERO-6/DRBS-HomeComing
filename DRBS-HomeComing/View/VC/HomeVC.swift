@@ -145,10 +145,6 @@ extension HomeVC: UITableViewDelegate {
         return headerView
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("tableView\(indexPath)")
-        print("tableView\(indexPath.row)")
-    }
 }
 
 //MARK: - UITableViewDataSource
