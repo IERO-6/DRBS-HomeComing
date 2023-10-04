@@ -462,7 +462,8 @@ final class MyHouseVC: UIViewController {
             "전기": "lightImage.png",
             "수도": "waterImage.png",
             "TV": "tvImage.png",
-            "인터넷": "internetImage.png"
+            "인터넷": "internetImage.png",
+            "기타": "etc.png"
         ]
         guard let 관리비미포함 = house.관리비미포함목록 else { return }
         let 관리비미포함목록 = 관리비미포함.sorted()
@@ -473,7 +474,8 @@ final class MyHouseVC: UIViewController {
                 }
             }
         }
-        while selectedImages.count < 5 {
+        // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
+        while selectedImages.count < 6 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
@@ -644,7 +646,7 @@ extension MyHouseVC {
                 $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
                 $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
                 $0.height.equalTo(36)
-                $0.width.equalTo(27*5 + 5*4)
+                $0.width.equalTo(27*6 + 5*5)
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
