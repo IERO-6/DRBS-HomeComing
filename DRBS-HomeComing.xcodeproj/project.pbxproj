@@ -10,7 +10,6 @@
 		1863355A2A8A0D0B00E283D5 /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186335592A8A0D0B00E283D5 /* DetailVC.swift */; };
 		1863355E2A8A0D1D00E283D5 /* DetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355D2A8A0D1D00E283D5 /* DetailCell.swift */; };
 		186335602A8A0D2900E283D5 /* CheckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1863355F2A8A0D2900E283D5 /* CheckViewModel.swift */; };
-		18FC92B82AC531F6002B9ABB /* config in Resources */ = {isa = PBXBuildFile; fileRef = 18FC92B72AC531F6002B9ABB /* config */; };
 		2143CE362A7904DD00A5DB36 /* OneroomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE352A7904DD00A5DB36 /* OneroomCell.swift */; };
 		2143CE382A79051400A5DB36 /* VillaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143CE372A79051400A5DB36 /* VillaCell.swift */; };
 		2158BA532A949B510064AFC4 /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2158BA522A949B510064AFC4 /* CustomSlider.swift */; };
@@ -151,7 +150,6 @@
 		B38C34D82AAB8F1700F8E3EF /* MyHouseImageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageVC.swift; sourceTree = "<group>"; };
 		B38C34DA2AAB8F3100F8E3EF /* MyHouseImageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHouseImageDetailVC.swift; sourceTree = "<group>"; };
 		B3CEE3922AA111D9006A0D79 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		EB2FF6A02AC20662004A3D79 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		EBD42DAE2AAC704A00568ED0 /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		EBD42DB22AACBE3400568ED0 /* CategoryNoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryNoDataView.swift; sourceTree = "<group>"; };
 		F4B999EA08173C79FED36B01 /* Pods-DRBS-HomeComing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DRBS-HomeComing.release.xcconfig"; path = "Target Support Files/Pods-DRBS-HomeComing/Pods-DRBS-HomeComing.release.xcconfig"; sourceTree = "<group>"; };
@@ -233,7 +231,6 @@
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
-				EB2FF6A02AC20662004A3D79 /* config.xcconfig */,
 				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
 				218ACDE02A75262400687EE6 /* Products */,
@@ -492,7 +489,6 @@
 				21CD21EB2AB6C598009690DA /* GoogleService-Info.plist in Resources */,
 				B38C34D32AAB8C8D00F8E3EF /* Raleway-Bold.ttf in Resources */,
 				B386B09D2A8F140500E68A2D /* Pretendard-Black.otf in Resources */,
-				18FC92B82AC531F6002B9ABB /* config in Resources */,
 				B386B0972A8F140500E68A2D /* Pretendard-Thin.otf in Resources */,
 				218ACDEC2A75262500687EE6 /* Assets.xcassets in Resources */,
 				B386B0962A8F140500E68A2D /* Pretendard-SemiBold.otf in Resources */,
@@ -628,7 +624,6 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2FF6A02AC20662004A3D79 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -690,7 +685,6 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EB2FF6A02AC20662004A3D79 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;

@@ -437,8 +437,10 @@ final class MyHouseVC: UIViewController {
     //MARK: - UI
     func configureUIWithData() {
         guard let house = self.selectedHouse else { return }
+        //하우스 모델을 받아옴
         self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
+            //거주형태, 거래방식에 대한 값 조정
             switch house.livingType ?? "" {
             case "아파트/오피스텔":
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
@@ -460,7 +462,8 @@ final class MyHouseVC: UIViewController {
             "전기": "lightImage.png",
             "수도": "waterImage.png",
             "TV": "tvImage.png",
-            "인터넷": "internetImage.png"
+            "인터넷": "internetImage.png",
+            "기타": "etc.png"
         ]
         for (key, imageName) in imageMapping {
             if let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(key) {
@@ -470,14 +473,12 @@ final class MyHouseVC: UIViewController {
             }
         }
         // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
-        // 왜 이미지가 5개여야하는지..?
-        while selectedImages.count < 5 {
+        while selectedImages.count < 6 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
         }
 
-//        let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
@@ -646,7 +647,7 @@ extension MyHouseVC {
                 $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
                 $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
                 $0.height.equalTo(36)
-                $0.width.equalTo(27*5 + 5*4)
+                $0.width.equalTo(27*6 + 5*5)
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)
