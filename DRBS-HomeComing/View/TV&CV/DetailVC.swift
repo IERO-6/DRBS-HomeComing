@@ -22,7 +22,6 @@ final class DetailVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
         configureNav()
         bannerView.load(GADRequest())
         
