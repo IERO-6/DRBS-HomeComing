@@ -232,7 +232,6 @@
 		218ACDD62A75262400687EE6 = {
 			isa = PBXGroup;
 			children = (
-				B33D2A282ACC829100E7247B /* config.xcconfig */,
 				21B6275F2A83470A00081D5E /* .swiftlint.yml */,
 				218ACDE12A75262400687EE6 /* DRBS-HomeComing */,
 				218ACDE02A75262400687EE6 /* Products */,
@@ -626,7 +625,6 @@
 /* Begin XCBuildConfiguration section */
 		218ACDF12A75262500687EE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B33D2A282ACC829100E7247B /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -688,7 +686,6 @@
 		};
 		218ACDF22A75262500687EE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B33D2A282ACC829100E7247B /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
