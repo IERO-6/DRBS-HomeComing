@@ -465,8 +465,10 @@ final class MyHouseVC: UIViewController {
             "인터넷": "internetImage.png",
             "기타": "etc.png"
         ]
+        guard let 관리비미포함 = house.관리비미포함목록 else { return }
+        let 관리비미포함목록 = 관리비미포함.sorted()
         for (key, imageName) in imageMapping {
-            if let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(key) {
+            if 관리비미포함목록.contains(key) {
                 if let image = UIImage(named: imageName) {
                     selectedImages.append(image)
                 }
@@ -478,14 +480,12 @@ final class MyHouseVC: UIViewController {
                 selectedImages.append(placeholder)
             }
         }
-
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -525,8 +525,8 @@ final class MyHouseVC: UIViewController {
         self.tradingTypeLabel.text = house.tradingType ?? ""
 
         self.mapView.setRegion(MKCoordinateRegion(center: house.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: false)
+        
         self.mapView.addAnnotation(house)
-        //span의 델타값이 작을수록 확대레벨 올라감
 
         self.memoTextView.text = house.기록 ?? ""
 
@@ -553,7 +553,6 @@ final class MyHouseVC: UIViewController {
         guard let house = selectedHouse else { return }
         let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
         guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
-              rightBarButtonItems.count > 1,
               let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
         
         bookmarkButton.setImage(UIImage(named: imageName), for: .normal)
