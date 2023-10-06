@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "annotation_dafault.png",
+      "filename" : "etc.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "annotation_default2.png",
+      "filename" : "etc@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "annotation_default3.png",
+      "filename" : "etc@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

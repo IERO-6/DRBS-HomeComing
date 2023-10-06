@@ -437,8 +437,10 @@ final class MyHouseVC: UIViewController {
     //MARK: - UI
     func configureUIWithData() {
         guard let house = self.selectedHouse else { return }
+        //하우스 모델을 받아옴
         self.checkListView.isUserInteractionEnabled = false
         DispatchQueue.main.async {
+            //거주형태, 거래방식에 대한 값 조정
             switch house.livingType ?? "" {
             case "아파트/오피스텔":
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(110)}
@@ -460,31 +462,31 @@ final class MyHouseVC: UIViewController {
             "전기": "lightImage.png",
             "수도": "waterImage.png",
             "TV": "tvImage.png",
-            "인터넷": "internetImage.png"
+            "인터넷": "internetImage.png",
+            "기타": "etc.png"
         ]
+        guard let 관리비미포함 = house.관리비미포함목록 else { return }
+        let 관리비미포함목록 = 관리비미포함.sorted().reversed()
+
         for (key, imageName) in imageMapping {
-            if let 관리비미포함목록 = house.관리비미포함목록, 관리비미포함목록.contains(key) {
+            if 관리비미포함목록.contains(key) {
                 if let image = UIImage(named: imageName) {
                     selectedImages.append(image)
                 }
             }
         }
         // 빈 이미지를 추가하여 총 5개의 이미지가 되도록 한다
-        // 왜 이미지가 5개여야하는지..?
-        while selectedImages.count < 5 {
+        while selectedImages.count < 6 {
             if let placeholder = UIImage(named: "emptyImage.png") {
                 selectedImages.append(placeholder)
             }
         }
-
-//        let image = UIImage(systemName: "photo.on.rectangle")
         DispatchQueue.main.async {
             for image in selectedImages {
                 let imageView = UIImageView()
                 imageView.translatesAutoresizingMaskIntoConstraints = false
                 imageView.image = image
                 imageView.contentMode = .scaleAspectFit
-
                 let desiredWidth: CGFloat = 27.0
                 let desiredHeight: CGFloat = 36.0
                 imageView.widthAnchor.constraint(equalToConstant: desiredWidth).isActive = true
@@ -524,35 +526,31 @@ final class MyHouseVC: UIViewController {
         self.tradingTypeLabel.text = house.tradingType ?? ""
 
         self.mapView.setRegion(MKCoordinateRegion(center: house.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)), animated: false)
+        
         self.mapView.addAnnotation(house)
-        //span의 델타값이 작을수록 확대레벨 올라감
 
         self.memoTextView.text = house.기록 ?? ""
 
         self.textCountLabel.text = "(\((house.기록 ?? "").count)/500)"
 
-        if (house.면적 ?? "0") == "0" {
-            self.면적ValueLabel.text = "정보가 없습니다"
-        }
-        if (house.입주가능일 ?? "").isEmpty {
-            self.입주가능일ValueLabel.text = "정보가 없습니다"
-        }
-        if (house.계약기간 ?? "").isEmpty {
+        
+        guard let 면적 = house.면적,
+              let 입주가능일 = house.입주가능일,
+              let 계약기간 = house.계약기간 else { return }
+        
+        if 면적.isEmpty { self.면적ValueLabel.text = "정보가 없습니다"
+        } else { self.면적ValueLabel.text = "\(면적) ㎡" }
+        if 입주가능일 == "ex) 23.08.28" { self.입주가능일ValueLabel.text = "정보가 없습니다"
+        } else { self.입주가능일ValueLabel.text = "(입주가능일)" + 입주가능일 }
+        if 계약기간.isEmpty {
             self.계약기간ValueLabel.text = "정보가 없습니다"
-        }
-        self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
-
-        self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? " ")
-
-        self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
-
+        } else { self.계약기간ValueLabel.text = 계약기간 + "년" }
     }
     
     private func updateBookmarkButtonState() {
         guard let house = selectedHouse else { return }
         let imageName = house.isBookMarked! ? "bookmark.fill" : "bookmark"
         guard let rightBarButtonItems = self.navigationItem.rightBarButtonItems,
-              rightBarButtonItems.count > 1,
               let bookmarkButton = rightBarButtonItems[1].customView as? UIButton else { return }
         
         bookmarkButton.setImage(UIImage(named: imageName), for: .normal)
@@ -646,7 +644,7 @@ extension MyHouseVC {
                 $0.centerY.equalTo(noneMaintenanceLabel.snp.centerY)
                 $0.leading.equalTo(noneMaintenanceLabel.snp.trailing).offset(10)
                 $0.height.equalTo(36)
-                $0.width.equalTo(27*5 + 5*4)
+                $0.width.equalTo(27*6 + 5*5)
             }
         } else if (selectedHouse?.관리비?.isEmpty ?? true == false) && (selectedHouse?.관리비미포함목록?.isEmpty ?? true) { //관리비는 있고 미포함은 없는
             mainView.addSubviews(maintenanceLabel, maintenanceCostLabel)

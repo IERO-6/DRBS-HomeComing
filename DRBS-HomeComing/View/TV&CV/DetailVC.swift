@@ -5,12 +5,14 @@ import GoogleMobileAds
 
 final class DetailVC: UIViewController {
     
-    //MARK: - Properties
+    // MARK: - Properties
     
+    var navTitle: String?
     private let noDataView = CategoryNoDataView()
     private lazy var tableView = UITableView()
     var houseViewModel = HouseViewModel()
     private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
+    var currentTitle: String?
     
     // MARK: - View Lifecycle
 
@@ -22,7 +24,6 @@ final class DetailVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
         configureNav()
         bannerView.load(GADRequest())
         
@@ -35,7 +36,7 @@ final class DetailVC: UIViewController {
         }
     }
     
-    //MARK: - Helpers
+    // MARK: - Helpers
     
     private func configureUI() {
         view.backgroundColor = .white
@@ -63,19 +64,30 @@ final class DetailVC: UIViewController {
     }
     
     private func configureNav() {
-        self.navigationController?.navigationBar.backItem?.title = ""
-        view.backgroundColor = .white
+        self.title = navTitle
+        let appearance = UINavigationBarAppearance().then {
+            $0.configureWithOpaqueBackground()
+            $0.backgroundColor = .white
+            $0.titleTextAttributes = [.foregroundColor: UIColor.black]
+            $0.shadowColor = nil
+        }
+
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
     }
     
     private func settingTV() {
         tableView.register(DetailCell.self, forCellReuseIdentifier: Constant.Identifier.detailCell.rawValue)
         tableView.dataSource = self
-//        tableView.rowHeight =
         tableView.delegate = self
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
+    
     @objc public func plusButtonTapped() {
         let additionalVC = CheckVC1()
         additionalVC.hidesBottomBarWhenPushed = true
@@ -83,7 +95,8 @@ final class DetailVC: UIViewController {
     }
 }
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
+
 extension DetailVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.houseViewModel.houses.count
@@ -99,7 +112,8 @@ extension DetailVC : UITableViewDataSource {
 }
 
 //MARK: - UITableViewDelegate
-extension DetailVC : UITableViewDelegate {
+
+extension DetailVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let myHouseVC = MyHouseVC()
         myHouseVC.selectedHouse = self.houseViewModel.houses[indexPath.row]

@@ -24,8 +24,8 @@ final class NoticeListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.fetchNotices()
-        noticeTableView.reloadData()
+//        viewModel.fetchNotices()
+//        noticeTableView.reloadData()
 
         configureNav()
         configureTableView()
@@ -36,6 +36,12 @@ final class NoticeListVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
+        NetworkingManager.shared.loadNotices { [weak self] notices in
+            DispatchQueue.main.async {
+                self?.viewModel.notices = notices
+                self?.noticeTableView.reloadData()
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

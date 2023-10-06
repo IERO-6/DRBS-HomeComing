@@ -318,38 +318,43 @@ final class CheckVC1: UIViewController {
     }
     
     @objc public func nextButtonTapped() {
-        guard let name = self.nameTextField.text,
-              let address = self.addressTextField.text,
-              !name.isEmpty && !address.isEmpty && self.houseViewModel.tradingType != nil && self.houseViewModel.livingType != nil else {
-            DispatchQueue.main.async {
-                let alert = UIAlertController(title: "항목 입력을 완료해주세요.", message: "모든 항목이 입력되지 않았습니다.", preferredStyle: .alert)
-                let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-                }
-                alert.addAction(confirm)
-                self.present(alert, animated: true)
-            }
-            return
-        }
         self.houseViewModel.switchAddressToCLCoordinate2D(address: self.addressTextField.text ?? "") { coordinate, error in
             if let error = error {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "주소 형식이 맞지 않습니다.", message: "주소를 다시 입력해주세요.", preferredStyle: .alert)
                     let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        self.addressTextField.text = ""
                     }
                     alert.addAction(confirm)
                     self.present(alert, animated: true)
                 }
                 print("Error geocoding address: \(error.localizedDescription)")
             } else if let coordinate = coordinate {
+                //좌표를 정상적으로 가져왔을 때
                 self.houseViewModel.address = self.addressTextField.text
                 self.houseViewModel.latitude = coordinate.latitude
                 self.houseViewModel.longitude = coordinate.longitude
+                self.houseViewModel.name = self.nameTextField.text
+                guard let name = self.nameTextField.text,
+                      let address = self.addressTextField.text,
+                      !name.isEmpty && !address.isEmpty &&
+                        self.houseViewModel.tradingType != nil &&
+                        self.houseViewModel.livingType != nil else {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "항목 입력을 완료해주세요.", message: "모든 항목이 입력되지 않았습니다.", preferredStyle: .alert)
+                        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
+                        }
+                        alert.addAction(confirm)
+                        self.present(alert, animated: true)
+                    }
+                    return
+                }
+                let checkVC2 = CheckVC2()
+                checkVC2.houseViewModel = self.houseViewModel
+                checkVC2.houseViewModel.house = self.houseViewModel.house
+                self.navigationController?.pushViewController(checkVC2, animated: true)
             }
-            self.houseViewModel.name = self.nameTextField.text
-            let checkVC2 = CheckVC2()
-            checkVC2.houseViewModel = self.houseViewModel
-            checkVC2.houseViewModel.house = self.houseViewModel.house
-            self.navigationController?.pushViewController(checkVC2, animated: true)
+            
         }
     }
     

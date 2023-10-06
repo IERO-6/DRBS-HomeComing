@@ -45,7 +45,6 @@ final class SettingVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
         configureNav()
         bannerView.load(GADRequest())
     }
@@ -224,7 +223,7 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                         }
                         break
                     case "App Store 리뷰하기":
-                        if let appStoreReviewURL = URL(string: "https://apps.apple.com/kr/app/%EC%8A%A4%ED%84%B0%EB%94%94%EC%9C%97%EB%AF%B8/id6446102842") {
+                        if let appStoreReviewURL = URL(string: "https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709") {
                             UIApplication.shared.open(appStoreReviewURL, options: [:], completionHandler: nil)
                         }
                         break

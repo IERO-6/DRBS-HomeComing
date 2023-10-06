@@ -1,6 +1,6 @@
 import UIKit
 
-struct NoticeList {
+struct NoticeList: Codable {
     let title: String
     let date: String
 }

@@ -8,11 +8,8 @@ import SnapKit
 final class MapVC: UIViewController {
     //MARK: - Properties
     lazy var houseViewModel = HouseViewModel()
-    
     private lazy var mkMapView = MKMapView(frame: self.view.frame)
-    
     private lazy var locationManager = CLLocationManager()
-    
     private lazy var currentLocationButton = UIButton().then {
         $0.setImage(UIImage(systemName: "location"), for: .normal)
         $0.backgroundColor = .white
@@ -20,9 +17,7 @@ final class MapVC: UIViewController {
         $0.tintColor = .darkGray
         $0.addTarget(self, action: #selector(currentLocationTapped), for: .touchUpInside)
     }
-    
     private lazy var separateLine = UIView().then {$0.backgroundColor = .darkGray}
-
     private lazy var searchButton = UIButton().then {
         $0.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         $0.backgroundColor = .white
@@ -30,7 +25,6 @@ final class MapVC: UIViewController {
         $0.tintColor = .darkGray
         $0.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
-    
     private lazy var stackView = UIStackView().then {
         $0.spacing = 0
         $0.axis = .vertical
@@ -155,6 +149,7 @@ final class MapVC: UIViewController {
 
 //MARK: - MKMapViewDelegate
 extension MapVC: MKMapViewDelegate {
+    //어노테이션 뷰 선택됐을 때, 실행되는 메서드
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let modalVC = ModalVC()
         guard let selectedAnnotation = view.annotation as? House else { return }
@@ -162,8 +157,9 @@ extension MapVC: MKMapViewDelegate {
         present(modalVC, animated: true)
     }
     
+    
+    //커스텀 어노테이션 뷰 설정
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // 커스텀 어노테이션 뷰 설정
         guard let annotation = annotation as? House else {return nil}
         var annotationView = self.mkMapView.dequeueReusableAnnotationView(withIdentifier: Constant.Identifier.annotationView.rawValue)
         if annotationView == nil {
@@ -180,13 +176,12 @@ extension MapVC: MKMapViewDelegate {
         default:
             annotationImage = UIImage()
         }
-//        annotationImage.draw(in: CGRect(x: 0, y: 0, width: 20, height: 20))
         annotationView?.image = annotationImage
         return annotationView
     }
     
     
-    
+    //맵뷰의 지역이 변했을 때 실행되는 메서드(화면이동시)
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentRegion = mkMapView.region
         mapView.limitRegionToKorea(currentRegion: currentRegion)
@@ -199,7 +194,6 @@ extension MapVC: MKMapViewDelegate {
                 }
             }
         }
-        
     }
 }
 //MARK: - CLLocationManagerDelegate
@@ -231,6 +225,7 @@ extension MapVC: CLLocationManagerDelegate {
 }
 
 extension MapVC: searchViewDelegate {
+    //선택한 지역을 받아와서 해당 지역으로 설정하는 메서드1
     func setRegion(cood: CLLocationCoordinate2D) {
         self.mkMapView.setRegion(.init(center: cood, span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
     }
