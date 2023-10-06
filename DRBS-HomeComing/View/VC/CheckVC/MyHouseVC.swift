@@ -466,7 +466,8 @@ final class MyHouseVC: UIViewController {
             "기타": "etc.png"
         ]
         guard let 관리비미포함 = house.관리비미포함목록 else { return }
-        let 관리비미포함목록 = 관리비미포함.sorted()
+        let 관리비미포함목록 = 관리비미포함.sorted().reversed()
+
         for (key, imageName) in imageMapping {
             if 관리비미포함목록.contains(key) {
                 if let image = UIImage(named: imageName) {
