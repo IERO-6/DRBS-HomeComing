@@ -12,6 +12,7 @@ final class DetailVC: UIViewController {
     private lazy var tableView = UITableView()
     var houseViewModel = HouseViewModel()
     private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
+    var currentTitle: String?
     
     // MARK: - View Lifecycle
 

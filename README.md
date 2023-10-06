@@ -1,14 +1,12 @@
-# DRBS
+# 🏠 DRBS
 ![DRBS Banner](https://github.com/IERO-6/DRBS-HomeComing/assets/117909631/6e62720a-79ed-49d5-830f-307115467327)
 
-
- <br>
+<br>
 
 ## 1️⃣ DRBS 소개
 복잡한 부동산 체크리스트를 한 번에. 손쉬운 체크리스트 서비스 도라방스
 
 메모장에 따로따로 저장해두어 복잡한 부동산 정보들을 도라방스에서 한번에 정리해보세요.
-
 
 앱 스토어 : [App Store](https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709)
 
@@ -42,8 +40,8 @@
 
 ## 4️⃣  Ground Rule
 
-| 제목        | URL                                                                             |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| 제목        | URL                                                                  |
+| ------------ | -------------------------------------------------------------------|
 |Code Convention|https://iero.site/Code-Convention-11ebd9e5b3dd411dbf912610e50e7e0c|
 |Commit Convention|https://iero.site/Git-Convention-4b46c76a8d5a477c976d54d269c0200d|
 |Trouble Shooting|https://iero.site/DRBS-af392606cb8c4c2dac5e704a33efd2bc|
@@ -51,4 +49,85 @@
 <br>
 
 ## 5️⃣ File Structures
+```bash
+├── DRBS-HomeComing.entitlements
+├── 📁 Resources
+│   ├── Assets.xcassets
+│   └── Font
+├── 📁 API
+│   └── NetworkingManager.swift
+├── 📁 Helpers
+│   ├── AppDelegate.swift
+│   ├── Constants.swift
+│   ├── Extensions.swift
+│   ├── Protocols.swift
+│   └── SceneDelegate.swift
+├── 📁 Model
+│   ├── CheckList.swift
+│   ├── House.swift
+│   └── 📁 SettingSectionModel
+│       ├── NoticeList.swift
+│       └── SettingSection.swift
+├── View
+│   ├── 📁 Cell
+│   │   ├── 📁 HomeCell
+│   │   │   ├── ApartCell.swift
+│   │   │   ├── BookMarkCell.swift
+│   │   │   ├── HouseTVCell.swift
+│   │   │   ├── OneroomCell.swift
+│   │   │   └── VillaCell.swift
+│   │   ├── DetailCell.swift
+│   │   ├── HomeImagesCell.swift
+│   │   ├── SearchCell.swift
+│   │   └── 📁 SettingSectionCell
+│   │       ├── AccountSettingCell.swift
+│   │       ├── AppVersionCell.swift
+│   │       ├── LisenseCell.swift
+│   │       ├── NoticeCell.swift
+│   │       ├── NoticeListCell.swift
+│   │       └── OptionCell.swift
+│   ├── 📁 TV&CV
+│   │   ├── DetailVC.swift
+│   │   ├── MyHouseImageDetailVC.swift
+│   │   └── MyHouseImageVC.swift
+│   ├── CategoryNoDataView.swift
+│   ├── CustomSlider.swift
+│   ├── NoDataView.swift
+│   └── 📁 VC
+│       ├── 📁 CheckVC
+│       │   ├── CalendarVC.swift
+│       │   ├── CheckListUIView.swift
+│       │   ├── CheckVC1.swift
+│       │   ├── CheckVC2.swift
+│       │   ├── MyHouseVC.swift
+│       │   ├── PopUpVC.swift
+│       │   ├── PopUpView.swift
+│       │   └── RateVC.swift
+│       ├── HomeVC.swift
+│       ├── LoginVC.swift
+│       ├── 📁 MapVC
+│       │   ├── AnnotationView.swift
+│       │   ├── MapVC.swift
+│       │   ├── ModalVC.swift
+│       │   └── SearchVC.swift
+│       ├── 📁 SettingSectionVC
+│       │   ├── NoticeListVC.swift
+│       │   ├── SettingVC.swift
+│       │   └── WithdrawVC.swift
+│       └── Tabbar.swift
+└── 📁 ViewModel
+│    ├── AuthViewModel.swift
+│    ├── CheckViewModel.swift
+│    ├── HouseViewModel.swift
+│    └── 📁 SettingSectionViewModel
+│        ├── NoticeListViewModel.swift
+│        └── SettingViewModel.swift
+├── GoogleService-Info.plist
+├── Info.plist
+└── LaunchScreen.storyboard
+```
 
+<br>
+
+### 6️⃣ Team Notion
+[팀 페이지 바로가기](https://iero.site/)
