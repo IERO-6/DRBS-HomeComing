@@ -19,3 +19,5 @@ final class Tabbar: UITabBarController {
         self.tabBar.tintColor = Constant.appColor
     }
 }
+
+

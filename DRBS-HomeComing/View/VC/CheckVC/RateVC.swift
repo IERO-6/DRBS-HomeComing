@@ -163,6 +163,12 @@ final class RateVC: UIViewController {
                                 self.hud.dismiss()
                             }
                         }
+                    } else {
+                        //올리는데 실패한 경우
+                        DispatchQueue.main.async {
+                            self.hud.dismiss()
+                            self.presentAlert(alertTitle: "올리는 데 실패했습니다.", message: "다시 시도해보세요", confirmMessage: "확인")
+                        }
                     }
                 }
                 
@@ -178,6 +184,12 @@ final class RateVC: UIViewController {
                         let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
                         sceneDelegate?.changeRootViewController(Tabbar(), animated: true)
                         DispatchQueue.main.async { self.hud.dismiss() }
+                    }
+                } else {
+                    //올리는데 실패한 경우
+                    DispatchQueue.main.async {
+                        self.hud.dismiss()
+                        self.presentAlert(alertTitle: "올리는 데 실패했습니다.", message: "다시 시도해보세요", confirmMessage: "확인")
                     }
                 }
             }

@@ -466,7 +466,8 @@ final class MyHouseVC: UIViewController {
             "기타": "etc.png"
         ]
         guard let 관리비미포함 = house.관리비미포함목록 else { return }
-        let 관리비미포함목록 = 관리비미포함.sorted()
+        let 관리비미포함목록 = 관리비미포함.sorted().reversed()
+
         for (key, imageName) in imageMapping {
             if 관리비미포함목록.contains(key) {
                 if let image = UIImage(named: imageName) {
@@ -532,21 +533,18 @@ final class MyHouseVC: UIViewController {
 
         self.textCountLabel.text = "(\((house.기록 ?? "").count)/500)"
 
-        if (house.면적 ?? "0") == "0" {
-            self.면적ValueLabel.text = "정보가 없습니다"
-        }
-        if (house.입주가능일 ?? "").isEmpty {
-            self.입주가능일ValueLabel.text = "정보가 없습니다"
-        }
-        if (house.계약기간 ?? "").isEmpty {
+        
+        guard let 면적 = house.면적,
+              let 입주가능일 = house.입주가능일,
+              let 계약기간 = house.계약기간 else { return }
+        
+        if 면적.isEmpty { self.면적ValueLabel.text = "정보가 없습니다"
+        } else { self.면적ValueLabel.text = "\(면적) ㎡" }
+        if 입주가능일 == "ex) 23.08.28" { self.입주가능일ValueLabel.text = "정보가 없습니다"
+        } else { self.입주가능일ValueLabel.text = "(입주가능일)" + 입주가능일 }
+        if 계약기간.isEmpty {
             self.계약기간ValueLabel.text = "정보가 없습니다"
-        }
-        self.면적ValueLabel.text = "\(house.면적 ?? "0") ㎡"
-
-        self.입주가능일ValueLabel.text = "(입주가능일)" + (house.입주가능일 ?? " ")
-
-        self.계약기간ValueLabel.text = (house.계약기간 ?? "") + "년"
-
+        } else { self.계약기간ValueLabel.text = 계약기간 + "년" }
     }
     
     private func updateBookmarkButtonState() {
