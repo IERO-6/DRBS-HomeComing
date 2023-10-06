@@ -92,15 +92,19 @@ final class HomeVC: UIViewController {
         switch sender.tag {
             case 0:
                 detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "아파트/오피스텔"}
+                detailVC.currentTitle = "아파트/오피스텔"
                 detailVC.title = "아파트/오피스텔"
             case 1:
                 detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "빌라/주택"}
+                detailVC.currentTitle = "빌라/주택"
                 detailVC.title = "빌라/주택"
             case 2:
                 detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "원룸/투룸+"}
+                detailVC.currentTitle = "원룸/투룸+"
                 detailVC.title = "원룸/투룸+"
             case 3:
                 detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.isBookMarked! == true}
+                detailVC.currentTitle = "북마크"
                 detailVC.title = "북마크"
             default:
                 break

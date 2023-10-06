@@ -11,6 +11,7 @@ final class DetailVC: UIViewController {
     private lazy var tableView = UITableView()
     var houseViewModel = HouseViewModel()
     private let bannerView = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width))
+    var currentTitle: String?
     
     // MARK: - View Lifecycle
 
@@ -62,7 +63,7 @@ final class DetailVC: UIViewController {
     }
     
     private func configureNav() {
-        self.navigationController?.navigationBar.backItem?.title = ""
+        self.navigationController?.navigationBar.backItem?.title = self.currentTitle
         view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
     }
