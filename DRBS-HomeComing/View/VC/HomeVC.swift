@@ -4,7 +4,7 @@ import Then
 
 final class HomeVC: UIViewController {
     
-    //MARK: - Properties
+    // MARK: - Properties
     
     private var viewModel = HouseViewModel()
     private let categories = ["아파트/오피스텔", "빌라/주택", "원룸/투룸+", "북마크"]
@@ -16,7 +16,7 @@ final class HomeVC: UIViewController {
         return .default
     }
     
-    //MARK: - LifeCycle
+    // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,7 @@ final class HomeVC: UIViewController {
         tableView.reloadData()
     }
     
-    //MARK: - Helpers
+    // MARK: - Helpers
     
     private func configureNav() {
         let appearance = UINavigationBarAppearance().then {
@@ -41,7 +41,6 @@ final class HomeVC: UIViewController {
             $0.shadowColor = nil
         }
         
-        navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
@@ -68,12 +67,12 @@ final class HomeVC: UIViewController {
     private func settingTV() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = self.view.frame.height/3.8
+        tableView.rowHeight = view.frame.height / 3.8
         tableView.register(HouseTVCell.self, forCellReuseIdentifier: Constant.Identifier.houseCell.rawValue)
         tableView.separatorStyle = .none
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
     
     @objc public func plusButtonTapped() {
         let checkVC = CheckVC1()
@@ -91,24 +90,23 @@ final class HomeVC: UIViewController {
         let detailVC = DetailVC()
         switch sender.tag {
             case 0:
-                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "아파트/오피스텔"}
-                detailVC.currentTitle = "아파트/오피스텔"
-                detailVC.title = "아파트/오피스텔"
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter { $0.livingType! == "아파트/오피스텔" }
+                detailVC.navTitle = "아파트/오피스텔"
             case 1:
-                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "빌라/주택"}
-                detailVC.currentTitle = "빌라/주택"
-                detailVC.title = "빌라/주택"
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter { $0.livingType! == "빌라/주택" }
+                detailVC.navTitle = "빌라/주택"
             case 2:
-                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.livingType! == "원룸/투룸+"}
-                detailVC.currentTitle = "원룸/투룸+"
-                detailVC.title = "원룸/투룸+"
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter { $0.livingType! == "원룸/투룸+" }
+                detailVC.navTitle = "원룸/투룸+"
             case 3:
-                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter{$0.isBookMarked! == true}
-                detailVC.currentTitle = "북마크"
-                detailVC.title = "북마크"
+                detailVC.houseViewModel.houses = (self.allHouseModels ?? []).filter { $0.isBookMarked! == true }
+                detailVC.navTitle = "북마크"
             default:
                 break
         }
+        let backButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = backButtonItem
+        
         detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -125,7 +123,7 @@ final class HomeVC: UIViewController {
     }
 }
 
-//MARK: - UITableViewDelegate
+// MARK: - UITableViewDelegate
 
 extension HomeVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -148,19 +146,16 @@ extension HomeVC: UITableViewDelegate {
         titleButton.tag = section
         return headerView
     }
-
 }
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
 
 extension HomeVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        //섹션의 개수
         return 4
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //섹션별 열의 개수
         return 1
     }
     
@@ -174,7 +169,7 @@ extension HomeVC: UITableViewDataSource {
     }
 }
 
-//MARK: - CellSelectedDelegate
+// MARK: - CellSelectedDelegate
 
 extension HomeVC: CellSelectedDelegate {
     func cellselected(houseTVCell: HouseTVCell, house: House) {
