@@ -37,6 +37,5 @@ final class NoDataView: UIView {
             $0.top.equalToSuperview().offset(10)
             $0.bottom.equalToSuperview().offset(-10)
         }
-        
     }
 }
