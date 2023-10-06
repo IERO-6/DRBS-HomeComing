@@ -12,7 +12,7 @@ final class CategoryNoDataView: UIView {
     }
 
     private let titleLabel = UILabel().then {
-        $0.text = "작성된 체크리스트가 존재하지 않습니다"
+        $0.text = "작성된 체크리스트가\n존재하지 않습니다"
         $0.font = UIFont(name: Constant.fontSemiBold, size: 24)
         $0.textAlignment = .center
         $0.numberOfLines = 0
