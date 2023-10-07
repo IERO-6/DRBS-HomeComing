@@ -182,9 +182,17 @@ final class CheckVC2: UIViewController {
     private var selectedAssetIdentifiers: [String] = []
     private lazy var galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
-        $0.image = UIImage(systemName: "camera")
+        if let cameraSymbolImage = UIImage(systemName: "camera") {
+            let imageSize = CGSize(width: 95, height: 75)
+            UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
+            cameraSymbolImage.draw(in: CGRect(origin: .zero, size: imageSize))
+            if let customSizedImage = UIGraphicsGetImageFromCurrentImageContext() {
+                UIGraphicsEndImageContext()
+                $0.image = customSizedImage
+            }
+        }
         $0.tintColor = .black
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .center
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
         $0.backgroundColor = UIColor.systemGray6
