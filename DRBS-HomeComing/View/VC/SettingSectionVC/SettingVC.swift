@@ -217,13 +217,13 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                             mailComposerVC.setSubject("문의하기")
                             self.present(mailComposerVC, animated: true, completion: nil)
                         } else {
-                            let alertController = UIAlertController(title: "메일을 보낼 수 없습니다.", message: "기기에서 이메일을 보낼 수 없습니다. 메일 설정을 확인 해주세요.", preferredStyle: .alert)
+                            let alertController = UIAlertController(title: "문의 메일 보내기 실패", message: "문의를 보내기 위해선 \n 기기의 메일 설정이 필요합니다.", preferredStyle: .alert)
                             alertController.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
                             self.present(alertController, animated: true, completion: nil)
                         }
                         break
                     case "App Store 리뷰하기":
-                        if let appStoreReviewURL = URL(string: "https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709") {
+                        if let appStoreReviewURL = URL(string: "https://apps.apple.com/kr/app/%EB%8F%84%EB%9D%BC%EB%B0%A9%EC%8A%A4/id6466733709/write-review") {
                             UIApplication.shared.open(appStoreReviewURL, options: [:], completionHandler: nil)
                         }
                         break
