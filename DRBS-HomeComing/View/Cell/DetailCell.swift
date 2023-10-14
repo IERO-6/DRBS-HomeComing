@@ -217,11 +217,12 @@ final class DetailCell: UITableViewCell {
                 self.livingTypeLabel.snp.makeConstraints{$0.width.equalTo(90)}
             }
         }
+        let formattedPrice = house.보증금!.formatPrice()
         self.nameLabel.text = house.title!
         self.rateLabel.text = String(house.별점!)
         self.addressLabel.text = house.address!
         self.memoTextView.text = house.기록 ?? ""
-        self.priceLabel.text = house.보증금! + "/" + house.월세!
+        self.priceLabel.text = formattedPrice + "/" + house.월세!
         self.livingTypeLabel.text = (house.livingType!) + " "
         self.tradingTypeLabel.text = house.tradingType!
         guard let isBookmarked = house.isBookMarked else { return }

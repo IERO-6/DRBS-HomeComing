@@ -194,3 +194,22 @@ extension UIImage {
     }
 }
 
+
+// MARK: - 보증금Label
+extension String {
+    func formatPrice() -> String {
+        if let 보증금 = Int(self) {
+            var formattedPrice = ""
+            if 보증금 >= 10000 {
+                let 억 = 보증금 / 10000
+                let 만 = 보증금 % 10000
+                formattedPrice = "\(억)억\(만)"
+            } else {
+                formattedPrice = self
+            }
+            return formattedPrice
+        } else {
+            return "가격 정보 없음"
+        }
+    }
+}

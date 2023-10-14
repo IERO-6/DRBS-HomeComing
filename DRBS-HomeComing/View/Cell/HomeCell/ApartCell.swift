@@ -24,10 +24,11 @@ final class ApartCell: UICollectionViewCell {
                 }
                 return
             }
+            let formattedPrice = house.보증금!.formatPrice()
             self.cellImage.sd_setImage(with: URL(string: images[0]))
             self.cellImage.contentMode = .scaleAspectFill
             self.titleLabel.text = house.title!
-            self.costLabel.text = house.보증금! + "/" + house.월세!
+            self.costLabel.text = formattedPrice + "/" + house.월세!
             self.ratingLabel.text = String(house.별점!)
         }
     }
