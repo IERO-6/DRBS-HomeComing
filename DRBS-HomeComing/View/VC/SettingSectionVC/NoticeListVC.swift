@@ -100,4 +100,13 @@ extension NoticeListVC: UITableViewDataSource, UITableViewDelegate {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             }
         }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let notice = viewModel.notice(at: indexPath.row)
+        
+        let detailVC = NoticeDetailVC()
+        detailVC.notice = notice
+        
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
