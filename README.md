@@ -111,6 +111,7 @@
 │       │   ├── ModalVC.swift
 │       │   └── SearchVC.swift
 │       ├── 📁 SettingSectionVC
+│       │   ├── NoticeDetailVC.swift
 │       │   ├── NoticeListVC.swift
 │       │   ├── SettingVC.swift
 │       │   └── WithdrawVC.swift
