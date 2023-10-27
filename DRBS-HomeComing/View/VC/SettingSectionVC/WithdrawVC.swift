@@ -123,6 +123,7 @@ final class WithdrawVC: UIViewController {
     
     private func configureNav() {
         navigationItem.title = "회원탈퇴"
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         let appearance = UINavigationBarAppearance().then {
             $0.configureWithOpaqueBackground()

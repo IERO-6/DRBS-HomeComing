@@ -203,6 +203,7 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
             case let .notice(models):
                 let _ = models[indexPath.row]
                 let noticeVC = NoticeListVC()
+                noticeVC.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(noticeVC, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
                 break
