@@ -2,6 +2,7 @@ import UIKit
 import Then
 import SnapKit
 import MessageUI
+import SafariServices
 import GoogleMobileAds
 
 final class SettingVC: UIViewController {
@@ -60,7 +61,6 @@ final class SettingVC: UIViewController {
             $0.backgroundColor = Constant.appColor
             $0.titleTextAttributes = [.foregroundColor: UIColor.white]
         }
-        navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
@@ -235,17 +235,20 @@ extension SettingVC: UITableViewDataSource, UITableViewDelegate {
                 switch license.title {
                     case "개인정보처리방침":
                         if let privacyPolicyNotionUrl = URL(string: "https://iero-drbs.notion.site/9ee322c4343a4a2380570f4452190105?pvs=4") {
-                            UIApplication.shared.open(privacyPolicyNotionUrl)
+                            let ppNotionSafariView = SFSafariViewController(url: privacyPolicyNotionUrl)
+                            present(ppNotionSafariView, animated: true, completion: nil)
                         }
                         break
                     case "서비스 이용약관":
                         if let termsOfUseNotionUrl = URL(string: "https://iero-drbs.notion.site/452e33f0341945efb952d72658904e1e?pvs=4") {
-                            UIApplication.shared.open(termsOfUseNotionUrl)
+                            let touNotionSafariView = SFSafariViewController(url: termsOfUseNotionUrl)
+                            present(touNotionSafariView, animated: true, completion: nil)
                         }
                         break
                     case "오픈소스 라이선스":
                         if let openSourceNotionUrl = URL(string: "https://iero-drbs.notion.site/5871edcf252647b3b0913a50881bcc6e?pvs=4") {
-                            UIApplication.shared.open(openSourceNotionUrl)
+                            let openSourceNotionSafariView = SFSafariViewController(url: openSourceNotionUrl)
+                            present(openSourceNotionSafariView, animated: true, completion: nil)
                         }
                         break
                     default:
