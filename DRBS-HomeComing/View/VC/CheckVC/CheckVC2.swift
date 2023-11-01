@@ -182,9 +182,17 @@ final class CheckVC2: UIViewController {
     private var selectedAssetIdentifiers: [String] = []
     private lazy var galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
-        $0.image = UIImage(systemName: "camera")
+        if let cameraSymbolImage = UIImage(systemName: "camera") {
+            let imageSize = CGSize(width: 95, height: 75)
+            UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
+            cameraSymbolImage.draw(in: CGRect(origin: .zero, size: imageSize))
+            if let customSizedImage = UIGraphicsGetImageFromCurrentImageContext() {
+                UIGraphicsEndImageContext()
+                $0.image = customSizedImage
+            }
+        }
         $0.tintColor = .black
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .center
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
         $0.backgroundColor = UIColor.systemGray6
@@ -247,8 +255,7 @@ final class CheckVC2: UIViewController {
         $0.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
     }
     private lazy var 관리비버튼 = [전기버튼, 가스버튼, 수도버튼, 인터넷버튼, TV버튼, 기타버튼]
-    
-
+    private var selectedImageCount = 0
     
     //MARK: - LifeCycle
     
@@ -275,7 +282,7 @@ final class CheckVC2: UIViewController {
         입주가능일button.layer.addBottomLayer()
         계약기간TextField.layer.addBottomLayer()
         let contentHeight = completionButton.frame.maxY + 20
-        let contentWidth = 140 * (imageButtonArray.count + 1) + 13 * (imageButtonArray.count)
+        let contentWidth = 140 * (selectedImageCount + 1) + 13 * (selectedImageCount)
         imageScrollView.contentSize = CGSize(width: contentWidth, height: 140)
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentHeight)
     }
@@ -598,8 +605,11 @@ final class CheckVC2: UIViewController {
             }
             
             //이미지를 띄우는 코드
-            guard let houseImages = house.사진 else { return }
+            guard let houseImages = house.사진 else {
+                selectedImageCount = 0
+                return }
             
+            selectedImageCount = houseImages.count
             for (index, button) in imageButtonArray.enumerated() {
                 if houseImages.indices.contains(index) {
                     button.sd_setImage(with: URL(string:houseImages[index]), for: .normal)
@@ -758,7 +768,6 @@ final class CheckVC2: UIViewController {
         }
         // 선택한 이미지의 인덱스를 설정
         popUpVC.currentIndex = popUpVC.images.firstIndex(where: { $0 === sender.currentImage }) ?? 0
-        
         self.present(popUpVC, animated: true)
     }
     // 키보드가 나타날 때 memoTextView를 이동시키는 함수
@@ -836,8 +845,9 @@ extension CheckVC2: CalendarDelegate {
 //MARK: - PHPickerViewControllerDelegate
 
 extension CheckVC2: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {        picker.dismiss(animated: true)
+        var imageCount = results.count
+        selectedImageCount = imageCount
         var newSelections: [String: PHPickerResult] = [:]
         for result in results {
             let identifier = result.assetIdentifier!
@@ -845,6 +855,10 @@ extension CheckVC2: PHPickerViewControllerDelegate {
         }
         selections = newSelections
         selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
+        //제약조건을 고른 갯수만큼으로 다시 설정해준다
+        let contentWidth = 140 * (selectedImageCount + 1) + 13 * (selectedImageCount)
+        imageScrollView.contentSize = CGSize(width: contentWidth, height: 140)
+        
         if selections.isEmpty {
             self.houseViewModel.uiImages = []
             self.imageButtonArray.forEach { $0.setImage(.none, for: .normal) }

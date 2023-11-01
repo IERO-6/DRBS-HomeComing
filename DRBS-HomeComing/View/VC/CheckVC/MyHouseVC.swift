@@ -510,12 +510,13 @@ final class MyHouseVC: UIViewController {
                 $0.width.height.equalTo(50)
             }
         }
+        let formattedPrice = house.보증금!.formatPrice()
+        
         self.imageCount.text = houseImages.isEmpty ? "0" : String(houseImages.count)
         self.nameLabel.text = house.title ?? ""
 
         self.rateLabel.text = String(house.별점 ?? 0.0)
-
-        self.priceLabel.text = house.보증금! + "/" + house.월세!
+        self.priceLabel.text = formattedPrice + "/" + house.월세!
 
         self.maintenanceCostLabel.text = (house.관리비 ?? "") + "만원"
 
