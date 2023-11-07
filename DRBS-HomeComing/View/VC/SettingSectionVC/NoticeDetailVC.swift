@@ -45,7 +45,7 @@ class NoticeDetailVC: UIViewController {
         
         dateLabel.text     = noticeItem.date
         titleLabel.text      = noticeItem.title
-        contentLabel.text    = noticeItem.content
+        contentLabel.text    = noticeItem.content.replacingOccurrences(of: "\\n", with: "\n")
         
         configureNav()
         configureUI()
