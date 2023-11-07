@@ -466,7 +466,7 @@
 			};
 			buildConfigurationList = 218ACDDA2A75262400687EE6 /* Build configuration list for PBXProject "DRBS-HomeComing" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
