@@ -182,8 +182,8 @@ final class CheckVC2: UIViewController {
     private var selectedAssetIdentifiers: [String] = []
     private lazy var galleryImageView = UIImageView().then {
         $0.frame = CGRect(x: 0, y: 0, width: 85, height: 65)
-        if let cameraSymbolImage = UIImage(systemName: "camera") {
-            let imageSize = CGSize(width: 95, height: 75)
+        if let cameraSymbolImage = UIImage(systemName: "camera")?.withTintColor(.darkGray, renderingMode: .alwaysOriginal) {
+            let imageSize = CGSize(width: 45, height: 35)
             UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
             cameraSymbolImage.draw(in: CGRect(origin: .zero, size: imageSize))
             if let customSizedImage = UIGraphicsGetImageFromCurrentImageContext() {
@@ -806,7 +806,7 @@ extension CheckVC2: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let allowedCharacters = CharacterSet(charactersIn:".0123456789")
+        let allowedCharacters = CharacterSet(charactersIn:"0123456789")
         let characterSet = CharacterSet(charactersIn: string)
         if !allowedCharacters.isSuperset(of: characterSet) {
             return false
@@ -865,6 +865,4 @@ extension CheckVC2: PHPickerViewControllerDelegate {
         } else { displayImage() }
     }
 }
-
-
 
